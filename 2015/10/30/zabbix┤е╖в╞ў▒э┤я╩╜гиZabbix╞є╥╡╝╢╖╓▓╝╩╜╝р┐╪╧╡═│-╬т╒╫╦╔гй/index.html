@@ -1,0 +1,303 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>zabbix触发器表达式（Zabbix企业级分布式监控系统+吴兆松） | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="zabbix触发器表达式（Zabbix企业级分布式监控系统+吴兆松）"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> zabbix触发器表达式（Zabbix企业级分布式监控系统+吴兆松）</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <p>触发器中的表达式使用很灵活，我们可以创建一个复杂的逻辑测试监控，触发器表达式形式如下:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&lt;server&gt;:&lt;key&gt;.&lt;function&gt;(&lt;parameter&gt;)&#125;&lt;operator&gt;&lt;constant&gt;</span><br></pre></td></tr></table></figure></p>
+<p>{主机：key.函数(参数)}&lt;表达式&gt;常数，具体的例子，请接着往下走，很简单</p>
+<ul>
+<li><strong>Functions函数</strong></li>
+</ul>
+<p>触发器functions可以引用检索到的值，当前时间或者其他元素。触发器表达式支持的function完整列表请点击官网地址 supported functions</p>
+<ul>
+<li><strong>Function参数- </strong></li>
+</ul>
+<p>大多数数值functions可以使用秒来作为参数。你可以使用前缀“#”来表示它有不同的含义</p>
+<p><br><img src="/img/dec/zabbix/16.png" style="width: 600px;"></p>
+<p>last函数使用不同的参数将会得到不同的值，#2表示倒数第二新的数据。例入从老到最新值为1,2,3,4,5,6,7,8,9,10，last(#2)得到的值为9，last(#9)得到的值为2。last函数必须包含参数。 AVG，count，last，min和max函数还支持额外的参数，以秒为单位的参数time_shift（时间偏移量）。例如avg(1h,1d)，那么将会获取到昨天的1小时内的平均数据。<br>备注：触发器表达式需要使用history历史数据来计算，如果history不可用（time_shift时间偏移量参数无法使用），因此history记录一定要保留长久一点，至少要保留需要用的记录。<br>触发器表达式可以使用单位符号来替代大数字，例如5m替代300，或者1d替代86400,1k替代1024字节等等。</p>
+<ul>
+<li><strong>操作符- </strong><br><br><img src="/img/dec/zabbix/17.png" style="width: 600px;"></li>
+</ul>
+<p>触发器示例</p>
+<ul>
+<li><strong>示例一- </strong></li>
+</ul>
+<p>触发器名称：Processor load is too high on www.zabbix.com<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;www.zabbix.com:system.cpu.load[all,avg1].last(<span class="number">0</span>)&#125;&gt;<span class="number">5</span></span><br></pre></td></tr></table></figure></p>
+<p>触发器说明： www.zabbix.com：host名称 system.cpu.load[all,avg1]：item值,一分内cpu平均负载值 last(0)：最新值 &gt;5：最新值大于5 如上所示，www.zabbix.com这个主机的监控项，最新的CPU负载值如果大于5，那么表达式会返回true，这样一来触发器状态就改变为“problem”了。</p>
+<ul>
+<li><strong>示例二- </strong></li>
+</ul>
+<p>触发器名称：www.zabbix.com is overloaded<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;www.zabbix.com:system.cpu.load[all,avg1].last(<span class="number">0</span>)&#125;&gt;<span class="number">5</span>|&#123;www.zabbix.com:system.cpu.load[all,avg1].min(<span class="number">10</span>m)&#125;&gt;<span class="number">2</span></span><br></pre></td></tr></table></figure></p>
+<p>当前cpu负载大于5或者最近10分内的cpu负载大于2，那么表达式将会返回true.</p>
+<ul>
+<li><strong>示例三- </strong></li>
+</ul>
+<p>触发器名称：/etc/passwd has been changed 使用函数 diff():<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;www.zabbix.com:vfs.file.cksum[/etc/passwd].diff(<span class="number">0</span>)&#125;&gt;<span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+<p>/etc/passwd最新的checksum与上一次获取到的checksum不同，表达式将会返回true. 我们可以使用同样的方法监控系统重要的配置文件,例如/etc/passwd,/etc/inetd.conf等等。这些zabbix一般都会自带，没带的你自己加上吧。</p>
+<ul>
+<li><strong>示例四- </strong></li>
+</ul>
+<p>触发器名称：Someone is downloading a large file from the Internet 使用函数 min:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;www.zabbix.com:net.<span class="keyword">if</span>.<span class="keyword">in</span>[eth0,bytes].min(<span class="number">5</span>m)&#125;&gt;<span class="number">100</span>K</span><br></pre></td></tr></table></figure></p>
+<p>当前主机网卡eth0最后5分钟内接收到的流量超过100KB那么触发器表达式将会返回true</p>
+<ul>
+<li><strong>示例五- </strong></li>
+</ul>
+<p>触发器名称：Both nodes of clustered SMTP server are down<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;smtp1.zabbix.com:net.tcp.service[smtp].last(<span class="number">0</span>)&#125;=<span class="number">0</span>&amp;&#123;smtp2.zabbix.com:net.tcp.service[smtp].last(<span class="number">0</span>)&#125;=<span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+<p>当smtp1.zabbix.com和smtp2.zabbix.com两台主机上的SMTP服务器都离线，表达式将会返回true.</p>
+<ul>
+<li><strong>示例六- </strong></li>
+</ul>
+<p>触发器名称：Zabbix agent needs to be upgraded 使用函数str():<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;zabbix.zabbix.com:agent.version.str(<span class="string">"beta8"</span>)&#125;=<span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<p>如果当前zabbix agent版本包含beta8（假设当前版本为1.0beta8），这个表达式会返回true.</p>
+<ul>
+<li><strong>示例七- </strong></li>
+</ul>
+<p>触发器名称：Server is unreachable<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;zabbix.zabbix.com:icmpping.count(<span class="number">30</span>m,<span class="number">0</span>)&#125;&gt;<span class="number">5</span></span><br></pre></td></tr></table></figure></p>
+<p>如上表达式表示最近30分钟zabbix.zabbix.com这个主机超过5次不可到达。</p>
+<ul>
+<li><strong>示例八- </strong></li>
+</ul>
+<p>触发器名称：No heartbeats within last 3 minutes 使用函数 nodata():<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;zabbix.zabbix.com:tick.nodata(<span class="number">3</span>m)&#125;=<span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<p>tick为Zabbix trapper类型，首先我们要定义一个类型为Zabbix trapper，key为tick的item。我们使用zabbix_sender定期发送数据给tick，如果在3分钟内还未收到zabbix_sender发送来的数据，那么表达式返回一个true，与此同时触发器的值变为“PROBLEM”。</p>
+<ul>
+<li><strong>示例九- </strong></li>
+</ul>
+<p>触发器名称：CPU activity at night time 使用函数 time():<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;zabbix:system.cpu.load[all,avg1].min(<span class="number">5</span>m)&#125;&gt;<span class="number">2</span>&amp;&#123;zabbix:system.cpu.load[all,avg1].time(<span class="number">0</span>)&#125;&gt;<span class="number">000000</span>&amp;&#123;zabbix:system.cpu.load[all,avg1].time(<span class="number">0</span>)&#125;&lt;<span class="number">060000</span></span><br></pre></td></tr></table></figure></p>
+<p>只有在凌晨0点到6点整，最近5分钟内cpu负载大于2，表达式返回true，触发器的状态变更为“problem”</p>
+<ul>
+<li><strong>示例十- </strong></li>
+</ul>
+<p>触发器名称：Check if client local time is in sync with Zabbix server time 使用函数 fuzzytime():<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;MySQL_DB:system.localtime.fuzzytime(<span class="number">10</span>)&#125;=<span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+<p>主机MySQL_DB当前服务器时间如果与zabbix server之间的时间相差10秒以上，表达式返回true，触发器状态改变为“problem”</p>
+<ul>
+<li><strong>示例十一- </strong></li>
+</ul>
+<p>触发器名称：Comparing average load today with average load of the same time yesterday (使用 time_shift 时间偏移量参数).<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;server:system.cpu.load.avg(<span class="number">1</span>h)&#125;/&#123;server:system.cpu.load.avg(<span class="number">1</span>h,<span class="number">1</span>d)&#125;&gt;<span class="number">2</span></span><br></pre></td></tr></table></figure></p>
+<p>如果上个小时的平均负荷比昨天的平均负荷值超过2次，则该表达式将发生告警。</p>
+<ul>
+<li><strong>Hysteresis（迟滞,滞后）- </strong></li>
+</ul>
+<p>简单的说触发器状态转变为problem需要一个条件，从problem转变回来还需要一个条件才行。一般触发器只需要不满足触发器为problem条件即可恢复。明白了么？不明白就看例子吧。 有时候触发器需要使用不同的条件来表示不同的状态，举个官网很有趣的例子：机房温度正常稳定为15-20°，当温度超过20°，触发器值为problem，当前情况下，只有温度处在这个温度之间触发器值才会为FALSE。（慢慢理解，这个表达式有点绕） 为了达到这个效果，我们需要使用如下触发器表达式:</p>
+<ul>
+<li><strong>示例1- </strong></li>
+</ul>
+<p>触发器名称：Temperature in server room is too high<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&#123;TRIGGER.VALUE&#125;=<span class="number">0</span>&amp;&#123;server:temp.last(<span class="number">0</span>)&#125;&gt;<span class="number">20</span>)|(&#123;TRIGGER.VALUE&#125;=<span class="number">1</span>&amp;&#123;server:temp.last(<span class="number">0</span>)&#125;&lt;<span class="number">15</span>)</span><br></pre></td></tr></table></figure></p>
+<p>注意：宏变量 {TRIGGER.VALUE}将会返回当前触发器的值</p>
+<ul>
+<li><strong>示例2- </strong></li>
+</ul>
+<p>触发器名称：Free disk space is too low Problem: 最近5分钟内剩余磁盘空间小于10GB。 Recovery: 最近10分钟内磁盘空间大于40GB</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&#123;TRIGGER.VALUE&#125;=<span class="number">0</span>&amp;&#123;server:vfs.fs.size[/,free].max(<span class="number">5</span>m)&#125;&lt;<span class="number">10</span>G)|(&#123;TRIGGER.VALUE&#125;=<span class="number">1</span>&amp;&#123;server:vfs.fs.size[/,free].min(<span class="number">10</span>m)&#125;&lt;<span class="number">40</span>G)</span><br></pre></td></tr></table></figure>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2015/11/08/Linux-╢и╩▒╕№╨┬╩▒╝ф/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2015/10/28/zabbix-╩╣╙├╣╚╕шфп└└╞ў▓х╝■zabbxi-Notifier/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2015/10/30/zabbix┤е╖в╞ў▒э┤я╩╜гиZabbix╞є╥╡╝╢╖╓▓╝╩╜╝р┐╪╧╡═│-╬т╒╫╦╔гй/" data-title="zabbix触发器表达式（Zabbix企业级分布式监控系统+吴兆松）" data-url="http://linuxOps.xyz/2015/10/30/zabbix┤е╖в╞ў▒э┤я╩╜гиZabbix╞є╥╡╝╢╖╓▓╝╩╜╝р┐╪╧╡═│-╬т╒╫╦╔гй/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2015-10-30 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

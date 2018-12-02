@@ -1,0 +1,231 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>python-nmap端口扫描 | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="python-nmap端口扫描"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> python-nmap端口扫描</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <p>python-nmap是python的一个模块库，使用这个模块可以让python很方便的操作nmap扫描器来工作，它可以帮助管理员完成自动扫描任务和生成报告的工具，它还支持nmap的脚步输出。</p>
+<p><strong>坏境准备：</strong></p>
+<p>###1、安装python-nmap和yum install nmap</p>
+<p>[root@localhost ~]# pip install python-nmap<br>You are using pip version 7.1.0, however version 9.0.1 is available.<br>You should consider upgrading via the ‘pip install –upgrade pip’ command.<br>Collecting python-nmap<br>  Downloading python-nmap-0.6.1.tar.gz (41kB)<br>    100%  45kB 40kBs<br>Installing collected packages python-nmap<br>  Running setup.py install for python-nmap<br>Successfully installed python-nmap-0.6.1</p>
+<p>具体查看链接：<a href="http://xael.org/pages/python-nmap-en.html" target="_blank" rel="external">http://xael.org/pages/python-nmap-en.html</a><br>[root@localhost ~]# yum install –y nmap</p>
+<p>###2、python 脚本代码<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost shell]<span class="comment"># cat saomiao.py </span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> nmap</span><br><span class="line"></span><br><span class="line">scan_row = [ ]</span><br><span class="line">input_data = raw_input(<span class="string">'Please input host and port: '</span>)</span><br><span class="line">scan_row = input_data.split(<span class="string">" "</span>)</span><br><span class="line"><span class="keyword">if</span> len( scan_row ) !=<span class="number">2</span>:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Input errors,example\"192.168.1.0/24 80,443,22\""</span></span><br><span class="line">    sys.exit(<span class="number">0</span>)</span><br><span class="line">hosts = scan_row[<span class="number">0</span>]  <span class="comment">#接收用户输入的主机</span></span><br><span class="line">port = scan_row[<span class="number">1</span>]  <span class="comment">#接收用户输入的端口</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    nm = nmap.PortScanner() <span class="comment">#创建端口扫描对象</span></span><br><span class="line"><span class="keyword">except</span> nmap.PortScannerError:</span><br><span class="line">    <span class="keyword">print</span> (<span class="string">'Nmap not found,'</span>,sys.exc_info()[<span class="number">0</span>])</span><br><span class="line">    sys.exit(<span class="number">0</span>)</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    nm.scan(hosts=hosts,arguments=<span class="string">'-v -sS -p '</span>+port)</span><br><span class="line"><span class="keyword">except</span> Exception,e:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Scan error:"</span>+str(e)</span><br><span class="line"><span class="keyword">for</span> host <span class="keyword">in</span> nm.all_hosts():</span><br><span class="line">    print(<span class="string">'----------------------------------------------------'</span>)</span><br><span class="line">    print(<span class="string">'Host : %s (%s)'</span> % (host, nm[host].hostname()))</span><br><span class="line">    print(<span class="string">'State : %s'</span> % nm[host].state())</span><br><span class="line">    <span class="keyword">for</span> proto <span class="keyword">in</span> nm[host].all_protocols():</span><br><span class="line">        print(<span class="string">'----------'</span>)</span><br><span class="line">        print(<span class="string">'Protocol : %s'</span> % proto)</span><br><span class="line">        lport = nm[host][proto].keys()</span><br><span class="line">        lport.sort()</span><br><span class="line">        <span class="keyword">for</span> port <span class="keyword">in</span> lport:</span><br><span class="line">            <span class="keyword">print</span> (<span class="string">'port : %s\tstate : %s'</span> % (port, nm[host][proto][port][<span class="string">'state'</span>]))</span><br></pre></td></tr></table></figure></p>
+<p>###3、执行测试<br>如果执行过程出现报错：<br>[root@localhost shell]# python nmap.py<br>Please input host and port: 192.168.1.200 80<br>Traceback (most recent call last):<br>  File “nmap.py”, line 4, in <module><br>    import nmap<br>  File “/data/shell/nmap.py”, line 16, in <module><br>    except nmap.PortScannerError:<br>AttributeError: ‘module’ object has no attribute ‘PortScannerError’</module></module></p>
+<p>发现，脚本名称为nmap.py 更改名称后执行正常。</p>
+<p>###Port scanning result： </p>
+<ul>
+<li><strong>10.6.17.83</strong> <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@<span class="number">10</span>-<span class="number">6</span>-<span class="number">17</span>-<span class="number">83</span> shell]<span class="comment"># python saomiao.py </span></span><br><span class="line">Please input host <span class="keyword">and</span> port: <span class="number">10.6</span><span class="number">.17</span><span class="number">.83</span> <span class="number">1</span>-<span class="number">65535</span></span><br><span class="line"> ---------------------------------------------------- </span><br><span class="line"> Host : <span class="number">10.6</span><span class="number">.17</span><span class="number">.83</span> (localhost) State : up </span><br><span class="line"> Protocol : tcp port : <span class="number">3306</span> state : open </span><br><span class="line"> port : <span class="number">8022</span> state : open </span><br><span class="line"> port : <span class="number">8080</span> state : open </span><br><span class="line"> port : <span class="number">10050</span> state : open </span><br><span class="line"> port : <span class="number">10051</span> state : open</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2017/02/14/django登陆注销/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2016/01/23/EXSI5-5░▓╫░vSphere/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2017/02/14/python-nmap端口扫描/" data-title="python-nmap端口扫描" data-url="http://linuxOps.xyz/2017/02/14/python-nmap端口扫描/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2017-02-14 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

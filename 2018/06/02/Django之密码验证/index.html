@@ -1,0 +1,224 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Django之密码验证 | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Django之密码验证"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> Django之密码验证</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <p>Django版本：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">In [<span class="number">14</span>]: <span class="keyword">import</span> django</span><br><span class="line"></span><br><span class="line">In [<span class="number">15</span>]: django.get_version()</span><br><span class="line">Out[<span class="number">15</span>]: <span class="string">'1.11.13'</span></span><br></pre></td></tr></table></figure></p>
+<p>导入包：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python manage.py shell</span><br><span class="line"><span class="keyword">from</span> django.contrib.auth.hashers <span class="keyword">import</span> make_password, check_password</span><br></pre></td></tr></table></figure></p>
+<p>查看make_password并生成密码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">help(make_password)</span><br><span class="line"></span><br><span class="line">Help on function make_password <span class="keyword">in</span> module django.contrib.auth.hashers:</span><br><span class="line">make_password(password, salt=<span class="keyword">None</span>, hasher=<span class="string">u'default'</span>)</span><br><span class="line">    Turn a plain-text password into a hash <span class="keyword">for</span> database storage</span><br><span class="line">    </span><br><span class="line">    Same <span class="keyword">as</span> encode() but generates a new random salt.</span><br><span class="line">    If password <span class="keyword">is</span> <span class="keyword">None</span> then a concatenation of</span><br><span class="line">    UNUSABLE_PASSWORD_PREFIX <span class="keyword">and</span> a random string will be returned</span><br><span class="line">    which disallows logins. Additional random string reduces chances</span><br><span class="line">    of gaining access to staff <span class="keyword">or</span> superuser accounts.</span><br><span class="line">    See ticket <span class="comment">#20079 for more info</span></span><br><span class="line">	</span><br><span class="line"><span class="comment">###生成密码</span></span><br><span class="line">In [<span class="number">4</span>]: make_password(<span class="string">"123456"</span>, <span class="keyword">None</span>, <span class="string">'pbkdf2_sha256'</span>)</span><br><span class="line">Out[<span class="number">4</span>]: <span class="string">u'pbkdf2_sha256$36000$h0yUI3WVw7x5$NOOndKMq9Y+FQ3pu9nALNoJFIqdbfTez0FJ6tgNl5AU='</span></span><br></pre></td></tr></table></figure>
+<p>check_password校验密码:<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">help(check_password)</span><br><span class="line"> </span><br><span class="line">Help on function check_password in module django.contrib.auth.hashers:</span><br><span class="line">check_password(password, encoded, setter=None, preferred=u'default')</span><br><span class="line">    Returns a boolean of whether the raw password matches the three</span><br><span class="line">    part encoded digest.</span><br><span class="line">    </span><br><span class="line">    If setter is specified, it'll be called when you need to</span><br><span class="line">    regenerate the password.</span><br><span class="line"></span><br><span class="line">In [6]: check_password("123456","pbkdf2_sha256$36000$h0yUI3WVw7x5$NOOndKMq9Y+FQ3pu9nALNoJFIqdbfTez0FJ6tgNl5AU=")</span><br><span class="line">Out[6]: True</span><br></pre></td></tr></table></figure></p>
+<p>附官方源码：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">check_password</span><span class="params">(password, encoded, setter=None, preferred=<span class="string">'default'</span>)</span>:</span></span><br><span class="line">    <span class="string">"""</span><br><span class="line">    Returns a boolean of whether the raw password matches the three</span><br><span class="line">    part encoded digest.</span><br><span class="line"></span><br><span class="line">    If setter is specified, it'll be called when you need to</span><br><span class="line">    regenerate the password.</span><br><span class="line">    """</span></span><br><span class="line">    <span class="keyword">if</span> password <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">or</span> <span class="keyword">not</span> is_password_usable(encoded):</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">    preferred = get_hasher(preferred)</span><br><span class="line">    hasher = identify_hasher(encoded)</span><br><span class="line"></span><br><span class="line">    hasher_changed = hasher.algorithm != preferred.algorithm</span><br><span class="line">    must_update = hasher_changed <span class="keyword">or</span> preferred.must_update(encoded)</span><br><span class="line">    is_correct = hasher.verify(password, encoded)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># If the hasher didn't change (we don't protect against enumeration if it</span></span><br><span class="line">    <span class="comment"># does) and the password should get updated, try to close the timing gap</span></span><br><span class="line">    <span class="comment"># between the work factor of the current encoded password and the default</span></span><br><span class="line">    <span class="comment"># work factor.</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> is_correct <span class="keyword">and</span> <span class="keyword">not</span> hasher_changed <span class="keyword">and</span> must_update:</span><br><span class="line">        hasher.harden_runtime(password, encoded)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> setter <span class="keyword">and</span> is_correct <span class="keyword">and</span> must_update:</span><br><span class="line">        setter(password)</span><br><span class="line">    <span class="keyword">return</span> is_correct</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_password</span><span class="params">(password, salt=None, hasher=<span class="string">'default'</span>)</span>:</span></span><br><span class="line">    <span class="string">"""</span><br><span class="line">    Turn a plain-text password into a hash for database storage</span><br><span class="line"></span><br><span class="line">    Same as encode() but generates a new random salt.</span><br><span class="line">    If password is None then a concatenation of</span><br><span class="line">    UNUSABLE_PASSWORD_PREFIX and a random string will be returned</span><br><span class="line">    which disallows logins. Additional random string reduces chances</span><br><span class="line">    of gaining access to staff or superuser accounts.</span><br><span class="line">    See ticket #20079 for more info.</span><br><span class="line">    """</span></span><br><span class="line">    <span class="keyword">if</span> password <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        <span class="keyword">return</span> UNUSABLE_PASSWORD_PREFIX + get_random_string(UNUSABLE_PASSWORD_SUFFIX_LENGTH)</span><br><span class="line">    hasher = get_hasher(hasher)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> salt:</span><br><span class="line">        salt = hasher.salt()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> hasher.encode(password, salt)</span><br></pre></td></tr></table></figure></p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2018/06/16/简单封装Ansible-Api-接口/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2018/06/02/Django模板之全局变量/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2018/06/02/Django之密码验证/" data-title="Django之密码验证" data-url="http://linuxOps.xyz/2018/06/02/Django之密码验证/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2018-06-02 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

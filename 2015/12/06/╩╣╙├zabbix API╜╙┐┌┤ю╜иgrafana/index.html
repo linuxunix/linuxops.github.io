@@ -1,0 +1,228 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>使用zabbix API接口搭建grafana | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="使用zabbix API接口搭建grafana"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> 使用zabbix API接口搭建grafana</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <p>或许很多小伙伴都说zabbix难看，实际上真的难看吗？我们可以帮它穿上一件皇帝的新衣变得不难看，先直接让大家看看成果吧：<br><br><img src="/img/12-grafana-1.png" style="width: 650x;"><br>要是觉得看得不清晰，可以直接看grafana官方演示站点 <a href="http://play.grafana.org/" target="_blank" rel="external">http://play.grafana.org/</a></p>
+<ul>
+<li><strong>配置过程：</strong></li>
+</ul>
+<p>一、下载安装grafana<br>下载链接：<a href="http://docs.grafana.org/installation/rpm/" target="_blank" rel="external">http://docs.grafana.org/installation/rpm/</a><br>要是觉得麻烦可以直接下载：wget <a href="https://grafanarel.s3.amazonaws.com/builds/grafana-2.5.0-1.x86_64.rpm" target="_blank" rel="external">https://grafanarel.s3.amazonaws.com/builds/grafana-2.5.0-1.x86_64.rpm</a><br>安装：rpm -Uvh grafana-2.5.0-1.x86_64.rpm<br>二、安装grafana-zabbix插件</p>
+<p>shell #git clone  <a href="https://github.com/alexanderzobnin/grafana-zabbix/" target="_blank" rel="external">https://github.com/alexanderzobnin/grafana-zabbix/</a></p>
+<p>shell #sudo cp -r grafana-zabbix/zabbix/  /usr/share/grafana/public/app/plugins/datasource/<br>shell #ls  /usr/share/grafana/public/app/plugins/datasource/<br>shell #vim   /usr/share/grafana/public/app/plugins/datasource/zabbix/plugin.json<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="string">"pluginType"</span> :  <span class="string">"datasource"</span> ,</span><br><span class="line"><span class="string">"name"</span> :  <span class="string">"Zabbix"</span> ,</span><br><span class="line"><span class="string">"type"</span> :  <span class="string">"zabbix"</span> ,</span><br><span class="line"><span class="string">"serviceName"</span> :  <span class="string">"ZabbixAPIDatasource"</span> ,</span><br><span class="line"><span class="string">"module"</span> :  <span class="string">"plugins/datasource/zabbix/datasource"</span> ,</span><br><span class="line"><span class="string">"partials"</span> : &#123;</span><br><span class="line"><span class="string">"config"</span> :  <span class="string">"app/plugins/datasource/zabbix/partials/config.html"</span> ,</span><br><span class="line"><span class="string">"query"</span> :  <span class="string">"app/plugins/datasource/zabbix/partials/query.editor.html"</span> ,</span><br><span class="line"><span class="string">"annotations"</span> :  <span class="string">"app/plugins/datasource/zabbix/partials/annotations.editor.html"</span></span><br><span class="line">&#125;,</span><br><span class="line"><span class="string">"username"</span> :  <span class="string">"guest"</span> ,   <span class="comment">#配置用户名，注意此用户在zabbix中存在，且对zabbix数据有只读权限（不需要写权限）</span></span><br><span class="line"><span class="string">"password"</span> :  <span class="string">"guest"</span> ,   <span class="comment">#配置密码</span></span><br><span class="line">  <span class="string">"metrics"</span> :  true ,</span><br><span class="line"><span class="string">"annotations"</span> :  true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>安装完成后启动应用：service grafana-server restart</p>
+<p>登陆浏览器配置：IP:3000<br><br><img src="/img/12-grafana-2.png" style="width: 650x;"><br><br><img src="/img/12-grafana-3.png" style="width: 650x;"><br><br><img src="/img/12-grafana-4.png" style="width: 650x;"></p>
+<p>配置后效果如下：<br><br><img src="/img/12-grafana-5.png" style="width: 650x;"><br>由于一开始是参照<a href="http://www.tuicool.com/articles/b2miiuJ此文做的插件配置，现在也分享给大家" target="_blank" rel="external">http://www.tuicool.com/articles/b2miiuJ此文做的插件配置，现在也分享给大家</a></p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2015/12/06/python-║═mysql╜╗╗е/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2015/11/29/ssh┼·┴┐╡╟┬╝▓в╓┤╨╨├№┴югиpython╩╡╧╓гй/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2015/12/06/╩╣╙├zabbix API╜╙┐┌┤ю╜иgrafana/" data-title="使用zabbix API接口搭建grafana" data-url="http://linuxOps.xyz/2015/12/06/╩╣╙├zabbix API╜╙┐┌┤ю╜иgrafana/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2015-12-06 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

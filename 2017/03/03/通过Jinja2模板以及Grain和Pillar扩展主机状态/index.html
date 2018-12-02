@@ -1,0 +1,274 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>通过Jinja2模板以及Grain和Pillar扩展主机状态 | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="通过Jinja2模板以及Grain和Pillar扩展主机状态"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> 通过Jinja2模板以及Grain和Pillar扩展主机状态</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <blockquote>
+<p>通过Jinja2模板以及Grain和Pillar扩展主机状态</p>
+</blockquote>
+<p><strong>Jinja2模板语言的基础</strong><br>Jinja2是一个强大的python模板引擎，可以使用代码动态生成内容和创建文件内容。可以理解为何django的模板用法一样。<br>官网地址：<a href="http://jinja.pocoo.org/" target="_blank" rel="external">http://jinja.pocoo.org/</a><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Jinja2变量：</span><br><span class="line">[root@localhost states]<span class="comment"># cat init/var.sls </span></span><br><span class="line">&#123;% set var = <span class="string">'hello'</span> %&#125;</span><br><span class="line">test_var:</span><br><span class="line">  cmd.run:</span><br><span class="line">    - name: echo <span class="string">"var is &#123;&#123; var &#125;&#125;"</span></span><br></pre></td></tr></table></figure></p>
+<p> <img src="/img/201703/salt-9.png" style="width: 550x;"></p>
+<p>由于和d’jango模板差不多，此处不作过多解析。</p>
+<blockquote>
+<p>Grains</p>
+</blockquote>
+<p><strong>Grains的概念</strong><br>grains是minion第一次启动的时候采集的静态数据，可以用在salt的模块和其他组件中。其实grains在每次的minion启动（重启）的时候都会采集，即向master汇报一次的。这个很重要，可以让某些同学企图使用grains值来做监控死心了。</p>
+<blockquote>
+<p>Grain相关命令</p>
+</blockquote>
+<p><strong>列出所有minion上的Grains项:</strong><br>[root@localhost states]# salt ‘*’ grains.ls<br>192.168.17.132:</p>
+<pre><code>-<span class="ruby"> <span class="constant">SSDs</span>
+</span>-<span class="ruby"> biosreleasedate
+</span>-<span class="ruby"> biosversion
+</span>-<span class="ruby"> cpu_flags
+</span>-<span class="ruby"> cpu_model
+</span>-<span class="ruby"> cpuarch</span>
+</code></pre><ul>
+<li>domain<br>…省略</li>
+</ul>
+<p><strong>查询minion上某一具体Grain的值：</strong><br>salt ‘*’ grains.item 选项</p>
+<p> <img src="/img/201703/salt-10.png" style="width: 550x;"></p>
+<p><strong>列出对应minion上所有Grain的详细信息：</strong><br>[root@localhost states]# salt ‘*’ grains.items<br>….省略部分数据</p>
+<h2 id="192-168-17-132:">192.168.17.132:</h2><pre><code>    <span class="number">192.168</span><span class="number">.17</span><span class="number">.132</span>
+
+manufacturer:
+    VMware, Inc.
+master:
+    <span class="number">192.168</span><span class="number">.17</span><span class="number">.135</span>
+mdadm:
+mem_total:
+    <span class="number">980</span>
+nodename:
+    localhost.localdomain
+num_cpus:
+    <span class="number">1</span>
+</code></pre><blockquote>
+<p>设置Grains数据  </p>
+</blockquote>
+<p><strong>命令行方式</strong></p>
+<p>单个值设置：<br>  <img src="/img/201703/salt-11.png" style="width: 550x;"><br>查询：<br>   <img src="/img/201703/salt-12.png" style="width: 550x;"><br>多个值设置：<br>    <img src="/img/201703/salt-13.png" style="width: 550x;"><br>列表结构设置：<br>    <img src="/img/201703/salt-14.png" style="width: 550x;"><br>查询：<br><img src="/img/201703/salt-15.png" style="width: 550x;"><br><strong>Grains_module的方式设置</strong><br>mkdir -p /etc/salt/states/_grains新增模块目录<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost salt]<span class="comment"># cat states/_grains/my_grain_mod.py </span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">now</span><span class="params">()</span>:</span></span><br><span class="line"> grains = ()</span><br><span class="line"> grains[<span class="string">'now'</span>] = time.time()</span><br><span class="line"> <span class="keyword">return</span> grains</span><br></pre></td></tr></table></figure></p>
+<p><strong>saltutil.sync_all同步模块到minion：</strong><br><img src="/img/201703/salt-16.png" style="width: 550x;"><br>重载一次模块：<br><img src="/img/201703/salt-17.png" style="width: 550x;"><br>自定义grains的item：编辑etc/salt/minion注意是有空格<br>grains:<br>  roles: nginx<br>  env: prod</p>
+<p>[root@localhost psycopg2]# salt -G ‘env:prod’ test.ping<br>192.168.17.130:<br>    True<br>在minion端新增以下，重启动客户端<br>[root@localhost ~]# cat /etc/salt/grains<br>web: nginx</p>
+<p>master可以<br><img src="/img/201703/salt-18.png" style="width: 550x;"><br>以下是采用刷新方式，不重启minion客户端<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@salt-minion ~]<span class="comment"># cat /etc/salt/grains </span></span><br><span class="line">web: nginx</span><br><span class="line">web: tomcat</span><br><span class="line"></span><br><span class="line">[root@ salt-master~]<span class="comment"># salt -G 'web:tomcat' test.ping</span></span><br><span class="line">No minions matched the target. No command was sent, no jid was assigned.</span><br><span class="line">ERROR: No <span class="keyword">return</span> received</span><br><span class="line">[root@ salt-master~]<span class="comment"># salt '*' saltutil.sync_grains</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.230</span>:</span><br><span class="line">test_lnmp<span class="number">.1</span><span class="number">.248</span>:</span><br><span class="line">CacheServer:</span><br><span class="line">[root@ salt-master~]<span class="comment"># salt -G 'web:tomcat' test.ping</span></span><br><span class="line">test_lnmp<span class="number">.1</span><span class="number">.248</span>:</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>Pillar</p>
+</blockquote>
+<p><strong>Pillar是什么？</strong></p>
+<p>Pillar是Salt非常重要的一个组件，它用于给特定的minion定义任何你需要的数据，这些数据可以被Salt的其他组件使用。Salt在 0.9.8版本中引入了Pillar。Pillar在解析完成后，是一个嵌套的dict结构；最上层的key是minion ID，其value是该minion所拥有的Pillar数据；每一个value也都是key/value。</p>
+<p><hr><br>这里可以看出Pillar的一个特点，Pillar数据是与特定minion关联的，也就是说每一个minion都只能看到自己的数据，所以 Pillar可以用来传递敏感数据（在Salt的设计中，Pillar使用独立的加密session，也是为了保证敏感数据的安全性）。<br><strong>Pillar可以用在哪些地方？</strong><br>•    敏感数据<br>例如ssh key，加密证书等，由于Pillar使用独立的加密session，可以确保这些敏感数据不被其他minion看到。<br>•    变量<br>可以在Pillar中处理平台差异性，比如针对不同的操作系统设置软件包的名字，然后在State中引用。<br>•    其他任何数据<br>可以在Pillar中添加任何需要用到的数据。比如定义用户和UID的对应关系，mnion的角色等。<br>•    用在Targetting中<br>Pillar可以用来选择minion，使用-I选项。</p>
+<p><strong>Pillar相关命令</strong><br>列出对应minion上所有的pillar的详细信息:<br>[root@localhost salt]# salt ‘<em>‘ pillar.items<br><em>*Pillar实战：</em></em><br><img src="/img/201703/salt-19.png" style="width: 550x;"><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost pillar]<span class="comment"># tree</span></span><br><span class="line">.</span><br><span class="line">├── init</span><br><span class="line">│ └── rsyclog.sls</span><br><span class="line">└── top.sls</span><br><span class="line">[root@localhost pillar]<span class="comment"># cat top.sls </span></span><br><span class="line">base:</span><br><span class="line">  <span class="string">'test_lnmp.1.248'</span>:</span><br><span class="line">- init.rsyslog</span><br><span class="line"></span><br><span class="line">[root@localhost pillar]<span class="comment"># cat init/rsyclog.sls </span></span><br><span class="line">&#123;% <span class="keyword">if</span> grains[<span class="string">'osfinger'</span>] == <span class="string">'CentOS-6'</span> %&#125;</span><br><span class="line">syslog: rsyslog</span><br><span class="line">&#123;% <span class="keyword">elif</span> grains[<span class="string">'osfinger'</span>] == <span class="string">'CentOS-5'</span> %&#125;</span><br><span class="line">syslog: syslog</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/img/201703/salt-20.png" style="width: 550x;"></p>
+<p><strong>Grains和Pillar区别</strong><br><img src="/img/201703/salt-21.png" style="width: 550x;"></p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2017/03/03/django上传图片和文件并保存在数据库/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2017/03/03/SaltStack数据系统之Grains【下】/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2017/03/03/通过Jinja2模板以及Grain和Pillar扩展主机状态/" data-title="通过Jinja2模板以及Grain和Pillar扩展主机状态" data-url="http://linuxOps.xyz/2017/03/03/通过Jinja2模板以及Grain和Pillar扩展主机状态/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2017-03-03 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

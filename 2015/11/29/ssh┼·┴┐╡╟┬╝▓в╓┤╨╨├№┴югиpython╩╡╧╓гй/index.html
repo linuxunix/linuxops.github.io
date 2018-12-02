@@ -1,0 +1,223 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>ssh批量登录并执行命令（python实现） | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="ssh批量登录并执行命令（python实现）"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> ssh批量登录并执行命令（python实现）</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <p>作为一个系统管理员，有时候常常批量修改远程主机配置，当然这里有很多选择，可以选择最近比较热门的自动化工具ansible等，以下介绍使用python实现：(这里假设所有主机的用户名和密码都一致)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#-*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#!/usr/bin/python </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> paramiko</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line">f = file (<span class="string">'ip.list'</span>,<span class="string">'r'</span>)</span><br><span class="line">IP = f.readlines()</span><br><span class="line">f.close() </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ssh2</span><span class="params">(ip,username,passwd,cmd)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line"></span><br><span class="line">        ssh = paramiko.SSHClient()</span><br><span class="line"></span><br><span class="line">        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())</span><br><span class="line"></span><br><span class="line">        ssh.connect(ip,<span class="number">22</span>,username,passwd,timeout=<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> m <span class="keyword">in</span> cmd:</span><br><span class="line"></span><br><span class="line">            stdin, stdout, stderr = ssh.exec_command(m)</span><br><span class="line"></span><br><span class="line">            stdin.write(<span class="string">"Y"</span>)</span><br><span class="line"></span><br><span class="line">            out = stdout.readlines()</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> o <span class="keyword">in</span> out:</span><br><span class="line"></span><br><span class="line">                <span class="keyword">print</span> o[:-<span class="number">1</span>]</span><br><span class="line">        f = file(<span class="string">'out.txt'</span>,<span class="string">'aw'</span>)</span><br><span class="line">        f.write(o)</span><br><span class="line">        f.close()</span><br><span class="line">        <span class="keyword">print</span> <span class="string">'%s\tOK\n'</span>%(ip)</span><br><span class="line">    f=file(<span class="string">'out.txt'</span>,<span class="string">'aw'</span>)</span><br><span class="line">    <span class="keyword">print</span> &gt;&gt; f,<span class="string">'%s\tOK\n'</span>%(ip)</span><br><span class="line">        f.close()</span><br><span class="line">    <span class="keyword">except</span> :</span><br><span class="line">        <span class="keyword">print</span> <span class="string">'%s\tError\n'</span>%(ip)</span><br><span class="line">    f = file(<span class="string">'out.txt'</span>,<span class="string">'aw'</span>)</span><br><span class="line">    <span class="keyword">print</span> &gt;&gt; f,<span class="string">'%s\tError\n'</span>%(ip)</span><br><span class="line">        f.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">'__main__'</span>:</span><br><span class="line"></span><br><span class="line">    cmd = [<span class="string">'date'</span>,<span class="string">'ifconfig'</span>] <span class="comment">#你要执行的命令列表，多个命令之间用,隔开</span></span><br><span class="line"></span><br><span class="line">    username=<span class="string">"账号"</span></span><br><span class="line">    passwd = <span class="string">"密码"</span>    </span><br><span class="line">    threads = []   <span class="comment">#多线程</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Begin......"</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> IP:</span><br><span class="line"></span><br><span class="line">        ip = str(i)</span><br><span class="line"></span><br><span class="line">        a=threading.Thread(target=ssh2,args=(ip,username,passwd,cmd))</span><br><span class="line">        a.start()</span><br></pre></td></tr></table></figure>
+<hr>
+<p>ip.list格式<br>IP<br>IP</p>
+<p>本文参考<a href="http://www.cnblogs.com/ma6174/" target="_blank" rel="external">http://www.cnblogs.com/ma6174/</a> 文章作了部分改进</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2015/12/06/╩╣╙├zabbix API╜╙┐┌┤ю╜иgrafana/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2015/11/29/╘╦╬м╓о╡└╓о╧╡═│╣▄└э╓╨╡─╚¤┤є└√╚╨-htop-glances-dstat/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2015/11/29/ssh┼·┴┐╡╟┬╝▓в╓┤╨╨├№┴югиpython╩╡╧╓гй/" data-title="ssh批量登录并执行命令（python实现）" data-url="http://linuxOps.xyz/2015/11/29/ssh┼·┴┐╡╟┬╝▓в╓┤╨╨├№┴югиpython╩╡╧╓гй/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2015-11-29 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

@@ -1,0 +1,235 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Celery - 分布式任务队列 | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Celery - 分布式任务队列"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> Celery - 分布式任务队列</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <p>Celery 是一个简单、灵活且可靠的，处理大量消息的分布式系统，并且提供维护这样一个系统的必需工具。</p>
+<p>它是一个专注于实时处理的任务队列，同时也支持任务调度。</p>
+<p>Celery 有广泛、多样的用户与贡献者社区，你可以通过 IRC 或是 邮件列表 加入我们。</p>
+<p>Celery 是开源的，使用 BSD 许可证 授权。<br>中文官网文档地址：<a href="http://docs.jinkan.org/docs/celery/" target="_blank" rel="external">http://docs.jinkan.org/docs/celery/</a></p>
+<h3 id="举例">举例</h3><p>创建task.py<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> celery <span class="keyword">import</span> Celery</span><br><span class="line"></span><br><span class="line">app =Celery(<span class="string">'tasks'</span>,broker=<span class="string">'redis://127.0.0.1:6379/0'</span>,backend=<span class="string">'redis://127.0.0.1:6379/0'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="decorator">@app.task</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(x, y)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> x + y</span><br></pre></td></tr></table></figure></p>
+<p>启动<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost python]<span class="comment"># celery -A task worker --loglevel=info</span></span><br><span class="line">/usr/lib/python2<span class="number">.7</span>/site-packages/celery/platforms.py:<span class="number">796</span>: RuntimeWarning: Yo<span class="string">u're running the worker with superuser privileges: this is</span><br><span class="line">absolutely not recommended!</span><br><span class="line"></span><br><span class="line">Please specify a different user using the -u option.</span><br><span class="line"></span><br><span class="line">User information: uid=0 euid=0 gid=0 egid=0</span><br><span class="line"></span><br><span class="line">  uid=uid, euid=euid, gid=gid, egid=egid,</span><br><span class="line"> </span><br><span class="line"> -------------- celery@localhost.localdomain v4.1.1 (latentcall)</span><br><span class="line">---- **** ----- </span><br><span class="line">--- * ***  * -- Linux-3.10.0-693.el7.x86_64-x86_64-with-centos-7.4.1708-Core 2018-06-06 05:25:17</span><br><span class="line">-- * - **** --- </span><br><span class="line">- ** ---------- [config]</span><br><span class="line">- ** ---------- .&gt; app:         tasks:0x7f5c3038c150</span><br><span class="line">- ** ---------- .&gt; transport:   redis://127.0.0.1:6379/0</span><br><span class="line">- ** ---------- .&gt; results:     redis://127.0.0.1:6379/0</span><br><span class="line">- *** --- * --- .&gt; concurrency: 1 (prefork)</span><br><span class="line">-- ******* ---- .&gt; task events: OFF (enable -E to monitor tasks in this worker)</span><br><span class="line">--- ***** ----- </span><br><span class="line"> -------------- [queues]</span><br><span class="line">                .&gt; celery           exchange=celery(direct) key=celery</span><br><span class="line">                </span><br><span class="line"></span><br><span class="line">[tasks]</span><br><span class="line">  . task.add</span><br><span class="line"></span><br><span class="line">[2018-06-06 05:25:17,206: INFO/MainProcess] Connected to redis://127.0.0.1:6379/0</span><br><span class="line">[2018-06-06 05:25:17,218: INFO/MainProcess] mingle: searching for neighbors</span><br><span class="line">[2018-06-06 05:25:18,241: INFO/MainProcess] mingle: all alone</span><br><span class="line">[2018-06-06 05:25:18,281: INFO/MainProcess] celery@localhost.localdomain ready.</span><br><span class="line">[2018-06-06 05:26:01,848: INFO/MainProcess] Received task: task.add[69c90eef-309c-45e7-a888-1357129aae6d]</span></span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<blockquote>
+<p>注意安装redis模块：pip install redis</p>
+</blockquote>
+</blockquote>
+<h3 id="执行调度">执行调度</h3><p>导入模块并执行调度<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> task <span class="keyword">import</span> add  <span class="comment">#注意模块路径</span></span><br><span class="line">In [<span class="number">2</span>]: add.delay(<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line">Out[<span class="number">2</span>]: &lt;AsyncResult: <span class="number">4e4</span>ab6aa-<span class="number">266e-4178</span>-b668-<span class="number">39</span>ada6382113&gt;</span><br></pre></td></tr></table></figure></p>
+<p>查看Celery终端输出<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">2018</span>-<span class="number">06</span>-<span class="number">06</span> <span class="number">05</span>:<span class="number">32</span>:<span class="number">20</span>,<span class="number">583</span>: INFO/ForkPoolWorker-<span class="number">1</span>] Task task.add[<span class="number">4e4</span>ab6aa-<span class="number">266e-4178</span>-b668-<span class="number">39</span>ada6382113] succeeded <span class="keyword">in</span> <span class="number">0.00385068000105</span>s: <span class="number">5</span></span><br></pre></td></tr></table></figure></p>
+<p>查看结果<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">3</span>]: result = add.delay(<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: print(result.get())</span><br><span class="line"><span class="number">5</span></span><br></pre></td></tr></table></figure></p>
+<p>查看模块的属性列表：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">5</span>]: dir(result)</span><br><span class="line"></span><br><span class="line">Out[<span class="number">5</span>]: </span><br><span class="line">[<span class="string">'TimeoutError'</span>,</span><br><span class="line"> <span class="string">'__class__'</span>,</span><br><span class="line"> <span class="string">'__copy__'</span>,</span><br><span class="line"> <span class="string">'__delattr__'</span>,</span><br><span class="line"> <span class="string">'__dict__'</span>,</span><br><span class="line"> <span class="string">'__doc__'</span>,</span><br><span class="line"> <span class="string">'__eq__'</span>,</span><br><span class="line"> <span class="string">'__format__'</span>,</span><br><span class="line"> <span class="string">'__getattribute__'</span>,</span><br><span class="line"> <span class="string">'__hash__'</span>,</span><br><span class="line"> <span class="string">'__init__'</span>,</span><br><span class="line"> <span class="string">'__module__'</span>,</span><br><span class="line"> <span class="string">'__ne__'</span>,</span><br><span class="line"> <span class="string">'__new__'</span>,</span><br><span class="line"> <span class="string">u'__reduce__'</span>,</span><br><span class="line"> <span class="string">'__reduce_args__'</span>,</span><br><span class="line"> <span class="string">'__reduce_ex__'</span>,</span><br><span class="line"> <span class="string">'__repr__'</span>,</span><br><span class="line"> <span class="string">'__setattr__'</span>,</span><br><span class="line"> <span class="string">'__sizeof__'</span>,</span><br><span class="line"> <span class="string">'__str__'</span>,</span><br><span class="line"> <span class="string">'__subclasshook__'</span>,</span><br><span class="line"> <span class="string">'__unicode__'</span>,</span><br><span class="line"> <span class="string">'__unicode_repr__'</span>,</span><br><span class="line"> <span class="string">'__weakref__'</span>,</span><br><span class="line"> <span class="string">'_cache'</span>,</span><br><span class="line"> <span class="string">'_get_task_meta'</span>,</span><br><span class="line"> <span class="string">'_iter_meta'</span>,</span><br><span class="line"> <span class="string">'_maybe_reraise_parent_error'</span>,</span><br><span class="line"> <span class="string">'_maybe_set_cache'</span>,</span><br><span class="line"> <span class="string">'_on_fulfilled'</span>,</span><br><span class="line"> <span class="string">'_parents'</span>,</span><br><span class="line"> <span class="string">'_set_cache'</span>,</span><br><span class="line"> <span class="string">'_to_remote_traceback'</span>,</span><br><span class="line"> <span class="string">'app'</span>,</span><br><span class="line"> <span class="string">'as_tuple'</span>,</span><br><span class="line"> <span class="string">'backend'</span>,</span><br><span class="line"> <span class="string">'build_graph'</span>,</span><br><span class="line"> <span class="string">'children'</span>,</span><br><span class="line"> <span class="string">'collect'</span>,</span><br><span class="line"> <span class="string">'failed'</span>,</span><br><span class="line"> <span class="string">'forget'</span>,</span><br><span class="line"> <span class="string">'get'</span>,</span><br><span class="line"> <span class="string">'get_leaf'</span>,</span><br><span class="line"> <span class="string">'graph'</span>,</span><br><span class="line"> <span class="string">'id'</span>,</span><br><span class="line"> <span class="string">'info'</span>,</span><br><span class="line"> <span class="string">'iterdeps'</span>,</span><br><span class="line"> <span class="string">'maybe_reraise'</span>,</span><br><span class="line"> <span class="string">'maybe_throw'</span>,</span><br><span class="line"> <span class="string">'on_ready'</span>,</span><br><span class="line"> <span class="string">'parent'</span>,</span><br><span class="line"> <span class="string">'ready'</span>,</span><br><span class="line"> <span class="string">'result'</span>,</span><br><span class="line"> <span class="string">'revoke'</span>,</span><br><span class="line"> <span class="string">'state'</span>,</span><br><span class="line"> <span class="string">'status'</span>,</span><br><span class="line"> <span class="string">'successful'</span>,</span><br><span class="line"> <span class="string">'supports_native_join'</span>,</span><br><span class="line"> <span class="string">'task_id'</span>,</span><br><span class="line"> <span class="string">'then'</span>,</span><br><span class="line"> <span class="string">'throw'</span>,</span><br><span class="line"> <span class="string">'traceback'</span>,</span><br><span class="line"> <span class="string">'wait'</span>]</span><br></pre></td></tr></table></figure></p>
+<p>获取id<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">6</span>]: print(result.id)</span><br><span class="line"><span class="number">30</span>f7fce2-<span class="number">2687</span>-<span class="number">448</span>c-<span class="number">816</span>f-<span class="number">11334</span>efc6442</span><br></pre></td></tr></table></figure></p>
+<p>登录reids查看<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost python]<span class="comment"># redis-cli</span></span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6379</span>&gt; KEYS *</span><br><span class="line"><span class="number">1</span>) <span class="string">"_kombu.binding.celery.pidbox"</span></span><br><span class="line"><span class="number">2</span>) <span class="string">"celery-task-meta-69c90eef-309c-45e7-a888-1357129aae6d"</span></span><br><span class="line"><span class="number">3</span>) <span class="string">"_kombu.binding.celery"</span></span><br><span class="line"><span class="number">4</span>) <span class="string">"_kombu.binding.celeryev"</span></span><br><span class="line"><span class="number">5</span>) <span class="string">"celery-task-meta-4e4ab6aa-266e-4178-b668-39ada6382113"</span></span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6379</span>&gt; get celery-task-meta-<span class="number">4e4</span>ab6aa-<span class="number">266e-4178</span>-b668-<span class="number">39</span>ada6382113</span><br><span class="line"><span class="string">"&#123;\"status\": \"SUCCESS\", \"traceback\": null, \"result\": 5, \"task_id\": \"4e4ab6aa-266e-4178-b668-39ada6382113\", \"children\": []&#125;"</span></span><br></pre></td></tr></table></figure></p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2018/07/29/Django中的缓存配置/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2018/06/16/Python-Zabbix-Api/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2018/06/16/Celery-分布式任务队列/" data-title="Celery - 分布式任务队列" data-url="http://linuxOps.xyz/2018/06/16/Celery-分布式任务队列/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2018-06-16 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

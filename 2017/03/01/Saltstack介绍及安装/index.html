@@ -1,0 +1,246 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Saltstack介绍及安装 | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Saltstack介绍及安装"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> Saltstack介绍及安装</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <p><strong>Saltstack介绍及安装</strong></p>
+<blockquote>
+<p>Salt 是：</p>
+</blockquote>
+<p>•    一个配置管理系统，能够维护预定义状态的远程节点(比如，确保指定的报被安装，指定的服务在运行)<br>•    一个分布式远程执行系统，用来在远程节点（可以是单个节点，也可以是任意规则挑选出来的节点）上执行命令和查询数据<br>开发其的目的是为远程执行提供最好的解决方案，并使远程执行变得更好，更快，更简单。<br>并行执行</p>
+<blockquote>
+<p>Salt的核心功能</p>
+</blockquote>
+<p>•    使命令发送到远程系统是并行的而不是串行的<br>•    使用安全加密的协议<br>•    使用最小最快的网络载荷<br>•    提供简单的编程接口<br>Salt同样引入了更加细致化的领域控制系统来远程执行，使得系统成为目标不止可以通过主机名，还可以通过系统属性。<br>Python客户端接口<br>为了允许简单的扩展，Salt执行程序可以写为纯Python模块。数据从Salt执行过程中收集到可以发送回master服务端，或者发送到任何 任意程序。Salt可以从一个简单的Python API调用，或者从命令行被调用，所以Salt可以用来执行一次性命令，也可以作为一个更大的应用程序的一个组成部分。<br><strong>saltstack安装</strong><br>安装准备<br>rpm -Uvh <a href="http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm" target="_blank" rel="external">http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</a><br>Salt的master和minion包是分开的。机器只需要安装相应的包即可运行。通常情况下，会有一个master和多个minions。<br>在salt-master上，运行:<br>yum install salt-master<br>在salt-minion上，运行:<br>yum install salt-minion</p>
+<blockquote>
+<p>实战安装</p>
+</blockquote>
+<p>Master:192.168.108.129<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@server1 ~]<span class="comment"># rpm -Uvh http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</span></span><br><span class="line">Retrieving http://ftp.linux.ncsu.edu/pub/epel/<span class="number">6</span>/x86_64/epel-release-<span class="number">6</span>-<span class="number">8.</span>noarch.rpm</span><br><span class="line">warning: /var/tmp/rpm-tmp.iZuZME: Header V3 RSA/SHA256 Signature, key ID <span class="number">0608</span>b895: NOKEY</span><br><span class="line">Preparing… <span class="comment">########################################### [100%]</span></span><br><span class="line">package epel-release-<span class="number">6</span>-<span class="number">8.</span>noarch <span class="keyword">is</span> already installed</span><br><span class="line">[root@server1 ~]<span class="comment"># yum install -y salt-master</span></span><br><span class="line">已加载插件：fastestmirror, refresh-packagekit, security</span><br><span class="line">设置安装进程</span><br><span class="line">Loading mirror speeds <span class="keyword">from</span> cached hostfile</span><br><span class="line">epel/metalink | <span class="number">5.4</span> kB <span class="number">00</span>:<span class="number">00</span> </span><br><span class="line">•	base: mirrors.aliyun.com</span><br><span class="line">….省略</span><br><span class="line">Minion：<span class="number">192.168</span><span class="number">.108</span><span class="number">.141</span></span><br><span class="line">[root@server2 ~]<span class="comment"># rpm -Uvh http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</span></span><br><span class="line">[root@server2 ~]<span class="comment"># yum install -y salt-minion</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>Master</strong><br>配置master开机自动启动:<br>[root@server2 ~]# chkconfig salt-master on<br>启动Master:<br>[root@server1 ~]# service salt-master start<br>Starting salt-master daemon: [确定]<br>[root@server1 ~]# lsof -i:4505<br>COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME<br>salt-mast 2833 root 12u IPv4 22272 0t0 TCP <em>:4505 (LISTEN)<br><em>*Minion</em></em><br>配置Minion开机自动启动:<br>[root@server2 ~]# chkconfig salt-minion on<br>启动Minion:<br>[root@server2 ~]# chkconfig salt-minion on<br>Starting salt-minion daemon: [确定]<br>[root@server2 ~]# vim /etc/salt/minion —配置文件<br>[root@server2 ~]# grep -v ‘^#’ /etc/salt/minion<br>master: 192.168.108.129</p>
+<p><strong>Master</strong><br>[root@server1 ~]# salt-key<br>Accepted Keys:<br>Denied Keys:<br>Unaccepted Keys:<br>server2   #默认是主机2的系统名，可以修改/etc/salt/minion的id字段<br>Rejected Keys:<br>把server2加入监控列表<br>[root@server1 ~]# salt-key -a server2<br>The following keys are going to be accepted:<br>Unaccepted Keys:<br>server2<br>Proceed? [n/Y] y<br>Key for minion server2 accepted.<br>[root@server1 ~]# salt-key<br>Accepted Keys:<br>server2<br>Denied Keys:<br>Unaccepted Keys:<br>Rejected Keys:</p>
+<blockquote>
+<p>测试</p>
+</blockquote>
+<p>[root@server1 ~]# salt ‘*’ test.ping&lt;==代表所有主机<br>server2:<br>True</p>
+<blockquote>
+<p>* 是指向所有minions的目标。<br>test.ping 告诉minon运行 test.ping 函数。    </p>
+</blockquote>
+<p>[root@server1 ~]# salt ‘*’ cmd.run ‘df -h’&lt;==远程执行命令<br>server2:<br>Filesystem Size Used Avail Use% Mounted on<br>/dev/mapper/VolGroup-lv_root 18G 8.2G 8.4G 50% /<br>tmpfs 491M 92K 491M 1% /dev/shm<br>/dev/sda1 485M 35M 426M 8% /boot<br>/dev/sr0 4.2G 4.2G 0 100% /media/CentOS_6.5_Final</p>
+<blockquote>
+<p>错误排查：</p>
+</blockquote>
+<p>通过查看minion：tail -f /var/log/salt/minion<br>2016-08-28 23:29:25,272 [salt.config      ][ERROR   ] Error parsing configuration file: /etc/salt/minion - conf should be a document, not <type 'str'="">.<br>修改minion配置文件<br>master: 192.168.1.248<br>id: 192.168.1.230<br>master：后面跟空格，然后是mster的ip。id：后面有个空格，千万别忘了，否则启动会报错。</type></p>
+<p>最新centos7系列安装可以参考官网：<br><a href="https://docs.saltstack.com/en/latest/topics/installation/rhel.html" target="_blank" rel="external">https://docs.saltstack.com/en/latest/topics/installation/rhel.html</a></p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2017/03/01/saltstack命令和端口介绍/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2017/02/28/简谈ELK日志系统附搭建过程/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2017/03/01/Saltstack介绍及安装/" data-title="Saltstack介绍及安装" data-url="http://linuxOps.xyz/2017/03/01/Saltstack介绍及安装/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2017-03-01 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

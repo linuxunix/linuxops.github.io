@@ -1,0 +1,1116 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 <div class="page-header">
+  <h1>记录Linux的点点滴滴（DevOps技术运维小学生）</h1>
+</div>
+
+<div class="row page">
+
+	
+	<div class="col-md-9">
+	
+
+		<div class="slogan">
+      <i class="fa fa-heart"></i>
+      Welcome to my blog.
+</div>    
+
+		<div class="mypage">
+		
+		<!-- title and entry -->
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2018-07-29 </div>
+			<div class="article-title"><a href="/2018/07/29/企业常用几种部署方式-蓝绿部署、滚动部署、金丝雀部署/" >企业常用几种部署方式(蓝绿部署、滚动部署、金丝雀部署)</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<p>部署是将服务的某个版本投入生产环境的过程。部署的总体目标是：对系统用户产生最小影响的情况下，把服务的升级版本投放到生产环境中。</p>
+</blockquote>
+<h3 id="服务变更的主要原因：">服务变更的主要原因：</h3><ul>
+<li>1、修复错误</li>
+<li>2、提高服务的质量</li>
+<li>3、增加新的功能</li>
+</ul>
+<h3 id="服务变更需要注意哪些(或者说如何产生最小影响)？">服务变更需要注意哪些(或者说如何产生最小影响)？</h3><p>SRE 经验告诉我们，大概 70% 的生产事故由某种部署的变更而触发。变更管理的最佳实践可使用自动化来完成以下几点：</p>
+<ul>
+<li>1、部署尽可能在用户少的时候。</li>
+<li>2、每次部署前备份原始数据。</li>
+<li>3、采用渐进式发布机制。</li>
+<li>4、迅速而准确地检测到问题的发生。</li>
+<li>5、当出现问题时，安全迅速地回退改动。</li>
+</ul>
+<h3 id="常用部署方式存在以下几种:">常用部署方式存在以下几种:</h3><ul>
+<li>蓝绿部署</li>
+<li>滚动部署</li>
+<li>灰度部署/金丝雀部署</li>
+</ul>
+<h4 id="蓝绿部署">蓝绿部署</h4><h5 id="定义：">定义：</h5><p>蓝绿部署(部分称大翻转或红/黑部署)，首先准备N台提供版本A服务的机器，同时准备N台提供版本B的机器。一旦版本B的N台机器配置好并准备好服务请求，通过切换路由到版本B,例子如下所示：</p>
+<p>1、绿色表示当前的生产应用程序V1<br> <img src="/img/201807/greendeployment.png" style="width: 550x;"></p>
+<p>2、现在，当您准备对app2进行更改并将其升级到v2时，您将在”蓝色环境”中执行此操作。在该环境中，您可以部署新版本的应用程序，运行冒烟测试以及任何其他测试（包括操作系统，缓存，CPU等）。当结果看起来不错时，您可以将负载均衡器/反向代理/路由器更改为指向蓝色环境：</p>
+<p> <img src="/img/201807/bluedeployment.png" style="width: 550x;"></p>
+<h5 id="方法：">方法：</h5><ul>
+<li>可以通过切换域名服务器（DNS）</li>
+<li>更改负载均衡器路由切换</li>
+</ul>
+<h5 id="优点：">优点：</h5><ul>
+<li>更新过程无需停机，风险较少</li>
+<li>回滚方便，只需要更改路由或者切换DNS服务器，效率较高</li>
+</ul>
+<h5 id="缺点：">缺点：</h5><ul>
+<li>需要部署两套机器，费用开销大</li>
+<li>在非隔离的机器（Docker、VM）上操作时，可能会导致蓝绿环境被摧毁风险</li>
+<li>负载均衡器/反向代理/路由/DNS处理不当，将导致流量没有切换过来情况出现</li>
+</ul>
+<h4 id="滚动发布：">滚动发布：</h4><h5 id="定义：-1">定义：</h5><p>现生产N台机器都为版本A的机器，部署取出一个或者多个服务器停止服务，执行更新版本B，更新后重新将其投入使用，继续不断更新其他机器，直到集群中所有的实例都更新成版本B。</p>
+<h5 id="流程：">流程：</h5><ul>
+<li>1、负载均衡或者路由移除一台或者多台实例(正常监控也需要移除)</li>
+<li>2、移除后的实例开始更新</li>
+<li>3、上线测试后无异常开始接入负载均衡器或者路由</li>
+<li>4、新增实例监控</li>
+<li>5、继续上线后一批实例，直到集群中所有的实例都更新</li>
+</ul>
+<h5 id="优点：-1">优点：</h5><ul>
+<li>更新过程体验影响少，风险较少</li>
+<li>费用对比蓝绿花费开销较少，无需额外新增机器</li>
+</ul>
+<h5 id="缺点：-1">缺点：</h5><ul>
+<li>上线/回滚完成时间相对较慢</li>
+<li>需要监控和负载均衡器的移除和接入能力</li>
+</ul>
+<h4 id="灰度发布">灰度发布</h4><h5 id="定义">定义</h5><p>灰度发布（又名金丝雀发布）是指在黑与白之间，能够平滑过渡的一种发布方式。在其上可以进行A/B testing，即让一部分用户继续用产品特性A，一部分用户开始用产品特性B，如果用户对B没有什么反对意见，那么逐步扩大范围，把所有用户都迁移到B上面来。灰度发布可以保证整体系统的稳定，在初始灰度的时候就可以发现、调整问题，以保证其影响度。（类似地下采煤使用的金丝雀方法，当金丝雀遇到有毒气体时候，产生痛苦信号）A/B testing和金丝雀的差别在于A/B 测试对于特定业务的关键绩效指标来说，确定那个版本执行得更好。</p>
+<h5 id="方法">方法</h5><ul>
+<li>首先部署少量服务器密切</li>
+<li>观察是否因为版本产生预期结果</li>
+<li>当结果满意时候再全量部署</li>
+</ul>
+<p> <img src="/img/201807/beta.png" style="width: 550x;"></p>
+<p> <img src="/img/201807/AB-test.png" style="width: 550x;"></p>
+<p> 优缺点可以参考上面</p>
+<h4 id="关于CAP定理">关于CAP定理</h4><ul>
+<li>一致性（Consistence） （等同于所有节点访问同一份最新的数据副本）</li>
+<li>可用性（Availability）（每次请求都能获取到非错的响应——但是不保证获取的数据为最新数据）</li>
+<li>分区容错性（Partition tolerance）（以实际效果而言，分区相当于对通信的时限要求。系统如果不能在时限内达成数据一致性，就意味着发生了分区的情况，必须就当前操作在C和A之间做出选择[3]。）</li>
+</ul>
+<p>我们这里只讨论一致性问题，其他你们可以自行思考下：</p>
+<ul>
+<li>建议无状态(session等信息存放在缓存数据库)</li>
+<li>如果新版本的操作涉及到数据库更改，建议保持只新增不删减字段操作</li>
+</ul>
+<p>要是存在多版本同时存在，注意考虑以下：</p>
+<ul>
+<li>1、功能开关</li>
+<li>2、前后版本兼容</li>
+</ul>
+<p>参考资料包括以下：</p>
+<ul>
+<li><a href="http://blog.christianposta.com/deploy/blue-green-deployments-a-b-testing-and-canary-releases/" target="_blank" rel="external">http://blog.christianposta.com/deploy/blue-green-deployments-a-b-testing-and-canary-releases/</a></li>
+<li><a href="https://docs.cloudfoundry.org/devguide/deploy-apps/blue-green.html" target="_blank" rel="external">https://docs.cloudfoundry.org/devguide/deploy-apps/blue-green.html</a></li>
+</ul>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2018/07/29/企业常用几种部署方式-蓝绿部署、滚动部署、金丝雀部署/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2018-07-29 </div>
+			<div class="article-title"><a href="/2018/07/29/Pyecharts-生成图表-附Django支持/" >Pyecharts 生成图表(附Django支持)</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<p>pyecharts 是一个用于生成 Echarts 图表的类库。Echarts 是百度开源的一个数据可视化 JS 库。用 Echarts 生成的图可视化效果非常棒，pyecharts 是为了与 Python 进行对接，方便在 Python 中直接使用数据生成图。</p>
+</blockquote>
+<h3 id="安装">安装</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pyecharts</span><br></pre></td></tr></table></figure>
+<h3 id="简单实例">简单实例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyecharts <span class="keyword">import</span> Bar</span><br><span class="line">bar = Bar(<span class="string">"我的第一个图表"</span>, <span class="string">"这里是副标题"</span>)</span><br><span class="line">bar.add(<span class="string">"服装"</span>, [<span class="string">"衬衫"</span>, <span class="string">"羊毛衫"</span>, <span class="string">"雪纺衫"</span>, <span class="string">"裤子"</span>, <span class="string">"高跟鞋"</span>, <span class="string">"袜子"</span>], [<span class="number">5</span>, <span class="number">20</span>, <span class="number">36</span>, <span class="number">10</span>, <span class="number">75</span>, <span class="number">90</span>])</span><br><span class="line"><span class="comment"># bar.print_echarts_options() # 该行只为了打印配置项，方便调试时使用</span></span><br><span class="line">bar.render()    <span class="comment"># 生成本地 HTML 文件</span></span><br></pre></td></tr></table></figure>
+<p>默认当前目录下生成render.html，使用浏览器打开如下：<br> <img src="/img/201807/Pyecharts01.png" style="width: 550x;"></p>
+<h5 id="图形绘制过程">图形绘制过程</h5><p>基本上所有的图表类型都是这样绘制的：</p>
+<ul>
+<li>chart_name = Type() 初始化具体类型图表。</li>
+<li>add() 添加数据及配置项。</li>
+<li>render() 生成本地文件（html/svg/jpeg/png/pdf/gif）。</li>
+</ul>
+<p>add() 数据一般为两个列表（长度一致）。如果你的数据是字典或者是带元组的字典。可利用 cast() 方法转换。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="decorator">@staticmethod</span></span><br><span class="line">cast(seq)</span><br><span class="line">转换数据序列，将带字典和元组类型的序列转换为 k_lst,v_lst 两个列表</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><strong>元组列表</strong><br>[(A1, B1), (A2, B2), (A3, B3), (A4, B4)] –&gt; k_lst[ A[i1, i2…] ], v_lst[ B[i1, i2…] ]</li>
+<li><strong>字典列表</strong><br>[{A1: B1}, {A2: B2}, {A3: B3}, {A4: B4}] –&gt; k_lst[ A[i1, i2…] ], v_lst[ B[i1, i2…] ]</li>
+<li><strong>字典</strong><br>{A1: B1, A2: B2, A3: B3, A4: B4} – &gt; k_lst[ A[i1, i2…] ], v_lst[ B[i1, i2…] ]</li>
+</ul>
+<h3 id="结合Django显示以上图形">结合Django显示以上图形</h3><h4 id="基础环境">基础环境</h4><ul>
+<li><strong>Django_version:</strong> 2.1a1</li>
+<li><strong>Python_verison:</strong> 3.6.5</li>
+</ul>
+<h4 id="url-py">url.py</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib <span class="keyword">import</span> admin</span><br><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> path,re_path</span><br><span class="line"><span class="keyword">from</span> django.views.generic <span class="keyword">import</span>  TemplateView  <span class="comment">#通用视图</span></span><br><span class="line"><span class="keyword">from</span> apps.ops <span class="keyword">import</span> views</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    re_path(<span class="string">r'^test/$'</span>, views.test),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<h4 id="app-ops-views-py">app.ops.views.py</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> render</span><br><span class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse</span><br><span class="line"><span class="keyword">from</span> django.template <span class="keyword">import</span> loader</span><br><span class="line"><span class="keyword">from</span> pyecharts <span class="keyword">import</span> Bar</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="comment"># Create your views here.</span></span><br><span class="line"></span><br><span class="line">REMOTE_HOST = <span class="string">"https://pyecharts.github.io/assets/js"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(request)</span>:</span></span><br><span class="line">    template = loader.get_template(<span class="string">'test/pyecharts.html'</span>)</span><br><span class="line">    b = bar()</span><br><span class="line">    context = dict(</span><br><span class="line">        myechart=b.render_embed(),</span><br><span class="line">        host=REMOTE_HOST,</span><br><span class="line">        script_list=b.get_js_dependencies()</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> HttpResponse(template.render(context, request))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bar</span><span class="params">()</span>:</span></span><br><span class="line">    bar = Bar(<span class="string">"我的第一个图表"</span>, <span class="string">"这里是副标题"</span>)</span><br><span class="line">    bar.add(<span class="string">"服装"</span>, [<span class="string">"衬衫"</span>, <span class="string">"羊毛衫"</span>, <span class="string">"雪纺衫"</span>, <span class="string">"裤子"</span>, <span class="string">"高跟鞋"</span>, <span class="string">"袜子"</span>], [<span class="number">5</span>, <span class="number">20</span>, <span class="number">36</span>, <span class="number">10</span>, <span class="number">75</span>, <span class="number">90</span>])</span><br><span class="line">    <span class="comment"># bar.print_echarts_options() # 该行只为了打印配置项，方便调试时使用</span></span><br><span class="line">    <span class="comment"># bar.render()  # 生成本地 HTML 文件</span></span><br><span class="line">    <span class="keyword">return</span> bar</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>script_list 是 Page() 类渲染网页所需要依赖的 echarts js 库，依赖的库的数量取决于所要渲染的图形种类。</p>
+</li>
+<li><p>host 是 echarts js 库的地址，默认提供的地址为 <a href="https://pyecharts.github.io/assets/js" target="_blank" rel="external">https://pyecharts.github.io/assets/js</a> 当然，如果你愿意你也可以改变这个地址，先克隆 <a href="https://github.com/pyecharts/assets" target="_blank" rel="external">https://github.com/pyecharts/assets</a> 然后将 js 文件夹挂载在你自己的服务器上即可。</p>
+</li>
+</ul>
+<h4 id="templates/test/pyecharts-html">templates/test/pyecharts.html</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- myfirstvis/templates/pyecharts.html --&gt;</span></span><br><span class="line"><span class="doctype">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">html</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="title">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">charset</span>=<span class="value">"utf-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">title</span>&gt;</span>Proudly presented by PycCharts<span class="tag">&lt;/<span class="title">title</span>&gt;</span></span><br><span class="line">    &#123;% for jsfile_name in script_list %&#125;</span><br><span class="line">        <span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">"&#123;&#123; host &#125;&#125;/&#123;&#123; jsfile_name &#125;&#125;.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></span><br><span class="line">    &#123;% endfor %&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="title">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="title">body</span>&gt;</span></span><br><span class="line">  &#123;&#123; myechart|safe &#125;&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="title">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="title">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>启动django访问/test/即可</p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2018/07/29/Pyecharts-生成图表-附Django支持/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2018-07-29 </div>
+			<div class="article-title"><a href="/2018/07/29/Python调用Zabbix-Api获取数据/" >Python调用Zabbix Api获取数据</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <h3 id="请求的方法参数">请求的方法参数</h3><p>官方原文：</p>
+<ul>
+<li><strong>jsonrpc</strong> - the version of the JSON-RPC protocol used by the API; the  Zabbix API implements JSON-RPC version 2.0;</li>
+<li><strong>method</strong> - the API method being called;</li>
+<li><strong>params</strong> - parameters that will be passed to the API method;</li>
+<li><strong>id</strong> - an arbitrary identifier of the request;</li>
+<li><strong>auth</strong> - a user authentication token; since we don’t have one yet, it’s set to null.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th style="text-align:center">值类型</th>
+<th style="text-align:left">说明</th>
+<th>是否必须</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jsonrpc</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">接口版本</td>
+<td>是</td>
+</tr>
+<tr>
+<td>method</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">请求方法</td>
+<td>是</td>
+</tr>
+<tr>
+<td>params</td>
+<td style="text-align:center">json</td>
+<td style="text-align:left">请求方法参数</td>
+<td>是</td>
+</tr>
+<tr>
+<td>user</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">zabbix账号</td>
+<td>是</td>
+</tr>
+<tr>
+<td>password</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">zabbix密码</td>
+<td>是</td>
+</tr>
+<tr>
+<td>auth</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">认证的key</td>
+<td>是</td>
+</tr>
+<tr>
+<td>id</td>
+<td style="text-align:center">int</td>
+<td style="text-align:left">认证id</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+<p>请求事例：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">POST http://company.com/zabbix/api_jsonrpc.php HTTP/1.1</span><br><span class="line">Content-Type: application/json-rpc</span><br><span class="line"></span><br><span class="line">&#123;"jsonrpc":"2.0","method":"apiinfo.version","id":1,"auth":null,"params":&#123;&#125;&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="python获取token">python获取token</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> sys, argparse</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Zabbix_Api</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.url = <span class="string">'http://IP/zabbix/api_jsonrpc.php'</span></span><br><span class="line">        self.header = &#123;<span class="string">"Content-Type"</span>: <span class="string">"application/json"</span>&#125;</span><br><span class="line">        self.id = <span class="number">1</span></span><br><span class="line">        self.user=<span class="string">"zabbix登录账号"</span></span><br><span class="line">        self.password=<span class="string">"zabbix登录密码"</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">json_obj</span><span class="params">(self,method,auth=True,params=&#123;&#125;)</span>:</span></span><br><span class="line">        obj = &#123;<span class="string">'jsonrpc'</span>: <span class="string">'2.0'</span>,</span><br><span class="line">               <span class="string">'method'</span>: method,</span><br><span class="line">               <span class="string">'params'</span>: params,</span><br><span class="line">               <span class="string">'auth'</span>: auth,</span><br><span class="line">               <span class="string">'id'</span>: self.id&#125;</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> auth:</span><br><span class="line">            <span class="keyword">del</span> obj[<span class="string">"auth"</span>]</span><br><span class="line">        <span class="keyword">return</span> obj</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">user_login</span><span class="params">(self)</span>:</span></span><br><span class="line">        data=self.json_obj(method=<span class="string">"user.login"</span>,auth=<span class="keyword">False</span>, params=&#123;<span class="string">"user"</span>: self.user, <span class="string">"password"</span>: self.password&#125;)</span><br><span class="line">        <span class="keyword">return</span> json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)[<span class="string">"result"</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    print(Zabbix_Api().user_login())</span><br></pre></td></tr></table></figure>
+<h3 id="获取版本信息">获取版本信息</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_version</span><span class="params">(self)</span>:</span></span><br><span class="line">    data=self.json_obj(method=<span class="string">"apiinfo.version"</span>,</span><br><span class="line">        params=&#123;</span><br><span class="line">            <span class="string">"output"</span>: []</span><br><span class="line">        &#125;,</span><br><span class="line">        auth=<span class="keyword">False</span>)</span><br><span class="line">    <span class="keyword">return</span> json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)</span><br></pre></td></tr></table></figure>
+<h3 id="host-get方法获取所有的主机ID">host.get方法获取所有的主机ID</h3><table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th style="text-align:center">值类型</th>
+<th style="text-align:left">说明</th>
+<th>是否必须</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jsonrpc</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">接口版本</td>
+<td>是</td>
+</tr>
+<tr>
+<td>method</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">请求方法</td>
+<td>是</td>
+</tr>
+<tr>
+<td>params</td>
+<td style="text-align:center">json</td>
+<td style="text-align:left">请求方法参数</td>
+<td>是</td>
+</tr>
+<tr>
+<td>output</td>
+<td style="text-align:center">array</td>
+<td style="text-align:left">输出格式</td>
+<td>是</td>
+</tr>
+<tr>
+<td>groupids</td>
+<td style="text-align:center">str/array</td>
+<td style="text-align:left">主机组id</td>
+<td>是</td>
+</tr>
+<tr>
+<td>auth</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">认证的key</td>
+<td>是</td>
+</tr>
+<tr>
+<td>id</td>
+<td style="text-align:center">int</td>
+<td style="text-align:left">认证id</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+<p>请求事例(参考上面类)：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_host</span><span class="params">(self)</span>:</span></span><br><span class="line">    data=self.json_obj(method=<span class="string">"host.get"</span>,</span><br><span class="line">        params=&#123;</span><br><span class="line">            <span class="string">"output"</span>: [<span class="string">"hostid"</span>, <span class="string">"name"</span>]</span><br><span class="line">        &#125;,</span><br><span class="line">        auth=self.user_login())</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)</span><br></pre></td></tr></table></figure></p>
+<h3 id="itemsid-get方法获取单个主机下所有的监控项ID">itemsid.get方法获取单个主机下所有的监控项ID</h3><table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th style="text-align:center">值类型</th>
+<th style="text-align:left">说明</th>
+<th>是否必须</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jsonrpc</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">接口版本</td>
+<td>是</td>
+</tr>
+<tr>
+<td>method</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">请求方法</td>
+<td>是</td>
+</tr>
+<tr>
+<td>params</td>
+<td style="text-align:center">json</td>
+<td style="text-align:left">请求方法参数</td>
+<td>是</td>
+</tr>
+<tr>
+<td>output</td>
+<td style="text-align:center">array</td>
+<td style="text-align:left">输出格式</td>
+<td>是</td>
+</tr>
+<tr>
+<td>groupids</td>
+<td style="text-align:center">str/array</td>
+<td style="text-align:left">主机组id</td>
+<td>是</td>
+</tr>
+<tr>
+<td>auth</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">认证的key</td>
+<td>是</td>
+</tr>
+<tr>
+<td>id</td>
+<td style="text-align:center">int</td>
+<td style="text-align:left">认证id</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+<p>请求事例：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_mem_total</span><span class="params">(self,hostid)</span>:</span></span><br><span class="line">    data=self.json_obj(method=<span class="string">"item.get"</span>,</span><br><span class="line">        params=&#123;</span><br><span class="line">            <span class="string">"output"</span>: <span class="string">"extend"</span>,</span><br><span class="line">            <span class="string">"hostids"</span>: hostid,</span><br><span class="line">            <span class="string">"search"</span>: &#123;</span><br><span class="line">                <span class="string">"key_"</span>: <span class="string">"vm.memory.size[total]"</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        auth=self.user_login())</span><br><span class="line">    <span class="keyword">return</span> int(json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)[<span class="string">"result"</span>][<span class="number">0</span>][<span class="string">"lastvalue"</span>])/<span class="number">1024</span>/<span class="number">1024</span>/<span class="number">1024</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="以上完整事例">以上完整事例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> sys, argparse</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Zabbix_Api</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.url = <span class="string">'http://192.168.31.249/zabbix/api_jsonrpc.php'</span></span><br><span class="line">        self.header = &#123;<span class="string">"Content-Type"</span>: <span class="string">"application/json"</span>&#125;</span><br><span class="line">        self.id = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">json_obj</span><span class="params">(self,method,auth=True,params=&#123;&#125;)</span>:</span></span><br><span class="line">        obj = &#123;<span class="string">'jsonrpc'</span>: <span class="string">'2.0'</span>,</span><br><span class="line">               <span class="string">'method'</span>: method,</span><br><span class="line">               <span class="string">'params'</span>: params,</span><br><span class="line">               <span class="string">'auth'</span>: auth,</span><br><span class="line">               <span class="string">'id'</span>: self.id&#125;</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> auth:</span><br><span class="line">            <span class="keyword">del</span> obj[<span class="string">"auth"</span>]</span><br><span class="line">        <span class="keyword">return</span> obj</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">user_login</span><span class="params">(self)</span>:</span></span><br><span class="line">        data=self.json_obj(method=<span class="string">"user.login"</span>,auth=<span class="keyword">False</span>, params=&#123;<span class="string">"user"</span>: <span class="string">"yunwei"</span>, <span class="string">"password"</span>: <span class="string">"yunwei"</span>&#125;)</span><br><span class="line">        <span class="keyword">return</span> json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)[<span class="string">"result"</span>]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_host</span><span class="params">(self)</span>:</span></span><br><span class="line">        data=self.json_obj(method=<span class="string">"host.get"</span>,</span><br><span class="line">            params=&#123;</span><br><span class="line">                <span class="string">"output"</span>: [<span class="string">"hostid"</span>, <span class="string">"name"</span>]</span><br><span class="line">            &#125;,</span><br><span class="line">            auth=self.user_login())</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_mem_total</span><span class="params">(self,hostid)</span>:</span></span><br><span class="line">        data=self.json_obj(method=<span class="string">"item.get"</span>,</span><br><span class="line">            params=&#123;</span><br><span class="line">                <span class="string">"output"</span>: <span class="string">"extend"</span>,</span><br><span class="line">                <span class="string">"hostids"</span>: hostid,</span><br><span class="line">                <span class="string">"search"</span>: &#123;</span><br><span class="line">                    <span class="string">"key_"</span>: <span class="string">"vm.memory.size[total]"</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            auth=self.user_login())</span><br><span class="line">        <span class="keyword">return</span> int(json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)[<span class="string">"result"</span>][<span class="number">0</span>][<span class="string">"lastvalue"</span>])/<span class="number">1024</span>/<span class="number">1024</span>/<span class="number">1024</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="comment"># for k in Zabbix_Api().get_host()["result"]:</span></span><br><span class="line">    <span class="comment">#     print(k["hostid"],k["name"],str(round(Zabbix_Api().get_mem(k["hostid"]),2))+"G")</span></span><br><span class="line">    print(Zabbix_Api().get_mem_total(<span class="number">10084</span>))</span><br></pre></td></tr></table></figure>
+<p>以上只是简单举例，具体实践可参考官网文档(要永远相信官方文档是最好的文档)：<a href="https://www.zabbix.com/documentation/3.0/manual/api" target="_blank" rel="external">https://www.zabbix.com/documentation/3.0/manual/api</a></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2018/07/29/Python调用Zabbix-Api获取数据/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2018-07-29 </div>
+			<div class="article-title"><a href="/2018/07/29/Django中的缓存配置/" >Django中的缓存配置</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<p>按照《大型网站技术架构》中所说，网站性能优化的第一定律：优先考虑缓存优化性能.今天简单探讨下django的缓存实现。</p>
+</blockquote>
+<p>缓存一些东西是为了保存那些需要很多计算资源的结果，这样的话就不必在下次重复消耗计算资源。 下面是一些伪代码，用来解释缓存怎样在动态生成的网页中工作的：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">iven a URL, <span class="keyword">try</span> finding that page <span class="keyword">in</span> the cache</span><br><span class="line"><span class="keyword">if</span> the page <span class="keyword">is</span> <span class="keyword">in</span> the cache:</span><br><span class="line">    <span class="keyword">return</span> the cached page</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    generate the page</span><br><span class="line">    save the generated page <span class="keyword">in</span> the cache (<span class="keyword">for</span> next time)</span><br><span class="line">    <span class="keyword">return</span> the generated page</span><br></pre></td></tr></table></figure></p>
+<h4 id="Django中的缓存类型">Django中的缓存类型</h4><ul>
+<li>1、内存缓存</li>
+<li>2、数据库缓存</li>
+<li>3、文件缓存</li>
+</ul>
+<h4 id="Django如何设置缓存">Django如何设置缓存</h4><p>缓存系统需要一些设置才能使用。 也就是说，你必须告诉他你要把数据缓存在哪里- 是数据库中，文件系统或者直接在内存中。 这个决定很重要，因为它会影响你的缓存性能，缓存配置是通过setting 文件的CACHES 配置来实现的。 </p>
+<h5 id="缓存参数">缓存参数</h5><ul>
+<li><p><strong>TIMEOUT:</strong> 用于缓存的默认超时（以秒为单位）。此参数默认为300秒（5分钟）。</p>
+</li>
+<li><p><strong>OPTIONS:</strong> 应传递给缓存后端的任何选项。(包括以下)</p>
+</li>
+<li>MAX_ENTRIES：删除旧值之前缓存中允许的最大条目数。此参数默认为300。</li>
+<li>CULL_FREQUENCY：MAX_ENTRIES达到时剔除的条目部分。实际比率是 ，设置为在达到时剔除一半数目。</li>
+<li>EY_PREFIX：一个字符串，将自动包含（默认情况下预先添加）到Django服务器使用的所有缓存键。</li>
+<li>VERSION：Django服务器生成的缓存键的默认版本号。</li>
+<li>KEY_FUNCTION 包含函数的虚线路径的字符串，用于定义如何将前缀，版本和密钥组合为最终缓存键。<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">###例子</span></span><br><span class="line">CACHES = &#123;</span><br><span class="line">    <span class="string">'default'</span>: &#123;</span><br><span class="line">        <span class="string">'BACKEND'</span>: <span class="string">'django.core.cache.backends.filebased.FileBasedCache'</span>,</span><br><span class="line">        <span class="string">'LOCATION'</span>: <span class="string">'/var/tmp/django_cache'</span>,</span><br><span class="line">        <span class="string">'TIMEOUT'</span>: <span class="number">60</span>,</span><br><span class="line">        <span class="string">'OPTIONS'</span>: &#123;</span><br><span class="line">            <span class="string">'MAX_ENTRIES'</span>: <span class="number">1000</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="内存缓存(Memcached)">内存缓存(Memcached)</h5><p>Memcached是Django本身支持的最快，最有效的缓存类型，它 是一个完全基于内存的缓存服务器，最初是为了处理LiveJournal.com的高负载而开发的，后来由Danga Interactive开源。Facebook和Wikipedia等网站使用它来减少数据库访问并显着提高网站性能。</p>
+<p>Memcached作为守护进程运行，并分配了指定数量的RAM。它所做的就是提供一个快速接口，用于在缓存中添加，检索和删除数据。所有数据都直接存储在内存中，因此不会产生数据库或文件系统使用的开销。</p>
+<p>安装Memcached本身后，您需要安装Memcached绑定。有几个Python Memcached绑定可用; 最常见的两个是python-memcached和pylibmc。</p>
+<p>在Django中使用Memcached：</p>
+<ul>
+<li>设置BACKEND为 django.core.cache.backends.memcached.MemcachedCache或 django.core.cache.backends.memcached.PyLibMCCache（取决于您选择的memcached绑定）</li>
+<li>设置LOCATION为ip:port值，其中ip是Memcached守护程序的IP地址，port是运行Memcached的端口，或者是unix:path值，其中 path是Memcached Unix套接字文件的路径。</li>
+</ul>
+<p><strong>Memcached使用python-memcached绑定在localhost（127.0.0.1）端口11211上运行:</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CACHES = &#123;</span><br><span class="line">    <span class="string">'default'</span>: &#123;</span><br><span class="line">        <span class="string">'BACKEND'</span>: <span class="string">'django.core.cache.backends.memcached.MemcachedCache'</span>,</span><br><span class="line">        <span class="string">'LOCATION'</span>: <span class="string">'127.0.0.1:11211'</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Memcached可通过/tmp/memcached.sock使用python-memcached绑定的本地Unix套接字文件:</strong></p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CACHES = &#123;</span><br><span class="line">    <span class="string">'default'</span>: &#123;</span><br><span class="line">        <span class="string">'BACKEND'</span>: <span class="string">'django.core.cache.backends.memcached.MemcachedCache'</span>,</span><br><span class="line">        <span class="string">'LOCATION'</span>: <span class="string">'unix:/tmp/memcached.sock'</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>用pylibmc绑定时，请不要包含unix:/前缀:</strong><br><figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CACHES = &#123;</span><br><span class="line">    <span class="string">'default'</span>: &#123;</span><br><span class="line">        <span class="string">'BACKEND'</span>: <span class="string">'django.core.cache.backends.memcached.PyLibMCCache'</span>,</span><br><span class="line">        <span class="string">'LOCATION'</span>: <span class="string">'/tmp/memcached.sock'</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="数据库缓存">数据库缓存</h5><p>Django可以将其缓存的数据存储在您的数据库中。如果你有一个快速，索引良好的数据库服务器，这种方法效果最好。</p>
+<p>要将数据库表用作缓存后端：</p>
+<ul>
+<li>设置BACKEND为 django.core.cache.backends.db.DatabaseCache</li>
+<li>设置LOCATION为tablename，数据库表的名称，注意这个表应该是还没有新增的。</li>
+</ul>
+<p><strong>缓存表的名称为my_cache_table：</strong><br><figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CACHES = &#123;</span><br><span class="line">    <span class="string">'default'</span>: &#123;</span><br><span class="line">        <span class="string">'BACKEND'</span>: <span class="string">'django.core.cache.backends.db.DatabaseCache'</span>,</span><br><span class="line">        <span class="string">'LOCATION'</span>: <span class="string">'my_cache_table'</span>,</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>创建缓存表,在使用数据库缓存之前，必须使用以下命令创建缓存表：</strong></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage<span class="class">.py</span> createcachetable</span><br></pre></td></tr></table></figure>
+<h6 id="多个数据库">多个数据库</h6><p>如果对多个数据库使用数据库缓存，则还需要为数据库缓存表设置路由指令。出于路由的目的，数据库缓存表CacheEntry在名为的应用程序中显示为名为的模型 django_cache。此模型不会出现在模型缓存中，但模型详细信息可用于路由目的。</p>
+<p>例如，以下路由器将指向所有高速缓存读取操作cache_replica，并将所有写入操作指向 cache_primary。缓存表将仅同步到 cache_primary：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CacheRouter</span>:</span></span><br><span class="line">    <span class="string">"""A router to control all database cache operations"""</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">db_for_read</span><span class="params">(self, model, **hints)</span>:</span></span><br><span class="line">        <span class="string">"All cache read operations go to the replica"</span></span><br><span class="line">        <span class="keyword">if</span> model._meta.app_label == <span class="string">'django_cache'</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">'cache_replica'</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">db_for_write</span><span class="params">(self, model, **hints)</span>:</span></span><br><span class="line">        <span class="string">"All cache write operations go to primary"</span></span><br><span class="line">        <span class="keyword">if</span> model._meta.app_label == <span class="string">'django_cache'</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">'cache_primary'</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">allow_migrate</span><span class="params">(self, db, app_label, model_name=None, **hints)</span>:</span></span><br><span class="line">        <span class="string">"Only install the cache model on primary"</span></span><br><span class="line">        <span class="keyword">if</span> app_label == <span class="string">'django_cache'</span>:</span><br><span class="line">            <span class="keyword">return</span> db == <span class="string">'cache_primary'</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">None</span></span><br></pre></td></tr></table></figure></p>
+<p>如果未指定数据库缓存模型的路由方向，则缓存后端将使用该default数据库。当然，如果不使用数据库缓存后端，则无需担心为数据库缓存模型提供路由指令。</p>
+<h4 id="文件系统缓存">文件系统缓存</h4><p>基于文件的后端将每个缓存值序列化并存储为单独的文件。要使用此后端设置BACKEND来 “django.core.cache.backends.filebased.FileBasedCache”和 LOCATION到合适的目录。例如，要存储缓存数据/var/tmp/django_cache，请使用以下设置：<br><figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CACHES = &#123;</span><br><span class="line">    <span class="string">'default'</span>: &#123;</span><br><span class="line">        <span class="string">'BACKEND'</span>: <span class="string">'django.core.cache.backends.filebased.FileBasedCache'</span>,</span><br><span class="line">        <span class="string">'LOCATION'</span>: <span class="string">'/var/tmp/django_cache'</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果您使用的是Windows，请将驱动器号放在路径的开头，如下所示：<br><figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CACHES = &#123;</span><br><span class="line">    <span class="string">'default'</span>: &#123;</span><br><span class="line">        <span class="string">'BACKEND'</span>: <span class="string">'django.core.cache.backends.filebased.FileBasedCache'</span>,</span><br><span class="line">        <span class="string">'LOCATION'</span>: <span class="string">'c:/foo/bar'</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="缓存整个站点">缓存整个站点</h4><p>可以在settings配置文件添加如下：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">MIDDLEWARE</span> = [</span><br><span class="line">    <span class="string">'django.middleware.cache.UpdateCacheMiddleware'</span>,</span><br><span class="line">    <span class="string">'django.middleware.common.CommonMiddleware'</span>,</span><br><span class="line">    <span class="string">'django.middleware.cache.FetchFromCacheMiddleware'</span>,</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<h4 id="views视图缓存">views视图缓存</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.views.decorators.cache <span class="keyword">import</span> cache_page</span><br><span class="line"></span><br><span class="line"><span class="decorator">@cache_page(60 * 15)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_view</span><span class="params">(request)</span>:</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>注意：cache_page：缓存时间以秒为单位</p>
+<h4 id="访问缓存">访问缓存</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="keyword">from</span> django.core.cache <span class="keyword">import</span> caches</span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>cache1 = caches[<span class="string">'myalias'</span>]</span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>cache2 = caches[<span class="string">'myalias'</span>]</span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>cache1 <span class="keyword">is</span> cache2</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h4 id="基本用法">基本用法</h4><p>语法： </p>
+<ul>
+<li><p>新增缓存：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">set</span>(<span class="keyword">key</span>, <span class="keyword">value</span>, <span class="keyword">timeout</span>)</span><br><span class="line"><span class="keyword">get</span>(<span class="keyword">key</span>) <span class="comment">--- 当存在key不会再新增</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取缓存：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">get</span><span class="params">(key)</span></span>---获取单个值</span><br><span class="line"><span class="function"><span class="title">get_many</span><span class="params">([<span class="string">'key1'</span>, <span class="string">'key2'</span>, <span class="string">'key3'</span>])</span></span>---获取多个值</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除缓存</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cache.<span class="function"><span class="title">delete</span><span class="params">(<span class="string">'a'</span>)</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>清空缓存</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cache.<span class="function"><span class="title">clear</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>还可以分别使用incr()或decr()方法增加或减少已存在的密钥 。默认情况下，现有缓存值将递增或递减1.可以通过为递增/递减调用提供参数来指定其他递增/递减值。如果您尝试递增或递减不存在的缓存键，将引发ValueError：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; cache.<span class="function"><span class="title">set</span><span class="params">(<span class="string">'num'</span>, <span class="number">1</span>)</span></span></span><br><span class="line">&gt;&gt;&gt; cache.<span class="function"><span class="title">incr</span><span class="params">(<span class="string">'num'</span>)</span></span></span><br><span class="line"><span class="number">2</span></span><br><span class="line">&gt;&gt;&gt; cache.<span class="function"><span class="title">incr</span><span class="params">(<span class="string">'num'</span>, <span class="number">10</span>)</span></span></span><br><span class="line"><span class="number">12</span></span><br><span class="line">&gt;&gt;&gt; cache.<span class="function"><span class="title">decr</span><span class="params">(<span class="string">'num'</span>)</span></span></span><br><span class="line"><span class="number">11</span></span><br><span class="line">&gt;&gt;&gt; cache.<span class="function"><span class="title">decr</span><span class="params">(<span class="string">'num'</span>, <span class="number">5</span>)</span></span></span><br><span class="line"><span class="number">6</span></span><br></pre></td></tr></table></figure></p>
+<p>要是还有疑问，具体可参考：<a href="https://docs.djangoproject.com/zh-hans/2.0/topics/cache/" target="_blank" rel="external">https://docs.djangoproject.com/zh-hans/2.0/topics/cache/</a></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2018/07/29/Django中的缓存配置/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2018-06-16 </div>
+			<div class="article-title"><a href="/2018/06/16/Celery-分布式任务队列/" >Celery - 分布式任务队列</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p>Celery 是一个简单、灵活且可靠的，处理大量消息的分布式系统，并且提供维护这样一个系统的必需工具。</p>
+<p>它是一个专注于实时处理的任务队列，同时也支持任务调度。</p>
+<p>Celery 有广泛、多样的用户与贡献者社区，你可以通过 IRC 或是 邮件列表 加入我们。</p>
+<p>Celery 是开源的，使用 BSD 许可证 授权。<br>中文官网文档地址：<a href="http://docs.jinkan.org/docs/celery/" target="_blank" rel="external">http://docs.jinkan.org/docs/celery/</a></p>
+<h3 id="举例">举例</h3><p>创建task.py<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> celery <span class="keyword">import</span> Celery</span><br><span class="line"></span><br><span class="line">app =Celery(<span class="string">'tasks'</span>,broker=<span class="string">'redis://127.0.0.1:6379/0'</span>,backend=<span class="string">'redis://127.0.0.1:6379/0'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="decorator">@app.task</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(x, y)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> x + y</span><br></pre></td></tr></table></figure></p>
+<p>启动<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost python]<span class="comment"># celery -A task worker --loglevel=info</span></span><br><span class="line">/usr/lib/python2<span class="number">.7</span>/site-packages/celery/platforms.py:<span class="number">796</span>: RuntimeWarning: Yo<span class="string">u're running the worker with superuser privileges: this is</span><br><span class="line">absolutely not recommended!</span><br><span class="line"></span><br><span class="line">Please specify a different user using the -u option.</span><br><span class="line"></span><br><span class="line">User information: uid=0 euid=0 gid=0 egid=0</span><br><span class="line"></span><br><span class="line">  uid=uid, euid=euid, gid=gid, egid=egid,</span><br><span class="line"> </span><br><span class="line"> -------------- celery@localhost.localdomain v4.1.1 (latentcall)</span><br><span class="line">---- **** ----- </span><br><span class="line">--- * ***  * -- Linux-3.10.0-693.el7.x86_64-x86_64-with-centos-7.4.1708-Core 2018-06-06 05:25:17</span><br><span class="line">-- * - **** --- </span><br><span class="line">- ** ---------- [config]</span><br><span class="line">- ** ---------- .&gt; app:         tasks:0x7f5c3038c150</span><br><span class="line">- ** ---------- .&gt; transport:   redis://127.0.0.1:6379/0</span><br><span class="line">- ** ---------- .&gt; results:     redis://127.0.0.1:6379/0</span><br><span class="line">- *** --- * --- .&gt; concurrency: 1 (prefork)</span><br><span class="line">-- ******* ---- .&gt; task events: OFF (enable -E to monitor tasks in this worker)</span><br><span class="line">--- ***** ----- </span><br><span class="line"> -------------- [queues]</span><br><span class="line">                .&gt; celery           exchange=celery(direct) key=celery</span><br><span class="line">                </span><br><span class="line"></span><br><span class="line">[tasks]</span><br><span class="line">  . task.add</span><br><span class="line"></span><br><span class="line">[2018-06-06 05:25:17,206: INFO/MainProcess] Connected to redis://127.0.0.1:6379/0</span><br><span class="line">[2018-06-06 05:25:17,218: INFO/MainProcess] mingle: searching for neighbors</span><br><span class="line">[2018-06-06 05:25:18,241: INFO/MainProcess] mingle: all alone</span><br><span class="line">[2018-06-06 05:25:18,281: INFO/MainProcess] celery@localhost.localdomain ready.</span><br><span class="line">[2018-06-06 05:26:01,848: INFO/MainProcess] Received task: task.add[69c90eef-309c-45e7-a888-1357129aae6d]</span></span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<blockquote>
+<p>注意安装redis模块：pip install redis</p>
+</blockquote>
+</blockquote>
+<h3 id="执行调度">执行调度</h3><p>导入模块并执行调度<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> task <span class="keyword">import</span> add  <span class="comment">#注意模块路径</span></span><br><span class="line">In [<span class="number">2</span>]: add.delay(<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line">Out[<span class="number">2</span>]: &lt;AsyncResult: <span class="number">4e4</span>ab6aa-<span class="number">266e-4178</span>-b668-<span class="number">39</span>ada6382113&gt;</span><br></pre></td></tr></table></figure></p>
+<p>查看Celery终端输出<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">2018</span>-<span class="number">06</span>-<span class="number">06</span> <span class="number">05</span>:<span class="number">32</span>:<span class="number">20</span>,<span class="number">583</span>: INFO/ForkPoolWorker-<span class="number">1</span>] Task task.add[<span class="number">4e4</span>ab6aa-<span class="number">266e-4178</span>-b668-<span class="number">39</span>ada6382113] succeeded <span class="keyword">in</span> <span class="number">0.00385068000105</span>s: <span class="number">5</span></span><br></pre></td></tr></table></figure></p>
+<p>查看结果<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">3</span>]: result = add.delay(<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: print(result.get())</span><br><span class="line"><span class="number">5</span></span><br></pre></td></tr></table></figure></p>
+<p>查看模块的属性列表：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">5</span>]: dir(result)</span><br><span class="line"></span><br><span class="line">Out[<span class="number">5</span>]: </span><br><span class="line">[<span class="string">'TimeoutError'</span>,</span><br><span class="line"> <span class="string">'__class__'</span>,</span><br><span class="line"> <span class="string">'__copy__'</span>,</span><br><span class="line"> <span class="string">'__delattr__'</span>,</span><br><span class="line"> <span class="string">'__dict__'</span>,</span><br><span class="line"> <span class="string">'__doc__'</span>,</span><br><span class="line"> <span class="string">'__eq__'</span>,</span><br><span class="line"> <span class="string">'__format__'</span>,</span><br><span class="line"> <span class="string">'__getattribute__'</span>,</span><br><span class="line"> <span class="string">'__hash__'</span>,</span><br><span class="line"> <span class="string">'__init__'</span>,</span><br><span class="line"> <span class="string">'__module__'</span>,</span><br><span class="line"> <span class="string">'__ne__'</span>,</span><br><span class="line"> <span class="string">'__new__'</span>,</span><br><span class="line"> <span class="string">u'__reduce__'</span>,</span><br><span class="line"> <span class="string">'__reduce_args__'</span>,</span><br><span class="line"> <span class="string">'__reduce_ex__'</span>,</span><br><span class="line"> <span class="string">'__repr__'</span>,</span><br><span class="line"> <span class="string">'__setattr__'</span>,</span><br><span class="line"> <span class="string">'__sizeof__'</span>,</span><br><span class="line"> <span class="string">'__str__'</span>,</span><br><span class="line"> <span class="string">'__subclasshook__'</span>,</span><br><span class="line"> <span class="string">'__unicode__'</span>,</span><br><span class="line"> <span class="string">'__unicode_repr__'</span>,</span><br><span class="line"> <span class="string">'__weakref__'</span>,</span><br><span class="line"> <span class="string">'_cache'</span>,</span><br><span class="line"> <span class="string">'_get_task_meta'</span>,</span><br><span class="line"> <span class="string">'_iter_meta'</span>,</span><br><span class="line"> <span class="string">'_maybe_reraise_parent_error'</span>,</span><br><span class="line"> <span class="string">'_maybe_set_cache'</span>,</span><br><span class="line"> <span class="string">'_on_fulfilled'</span>,</span><br><span class="line"> <span class="string">'_parents'</span>,</span><br><span class="line"> <span class="string">'_set_cache'</span>,</span><br><span class="line"> <span class="string">'_to_remote_traceback'</span>,</span><br><span class="line"> <span class="string">'app'</span>,</span><br><span class="line"> <span class="string">'as_tuple'</span>,</span><br><span class="line"> <span class="string">'backend'</span>,</span><br><span class="line"> <span class="string">'build_graph'</span>,</span><br><span class="line"> <span class="string">'children'</span>,</span><br><span class="line"> <span class="string">'collect'</span>,</span><br><span class="line"> <span class="string">'failed'</span>,</span><br><span class="line"> <span class="string">'forget'</span>,</span><br><span class="line"> <span class="string">'get'</span>,</span><br><span class="line"> <span class="string">'get_leaf'</span>,</span><br><span class="line"> <span class="string">'graph'</span>,</span><br><span class="line"> <span class="string">'id'</span>,</span><br><span class="line"> <span class="string">'info'</span>,</span><br><span class="line"> <span class="string">'iterdeps'</span>,</span><br><span class="line"> <span class="string">'maybe_reraise'</span>,</span><br><span class="line"> <span class="string">'maybe_throw'</span>,</span><br><span class="line"> <span class="string">'on_ready'</span>,</span><br><span class="line"> <span class="string">'parent'</span>,</span><br><span class="line"> <span class="string">'ready'</span>,</span><br><span class="line"> <span class="string">'result'</span>,</span><br><span class="line"> <span class="string">'revoke'</span>,</span><br><span class="line"> <span class="string">'state'</span>,</span><br><span class="line"> <span class="string">'status'</span>,</span><br><span class="line"> <span class="string">'successful'</span>,</span><br><span class="line"> <span class="string">'supports_native_join'</span>,</span><br><span class="line"> <span class="string">'task_id'</span>,</span><br><span class="line"> <span class="string">'then'</span>,</span><br><span class="line"> <span class="string">'throw'</span>,</span><br><span class="line"> <span class="string">'traceback'</span>,</span><br><span class="line"> <span class="string">'wait'</span>]</span><br></pre></td></tr></table></figure></p>
+<p>获取id<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">6</span>]: print(result.id)</span><br><span class="line"><span class="number">30</span>f7fce2-<span class="number">2687</span>-<span class="number">448</span>c-<span class="number">816</span>f-<span class="number">11334</span>efc6442</span><br></pre></td></tr></table></figure></p>
+<p>登录reids查看<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost python]<span class="comment"># redis-cli</span></span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6379</span>&gt; KEYS *</span><br><span class="line"><span class="number">1</span>) <span class="string">"_kombu.binding.celery.pidbox"</span></span><br><span class="line"><span class="number">2</span>) <span class="string">"celery-task-meta-69c90eef-309c-45e7-a888-1357129aae6d"</span></span><br><span class="line"><span class="number">3</span>) <span class="string">"_kombu.binding.celery"</span></span><br><span class="line"><span class="number">4</span>) <span class="string">"_kombu.binding.celeryev"</span></span><br><span class="line"><span class="number">5</span>) <span class="string">"celery-task-meta-4e4ab6aa-266e-4178-b668-39ada6382113"</span></span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6379</span>&gt; get celery-task-meta-<span class="number">4e4</span>ab6aa-<span class="number">266e-4178</span>-b668-<span class="number">39</span>ada6382113</span><br><span class="line"><span class="string">"&#123;\"status\": \"SUCCESS\", \"traceback\": null, \"result\": 5, \"task_id\": \"4e4ab6aa-266e-4178-b668-39ada6382113\", \"children\": []&#125;"</span></span><br></pre></td></tr></table></figure></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2018/06/16/Celery-分布式任务队列/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2018-06-16 </div>
+			<div class="article-title"><a href="/2018/06/16/Python-Zabbix-Api/" >Python Zabbix Api</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <h3 id="请求的方法参数">请求的方法参数</h3><p>官方原文：</p>
+<ul>
+<li><strong>jsonrpc</strong> - the version of the JSON-RPC protocol used by the API; the  Zabbix API implements JSON-RPC version 2.0;</li>
+<li><strong>method</strong> - the API method being called;</li>
+<li><strong>params</strong> - parameters that will be passed to the API method;</li>
+<li><strong>id</strong> - an arbitrary identifier of the request;</li>
+<li><strong>auth</strong> - a user authentication token; since we don’t have one yet, it’s set to null.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th style="text-align:center">值类型</th>
+<th style="text-align:left">说明</th>
+<th>是否必须</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jsonrpc</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">接口版本</td>
+<td>是</td>
+</tr>
+<tr>
+<td>method</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">请求方法</td>
+<td>是</td>
+</tr>
+<tr>
+<td>params</td>
+<td style="text-align:center">json</td>
+<td style="text-align:left">请求方法参数</td>
+<td>是</td>
+</tr>
+<tr>
+<td>user</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">zabbix账号</td>
+<td>是</td>
+</tr>
+<tr>
+<td>password</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">zabbix密码</td>
+<td>是</td>
+</tr>
+<tr>
+<td>auth</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">认证的key</td>
+<td>是</td>
+</tr>
+<tr>
+<td>id</td>
+<td style="text-align:center">int</td>
+<td style="text-align:left">认证id</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+<p>请求事例：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">POST http://company.com/zabbix/api_jsonrpc.php HTTP/1.1</span><br><span class="line">Content-Type: application/json-rpc</span><br><span class="line"></span><br><span class="line">&#123;"jsonrpc":"2.0","method":"apiinfo.version","id":1,"auth":null,"params":&#123;&#125;&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="python获取token">python获取token</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> sys, argparse</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Zabbix_Api</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.url = <span class="string">'http://IP/zabbix/api_jsonrpc.php'</span></span><br><span class="line">        self.header = &#123;<span class="string">"Content-Type"</span>: <span class="string">"application/json"</span>&#125;</span><br><span class="line">        self.id = <span class="number">1</span></span><br><span class="line">        self.user=<span class="string">"zabbix登录账号"</span></span><br><span class="line">        self.password=<span class="string">"zabbix登录密码"</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">json_obj</span><span class="params">(self,method,auth=True,params=&#123;&#125;)</span>:</span></span><br><span class="line">        obj = &#123;<span class="string">'jsonrpc'</span>: <span class="string">'2.0'</span>,</span><br><span class="line">               <span class="string">'method'</span>: method,</span><br><span class="line">               <span class="string">'params'</span>: params,</span><br><span class="line">               <span class="string">'auth'</span>: auth,</span><br><span class="line">               <span class="string">'id'</span>: self.id&#125;</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> auth:</span><br><span class="line">            <span class="keyword">del</span> obj[<span class="string">"auth"</span>]</span><br><span class="line">        <span class="keyword">return</span> obj</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">user_login</span><span class="params">(self)</span>:</span></span><br><span class="line">        data=self.json_obj(method=<span class="string">"user.login"</span>,auth=<span class="keyword">False</span>, params=&#123;<span class="string">"user"</span>: self.user, <span class="string">"password"</span>: self.password&#125;)</span><br><span class="line">        <span class="keyword">return</span> json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)[<span class="string">"result"</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    print(Zabbix_Api().user_login())</span><br></pre></td></tr></table></figure>
+<h3 id="获取版本信息">获取版本信息</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_version</span><span class="params">(self)</span>:</span></span><br><span class="line">    data=self.json_obj(method=<span class="string">"apiinfo.version"</span>,</span><br><span class="line">        params=&#123;</span><br><span class="line">            <span class="string">"output"</span>: []</span><br><span class="line">        &#125;,</span><br><span class="line">        auth=<span class="keyword">False</span>)</span><br><span class="line">    <span class="keyword">return</span> json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)</span><br></pre></td></tr></table></figure>
+<h3 id="host-get方法获取所有的主机ID">host.get方法获取所有的主机ID</h3><table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th style="text-align:center">值类型</th>
+<th style="text-align:left">说明</th>
+<th>是否必须</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jsonrpc</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">接口版本</td>
+<td>是</td>
+</tr>
+<tr>
+<td>method</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">请求方法</td>
+<td>是</td>
+</tr>
+<tr>
+<td>params</td>
+<td style="text-align:center">json</td>
+<td style="text-align:left">请求方法参数</td>
+<td>是</td>
+</tr>
+<tr>
+<td>output</td>
+<td style="text-align:center">array</td>
+<td style="text-align:left">输出格式</td>
+<td>是</td>
+</tr>
+<tr>
+<td>groupids</td>
+<td style="text-align:center">str/array</td>
+<td style="text-align:left">主机组id</td>
+<td>是</td>
+</tr>
+<tr>
+<td>auth</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">认证的key</td>
+<td>是</td>
+</tr>
+<tr>
+<td>id</td>
+<td style="text-align:center">int</td>
+<td style="text-align:left">认证id</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+<p>请求事例(参考上面类)：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_host</span><span class="params">(self)</span>:</span></span><br><span class="line">    data=self.json_obj(method=<span class="string">"host.get"</span>,</span><br><span class="line">        params=&#123;</span><br><span class="line">            <span class="string">"output"</span>: [<span class="string">"hostid"</span>, <span class="string">"name"</span>]</span><br><span class="line">        &#125;,</span><br><span class="line">        auth=self.user_login())</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)</span><br></pre></td></tr></table></figure></p>
+<h3 id="itemsid-get方法获取单个主机下所有的监控项ID">itemsid.get方法获取单个主机下所有的监控项ID</h3><table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th style="text-align:center">值类型</th>
+<th style="text-align:left">说明</th>
+<th>是否必须</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jsonrpc</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">接口版本</td>
+<td>是</td>
+</tr>
+<tr>
+<td>method</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">请求方法</td>
+<td>是</td>
+</tr>
+<tr>
+<td>params</td>
+<td style="text-align:center">json</td>
+<td style="text-align:left">请求方法参数</td>
+<td>是</td>
+</tr>
+<tr>
+<td>output</td>
+<td style="text-align:center">array</td>
+<td style="text-align:left">输出格式</td>
+<td>是</td>
+</tr>
+<tr>
+<td>groupids</td>
+<td style="text-align:center">str/array</td>
+<td style="text-align:left">主机组id</td>
+<td>是</td>
+</tr>
+<tr>
+<td>auth</td>
+<td style="text-align:center">str</td>
+<td style="text-align:left">认证的key</td>
+<td>是</td>
+</tr>
+<tr>
+<td>id</td>
+<td style="text-align:center">int</td>
+<td style="text-align:left">认证id</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+<p>请求事例：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_mem_total</span><span class="params">(self,hostid)</span>:</span></span><br><span class="line">    data=self.json_obj(method=<span class="string">"item.get"</span>,</span><br><span class="line">        params=&#123;</span><br><span class="line">            <span class="string">"output"</span>: <span class="string">"extend"</span>,</span><br><span class="line">            <span class="string">"hostids"</span>: hostid,</span><br><span class="line">            <span class="string">"search"</span>: &#123;</span><br><span class="line">                <span class="string">"key_"</span>: <span class="string">"vm.memory.size[total]"</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        auth=self.user_login())</span><br><span class="line">    <span class="keyword">return</span> int(json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)[<span class="string">"result"</span>][<span class="number">0</span>][<span class="string">"lastvalue"</span>])/<span class="number">1024</span>/<span class="number">1024</span>/<span class="number">1024</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="以上完整事例">以上完整事例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> sys, argparse</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Zabbix_Api</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.url = <span class="string">'http://192.168.31.249/zabbix/api_jsonrpc.php'</span></span><br><span class="line">        self.header = &#123;<span class="string">"Content-Type"</span>: <span class="string">"application/json"</span>&#125;</span><br><span class="line">        self.id = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">json_obj</span><span class="params">(self,method,auth=True,params=&#123;&#125;)</span>:</span></span><br><span class="line">        obj = &#123;<span class="string">'jsonrpc'</span>: <span class="string">'2.0'</span>,</span><br><span class="line">               <span class="string">'method'</span>: method,</span><br><span class="line">               <span class="string">'params'</span>: params,</span><br><span class="line">               <span class="string">'auth'</span>: auth,</span><br><span class="line">               <span class="string">'id'</span>: self.id&#125;</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> auth:</span><br><span class="line">            <span class="keyword">del</span> obj[<span class="string">"auth"</span>]</span><br><span class="line">        <span class="keyword">return</span> obj</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">user_login</span><span class="params">(self)</span>:</span></span><br><span class="line">        data=self.json_obj(method=<span class="string">"user.login"</span>,auth=<span class="keyword">False</span>, params=&#123;<span class="string">"user"</span>: <span class="string">"yunwei"</span>, <span class="string">"password"</span>: <span class="string">"yunwei"</span>&#125;)</span><br><span class="line">        <span class="keyword">return</span> json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)[<span class="string">"result"</span>]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_host</span><span class="params">(self)</span>:</span></span><br><span class="line">        data=self.json_obj(method=<span class="string">"host.get"</span>,</span><br><span class="line">            params=&#123;</span><br><span class="line">                <span class="string">"output"</span>: [<span class="string">"hostid"</span>, <span class="string">"name"</span>]</span><br><span class="line">            &#125;,</span><br><span class="line">            auth=self.user_login())</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_mem_total</span><span class="params">(self,hostid)</span>:</span></span><br><span class="line">        data=self.json_obj(method=<span class="string">"item.get"</span>,</span><br><span class="line">            params=&#123;</span><br><span class="line">                <span class="string">"output"</span>: <span class="string">"extend"</span>,</span><br><span class="line">                <span class="string">"hostids"</span>: hostid,</span><br><span class="line">                <span class="string">"search"</span>: &#123;</span><br><span class="line">                    <span class="string">"key_"</span>: <span class="string">"vm.memory.size[total]"</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            auth=self.user_login())</span><br><span class="line">        <span class="keyword">return</span> int(json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)[<span class="string">"result"</span>][<span class="number">0</span>][<span class="string">"lastvalue"</span>])/<span class="number">1024</span>/<span class="number">1024</span>/<span class="number">1024</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="comment"># for k in Zabbix_Api().get_host()["result"]:</span></span><br><span class="line">    <span class="comment">#     print(k["hostid"],k["name"],str(round(Zabbix_Api().get_mem(k["hostid"]),2))+"G")</span></span><br><span class="line">    print(Zabbix_Api().get_mem_total(<span class="number">10084</span>))</span><br></pre></td></tr></table></figure>
+<p>以上只是简单举例，具体实践可参考官网文档(要永远相信官方文档是最好的文档)：<a href="https://www.zabbix.com/documentation/3.0/manual/api" target="_blank" rel="external">https://www.zabbix.com/documentation/3.0/manual/api</a></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2018/06/16/Python-Zabbix-Api/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2018-06-16 </div>
+			<div class="article-title"><a href="/2018/06/16/Python-AES-加解密/" >Python AES 加解密</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<p>高级加密标准（英语：Advanced Encryption Standard，缩写：AES），在密码学中又称Rijndael加密法，是美国联邦政府采用的一种区块加密标准。这个标准用来替代原先的DES，已经被多方分析且广为全世界所使用。经过五年的甄选流程，高级加密标准由美国国家标准与技术研究院（NIST）于2001年11月26日发布于FIPS PUB 197，并在2002年5月26日成为有效的标准。2006年，高级加密标准已然成为对称密钥加密中最流行的算法之一。</p>
+</blockquote>
+<p>如需进一步了解可以参考：<a href="https://zh.wikipedia.org/wiki/%E9%AB%98%E7%BA%A7%E5%8A%A0%E5%AF%86%E6%A0%87%E5%87%86#%E5%AF%86%E7%A0%81%E8%AF%B4%E6%98%8E" target="_blank" rel="external">https://zh.wikipedia.org/wiki/%E9%AB%98%E7%BA%A7%E5%8A%A0%E5%AF%86%E6%A0%87%E5%87%86#%E5%AF%86%E7%A0%81%E8%AF%B4%E6%98%8E</a></p>
+<p>AES5种常见加密模式：</p>
+<pre><code><span class="bullet">1. </span>电码本模式（Electronic Codebook Book (ECB)）
+
+<span class="bullet">2. </span>密码分组链接模式（Cipher Block Chaining (CBC)）
+
+<span class="bullet">3. </span>计算器模式（Counter (CTR)）
+
+<span class="bullet">4. </span>密码反馈模式（Cipher FeedBack (CFB)）
+
+<span class="bullet">5. </span>输出反馈模式（Output FeedBack (OFB)）
+</code></pre><p>pip install pycrypto</p>
+<p>官方链接:<a href="https://pypi.org/project/pycrypto/" target="_blank" rel="external">https://pypi.org/project/pycrypto/</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'''</span><br><span class="line">new(key, *args, **kwargs)</span><br><span class="line">    Create a new AES cipher</span><br><span class="line">    </span><br><span class="line">    :Parameters:</span><br><span class="line">      key : byte string</span><br><span class="line">        The secret key to use in the symmetric cipher.</span><br><span class="line">        It must be 16 (*AES-128*), 24 (*AES-192*), or 32 (*AES-256*) bytes long.</span><br><span class="line">    :Keywords:</span><br><span class="line">      mode : a *MODE_** constant</span><br><span class="line">        The chaining mode to use for encryption or decryption.</span><br><span class="line">        Default is `MODE_ECB`.</span><br><span class="line">      IV : byte string</span><br><span class="line">        The initialization vector to use for encryption or decryption.</span><br><span class="line">        </span><br><span class="line">        It is ignored for `MODE_ECB` and `MODE_CTR`.</span><br><span class="line">    </span><br><span class="line">        For `MODE_OPENPGP`, IV must be `block_size` bytes long for encryption</span><br><span class="line">        and `block_size` +2 bytes for decryption (in the latter case, it is</span><br><span class="line">        actually the *encrypted* IV which was prefixed to the ciphertext).</span><br><span class="line">        It is mandatory.</span><br><span class="line">       </span><br><span class="line">        For all other modes, it must be `block_size` bytes longs. It is optional and</span><br><span class="line">        when not present it will be given a default value of all zeroes.</span><br><span class="line">      counter : callable</span><br><span class="line">        (*Only* `MODE_CTR`). A stateful function that returns the next</span><br><span class="line">        *counter block*, which is a byte string of `block_size` bytes.</span><br><span class="line">        For better performance, use `Crypto.Util.Counter`.</span><br><span class="line">      segment_size : integer</span><br><span class="line">        (*Only* `MODE_CFB`).The number of bits the plaintext and ciphertext</span><br><span class="line">        are segmented in.</span><br><span class="line">        It must be a multiple of 8. If 0 or not specified, it will be assumed to be 8.</span><br><span class="line">    </span><br><span class="line">    :Return: an `AESCipher` object</span><br><span class="line">'''</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES</span><br><span class="line"><span class="keyword">from</span> binascii <span class="keyword">import</span> b2a_hex, a2b_hex</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Aes_Crypto</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, key)</span>:</span></span><br><span class="line">        <span class="comment">#self.key = key</span></span><br><span class="line">        <span class="comment">##建议使用以下方式</span></span><br><span class="line">        self.key=hashlib.md5(key).hexdigest()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 这里密钥key 长度必须为16（AES-128）、24（AES-192）、或32（AES-256）Bytes 长度</span></span><br><span class="line">        self.iv=<span class="number">16</span>*<span class="string">'0'</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">encrypt</span><span class="params">(self,data)</span>:</span></span><br><span class="line">        <span class="comment"># 不足16位补'\0'</span></span><br><span class="line">        data+=int(<span class="number">16</span>-(len(data) % <span class="number">16</span>)) * <span class="string">'\0'</span></span><br><span class="line">        obj = AES.new(self.key, AES.MODE_CBC, self.iv)</span><br><span class="line">        ciphertext =obj.encrypt(data)</span><br><span class="line">        <span class="comment"># 转化为16进制字符串</span></span><br><span class="line">        <span class="keyword">return</span> b2a_hex(ciphertext)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decrypt</span><span class="params">(self,data)</span>:</span></span><br><span class="line">        obj = AES.new(self.key, AES.MODE_CBC, self.iv)</span><br><span class="line">        <span class="keyword">return</span> obj.decrypt(a2b_hex(data)).rstrip(<span class="string">'\0'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    a=Aes_Crypto(<span class="number">16</span>*<span class="string">'1'</span>)</span><br><span class="line">    b=a.encrypt(<span class="string">'123456782dd000'</span>)</span><br><span class="line">    print(<span class="string">"加密后结果："</span>+b)</span><br><span class="line">    c=a.decrypt(b)</span><br><span class="line">    print(<span class="string">"解密后结果："</span>+c)</span><br></pre></td></tr></table></figure>
+<p>执行后的结果：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> python test2.py </span><br><span class="line">加密后结果：a0ac1a2c639fd4bce1e3804be22bbcbb</span><br><span class="line">解密后结果：<span class="number">1234567890123456</span></span><br></pre></td></tr></table></figure></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2018/06/16/Python-AES-加解密/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2018-06-16 </div>
+			<div class="article-title"><a href="/2018/06/16/简单封装Ansible-Api-接口/" >简单封装Ansible Api 接口</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p>官网链接：<a href="http://docs.ansible.com/ansible/latest/dev_guide/developing_api.html" target="_blank" rel="external">http://docs.ansible.com/ansible/latest/dev_guide/developing_api.html</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="string">'''</span><br><span class="line">引用模块</span><br><span class="line">'''</span></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> shutil</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> namedtuple</span><br><span class="line"><span class="keyword">from</span> ansible.parsing.dataloader <span class="keyword">import</span> DataLoader</span><br><span class="line"><span class="keyword">from</span> ansible.vars.manager <span class="keyword">import</span> VariableManager</span><br><span class="line"><span class="keyword">from</span> ansible.inventory.manager <span class="keyword">import</span> InventoryManager</span><br><span class="line"><span class="keyword">from</span> ansible.playbook.play <span class="keyword">import</span> Play</span><br><span class="line"><span class="keyword">from</span> ansible.executor.task_queue_manager <span class="keyword">import</span> TaskQueueManager</span><br><span class="line"><span class="keyword">from</span> ansible.plugins.callback <span class="keyword">import</span> CallbackBase</span><br><span class="line"><span class="keyword">import</span> ansible.constants <span class="keyword">as</span> C</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ResultCallback</span><span class="params">(CallbackBase)</span>:</span></span><br><span class="line">    <span class="string">"""A sample callback plugin used for performing an action as results come in</span><br><span class="line"></span><br><span class="line">    If you want to collect all results into a single object for processing at</span><br><span class="line">    the end of the execution, look into utilizing the ``json`` callback plugin</span><br><span class="line">    or writing your own custom callback plugin</span><br><span class="line">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">v2_runner_on_ok</span><span class="params">(self, result, **kwargs)</span>:</span></span><br><span class="line">        <span class="string">"""Print a json representation of the result</span><br><span class="line"></span><br><span class="line">        This method could store the result in an instance attribute for retrieval later</span><br><span class="line">        """</span></span><br><span class="line">        host = result._host</span><br><span class="line">        print(json.dumps(&#123;host.name: result._result&#125;, indent=<span class="number">4</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># since API is constructed for CLI it expects certain options to always be set, named tuple 'fakes' the args parsing options object</span></span><br><span class="line">Options = namedtuple(<span class="string">'Options'</span>, [<span class="string">'connection'</span>, <span class="string">'module_path'</span>, <span class="string">'forks'</span>, <span class="string">'become'</span>, <span class="string">'become_method'</span>, <span class="string">'become_user'</span>, <span class="string">'check'</span>, <span class="string">'diff'</span>])</span><br><span class="line">options = Options(connection=<span class="string">'local'</span>, module_path=[<span class="string">'/to/mymodules'</span>], forks=<span class="number">10</span>, become=<span class="keyword">None</span>, become_method=<span class="keyword">None</span>, become_user=<span class="keyword">None</span>, check=<span class="keyword">False</span>, diff=<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># initialize needed objects</span></span><br><span class="line">loader = DataLoader() <span class="comment"># Takes care of finding and reading yaml, json and ini files</span></span><br><span class="line">passwords = dict(vault_pass=<span class="string">'secret'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Instantiate our ResultCallback for handling results as they come in. Ansible expects this to be one of its main display outlets</span></span><br><span class="line">results_callback = ResultCallback()</span><br><span class="line"></span><br><span class="line"><span class="comment"># create inventory, use path to host config file as source or hosts in a comma separated string</span></span><br><span class="line">inventory = InventoryManager(loader=loader, sources=<span class="string">'localhost,'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># variable manager takes care of merging all the different sources to give you a unifed view of variables available in each context</span></span><br><span class="line">variable_manager = VariableManager(loader=loader, inventory=inventory)</span><br><span class="line"></span><br><span class="line"><span class="comment"># create datastructure that represents our play, including tasks, this is basically what our YAML loader does internally.</span></span><br><span class="line">play_source =  dict(</span><br><span class="line">        name = <span class="string">"Ansible Play"</span>,</span><br><span class="line">        hosts = <span class="string">'localhost'</span>,</span><br><span class="line">        gather_facts = <span class="string">'no'</span>,</span><br><span class="line">        tasks = [</span><br><span class="line">            dict(action=dict(module=<span class="string">'shell'</span>, args=<span class="string">'ls'</span>), register=<span class="string">'shell_out'</span>),</span><br><span class="line">            dict(action=dict(module=<span class="string">'debug'</span>, args=dict(msg=<span class="string">'&#123;&#123;shell_out.stdout&#125;&#125;'</span>)))</span><br><span class="line">         ]</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment"># Create play object, playbook objects use .load instead of init or new methods,</span></span><br><span class="line"><span class="comment"># this will also automatically create the task objects from the info provided in play_source</span></span><br><span class="line">play = Play().load(play_source, variable_manager=variable_manager, loader=loader)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Run it - instantiate task queue manager, which takes care of forking and setting up all objects to iterate over host list and tasks</span></span><br><span class="line">tqm = <span class="keyword">None</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    tqm = TaskQueueManager(</span><br><span class="line">              inventory=inventory,</span><br><span class="line">              variable_manager=variable_manager,</span><br><span class="line">              loader=loader,</span><br><span class="line">              options=options,</span><br><span class="line">              passwords=passwords,</span><br><span class="line">              stdout_callback=results_callback,  <span class="comment"># Use our custom callback instead of the ``default`` callback plugin, which prints to stdout</span></span><br><span class="line">          )</span><br><span class="line">    result = tqm.run(play) <span class="comment"># most interesting data for a play is actually sent to the callback's methods</span></span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    <span class="comment"># we always need to cleanup child procs and the structres we use to communicate with them</span></span><br><span class="line">    <span class="keyword">if</span> tqm <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">        tqm.cleanup()</span><br><span class="line"></span><br><span class="line">     <span class="comment"># Remove ansible tmpdir</span></span><br><span class="line">     shutil.rmtree(C.DEFAULT_LOCAL_TMP, <span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
+<p>运行结果：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost python]<span class="comment"># python ansible_api.py </span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"localhost"</span>: &#123;</span><br><span class="line">        <span class="string">"_ansible_parsed"</span>: true, </span><br><span class="line">        <span class="string">"stderr_lines"</span>: [], </span><br><span class="line">        <span class="string">"changed"</span>: true, </span><br><span class="line">        <span class="string">"end"</span>: <span class="string">"2018-05-29 03:44:27.292832"</span>, </span><br><span class="line">        <span class="string">"_ansible_no_log"</span>: false, </span><br><span class="line">        <span class="string">"stdout"</span>: <span class="string">"ansible_api.py\nsaomiao.py"</span>, </span><br><span class="line">        <span class="string">"cmd"</span>: <span class="string">"ls"</span>, </span><br><span class="line">        <span class="string">"start"</span>: <span class="string">"2018-05-29 03:44:27.262984"</span>, </span><br><span class="line">        <span class="string">"delta"</span>: <span class="string">"0:00:00.029848"</span>, </span><br><span class="line">        <span class="string">"stderr"</span>: <span class="string">""</span>, </span><br><span class="line">        <span class="string">"rc"</span>: <span class="number">0</span>, </span><br><span class="line">        <span class="string">"invocation"</span>: &#123;</span><br><span class="line">            <span class="string">"module_args"</span>: &#123;</span><br><span class="line">                <span class="string">"creates"</span>: null, </span><br><span class="line">                <span class="string">"executable"</span>: null, </span><br><span class="line">                <span class="string">"_uses_shell"</span>: true, </span><br><span class="line">                <span class="string">"_raw_params"</span>: <span class="string">"ls"</span>, </span><br><span class="line">                <span class="string">"removes"</span>: null, </span><br><span class="line">                <span class="string">"warn"</span>: true, </span><br><span class="line">                <span class="string">"chdir"</span>: null, </span><br><span class="line">                <span class="string">"stdin"</span>: null</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, </span><br><span class="line">        <span class="string">"stdout_lines"</span>: [</span><br><span class="line">            <span class="string">"ansible_api.py"</span>, </span><br><span class="line">            <span class="string">"saomiao.py"</span></span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"localhost"</span>: &#123;</span><br><span class="line">        <span class="string">"msg"</span>: <span class="string">"ansible_api.py\nsaomiao.py"</span>, </span><br><span class="line">        <span class="string">"changed"</span>: false, </span><br><span class="line">        <span class="string">"_ansible_verbose_always"</span>: true, </span><br><span class="line">        <span class="string">"_ansible_no_log"</span>: false</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>更改后的API：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># python 2.7.5</span></span><br><span class="line"><span class="comment"># ansible 2.4.2.0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os, sys</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> shutil</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> namedtuple</span><br><span class="line"><span class="keyword">from</span> ansible.parsing.dataloader <span class="keyword">import</span> DataLoader</span><br><span class="line"><span class="keyword">from</span> ansible.vars.manager <span class="keyword">import</span> VariableManager</span><br><span class="line"><span class="keyword">from</span> ansible.inventory.manager <span class="keyword">import</span> InventoryManager</span><br><span class="line"><span class="keyword">from</span> ansible.playbook.play <span class="keyword">import</span> Play</span><br><span class="line"><span class="keyword">from</span> ansible.executor.playbook_executor <span class="keyword">import</span> PlaybookExecutor</span><br><span class="line"><span class="keyword">from</span> ansible.executor.task_queue_manager <span class="keyword">import</span> TaskQueueManager</span><br><span class="line"><span class="keyword">from</span> ansible.plugins.callback <span class="keyword">import</span> CallbackBase</span><br><span class="line"><span class="keyword">import</span> ansible.constants <span class="keyword">as</span> C</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ResultCallback</span><span class="params">(CallbackBase)</span>:</span></span><br><span class="line">    <span class="string">"""A sample callback plugin used for performing an action as results come in</span><br><span class="line"></span><br><span class="line">    If you want to collect all results into a single object for processing at</span><br><span class="line">    the end of the execution, look into utilizing the ``json`` callback plugin</span><br><span class="line">    or writing your own custom callback plugin</span><br><span class="line">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">v2_runner_on_ok</span><span class="params">(self, result, **kwargs)</span>:</span></span><br><span class="line">        <span class="string">"""Print a json representation of the result</span><br><span class="line"></span><br><span class="line">        This method could store the result in an instance attribute for retrieval later</span><br><span class="line">        """</span></span><br><span class="line">        host = result._host</span><br><span class="line">        print(json.dumps(&#123;host.name: result._result&#125;, indent=<span class="number">4</span>))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">v2_runner_on_failed</span><span class="params">(self, result, ignore_errors=False)</span>:</span></span><br><span class="line">        host = result._host</span><br><span class="line">        print(json.dumps(&#123;host.name: result._result&#125;, indent=<span class="number">4</span>))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">v2_runner_on_unreachable</span><span class="params">(self, result)</span>:</span></span><br><span class="line">        host = result._host</span><br><span class="line">        print(json.dumps(&#123;host.name: result._result&#125;, indent=<span class="number">4</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AnsRunner</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.resource = <span class="keyword">None</span></span><br><span class="line">        self.inventory = <span class="keyword">None</span></span><br><span class="line">        self.variable_manager = <span class="keyword">None</span></span><br><span class="line">        self.loader = <span class="keyword">None</span></span><br><span class="line">        self.options = <span class="keyword">None</span></span><br><span class="line">        self.passwords = <span class="keyword">None</span></span><br><span class="line">        self.__initializeData()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__initializeData</span><span class="params">(self)</span>:</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 初始化需要的对象</span></span><br><span class="line">        Options = namedtuple(<span class="string">'Options'</span>, [<span class="string">'connection'</span>, <span class="string">'module_path'</span>, <span class="string">'forks'</span>, <span class="string">'timeout'</span>, <span class="string">'remote_user'</span>,</span><br><span class="line">                                         <span class="string">'ask_pass'</span>, <span class="string">'private_key_file'</span>, <span class="string">'ssh_common_args'</span>, <span class="string">'ssh_extra_args'</span>,</span><br><span class="line">                                         <span class="string">'sftp_extra_args'</span>,</span><br><span class="line">                                         <span class="string">'scp_extra_args'</span>, <span class="string">'become'</span>, <span class="string">'become_method'</span>, <span class="string">'become_user'</span>, <span class="string">'ask_value_pass'</span>,</span><br><span class="line">                                         <span class="string">'verbosity'</span>,</span><br><span class="line">                                         <span class="string">'check'</span>, <span class="string">'listhosts'</span>, <span class="string">'listtasks'</span>, <span class="string">'listtags'</span>, <span class="string">'syntax'</span>, <span class="string">'diff'</span>])</span><br><span class="line"></span><br><span class="line">        self.options = Options(connection=<span class="string">'ssh'</span>, module_path=<span class="keyword">None</span>, forks=<span class="number">100</span>, timeout=<span class="number">10</span>,</span><br><span class="line">                               remote_user=<span class="string">'root'</span>, ask_pass=<span class="keyword">False</span>, private_key_file=<span class="keyword">None</span>, ssh_common_args=<span class="keyword">None</span>,</span><br><span class="line">                               ssh_extra_args=<span class="keyword">None</span>,</span><br><span class="line">                               sftp_extra_args=<span class="keyword">None</span>, scp_extra_args=<span class="keyword">None</span>, become=<span class="keyword">None</span>, become_method=<span class="keyword">None</span>,</span><br><span class="line">                               become_user=<span class="string">'root'</span>, ask_value_pass=<span class="keyword">False</span>, verbosity=<span class="keyword">None</span>, check=<span class="keyword">False</span>, listhosts=<span class="keyword">False</span>,</span><br><span class="line">                               listtasks=<span class="keyword">False</span>, listtags=<span class="keyword">False</span>, syntax=<span class="keyword">False</span>, diff=<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line">        self.loader = DataLoader()  <span class="comment"># Takes care of finding and reading yaml, json and ini files</span></span><br><span class="line">        self.passwords = dict(vault_pass=<span class="string">'secret'</span>)</span><br><span class="line">        self.results_callback = ResultCallback()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># create inventory, use path to host config file as source or hosts in a comma separated string</span></span><br><span class="line">        self.inventory = InventoryManager(loader=self.loader, sources=[<span class="string">'/etc/ansible/hosts'</span>])</span><br><span class="line">        <span class="comment"># variable manager takes care of merging all the different sources to give you a unifed view of variables available in each context</span></span><br><span class="line">        self.variable_manager = VariableManager(loader=self.loader, inventory=self.inventory)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">adc_runner</span><span class="params">(self, host_list, module_name, module_args=None)</span>:</span></span><br><span class="line">        <span class="comment"># create datastructure that represents our play, including tasks, this is basically what our YAML loader does internally.</span></span><br><span class="line">        play_source = dict(</span><br><span class="line">            name=<span class="string">"Ansible Play"</span>,</span><br><span class="line">            hosts=host_list,</span><br><span class="line">            gather_facts=<span class="string">'no'</span>,</span><br><span class="line">            tasks=[</span><br><span class="line">                dict(action=dict(module=module_name, args=module_args), register=<span class="string">'shell_out'</span>),</span><br><span class="line">                dict(action=dict(module=<span class="string">'debug'</span>, args=dict(msg=<span class="string">'&#123;&#123;shell_out.stdout&#125;&#125;'</span>)))</span><br><span class="line">            ]</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        play = Play().load(play_source, variable_manager=self.variable_manager, loader=self.loader)</span><br><span class="line">        tqm = <span class="keyword">None</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            tqm = TaskQueueManager(</span><br><span class="line">                inventory=self.inventory,</span><br><span class="line">                variable_manager=self.variable_manager,</span><br><span class="line">                loader=self.loader,</span><br><span class="line">                options=self.options,</span><br><span class="line">                passwords=self.passwords,</span><br><span class="line">                stdout_callback=self.results_callback,</span><br><span class="line">                <span class="comment"># Use our custom callback instead of the ``default`` callback plugin, which prints to stdout</span></span><br><span class="line">            )</span><br><span class="line">            result = tqm.run(play)  <span class="comment"># most interesting data for a play is actually sent to the callback's methods</span></span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            <span class="comment"># we always need to cleanup child procs and the structres we use to communicate with them</span></span><br><span class="line">            <span class="keyword">if</span> tqm <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">                tqm.cleanup()</span><br><span class="line"></span><br><span class="line">                <span class="comment"># Remove ansible tmpdir</span></span><br><span class="line">            shutil.rmtree(C.DEFAULT_LOCAL_TMP, <span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run_playbook</span><span class="params">(self, playbook_path,host_list=None, extra_vars=None)</span>:</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(playbook_path):</span><br><span class="line">            print(<span class="string">'The playbook_path does not exist'</span> % playbook_path)</span><br><span class="line">            sys.exit()</span><br><span class="line">        passwords = <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">        playbook = PlaybookExecutor(playbooks=playbook_path, inventory=self.inventory,</span><br><span class="line">                                    variable_manager=self.variable_manager,</span><br><span class="line">                                    loader=self.loader, options=self.options, passwords=passwords)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># run playbook</span></span><br><span class="line">        result = playbook.run()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    print(AnsRunner().run_playbook(playbook_path=<span class="string">'/data/Playbook/install_jdk18.yaml'</span>,</span><br><span class="line">                                   extra_vars=&#123;<span class="string">"remote_server"</span>: <span class="string">"192.168.72.130"</span>&#125;))</span><br><span class="line">    <span class="comment"># print(AnsRunner().adc_runner(host_list='192.168.72.129',module_name='shell',module_args='ls'))</span></span><br></pre></td></tr></table></figure></p>
+<p>通过api接口我们可以进一步修改，例如需要写CMDB的小伙伴，具体按需实际修改即可。后面本博也会更新关于ansible的文章。</p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2018/06/16/简单封装Ansible-Api-接口/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2018-06-02 </div>
+			<div class="article-title"><a href="/2018/06/02/Django之密码验证/" >Django之密码验证</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p>Django版本：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">In [<span class="number">14</span>]: <span class="keyword">import</span> django</span><br><span class="line"></span><br><span class="line">In [<span class="number">15</span>]: django.get_version()</span><br><span class="line">Out[<span class="number">15</span>]: <span class="string">'1.11.13'</span></span><br></pre></td></tr></table></figure></p>
+<p>导入包：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python manage.py shell</span><br><span class="line"><span class="keyword">from</span> django.contrib.auth.hashers <span class="keyword">import</span> make_password, check_password</span><br></pre></td></tr></table></figure></p>
+<p>查看make_password并生成密码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">help(make_password)</span><br><span class="line"></span><br><span class="line">Help on function make_password <span class="keyword">in</span> module django.contrib.auth.hashers:</span><br><span class="line">make_password(password, salt=<span class="keyword">None</span>, hasher=<span class="string">u'default'</span>)</span><br><span class="line">    Turn a plain-text password into a hash <span class="keyword">for</span> database storage</span><br><span class="line">    </span><br><span class="line">    Same <span class="keyword">as</span> encode() but generates a new random salt.</span><br><span class="line">    If password <span class="keyword">is</span> <span class="keyword">None</span> then a concatenation of</span><br><span class="line">    UNUSABLE_PASSWORD_PREFIX <span class="keyword">and</span> a random string will be returned</span><br><span class="line">    which disallows logins. Additional random string reduces chances</span><br><span class="line">    of gaining access to staff <span class="keyword">or</span> superuser accounts.</span><br><span class="line">    See ticket <span class="comment">#20079 for more info</span></span><br><span class="line">	</span><br><span class="line"><span class="comment">###生成密码</span></span><br><span class="line">In [<span class="number">4</span>]: make_password(<span class="string">"123456"</span>, <span class="keyword">None</span>, <span class="string">'pbkdf2_sha256'</span>)</span><br><span class="line">Out[<span class="number">4</span>]: <span class="string">u'pbkdf2_sha256$36000$h0yUI3WVw7x5$NOOndKMq9Y+FQ3pu9nALNoJFIqdbfTez0FJ6tgNl5AU='</span></span><br></pre></td></tr></table></figure>
+<p>check_password校验密码:<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">help(check_password)</span><br><span class="line"> </span><br><span class="line">Help on function check_password in module django.contrib.auth.hashers:</span><br><span class="line">check_password(password, encoded, setter=None, preferred=u'default')</span><br><span class="line">    Returns a boolean of whether the raw password matches the three</span><br><span class="line">    part encoded digest.</span><br><span class="line">    </span><br><span class="line">    If setter is specified, it'll be called when you need to</span><br><span class="line">    regenerate the password.</span><br><span class="line"></span><br><span class="line">In [6]: check_password("123456","pbkdf2_sha256$36000$h0yUI3WVw7x5$NOOndKMq9Y+FQ3pu9nALNoJFIqdbfTez0FJ6tgNl5AU=")</span><br><span class="line">Out[6]: True</span><br></pre></td></tr></table></figure></p>
+<p>附官方源码：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">check_password</span><span class="params">(password, encoded, setter=None, preferred=<span class="string">'default'</span>)</span>:</span></span><br><span class="line">    <span class="string">"""</span><br><span class="line">    Returns a boolean of whether the raw password matches the three</span><br><span class="line">    part encoded digest.</span><br><span class="line"></span><br><span class="line">    If setter is specified, it'll be called when you need to</span><br><span class="line">    regenerate the password.</span><br><span class="line">    """</span></span><br><span class="line">    <span class="keyword">if</span> password <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">or</span> <span class="keyword">not</span> is_password_usable(encoded):</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">    preferred = get_hasher(preferred)</span><br><span class="line">    hasher = identify_hasher(encoded)</span><br><span class="line"></span><br><span class="line">    hasher_changed = hasher.algorithm != preferred.algorithm</span><br><span class="line">    must_update = hasher_changed <span class="keyword">or</span> preferred.must_update(encoded)</span><br><span class="line">    is_correct = hasher.verify(password, encoded)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># If the hasher didn't change (we don't protect against enumeration if it</span></span><br><span class="line">    <span class="comment"># does) and the password should get updated, try to close the timing gap</span></span><br><span class="line">    <span class="comment"># between the work factor of the current encoded password and the default</span></span><br><span class="line">    <span class="comment"># work factor.</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> is_correct <span class="keyword">and</span> <span class="keyword">not</span> hasher_changed <span class="keyword">and</span> must_update:</span><br><span class="line">        hasher.harden_runtime(password, encoded)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> setter <span class="keyword">and</span> is_correct <span class="keyword">and</span> must_update:</span><br><span class="line">        setter(password)</span><br><span class="line">    <span class="keyword">return</span> is_correct</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_password</span><span class="params">(password, salt=None, hasher=<span class="string">'default'</span>)</span>:</span></span><br><span class="line">    <span class="string">"""</span><br><span class="line">    Turn a plain-text password into a hash for database storage</span><br><span class="line"></span><br><span class="line">    Same as encode() but generates a new random salt.</span><br><span class="line">    If password is None then a concatenation of</span><br><span class="line">    UNUSABLE_PASSWORD_PREFIX and a random string will be returned</span><br><span class="line">    which disallows logins. Additional random string reduces chances</span><br><span class="line">    of gaining access to staff or superuser accounts.</span><br><span class="line">    See ticket #20079 for more info.</span><br><span class="line">    """</span></span><br><span class="line">    <span class="keyword">if</span> password <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        <span class="keyword">return</span> UNUSABLE_PASSWORD_PREFIX + get_random_string(UNUSABLE_PASSWORD_SUFFIX_LENGTH)</span><br><span class="line">    hasher = get_hasher(hasher)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> salt:</span><br><span class="line">        salt = hasher.salt()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> hasher.encode(password, salt)</span><br></pre></td></tr></table></figure></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2018/06/02/Django之密码验证/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2018-06-02 </div>
+			<div class="article-title"><a href="/2018/06/02/Django模板之全局变量/" >Django模板之全局变量</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<p>作为一个Web框架，Django需要一种方便的方式来动态生成HTML。最常用的方法依赖于模板。相信Django中的templates模板大家遇到很多，今天我们来简单探讨下模板变量。</p>
+</blockquote>
+<p>在说模板变量之前我们可以先看看以下例子，在编写web日常中，我们经常会简单判断是否登录，如果没有登录，则显示请登录(或跳转到登录界面)。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;% if user.is_authenticated %&#125;</span><br><span class="line">    &lt;span class="username username-hide-on-mobile"&gt; &#123;&#123; user.username &#125;&#125; &lt;/span&gt;</span><br><span class="line">&#123;% else %&#125;</span><br><span class="line">    &lt;span class="username username-hide-on-mobile"&gt; Please log in &lt;/span&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+<p>事实上，我们都清楚Django的MTV，但是这里很明显views.py并没有定义user.is_authenticated，那么这里变量是如何产生的尼？</p>
+<p>如果细心的应该可以发现在Django的settings.py配置文件上会默认存在以下配置：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">TEMPLATES = [</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">'BACKEND'</span>: <span class="string">'django.template.backends.django.DjangoTemplates'</span>,</span><br><span class="line">        <span class="string">'DIRS'</span>: [os.path.join(BASE_DIR, <span class="string">'templates'</span>)]</span><br><span class="line">        ,</span><br><span class="line">        <span class="string">'APP_DIRS'</span>: <span class="keyword">True</span>,</span><br><span class="line">        <span class="string">'OPTIONS'</span>: &#123;</span><br><span class="line">            <span class="string">'context_processors'</span>: [</span><br><span class="line">                <span class="string">'django.template.context_processors.debug'</span>,</span><br><span class="line">                <span class="string">'django.template.context_processors.request'</span>,</span><br><span class="line">                </span><br><span class="line">                <span class="string">'django.contrib.messages.context_processors.messages'</span>,</span><br><span class="line">            ],</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p><strong>BACKEND</strong>是实现Django模板后端API的模板引擎类的Python路径。默认是django.template.backends.django.DjangoTemplates和 django.template.backends.jinja2.Jinja2。</p>
+</li>
+<li><p><strong>DIRS</strong> 定义引擎应该查找模板源文件的目录列表。</p>
+</li>
+<li><strong>APP_DIRS</strong> 告诉引擎是否应该在已安装的应用程序中查找模板。</li>
+<li><strong>OPTIONS</strong> 包含后端特定的设置。</li>
+</ul>
+<p>认真的你,通过django.contrib.auth.context_processors.auth可以发现以下代码:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">auth</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="string">"""</span><br><span class="line">    Return context variables required by apps that use Django's authentication</span><br><span class="line">    system.</span><br><span class="line"></span><br><span class="line">    If there is no 'user' attribute in the request, use AnonymousUser (from</span><br><span class="line">    django.contrib.auth).</span><br><span class="line">    """</span></span><br><span class="line">    <span class="keyword">if</span> hasattr(request, <span class="string">'user'</span>):</span><br><span class="line">        user = request.user</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">from</span> django.contrib.auth.models <span class="keyword">import</span> AnonymousUser</span><br><span class="line">        user = AnonymousUser()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">'user'</span>: user,</span><br><span class="line">        <span class="string">'perms'</span>: PermWrapper(user),</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>看到这里是否明白了点尼？我们称之为默认变量或者全局变量。要是小伙伴还不明白可以进一步查阅官方文档 <a href="https://docs.djangoproject.com/zh-hans/2.0/topics/templates/" target="_blank" rel="external">https://docs.djangoproject.com/zh-hans/2.0/topics/templates/</a></p>
+<h3 id="例子：">例子：</h3><blockquote>
+<p>既然上面说了那么多，全局变量到底怎么使用尼？简单举个例子，假设WEB前端存在多个页面都需要获取同一个相同的数据，那样子则可以设置全局变量，在需要使用的页面上直接应用就行了。</p>
+</blockquote>
+<p>以下是简单例子，具体可按照实际需要来更改，首先在apps下新增utils目录，然后新增contexts.py<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">django_verison</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">'django_verison'</span>:<span class="string">'2.1'</span>&#125;</span><br></pre></td></tr></table></figure></p>
+<p>修改django配置文件settings.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">TEMPLATES = [</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">'BACKEND'</span>: <span class="string">'django.template.backends.django.DjangoTemplates'</span>,</span><br><span class="line">        <span class="string">'DIRS'</span>: [os.path.join(BASE_DIR, <span class="string">'templates'</span>)]</span><br><span class="line">        ,</span><br><span class="line">        <span class="string">'APP_DIRS'</span>: <span class="keyword">True</span>,</span><br><span class="line">        <span class="string">'OPTIONS'</span>: &#123;</span><br><span class="line">            <span class="string">'context_processors'</span>: [</span><br><span class="line">                <span class="string">'django.template.context_processors.debug'</span>,</span><br><span class="line">                <span class="string">'django.template.context_processors.request'</span>,</span><br><span class="line">                <span class="string">'django.contrib.auth.context_processors.auth'</span>,</span><br><span class="line">                <span class="string">'django.contrib.messages.context_processors.messages'</span>,</span><br><span class="line">                <span class="string">'apps.utils.contexts.django_verison'</span>,</span><br><span class="line">            ],</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>前端页面html页面引用：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">span&gt;&#123;&#123; django_verison &#125;&#125;<span class="tag">&lt;/<span class="title">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2018/06/02/Django模板之全局变量/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+
+		</div>
+
+		<!-- pagination -->
+		<div>
+  		<center>
+		<div class="pagination">
+<ul class="pagination">
+	 
+		
+          <li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+        
+
+        <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+
+		
+		   <li class="next"> <a href="/page/2/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a> </li>          
+        
+	
+</ul>
+</div>
+
+  		</center>
+		</div>
+
+		
+		
+	</div> <!-- col-md-9 -->
+
+	
+		<div class="col-md-3">
+	<div id="sidebar">
+	
+			
+  <div class="widget tag">
+    <h3 class="title">归档</h3>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+  </div>
+
+		
+			
+		
+			
+
+		
+			
+<div class="widget">
+  <h4>最新文章</h4>
+  <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2018/07/29/企业常用几种部署方式-蓝绿部署、滚动部署、金丝雀部署/" ><i class="fa fa-file-o"></i>企业常用几种部署方式(蓝绿部署、滚动部署、金丝雀部署)...</a>
+      </li>
+    
+      <li>
+        <a href="/2018/07/29/Pyecharts-生成图表-附Django支持/" ><i class="fa fa-file-o"></i>Pyecharts 生成图表(附Django支持)...</a>
+      </li>
+    
+      <li>
+        <a href="/2018/07/29/Python调用Zabbix-Api获取数据/" ><i class="fa fa-file-o"></i>Python调用Zabbix Api获取数据...</a>
+      </li>
+    
+      <li>
+        <a href="/2018/07/29/Django中的缓存配置/" ><i class="fa fa-file-o"></i>Django中的缓存配置...</a>
+      </li>
+    
+      <li>
+        <a href="/2018/06/16/Celery-分布式任务队列/" ><i class="fa fa-file-o"></i>Celery - 分布式任务队列...</a>
+      </li>
+    
+  </ul>
+</div>
+
+		
+			
+<div class="widget">
+	<h4>鏈接</h4>
+	<ul class="blogroll list-unstyled">
+	
+		<li><i class="fa fa-github"></i><a href="http://linuxops.cc" title="Macro博客" target="_blank"]);">Macro博客</a></li>
+	
+		<li><i class="fa fa-github"></i><a href="http://www.uinion.com/" title="uinion小站" target="_blank"]);">uinion小站</a></li>
+	
+	</ul>
+</div>
+
+
+		
+	</div> <!-- sidebar -->
+</div> <!-- col-md-3 -->
+
+	
+	
+</div> <!-- row-fluid -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

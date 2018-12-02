@@ -1,0 +1,296 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>JVM诊断调优必掌握的几个linux命令 | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="JVM诊断调优必掌握的几个linux命令"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> JVM诊断调优必掌握的几个linux命令</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <h2 id="常用Shell命令">常用Shell命令</h2><p>查看网络状况</p>
+<pre><code>netstat -<span class="keyword">n</span> | awk '/^tcp/ {++S[<span class="label">$NF</span>]} END {<span class="keyword">for</span>(a <span class="keyword">in</span> S) <span class="keyword">print</span> a, S[a]}'
+</code></pre><p>使用top去获取进程cpu使用率；使用/proc文件查看进程所占内存。</p>
+<pre><code><span class="shebang">#!/bin/bash
+</span>
+ <span class="keyword">for</span> i <span class="keyword">in</span> `ps -ef | egrep -v <span class="string">"awk|<span class="variable">$0</span>"</span> | awk <span class="string">'/'</span><span class="variable">$1</span><span class="string">'/{print $2}'</span>`
+
+ <span class="keyword">do</span>
+
+     mymem=`cat /proc/<span class="variable">$i</span>/status <span class="number">2</span>&gt; /dev/null | grep VmRSS | awk <span class="string">'{print $2" " $3}'</span>`
+
+     cpu=`top -n <span class="number">1</span> -b |awk <span class="string">'/'</span><span class="variable">$i</span><span class="string">'/{print $9}'</span>`
+
+ <span class="keyword">done</span>
+</code></pre><h2 id="常用JDK命令">常用JDK命令</h2><h3 id="CPU预警">CPU预警</h3><h5 id="原生手段">原生手段</h5><ul>
+<li><p><strong>1、查找使用率最高的PID</strong> </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top <span class="comment">#按P</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>2、查看最占CPU的线程</strong> </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top -Hp $PID</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>3.查看线程堆栈</strong> </p>
+</li>
+</ul>
+<blockquote>
+<p>jstack -F -l [pid]</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">printf <span class="string">"%x\n"</span> $线程     <span class="comment">#得到16进制</span></span><br><span class="line">jstack $PID |grep $<span class="number">16</span>进制  -A <span class="number">20</span>|less</span><br></pre></td></tr></table></figure>
+<h5 id="借助外部工具，下载链接http://soft-xxx-com/Tools/java">借助外部工具，下载链接<a href="http://soft.xxx.com/Tools/java" target="_blank" rel="external">http://soft.xxx.com/Tools/java</a></h5><pre><code>sh <span class="operator"><span class="keyword">show</span>-busy-<span class="keyword">java</span>-threads -<span class="keyword">c</span> 显示的线程数 -<span class="keyword">p</span> 进程<span class="keyword">id</span>
+<span class="keyword">java</span> -jar sjk.jar ttop -<span class="keyword">p</span> [pid]-o CPU,ALLOC -<span class="keyword">n</span> <span class="number">30</span> （表示按照CPU占用率和堆内存分配速率排序）</span>
+</code></pre><p>sjk因为直接jmx监控的，所以精准度会更高一点。但是不好的地方是，看不到完整的线程堆栈，只有线程名称。因此，实战中，建议多种手段结合操作。<br><a href="https://github.com/aragozin/jvm-tools" target="_blank" rel="external">https://github.com/aragozin/jvm-tools</a></p>
+<h3 id="内存预警">内存预警</h3><blockquote>
+<p>时间紧急的情况下</p>
+</blockquote>
+<p>jmap -histo [pid] </p>
+<blockquote>
+<p>时间不紧急的情况下<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmap -dump:format=b,file=xxx.hprof [pid]</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>可以输出所有内存中对象的工具，甚至可以将VM 中的heap，以二进制输出成文本。使用方法 jmap -histo pid。如果连用SHELL jmap -histo pid&gt;a.log可以将其保存到文本中去，在一段时间后，使用文本对比工具，可以对比出GC回收了哪些对象。</p>
+<p>jmap -dump:format=b,file=xxx.hprof [pid]，将内存heap输出出来到xxx.hprof文件里，再配合MAT（内存分析工具(Memory Analysis Tool），使用参见：<a href="http://blog.csdn.net/fenglibing/archive/2011/04/02/6298326.aspx" target="_blank" rel="external">http://blog.csdn.net/fenglibing/archive/2011/04/02/6298326.aspx</a> 或与jhat (Java Heap Analysis Tool)一起使用，能够以图像的形式直观的展示当前内存是否有问题。</p>
+<h5 id="查看类的一些信息，如字节码的版本号、常量池等">查看类的一些信息，如字节码的版本号、常量池等</h5><pre><code><span class="title">javap</span> -verbose classname
+</code></pre><h5 id="查看jvm进程">查看jvm进程</h5><pre><code><span class="title">jps</span>
+
+jcmd -vl
+</code></pre><h5 id="查看进程的gc情况">查看进程的gc情况</h5><pre><code>jstat -gcutil [pid] (显示总体情况)
+
+
+jstat -gc [pid] <span class="number">1000</span> <span class="number">10</span>（每隔<span class="number">1</span>秒刷新一次 一共<span class="number">10</span>次）
+</code></pre><h5 id="查看jvm内存使用状况">查看jvm内存使用状况</h5><pre><code><span class="keyword">jmap</span> -heap<span class="sqbracket"> [pid]</span>
+</code></pre><h5 id="查看jvm内存存活的对象：">查看jvm内存存活的对象：</h5><pre><code><span class="tag">jcmd</span> <span class="attr_selector">[pid]</span> <span class="tag">GC</span><span class="class">.class_histogram</span>
+<span class="tag">jmap</span> <span class="rule"><span class="attribute">-histo</span>:<span class="value">live [pid]</span></span>
+</code></pre><h5 id="把heap里所有对象都dump下来，无论对象是死是活">把heap里所有对象都dump下来，无论对象是死是活</h5><pre><code>jmap -dump:format=<span class="tag">b</span>,file=xxx<span class="class">.hprof</span> [pid]
+</code></pre><h4 id="线程dump">线程dump</h4><pre><code><span class="tag">jstack</span> <span class="attr_selector">[pid]</span> <span class="id">#-m</span>参数可以打印出<span class="tag">native</span>栈的信息
+
+<span class="tag">jcmd</span> <span class="tag">Thread</span><span class="class">.print</span>
+
+<span class="tag">kill</span> <span class="tag">-3</span> <span class="attr_selector">[pid]</span>
+</code></pre><h4 id="查看目前jvm启动的参数">查看目前jvm启动的参数</h4><pre><code><span class="tag">jinfo</span> <span class="tag">-flags</span> <span class="attr_selector">[pid]</span> #有效参数
+
+<span class="tag">jcmd</span> <span class="attr_selector">[pid]</span> <span class="tag">VM</span><span class="class">.flags</span> #所有参数
+</code></pre><h4 id="查看对应参数的值">查看对应参数的值</h4><pre><code><span class="tag">jinfo</span> <span class="tag">-flag</span> <span class="attr_selector">[flagName]</span> <span class="attr_selector">[pid]</span>
+</code></pre><h4 id="启用/禁止某个参数">启用/禁止某个参数</h4><pre><code>jinfo -flag [<span class="link_label">+/-</span>][<span class="link_reference">flagName</span>] [pid]
+</code></pre><h4 id="设置某个参数">设置某个参数</h4><pre><code><span class="tag">jinfo</span> <span class="tag">-flag</span> <span class="attr_selector">[flagName=value]</span> <span class="attr_selector">[pid]</span>
+</code></pre><h4 id="查看所有可以设置的参数以及其默认值">查看所有可以设置的参数以及其默认值</h4><pre><code>java -<span class="constant">XX</span><span class="symbol">:+PrintFlagsInitial</span>
+</code></pre><h2 id="第三方工具">第三方工具</h2><p>========awesome-scripts========</p>
+<p>安装:</p>
+<pre><code>curl <span class="operator">-s</span> <span class="string">"https://raw.githubusercontent.com/superhj1987/awesome-scripts/master/self-installer.sh"</span> | bash <span class="operator">-s</span>
+</code></pre><p>使用：</p>
+<p>显示最繁忙的java线程: -c &lt;要显示的线程栈数&gt; -p &lt;指定的Java Process&gt;</p>
+<pre><code>opscipts <span class="operator"><span class="keyword">show</span>-busy-<span class="keyword">java</span>-threads [-<span class="keyword">c</span>] [-<span class="keyword">p</span>]</span>
+</code></pre><p>使用greys跟踪方法耗时</p>
+<pre><code>opscripts greys [@IP:PORT]
+
+ga?: trace [<span class="keyword">class</span>] [<span class="function"><span class="keyword">method</span>]</span>
+</code></pre><p>显示当前cpu和内存使用状况，包括全局和各个进程的。</p>
+<pre><code>opscripts <span class="operator"><span class="keyword">show</span>-cpu-<span class="keyword">and</span>-<span class="keyword">memory</span></span>
+</code></pre><p>进入jvm调试交互命令行，包含对java栈、堆、线程、gc等状态的查看</p>
+<pre><code><span class="keyword">opscripts</span> jvm<span class="sqbracket"> [pid]</span>
+</code></pre>	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2018/03/10/手把手教你如何使用openresty-redis动态更新访问白名单/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2018/02/11/闲聊一下企业上线发布经典案例/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2018/03/10/JVM诊断调优必掌握的几个linux命令/" data-title="JVM诊断调优必掌握的几个linux命令" data-url="http://linuxOps.xyz/2018/03/10/JVM诊断调优必掌握的几个linux命令/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2018-03-10 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

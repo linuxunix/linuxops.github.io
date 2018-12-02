@@ -1,0 +1,251 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>centos安装glusterfs和实战 | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="centos安装glusterfs和实战"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> centos安装glusterfs和实战</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <p>刚过元旦，由于最近比较忙，还木有时间给各位小伙伴们拜年，在此祝各位小伙伴们新年新气象，在新的一年内财源广进，身体健康。</p>
+<blockquote>
+<p>什么是分布式文件系统：</p>
+<p>分布式文件系统（Distributed File System）是指文件系统管理的物理存储资源不一定直接连接在本地节点上，而是通过计算机网络与节点相连。分布式文件系统的设计基于客户机/服务器模 式。一个典型的网络可能包括多个供多用户访问的服务器。另外，对等特性允许一些系统扮演客户机和服务器的双重角色。例如，用户可以“发表”一个允许其他客 户机访问的目录，一旦被访问，这个目录对客户机来说就像使用本地驱动器一样。</p>
+</blockquote>
+<p><strong>分区磁盘</strong><br>[root@localhost src]# fdisk -l<br>[root@localhost src]# mkfs.etx4  /dev/sdb</p>
+<p><strong>1、下载glusterfs源码包到/usr/local/urc</strong><br><a href="http://www.gluster.org/download/" target="_blank" rel="external">http://www.gluster.org/download/</a></p>
+<p><strong>2、解压</strong><br>[root@localhost src]# tar zvxf glusterfs-3.6.6.tar.gz </p>
+<p><strong>3、编译安装</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost glusterfs-<span class="number">3.6</span><span class="number">.6</span>]<span class="comment"># ./configure   --prefix=/usr/local/glusterfs -enable-systemt</span></span><br><span class="line">--------------------------------------------------------------------------------------------------------------------</span><br><span class="line"><span class="comment"># 如果出现下面错误</span></span><br><span class="line">checking <span class="keyword">for</span> flex... no</span><br><span class="line">checking <span class="keyword">for</span> lex... no</span><br><span class="line">configure: error: Flex <span class="keyword">or</span> lex required to build glusterfs.</span><br><span class="line">解决方法 [root@localhost glusterfs-<span class="number">3.6</span><span class="number">.6</span>]<span class="comment"># yum -y install flex</span></span><br><span class="line"><span class="comment"># 如果出现下面错误</span></span><br><span class="line">configure: error: GNU Bison required to build glusterfs.</span><br><span class="line">解决方法 [root@localhost glusterfs-<span class="number">3.6</span><span class="number">.6</span>]<span class="comment"># yum -y install bison</span></span><br><span class="line"><span class="comment"># 如果出现下面错误</span></span><br><span class="line">configure: error: OpenSSL crypto library <span class="keyword">is</span> required to build glusterfs</span><br><span class="line">解决方法 [root@localhost glusterfs-<span class="number">3.6</span><span class="number">.6</span>]<span class="comment"># yum -y install openssl-devel</span></span><br><span class="line"></span><br><span class="line">configure: error: libxml2 devel libraries <span class="keyword">not</span> found</span><br><span class="line">解决方法：[root@localhost glusterfs-<span class="number">3.6</span><span class="number">.6</span>]<span class="comment"># yum install libxml2 libxml2-devel</span></span><br><span class="line">--------------------------------------------------------------------------------------------------------------------</span><br><span class="line">[root@localhost glusterfs-<span class="number">3.6</span><span class="number">.6</span>]<span class="comment">#make &amp;&amp; make install</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>4、查看版本信息</strong><br>[root@localhost sbin]# ./gluster –version<br>glusterfs 3.6.6 built on Dec 27 2015 03:48:07<br>Repository revision: git://git.gluster.com/glusterfs.git<br>Copyright (c) 2006-2011 Gluster Inc. <a href="http://www.gluster.com" target="_blank" rel="external">http://www.gluster.com</a><br>GlusterFS comes with ABSOLUTELY NO WARRANTY.<br>You may redistribute copies of GlusterFS under the terms of the GNU General Public License.</p>
+<p><strong>5、glusterfs 启动</strong><br>[root@localhost sbin]#  service glusterd start<br>Starting glusterd:                                         [确定]</p>
+<p>[root@localhost sbin]# ps -ef |grep glusterd<br>root      49226      1  0 03:56 ?        00:00:00 /usr/local/glusterfs/sbin/glusterd –pid-file=/var/run/glusterd.pid<br>root      49363   6751  0 03:57 pts/2    00:00:00 grep glusterd</p>
+<p><strong>6、gluster基本操作</strong><br>6.1、创建并启动volume<br>[root@localhost sbin]# ./gluster volume create help<br>Usage: volume create <new-volname> [stripe <count>] [replica <count>] [disperse [<count>]] [redundancy <count>] [transport <tcp|rdma|tcp,rdma>] <new-brick>… [force]<br>[root@localhost sbin]# ./gluster volume create  testvol 192.168.108.141:/data/brick1 192.168.108.141:/data/brick2<br>volume create: testvol: failed: The brick 192.168.108.141:/data/brick1 is being created in the root partition. It is recommended that you don’t use the system’s root partition for storage backend. Or use ‘force’ at the end of the command if you want to override this behavior.<br>提示：建议您不使用系统的根分区来存储后端。或使用“强制”命令结束时，如果你想重写此行为。<br>[root@localhost sbin]# ./gluster volume create  testvol 192.168.108.141:/data/brick1 192.168.108.141:/data/brick2 force<br>volume create: testvol: success: please start the volume to access data<br>[root@localhost sbin]# ./gluster volume info<br>Volume Name: testvol<br>Type: Distribute<br>Volume ID: 1b1c1b4d-cd7e-4770-beb4-8dfa1499d723<br>Status: Created<br>Number of Bricks: 2<br>Transport-type: tcp<br>Bricks:<br>Brick1: 192.168.108.141:/data/brick1<br>Brick2: 192.168.108.141:/data/brick2</new-brick></tcp|rdma|tcp,rdma></count></count></count></count></new-volname></p>
+<p>[root@localhost sbin]# ./gluster volume start testvol   —testvol 是指创建volume的名字<br>volume start: testvol: success<br>[root@localhost sbin]# ./gluster volume info</p>
+<p>Volume Name: testvol<br>Type: Distribute<br>Volume ID: 1b1c1b4d-cd7e-4770-beb4-8dfa1499d723<br>Status: Started<br>Number of Bricks: 2<br>Transport-type: tcp<br>Bricks:<br>Brick1: 192.168.108.141:/data/brick1<br>Brick2: 192.168.108.141:/data/brick2</p>
+<p>[root@localhost sbin]# mount -t glusterfs 192.168.108.141:/testvol /mnt<br>[root@localhost sbin]# mount<br>/dev/mapper/VolGroup-lv_root on / type ext4 (rw)<br>proc on /proc type proc (rw)<br>sysfs on /sys type sysfs (rw)<br>devpts on /dev/pts type devpts (rw,gid=5,mode=620)<br>tmpfs on /dev/shm type tmpfs (rw)<br>/dev/sda1 on /boot type ext4 (rw)<br>none on /proc/sys/fs/binfmt_misc type binfmt_misc (rw)<br>gvfs-fuse-daemon on /root/.gvfs type fuse.gvfs-fuse-daemon (rw,nosuid,nodev)<br>/dev/sr0 on /media/CentOS_6.5_Final type iso9660 (ro,nosuid,nodev,uhelper=udisks,uid=0,gid=0,iocharset=utf8,mode=0400,dmode=0500)<br>192.168.108.141:/testvol on /mnt type fuse.glusterfs (rw,default_permissions,allow_other,max_read=131072)<br>[root@localhost sbin]# df -h<br>Filesystem                    Size  Used Avail Use% Mounted on<br>/dev/mapper/VolGroup-lv_root   18G  8.0G  8.6G  49% /<br>tmpfs                         491M  228K  491M   1% /dev/shm<br>/dev/sda1                     485M   35M  426M   8% /boot<br>/dev/sr0                      4.2G  4.2G     0 100% /media/CentOS_6.5_Final<br>192.168.108.141:/testvol       35G   16G   18G  49% /mnt</p>
+<p>[root@localhost /]# cd /mnt/<br>[root@localhost mnt]# touch file.{1..10}<br>[root@localhost mnt]# ll<br>总用量 8<br>-rw-r–r– 1 root root    0 12月 27 23:05 file.1<br>-rw-r–r– 1 root root    0 12月 27 23:05 file.10<br>-rw-r–r– 1 root root    0 12月 27 23:05 file.2<br>-rw-r–r– 1 root root    0 12月 27 23:05 file.3<br>-rw-r–r– 1 root root    0 12月 27 23:05 file.4<br>-rw-r–r– 1 root root    0 12月 27 23:05 file.5<br>-rw-r–r– 1 root root    0 12月 27 23:05 file.6<br>-rw-r–r– 1 root root    0 12月 27 23:05 file.7<br>-rw-r–r– 1 root root    0 12月 27 23:05 file.8<br>-rw-r–r– 1 root root    0 12月 27 23:05 file.9</p>
+<p>drwxr-xr-x 2 root root 8192 12月 27 22:53 test11[root@localhost /]# cd /mnt/<br>[root@localhost mnt]# ll<br>总用量 8<br>drwxr-xr-x 2 root root 8192 12月 27 22:53 test11<br>[root@localhost mnt]# touch file.{1..10}<br>[root@localhost mnt]# ll<br>总用量 8<br>-rw-r–r– 1 root root    0 12月 27 23:05 file.1<br>-rw-r–r– 1 root root    0 12月 27 23:05 file.10<br>-rw-r–r– 1 root root    0 12月 27 23:05 file.2<br>-rw-r–r– 1 root root    0 12月 27 23:05 file.3<br>-rw-r–r– 1 root root    0 12月 27 23:05 file.4<br>-rw-r–r– 1 root root    0 12月 27 23:05 file.5<br>-rw-r–r– 1 root root    0 12月 27 23:05 file.6<br>-rw-r–r– 1 root root    0 12月 27 23:05 file.7<br>-rw-r–r– 1 root root    0 12月 27 23:05 file.8<br>-rw-r–r– 1 root root    0 12月 27 23:05 file.9<br>drwxr-xr-x 2 root root 8192 12月 27 22:53 test11<br>[root@localhost /]# ll /data/brick1/<br>总用量 4<br>-rw-r–r– 2 root root    0 12月 27 23:05 file.6<br>-rw-r–r– 2 root root    0 12月 27 23:05 file.7<br>-rw-r–r– 2 root root    0 12月 27 23:05 file.8<br>drwxr-xr-x 2 root root 4096 12月 27 22:53 test11<br>[root@localhost /]# ll /data/brick2/<br>总用量 4<br>-rw-r–r– 2 root root    0 12月 27 23:05 file.1<br>-rw-r–r– 2 root root    0 12月 27 23:05 file.10<br>-rw-r–r– 2 root root    0 12月 27 23:05 file.2<br>-rw-r–r– 2 root root    0 12月 27 23:05 file.3<br>-rw-r–r– 2 root root    0 12月 27 23:05 file.4<br>-rw-r–r– 2 root root    0 12月 27 23:05 file.5<br>-rw-r–r– 2 root root    0 12月 27 23:05 file.9<br>drwxr-xr-x 2 root root 4096 12月 27 22:53 test11<br>提示：当我们创建了testvol时候，在挂载点上创建11个文件，自动分配给两个节点。<br><strong>分配4个节点实战：</strong><br>[root@localhost /]# /usr/local/glusterfs/sbin/gluster  volume create testvol2 192.168.108.141:/data/brick3 192.168.108.141:/data/brick4 192.168.108.141:/data/brick5 192.168.108.141:/data/brick6 force<br>volume create: testvol2: success: please start the volume to access data<br>[root@localhost data]# /usr/local/glusterfs/sbin/gluster  volume info</p>
+<p>Volume Name: testvol<br>Type: Distribute<br>Volume ID: 1b1c1b4d-cd7e-4770-beb4-8dfa1499d723<br>Status: Started<br>Number of Bricks: 2<br>Transport-type: tcp<br>Bricks:<br>Brick1: 192.168.108.141:/data/brick1<br>Brick2: 192.168.108.141:/data/brick2</p>
+<p>Volume Name: testvol2<br>Type: Distribute<br>Volume ID: 1aa17053-51d7-4d9d-bb5f-3b6ed4ddc559<br>Status: Created<br>Number of Bricks: 4<br>Transport-type: tcp<br>Bricks:<br>Brick1: 192.168.108.141:/data/brick3<br>Brick2: 192.168.108.141:/data/brick4<br>Brick3: 192.168.108.141:/data/brick5<br>Brick4: 192.168.108.141:/data/brick6<br>[root@localhost data]# /usr/local/glusterfs/sbin/gluster  volume stop  testvol2  –停止testvol2卷<br>Stopping volume will make its data inaccessible. Do you want to continue? (y/n) y<br>volume stop: testvol2: failed: Volume testvol2 is not in the started state<br>[root@localhost data]# /usr/local/glusterfs/sbin/gluster  volume delete  testvol2   –删除testvol2卷<br>Deleting volume will erase all information about the volume. Do you want to continue? (y/n) y<br>volume delete: testvol2: success<br>[root@localhost data]# /usr/local/glusterfs/sbin/gluster  volume info</p>
+<p>Volume Name: testvol<br>Type: Distribute<br>Volume ID: 1b1c1b4d-cd7e-4770-beb4-8dfa1499d723<br>Status: Started<br>Number of Bricks: 2<br>Transport-type: tcp<br>Bricks:<br>Brick1: 192.168.108.141:/data/brick1<br>Brick2: 192.168.108.141:/data/brick2</p>
+<p>[root@localhost data]# /usr/local/glusterfs/sbin/gluster  volume create  test2vol replica 2  192.168.108.141:/data/brick3 192.168.108.141:/data/brick4 192.168.108.141:/data/brick5 192.168.108.141:/data/brick6 force<br>Multiple bricks of a replicate volume are present on the same server. This setup is not optimal.<br>Do you still want to continue creating the volume?  (y/n) y<br>volume create: test2vol: success: please start the volume to access data</p>
+<p>[root@localhost data]# /usr/local/glusterfs/sbin/gluster  volume info</p>
+<p>Volume Name: test2vol<br>Type: Distributed-Replicate<br>Volume ID: 581ca5a1-2651-47cc-a35f-0a018b164871<br>Status: Created<br>Number of Bricks: 2 x 2 = 4<br>Transport-type: tcp<br>Bricks:<br>Brick1: 192.168.108.141:/data/brick3<br>Brick2: 192.168.108.141:/data/brick4<br>Brick3: 192.168.108.141:/data/brick5<br>Brick4: 192.168.108.141:/data/brick6</p>
+<p>Volume Name: testvol<br>Type: Distribute<br>Volume ID: 1b1c1b4d-cd7e-4770-beb4-8dfa1499d723<br>Status: Started<br>Number of Bricks: 2<br>Transport-type: tcp<br>Bricks:<br>Brick1: 192.168.108.141:/data/brick1<br>Brick2: 192.168.108.141:/data/brick2</p>
+<p>[root@localhost data]# mount -t glusterfs  192.168.108.141:/test2vol /mnt/test2vol/    –挂载test2vol卷<br>Mount failed. Please check the log file for more details.<br>[root@localhost data]# df -h                                                                                                       –由于卷没有启动，所以挂载失败<br>Filesystem                    Size  Used Avail Use% Mounted on<br>/dev/mapper/VolGroup-lv_root   18G  7.9G  8.6G  48% /<br>tmpfs                         491M  224K  491M   1% /dev/shm<br>/dev/sda1                     485M   35M  426M   8% /boot<br>192.168.108.141:/testvol       35G   16G   18G  48% /mnt<br>[root@localhost data]# /usr/local/glusterfs/sbin/gluster  volume  start test2vol<br>volume start: test2vol: success<br>[root@localhost data]# mount -t glusterfs  192.168.108.141:/test2vol /mnt/test2vol/<br>[root@localhost data]# df -h<br>Filesystem                    Size  Used Avail Use% Mounted on<br>/dev/mapper/VolGroup-lv_root   18G  7.9G  8.6G  48% /<br>tmpfs                         491M  224K  491M   1% /dev/shm<br>/dev/sda1                     485M   35M  426M   8% /boot<br>192.168.108.141:/testvol       35G   16G   18G  48% /mnt<br>192.168.108.141:/test2vol      35G   16G   18G  48% /mnt/test2vol</p>
+<p>[root@localhost data]# cd /mnt/test2vol/<br>[root@localhost test2vol]# ll<br>总用量 0<br>[root@localhost test2vol]# touch file.{20..30}<br>[root@localhost test2vol]# ll<br>总用量 0<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.20<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.21<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.22<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.23<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.24<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.25<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.26<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.27<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.28<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.29<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.30<br>[root@localhost test2vol]# ll /data/brick<br>brick1/ brick2/ brick3/ brick4/ brick5/ brick6/<br>[root@localhost test2vol]# ll /data/brick3/<br>总用量 0<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.20<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.21<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.22<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.28<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.30<br>[root@localhost test2vol]# ll /data/brick4<br>总用量 0<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.20<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.21<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.22<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.28<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.30<br>[root@localhost test2vol]# ll /data/brick5<br>总用量 0<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.23<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.24<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.25<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.26<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.27<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.29<br>[root@localhost test2vol]# ll /data/brick6<br>总用量 0<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.23<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.24<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.25<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.26<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.27<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.29<br>由上可以得出：当写入数据时候、数据结构是以下图：</p>
+<p>把节点3的数据删除，能不能恢复：</p>
+<p>[root@localhost test2vol]# ll /data/brick3<br>总用量 0<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.20<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.21<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.22<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.28<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.30<br>[root@localhost test2vol]# rm -rf /data/brick3/*<br>[root@localhost test2vol]# ll /data/brick3<br>总用量 0<br>[root@localhost test2vol]# ll /mnt/test2vol<br>总用量 0<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.20<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.21<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.22<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.23<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.24<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.25<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.26<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.27<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.28<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.29<br>-rw-r–r– 1 root root 0 12月 27 23:29 file.30</p>
+<p>当节点3数据掉失后，卷数据显示还是正常的。</p>
+<p>均衡下：</p>
+<p>[root@localhost test2vol]# /usr/local/glusterfs/sbin/gluster volume rebalance test2vol start<br>volume rebalance: test2vol: success: Initiated rebalance on volume test2vol.<br>Execute “gluster volume rebalance <volume-name> status” to check status.<br>ID: adb5c963-10a5-463c-adac-f6a4f0b3ce5e</volume-name></p>
+<p>[root@localhost test2vol]# ll /data/brick3   –数据已经恢复<br>总用量 0<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.20<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.21<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.22<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.28<br>-rw-r–r– 2 root root 0 12月 27 23:29 file.30</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2016/01/23/NGINX╥■▓╪░ц▒╛║┼/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2016/01/05/╗∙╙┌-memcached-╡─-tomcat-╝п╚║╓о-session-╣▓╧э/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2016/01/05/centos░▓╫░glusterfs/" data-title="centos安装glusterfs和实战" data-url="http://linuxOps.xyz/2016/01/05/centos░▓╫░glusterfs/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2016-01-05 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

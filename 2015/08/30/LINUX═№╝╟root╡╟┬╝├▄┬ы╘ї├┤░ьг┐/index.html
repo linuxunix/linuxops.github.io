@@ -1,0 +1,234 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>LINUX忘记root登录密码怎么办？ | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="LINUX忘记root登录密码怎么办？"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> LINUX忘记root登录密码怎么办？</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <blockquote>
+<p>相信不少朋友在使用linux系统时候也会出现过忘记root系统登录密码，但有时候又需要root权限的时候就苦不堪言了，看了本文基本能更改新的root密码。</p>
+</blockquote>
+<ul>
+<li><p><strong>使用装备：</strong> 自家使用win10在虚拟机搭建的CentOS 6.4</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@centos ~]# uname -a&#10;[root@centos ~]# uname -a&#10;Linux centos 2.6.32-358.el6.x86_64 #1 SMP Fri Feb 22 00:31:26 UTC 2013 x86_64 x86_64 x86_64 GNU/Linux&#10;[root@centos ~]# lsb_release -a&#10;LSB Version:    :base-4.0-amd64:base-4.0-noarch:core-4.0-amd64:core-4.0-noarch&#10;Distributor ID: CentOS&#10;Description:    CentOS release 6.4 (Final)&#10;Release:        6.4&#10;Codename:       Final</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>一、更改密码之前我们需要知道inittab下的几种模式：</strong><br>1、运行 cat /etc/inittab 如下图所示：<br><br><img src="/img/inittab.png" style="width: 600px;"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 0 - halt (Do NOT set initdefault to this)   //关机</span></span><br><span class="line"><span class="comment"># 1 - Single user mode   //单用户模式</span></span><br><span class="line"><span class="comment"># 2 - Multiuser, without NFS (The same as 3, if you do not have networking)    //多用户模式，无NFS功能。</span></span><br><span class="line"><span class="comment"># 3 - Full multiuser mode //完整多用户模式</span></span><br><span class="line"><span class="comment"># 4 - unused    //这个暂时不用</span></span><br><span class="line"><span class="comment"># 5 - X11 //完整多用户模式，启动X11</span></span><br><span class="line"><span class="comment"># 6 - reboot (Do NOT set initdefault to this) //重启</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">id:<span class="number">5</span>:initdefault:  //默认以<span class="number">5</span>级别启动</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>2、上面所述可以得出，现在使用正是多用户模式，而且是带图形界面的，那知道上面知识有啥用呢？别急，因为我们等下要通过单用户模式进行修改root用户密码。</p>
+<ul>
+<li><strong>二、修改root密码流程图：</strong><br><br><img src="/img/passwdliucheng.png" style="width: 600px;"></li>
+<li><strong>三、虚拟下实操流程：</strong><br>1、重启虚拟机，带开机后立即按键盘e，进入如下图：<br><img src="/img/passwd1.png" style="width: 600px;"><br>2、继续按e ，如下图所示：<br><img src="/img/passwd2.png" style="width: 600px;"><br>3、选择kernel /vmlinuz-2.6.32-358.e16.x86_64 ro root 等这项，按e进入：<br><img src="/img/passwd3.png" style="width: 600px;"><br>4、在后面输入空格和1 后直接回车<br>5、继续选择kernel /vmlinuz-2.6.32-358.e16.x86_64 ro root 等这项，按b进入：<br>6、直接输入passwd root 后输入新的root密码即可。<br> <img src="/img/passwd4.png" style="width: 600px;"><br>7、重启即可。</li>
+</ul>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2015/08/30/CentOS6-5-┼ф╓├vsftpd/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2015/08/29/win10╙╥╝№▓╗─▄╨┬╘Ў╬─╝■╝╨║═╬─▒╛╕├╚ч║╬┤ж└эг┐/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2015/08/30/LINUX═№╝╟root╡╟┬╝├▄┬ы╘ї├┤░ьг┐/" data-title="LINUX忘记root登录密码怎么办？" data-url="http://linuxOps.xyz/2015/08/30/LINUX═№╝╟root╡╟┬╝├▄┬ы╘ї├┤░ьг┐/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2015-08-30 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

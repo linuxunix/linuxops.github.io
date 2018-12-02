@@ -1,0 +1,287 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>通过salt远程执行管理minion | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="通过salt远程执行管理minion"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> 通过salt远程执行管理minion</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <p><strong>通过salt远程执行管理minion</strong></p>
+<blockquote>
+<p>远程命令执行结构</p>
+</blockquote>
+<p>[root@localhost ~]# salt –help<br>Usage: salt [options] ‘<target>‘ <function> [arguments]<br>…省略<br> <img src="/img/201703/salt-1.png" style="width: 550x;"></function></target></p>
+<p>命令行选项<br>–out：控制salt执行后输出格式：<br>如下以json格式输出执行结果：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># salt --out=json "192.168.1.135" file.stats /etc/yum.conf </span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"192.168.1.135"</span>: &#123;</span><br><span class="line">        <span class="string">"size"</span>: <span class="number">969</span>, </span><br><span class="line">        <span class="string">"group"</span>: <span class="string">"root"</span>, </span><br><span class="line">        <span class="string">"ctime"</span>: <span class="number">1452756899.5019996</span>, </span><br><span class="line">        <span class="string">"type"</span>: <span class="string">"file"</span>, </span><br><span class="line">        <span class="string">"mode"</span>: <span class="string">"0644"</span>, </span><br><span class="line">        <span class="string">"gid"</span>: <span class="number">0</span>, </span><br><span class="line">        <span class="string">"target"</span>: <span class="string">"/etc/yum.conf"</span>, </span><br><span class="line">        <span class="string">"user"</span>: <span class="string">"root"</span>, </span><br><span class="line">        <span class="string">"mtime"</span>: <span class="number">1437733679.0</span>, </span><br><span class="line">        <span class="string">"atime"</span>: <span class="number">1473108087.4774382</span>, </span><br><span class="line">        <span class="string">"inode"</span>: <span class="number">1835529</span>, </span><br><span class="line">        <span class="string">"uid"</span>: <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>目标主机</strong></p>
+<blockquote>
+<blockquote>
+<p>全局匹配：</p>
+</blockquote>
+</blockquote>
+<pre><code>*:代表任意字符串，也可以是空字符串
+?:代表一个字符串，但不能为空
+<span class="attr_selector">[]</span>：字符集合，例如<span class="attr_selector">[a~z]</span>代表任何一个小写字母，<span class="attr_selector">[0-9]</span>代表数字
+</code></pre><blockquote>
+<blockquote>
+<p>正则匹配:</p>
+</blockquote>
+</blockquote>
+<pre><code>Targets也可以使用正则表达式，但是需要配合-<span class="keyword">E</span>使用
+</code></pre><p>salt -E ‘virtmach[0-9]’ test.ping</p>
+<blockquote>
+<blockquote>
+<p>列表匹配:</p>
+</blockquote>
+</blockquote>
+<p>salt -L ‘foo,bar,baz,quo’ test.ping</p>
+<blockquote>
+<blockquote>
+<p>混合匹配：</p>
+</blockquote>
+</blockquote>
+<p>salt -C ‘G@os:Ubuntu and webser<em> or E@database.</em>‘ test.ping</p>
+<blockquote>
+<blockquote>
+<p>Grain和Pillar匹配：</p>
+</blockquote>
+<p>Targets可以使用Grains系统来通过minion的系统信息进行过滤:<br>salt -G ‘os:Ubuntu’ test.ping</p>
+</blockquote>
+<p>参考地址：<a href="http://docs.saltstack.cn/topics/tutorials/modules.html" target="_blank" rel="external">http://docs.saltstack.cn/topics/tutorials/modules.html</a><br><strong>远程执行模块和函数</strong><br>看模块中的函数sys.list_functions<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># salt "192.168.1.135" sys.list_functions user</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.135</span>:</span><br><span class="line">    - user.add</span><br><span class="line">    - user.chfullname</span><br><span class="line">    - user.chgid</span><br><span class="line">    - user.chgroups</span><br><span class="line">    - user.chhome</span><br><span class="line">    - user.chhomephone</span><br><span class="line">    - user.chloginclass</span><br><span class="line">    - user.chroomnumber</span><br><span class="line">    - user.chshell</span><br><span class="line">    - user.chuid</span><br><span class="line">    - user.chworkphone</span><br><span class="line">    - user.delete</span><br><span class="line">    - user.get_loginclass</span><br><span class="line">    - user.getent</span><br><span class="line">    - user.info</span><br><span class="line">    - user.list_groups</span><br><span class="line">    - user.list_users</span><br><span class="line">- user.rename</span><br></pre></td></tr></table></figure></p>
+<p>远程执行命令模块—cmd模块<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># salt "192.168.1.135" sys.list_functions cmd</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.135</span>:</span><br><span class="line">    - cmd.exec_code</span><br><span class="line">    - cmd.exec_code_all</span><br><span class="line">    - cmd.has_exec</span><br><span class="line">    - cmd.retcode</span><br><span class="line">    - cmd.run</span><br><span class="line">    - cmd.run_all</span><br><span class="line">    - cmd.run_chroot</span><br><span class="line">    - cmd.run_stderr</span><br><span class="line">    - cmd.run_stdout</span><br><span class="line">    - cmd.script</span><br><span class="line">    - cmd.script_retcode</span><br><span class="line">    - cmd.shell</span><br><span class="line">    - cmd.shells</span><br><span class="line">    - cmd.tty</span><br><span class="line">    - cmd.which</span><br><span class="line">    - cmd.which_bin</span><br></pre></td></tr></table></figure></p>
+<p>如多台主机执行free –m命令：</p>
+<p>Cmd_run_all显示更加详细信息：</p>
+<p><strong>安装包管理pkg模块：</strong><br>查看模块函数：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># salt "192.168.1.135" sys.list_functions pkg</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.135</span>:</span><br><span class="line">    - pkg.available_version</span><br><span class="line">    - pkg.check_db</span><br><span class="line">    - pkg.clean_metadata</span><br><span class="line">    - pkg.del_repo</span><br><span class="line">    - pkg.diff</span><br><span class="line">    - pkg.download</span><br><span class="line">    - pkg.expand_repo_def</span><br><span class="line">    - pkg.file_dict</span><br><span class="line">    - pkg.file_list</span><br><span class="line">    - pkg.get_locked_packages</span><br><span class="line">    - pkg.get_repo</span><br><span class="line">    - pkg.group_diff</span><br><span class="line">    - pkg.group_info</span><br><span class="line">    - pkg.group_install</span><br><span class="line">    - pkg.group_list</span><br><span class="line">    - pkg.hold</span><br><span class="line">    - pkg.install</span><br><span class="line">    - pkg.latest_version</span><br><span class="line">    - pkg.list_holds</span><br><span class="line">    - pkg.list_pkgs</span><br><span class="line">    - pkg.list_repo_pkgs</span><br><span class="line">    - pkg.list_repos</span><br><span class="line">    - pkg.list_upgrades</span><br><span class="line">    - pkg.mod_repo</span><br><span class="line">    - pkg.modified</span><br><span class="line">    - pkg.normalize_name</span><br><span class="line">    - pkg.owner</span><br><span class="line">    - pkg.purge</span><br><span class="line">    - pkg.refresh_db</span><br><span class="line">    - pkg.remove</span><br><span class="line">    - pkg.unhold</span><br><span class="line">    - pkg.upgrade</span><br><span class="line">    - pkg.upgrade_available</span><br><span class="line">    - pkg.verify</span><br><span class="line">    - pkg.version</span><br><span class="line">    - pkg.version_cmp</span><br></pre></td></tr></table></figure></p>
+<p>pkg.install安装软件：</p>
+<p>pkg.version查看已安装软件的版本信息：</p>
+<p>pkg.remove卸载软件：</p>
+<p><strong>Service管理服务模块</strong><br>查看service模块函数<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# salt "192.168.1.135" sys.list_functions service</span><br><span class="line">192.168.1.135:</span><br><span class="line">    -<span class="ruby"> service.available</span><br><span class="line"></span>    -<span class="ruby"> service.disable</span><br><span class="line"></span>    -<span class="ruby"> service.disabled</span><br><span class="line"></span>    -<span class="ruby"> service.enable</span><br><span class="line"></span>    -<span class="ruby"> service.enabled</span><br><span class="line"></span>    -<span class="ruby"> service.get_all</span><br><span class="line"></span>    -<span class="ruby"> service.get_disabled</span><br><span class="line"></span>    -<span class="ruby"> service.get_enabled</span><br><span class="line"></span>    -<span class="ruby"> service.missing</span><br><span class="line"></span>    -<span class="ruby"> service.reload</span><br><span class="line"></span>    -<span class="ruby"> service.restart</span><br><span class="line"></span>    -<span class="ruby"> service.start</span><br><span class="line"></span>    -<span class="ruby"> service.status</span><br><span class="line"></span>    -<span class="ruby"> service.stop</span></span><br></pre></td></tr></table></figure></p>
+<p>service.status查看软件运行状态：</p>
+<p>False代表关闭<br>True代表运行<br>Service.start启动软件：</p>
+<p>Service.stop关闭软件：</p>
+<p><strong>File文件管理模块</strong><br>查看file模块函数<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># salt  "192.168.1.135" sys.list_functions file</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.135</span>:</span><br><span class="line">    - file.access</span><br><span class="line">    - file.append</span><br><span class="line">    - file.basename</span><br><span class="line">    - file.blockreplace</span><br><span class="line">    - file.check_file_meta</span><br><span class="line">    - file.check_hash</span><br><span class="line">    - file.check_managed</span><br><span class="line">    - file.check_managed_changes</span><br><span class="line">    - file.check_perms</span><br><span class="line">    - file.chgrp</span><br><span class="line">    - file.chown</span><br><span class="line">    - file.comment</span><br><span class="line">    - file.comment_line</span><br><span class="line">    - file.contains</span><br><span class="line">    - file.contains_glob</span><br><span class="line">    - file.contains_regex</span><br><span class="line">    - file.contains_regex_multiline</span><br><span class="line">    - file.copy</span><br><span class="line">    - file.delete_backup</span><br><span class="line">    - file.directory_exists</span><br><span class="line">    - file.dirname</span><br><span class="line">    - file.diskusage</span><br><span class="line">    - file.extract_hash</span><br><span class="line">    - file.file_exists</span><br><span class="line">    - file.find</span><br><span class="line">    - file.get_devmm</span><br><span class="line">    - file.get_diff</span><br><span class="line">    - file.get_gid</span><br><span class="line">    - file.get_group</span><br><span class="line">    - file.get_hash</span><br><span class="line">    - file.get_managed</span><br><span class="line">    - file.get_mode</span><br><span class="line">    - file.get_selinux_context</span><br><span class="line">    - file.get_sum</span><br><span class="line">    - file.get_uid</span><br><span class="line">    - file.get_user</span><br><span class="line">    - file.gid_to_group</span><br><span class="line">    - file.grep</span><br><span class="line">    - file.group_to_gid</span><br><span class="line">    - file.is_blkdev</span><br><span class="line">    - file.is_chrdev</span><br><span class="line">    - file.is_fifo</span><br><span class="line">    - file.is_link</span><br><span class="line">    - file.join</span><br><span class="line">    - file.lchown</span><br><span class="line">    - file.link</span><br><span class="line">    - file.list_backup</span><br><span class="line">    - file.list_backups</span><br><span class="line">    - file.list_backups_dir</span><br><span class="line">    - file.lstat</span><br><span class="line">    - file.makedirs</span><br><span class="line">    - file.makedirs_perms</span><br><span class="line">    - file.manage_file</span><br><span class="line">    - file.mkdir</span><br><span class="line">    - file.mknod</span><br><span class="line">    - file.mknod_blkdev</span><br><span class="line">    - file.mknod_chrdev</span><br><span class="line">    - file.mknod_fifo</span><br><span class="line">    - file.move</span><br><span class="line">    - file.normpath</span><br><span class="line">    - file.open_files</span><br><span class="line">    - file.pardir</span><br><span class="line">    - file.patch</span><br><span class="line">    - file.path_exists_glob</span><br><span class="line">    - file.prepend</span><br><span class="line">    - file.psed</span><br><span class="line">    - file.readdir</span><br><span class="line">    - file.readlink</span><br><span class="line">    - file.remove</span><br><span class="line">    - file.remove_backup</span><br><span class="line">    - file.rename</span><br><span class="line">    - file.replace</span><br><span class="line">    - file.restore_backup</span><br><span class="line">    - file.restorecon</span><br><span class="line">    - file.rmdir</span><br><span class="line">    - file.search</span><br><span class="line">    - file.sed</span><br><span class="line">    - file.sed_contains</span><br><span class="line">    - file.seek_read</span><br><span class="line">    - file.seek_write</span><br><span class="line">    - file.set_mode</span><br><span class="line">    - file.set_selinux_context</span><br><span class="line">    - file.source_list</span><br><span class="line">    - file.stats</span><br><span class="line">    - file.statvfs</span><br><span class="line">    - file.symlink</span><br><span class="line">    - file.touch</span><br><span class="line">    - file.truncate</span><br><span class="line">    - file.uid_to_user</span><br><span class="line">    - file.uncomment</span><br><span class="line">    - file.user_to_uid</span><br><span class="line">    - file.write</span><br></pre></td></tr></table></figure></p>
+<p>file.stats查看文件信息：</p>
+<p>file.chown 改变文件所属用户和用户组：<br>语法：file.chown Path User Group</p>
+<p>file.directory_exists判断客户端文件夹是否存在</p>
+<p>file.is_link检测文件是否为链接</p>
+<p>File.get_diff 返回两个文件的差异，可以是本地文件，也可以是sallt://文件</p>
+<p>file.get_hash获取文件的hash值</p>
+<p>file.touch创建文件</p>
+<p>File.addend追加文件</p>
+<p>File.makedirs创建父文件夹</p>
+<p>File.mkidr创建文件夹</p>
+<p><strong>用户管理模块</strong><br>查看模块的所有函数<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># salt '*' sys.list_functions user</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.17</span><span class="number">.130</span>:</span><br><span class="line">    - user.add</span><br><span class="line">    - user.chfullname</span><br><span class="line">    - user.chgid</span><br><span class="line">    - user.chgroups</span><br><span class="line">    - user.chhome</span><br><span class="line">    - user.chhomephone</span><br><span class="line">    - user.chloginclass</span><br><span class="line">    - user.chroomnumber</span><br><span class="line">    - user.chshell</span><br><span class="line">    - user.chuid</span><br><span class="line">    - user.chworkphone</span><br><span class="line">    - user.delete</span><br><span class="line">    - user.get_loginclass</span><br><span class="line">    - user.getent</span><br><span class="line">    - user.info</span><br><span class="line">    - user.list_groups</span><br><span class="line">    - user.list_users</span><br><span class="line">    - user.rename</span><br></pre></td></tr></table></figure></p>
+<p>user.info查看用户信息：</p>
+<p>user.list_users列出所有用户：</p>
+<p>salt.modules.useradd.add(name, uid=None, gid=None, groups=None, home=None, shell=None, unique=True, system=False, fullname=’’, roomnumber=’’, workphone=’’, homephone=’’, createhome=True, loginclass=None)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">例：salt <span class="string">'*'</span> user.add name &lt;uid&gt; &lt;gid&gt; &lt;groups&gt; &lt;home&gt; &lt;shell&gt;</span><br></pre></td></tr></table></figure></p>
+<p>user.delete删除用户</p>
+<p>User.chhome更改用户家目录<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># salt '*' sys.doc user.chhome</span></span><br><span class="line"><span class="string">'user.chhome:'</span></span><br><span class="line">    Change the home directory of the user, <span class="keyword">pass</span> <span class="keyword">True</span> <span class="keyword">for</span> persist to move files</span><br><span class="line">    to the new home directory <span class="keyword">if</span> the old home directory exist.</span><br><span class="line">    CLI Example:</span><br><span class="line">        salt <span class="string">'*'</span> user.chhome foo /home/users/foo <span class="keyword">True</span></span><br></pre></td></tr></table></figure></p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2017/03/02/编写自己的模块代码/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2017/03/01/获取nginx日志访问前10名（附python做法/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2017/03/02/通过salt远程执行管理minion/" data-title="通过salt远程执行管理minion" data-url="http://linuxOps.xyz/2017/03/02/通过salt远程执行管理minion/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2017-03-02 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

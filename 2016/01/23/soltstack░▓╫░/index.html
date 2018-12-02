@@ -1,0 +1,244 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>soltstack安装 | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="soltstack安装"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> soltstack安装</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <blockquote>
+<p>SaltStack是什么？</p>
+</blockquote>
+<p>Salt是一种和以往不同的基础设施管理方法，它是建立在大规模系统高速通讯能力可以大幅提升的想法上。这种方法使得Salt成为一个强大的能够解决基础设施中许多特定问题的多任务系统。远程执行引擎是Salt的核心，它能够为多组系统创建高速、安全的双向通讯网络。基于这个通许系统，Salt提供了一个非常快速、灵活并且容易使用的配置管理系统，称之为“Salt States”。</p>
+<blockquote>
+<p>安装准备</p>
+</blockquote>
+<p>rpm -Uvh <a href="http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm" target="_blank" rel="external">http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</a><br>Salt的master和minion包是分开的。机器只需要安装相应的包即可运行。通常情况下，会有一个master和多个minions。<br>在salt-master上，运行:<br>yum install salt-master<br>在salt-minion上，运行:<br>yum install salt-minion</p>
+<blockquote>
+<p>实战安装</p>
+<p>Master:192.168.108.129</p>
+</blockquote>
+<p>[root@server1 ~]# rpm -Uvh <a href="http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm" target="_blank" rel="external">http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</a><br>Retrieving <a href="http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm" target="_blank" rel="external">http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</a><br>warning: /var/tmp/rpm-tmp.iZuZME: Header V3 RSA/SHA256 Signature, key ID 0608b895: NOKEY<br>Preparing…                ########################################### [100%]<br>    package epel-release-6-8.noarch is already installed<br>[root@server1 ~]# yum install -y salt-master<br>已加载插件：fastestmirror, refresh-packagekit, security<br>设置安装进程<br>Loading mirror speeds from cached hostfile<br>epel/metalink                                                                                                                                   | 5.4 kB     00:00     </p>
+<ul>
+<li>base: mirrors.aliyun.com<br>….省略</li>
+</ul>
+<blockquote>
+<p>Minion：192.168.108.141</p>
+</blockquote>
+<p>[root@server2 ~]# rpm -Uvh <a href="http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm" target="_blank" rel="external">http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</a><br>[root@server2 ~]# yum install -y salt-minion </p>
+<p>Master<br>配置master开机自动启动:<br>[root@server2 ~]# chkconfig salt-master on<br>启动Master:<br>[root@server1 ~]# service salt-master start<br>Starting salt-master daemon:                               [确定]<br>[root@server1 ~]# lsof -i:4505<br>COMMAND    PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME<br>salt-mast 2833 root   12u  IPv4  22272      0t0  TCP *:4505 (LISTEN)</p>
+<p>Minion<br>配置Minion开机自动启动:<br>[root@server2 ~]# chkconfig salt-minion on<br>启动Minion:<br>[root@server2 ~]# chkconfig salt-minion on<br>Starting salt-minion daemon:                               [确定]<br>[root@server2 ~]# vim /etc/salt/minion —配置文件<br>[root@server2 ~]# grep -v ‘^#’ /etc/salt/minion<br>master: 192.168.108.129</p>
+<blockquote>
+<p>测试</p>
+</blockquote>
+<p>Master<br>[root@server1 ~]# salt-key<br>Accepted Keys:<br>Denied Keys:<br>Unaccepted Keys:<br>server2   —默认是主机2的系统名，可以修改/etc/salt/minion的id字段<br>Rejected Keys:<br>把server2加入监控列表<br>[root@server1 ~]# salt-key -a server2<br>The following keys are going to be accepted:<br>Unaccepted Keys:<br>server2<br>Proceed? [n/Y] y<br>Key for minion server2 accepted.<br>[root@server1 ~]# salt-key<br>Accepted Keys:<br>server2<br>Denied Keys:<br>Unaccepted Keys:<br>Rejected Keys:<br>测试<br>[root@server1 ~]# salt ‘<em>‘ test.ping  &lt;==</em>代表所有主机<br>server2:<br>    True<br>[root@server1 ~]# salt ‘*’ cmd.run ‘df -h’ &lt;==远程执行命令<br>server2:<br>    Filesystem                    Size  Used Avail Use% Mounted on<br>    /dev/mapper/VolGroup-lv_root   18G  8.2G  8.4G  50% /<br>    tmpfs                         491M   92K  491M   1% /dev/shm<br>    /dev/sda1                     485M   35M  426M   8% /boot<br>    /dev/sr0                      4.2G  4.2G     0 100% /media/CentOS_6.5_Final</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2016/01/23/EXSI5-5░▓╫░vSphere/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2016/01/23/mongodb╦ў╥¤╙┼╗п░╕└¤/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2016/01/23/soltstack░▓╫░/" data-title="soltstack安装" data-url="http://linuxOps.xyz/2016/01/23/soltstack░▓╫░/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2016-01-23 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

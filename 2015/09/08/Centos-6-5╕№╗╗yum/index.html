@@ -1,0 +1,283 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Centos 6.5更换yum | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Centos 6.5更换yum"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> Centos 6.5更换yum</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <blockquote>
+<p><strong>什么是yum？所有软件也能用yum安装吗？</strong></p>
+</blockquote>
+<p>1、    首先yum（全称为 Yellow dog Updater, Modified），是一个基于RPM包管理的软件包管理器，它能自动解决包的倚赖性问题，能一次安装软件所需的依赖包。<br>2、    当然不是了，这个得看yum 可安装列表<br>yum list  列出所有可安装的软件包.<br>yum list updates列出所有可更新的软件包<br>话说回来，我们为何要更换源呢？主要还是因为LINUX基本都是外国人写的东西，人家把服务器放在国外，这也是我们下载有时很慢的原因之一了。换源确实能很好解决这问题，这里推荐阿里和163源。</p>
+<ul>
+<li><strong>网易163源：</strong></li>
+</ul>
+<p>1、打开存放源配置的文件夹</p>
+<pre><code class="python">cd /etc/yum.repos.d
+</code></pre>
+<p>2、保险为见，先备份默认源</p>
+<pre><code class="python">cp ./CentOS-Base.repo ./CentOS-Base.repo.bak
+</code></pre>
+<p>3、下载163的源 </p>
+<pre><code class="python">http://mirrors<span class="number">.163</span>.com/.help/centos.html
+wget http://mirrors<span class="number">.163</span>.com/.help/CentOS6-Base-<span class="number">163.</span>repo
+</code></pre>
+<p>4、把下载下来的文件CentOS-Base-163.repo设置为默认源</p>
+<pre><code class="python">mv CentOS6-Base-<span class="number">163.</span>repo CentOS-Base.repo
+</code></pre>
+<p>或者直接跳过第3、4步直接输入以下：</p>
+<pre><code class="python">wget http://mirrors<span class="number">.163</span>.com/.help/CentOS6-Base-<span class="number">163.</span>repo -O CentOS-Base.repo
+</code></pre>
+<p>5、生成缓存并更新</p>
+<pre><code class="python">yum clean all
+yum makecache
+yum update
+</code></pre>
+<p>要是还不可以请查看官方帮助文档：<a href="http://mirrors.163.com/.help/" target="_blank" rel="external">http://mirrors.163.com/.help/</a></p>
+<ul>
+<li><strong>阿里云yum源：阿里提供一键安装脚本 </strong><br>当然备份时必须的，请看上面的1。<br>1、    下载脚本<pre><code class="python">wget http://oss.aliyuncs.com/aliyunecs/update_source.tgz
+</code></pre>
+2、    解压<pre><code class="python">tar xf update_source.tgz
+</code></pre>
+3、    运行脚本<pre><code class="python">./update_source.sh   (root权限)
+</code></pre>
+这里提示下，由于本博在阿里云实验下测试成功，后面在自家虚拟机发现以下：</li>
+</ul>
+<pre><code>[root@localhost yum.repos.d]<span class="preprocessor"># ./update1_source.sh</span>
+Step <span class="number">1.</span>No lock file,begin to create lock file and <span class="keyword">continue</span>.
+
+Step <span class="number">2.</span>Begin to check the OS issue.
+
+This OS is centos6.
+
+Step <span class="number">3.</span>Begin to modify the source configration file and update.
+
+--<span class="number">2015</span>-<span class="number">09</span>-<span class="number">08</span> <span class="number">23</span>:<span class="number">16</span>:<span class="number">42</span>--  http:<span class="comment">//mirrors.aliyuncs.com/repo/Centos-6.repo</span>
+正在解析主机 mirrors.aliyuncs.com... <span class="number">10.143</span><span class="number">.34</span><span class="number">.200</span>
+正在连接 mirrors.aliyuncs.com|<span class="number">10.143</span><span class="number">.34</span><span class="number">.200</span>|:<span class="number">80.</span>..
+</code></pre><p>得出10.143.34.200是内网IP，无法连接，由于阿里云服务器不仅有公网IP，还带内网IP。</p>
+<p>2.1、打开存放源配置的文件夹</p>
+<pre><code class="python">cd /etc/yum.repos.d
+</code></pre>
+<p>2.2、先备份</p>
+<pre><code class="python">cp ./CentOS-Base.repo ./CentOS-Base.repo.bak
+</code></pre>
+<p>2.3更换阿里云yum源</p>
+<pre><code class="python">wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-<span class="number">6.</span>repo
+</code></pre>
+<p>2.4、生成缓存并更新</p>
+<pre><code class="python">yum clean all
+yum makecache
+yum update
+</code></pre>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2015/09/12/shell│╠╨Є▒р╨┤╓о╢■/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2015/09/03/╟│╠╕4G╝╝╩ї/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2015/09/08/Centos-6-5╕№╗╗yum/" data-title="Centos 6.5更换yum" data-url="http://linuxOps.xyz/2015/09/08/Centos-6-5╕№╗╗yum/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2015-09-08 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

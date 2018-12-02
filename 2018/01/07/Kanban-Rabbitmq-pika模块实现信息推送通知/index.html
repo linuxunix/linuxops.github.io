@@ -1,0 +1,245 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Kanban+Rabbitmq+pika模块实现信息推送通知 | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Kanban+Rabbitmq+pika模块实现信息推送通知"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> Kanban+Rabbitmq+pika模块实现信息推送通知</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <h2 id="Kanboard_简介：">Kanboard 简介：</h2><blockquote>
+<p>Kanboard流程图指示十分利于我们每天对工作的复盘，同时让团队成员相互了解在做什么，将要做什么，完成了什么。现在大部分公司开始使用阿里钉钉用于工作沟通，当我们在Kanboard新增任务时候，推送一份到MQ，同时通过脚本方式，触发钉钉接口传送消息到钉钉群，这样子有利于团队试试查看任务情况。</p>
+</blockquote>
+<ul>
+<li><strong>Kanboard官网地址:</strong> <a href="https://kanboard.org/" target="_blank" rel="external">https://kanboard.org/</a></li>
+<li><strong>安装过程:</strong> <a href="https://github.com/kanboard/kanboard/blob/master/doc/en_US/installation.markdown" target="_blank" rel="external">https://github.com/kanboard/kanboard/blob/master/doc/en_US/installation.markdown</a> 依赖PHP语言环境，安装过程请参考官网配置</li>
+<li><strong>配置文件:</strong> <a href="https://github.com/kanboard/kanboard/blob/master/doc/en_US/config.markdown" target="_blank" rel="external">https://github.com/kanboard/kanboard/blob/master/doc/en_US/config.markdown</a></li>
+</ul>
+<blockquote>
+<p>Kanboard 不仅可以推送到MQ，同时还可以接入LDAP，这对于公司使用域账号登录来说可谓是福音</p>
+</blockquote>
+<h2 id="Kanboard_推送到RabbitMQ">Kanboard 推送到RabbitMQ</h2><ul>
+<li><strong>参考文档:</strong> <a href="https://github.com/kanboard/plugin-rabbitmq" target="_blank" rel="external">https://github.com/kanboard/plugin-rabbitmq</a><h4 id="配置过程如下：">配置过程如下：</h4></li>
+<li>Install the plugin from the Kanboard plugin manager in one click</li>
+<li>Download the zip file and decompress everything under the directory plugins/RabbitMQ</li>
+<li>Clone this repository into the folder plugins/RabbitMQ</li>
+<li><p>vim config.php</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">define(<span class="string">'RABBITMQ_QUEUE'</span>, <span class="string">'kanboard_queue'</span>);</span><br><span class="line">define(<span class="string">'RABBITMQ_EXCHANGE'</span>, <span class="string">'kanboard_exchange'</span>);</span><br><span class="line">define(<span class="string">'RABBITMQ_HOSTNAME'</span>, <span class="string">'127.0.0.1'</span>);</span><br><span class="line">define(<span class="string">'RABBITMQ_PORT'</span>, <span class="number">5672</span>);</span><br><span class="line">define(<span class="string">'RABBITMQ_USERNAME'</span>, <span class="string">'guest'</span>);</span><br><span class="line">define(<span class="string">'RABBITMQ_PASSWORD'</span>, <span class="string">'guest'</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>/path/to/kanboard/cli worker</p>
+</li>
+</ul>
+<h2 id="从RabbitMQ获取队列信息推送到钉钉群">从RabbitMQ获取队列信息推送到钉钉群</h2><ul>
+<li><strong>pip install pika</strong></li>
+</ul>
+<hr>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">#-*-coding:utf-8-*-</span></span><br><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># v1:2018-01-04</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pika</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding(<span class="string">'utf8'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Step #6</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Dingding_Send</span><span class="params">(title, description,creator_username,url,column_title)</span>:</span></span><br><span class="line">    headers = &#123;<span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>&#125;</span><br><span class="line">    dingtalk_token = [<span class="string">"https://oapi.dingtalk.com/robot/send?access_token=xxxx"</span>]</span><br><span class="line">    data = &#123;</span><br><span class="line">        <span class="string">"msgtype"</span>: <span class="string">"markdown"</span>,</span><br><span class="line">        <span class="string">"markdown"</span>: &#123;</span><br><span class="line">            <span class="string">"title"</span>: <span class="string">"Kanban信息推送通知"</span>,</span><br><span class="line">            <span class="string">"text"</span>: <span class="string">"### Kanban信息推送通知:\n"</span>+</span><br><span class="line">                     <span class="string">"------------------- \n"</span> +</span><br><span class="line">                     <span class="string">"- **任务名称:**  &#123;0&#125; \n"</span>.format(title)+</span><br><span class="line">                     <span class="string">"- **任务描述:**   &#123;0&#125; \n"</span>.format(description)+</span><br><span class="line">                     <span class="string">"- **创建人为:**  &#123;0&#125; \n"</span>.format(creator_username) +</span><br><span class="line">                     <span class="string">"- [详情请点击URL](&#123;0&#125;) \n"</span>.format(url) +</span><br><span class="line">                     <span class="string">"- **任务状态:**  **&#123;0&#125;** \n"</span>.format(column_title)</span><br><span class="line"></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">"at"</span>: &#123;</span><br><span class="line">            <span class="string">"isAtAll"</span>: <span class="string">'True'</span></span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> Api_Url <span class="keyword">in</span> dingtalk_token:</span><br><span class="line">        <span class="keyword">print</span> requests.post(url=Api_Url, headers=headers, data=json.dumps(data)).text</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Step #5</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_mq_kb</span><span class="params">(channel, method_frame, header_frame, body)</span>:</span></span><br><span class="line">    print(<span class="string">" [GET MQ INFO] %r"</span> % body)</span><br><span class="line"></span><br><span class="line">    <span class="comment">### ["task.create_update","task.update"]</span></span><br><span class="line">    <span class="keyword">if</span> len(json.loads(body)[<span class="string">"params"</span>]) == <span class="number">5</span> :</span><br><span class="line">        <span class="keyword">if</span>   json.loads(body)[<span class="string">"params"</span>][<span class="number">1</span>][<span class="number">1</span>]==<span class="string">"task.update"</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">        <span class="keyword">elif</span> json.loads(body)[<span class="string">"params"</span>][<span class="number">1</span>][<span class="number">1</span>] == <span class="string">"task.create"</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> json.loads(body)[<span class="string">"params"</span>][<span class="number">0</span>] != str(<span class="number">2</span>):</span><br><span class="line">            title=json.loads(body)[<span class="string">"params"</span>][<span class="number">0</span>][<span class="string">"task"</span>][<span class="string">"title"</span>]</span><br><span class="line">            description =  json.loads(body)[<span class="string">"params"</span>][<span class="number">0</span>][<span class="string">"task"</span>][<span class="string">"description"</span>]</span><br><span class="line">            creator_username = json.loads(body)[<span class="string">"params"</span>][<span class="number">0</span>][<span class="string">"task"</span>][<span class="string">"creator_name"</span>]</span><br><span class="line">            column_title = json.loads(body)[<span class="string">"params"</span>][<span class="number">0</span>][<span class="string">"task"</span>][<span class="string">"column_title"</span>]</span><br><span class="line">            url = <span class="string">"http://kb.xxx.com/project/&#123;project_id&#125;/task/&#123;task_id&#125;"</span>.format(project_id=json.loads(body)[<span class="string">"params"</span>][<span class="number">0</span>][<span class="string">"project_id"</span>],task_id=json.loads(body)[<span class="string">"params"</span>][<span class="number">0</span>][<span class="string">"task_id"</span>])</span><br><span class="line">            <span class="keyword">if</span> column_title != <span class="string">"要做"</span>:</span><br><span class="line">                Dingding_Send(title, description,creator_username,url,column_title)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Step #3</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">on_open</span><span class="params">(connection)</span>:</span></span><br><span class="line">    connection.channel(on_channel_open)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Step #4</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">on_channel_open</span><span class="params">(channel)</span>:</span></span><br><span class="line">    <span class="string">''' Start a queue consumer</span><br><span class="line">    basic_consume(self, queue='', consumer_tag='', no_local=False,</span><br><span class="line">                  no_ack=False, exclusive=False, nowait=False,</span><br><span class="line">                  callback=None, arguments=None, on_cancel=None):</span><br><span class="line">    '''</span></span><br><span class="line">    channel.basic_consume(get_mq_kb,queue=<span class="string">'kanboard_queue'</span>,no_ack=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Step #1: Connect to RabbitMQ</span></span><br><span class="line">    parameters = pika.URLParameters(<span class="string">'amqp://guest:guest@host:5672/%2F'</span>)</span><br><span class="line">    <span class="comment"># Create our connection object, passing in the on_open method</span></span><br><span class="line">    connection = pika.SelectConnection(parameters=parameters, on_open_callback=on_open)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># Step #2 - Block on the IOLoop</span></span><br><span class="line">        connection.ioloop.start()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> Exception,e:</span><br><span class="line">        <span class="comment"># Gracefully close the connection</span></span><br><span class="line">        connection.close()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Start the IOLoop again so Pika can communicate, it will stop on its own when the connection is closed</span></span><br><span class="line">        connection.ioloop.start()</span><br></pre></td></tr></table></figure>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2018/02/11/python使用ConfigParser读取配置文件/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2017/11/18/openresty针对不同IP或者不同目录做权限认证/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2018/01/07/Kanban-Rabbitmq-pika模块实现信息推送通知/" data-title="Kanban+Rabbitmq+pika模块实现信息推送通知" data-url="http://linuxOps.xyz/2018/01/07/Kanban-Rabbitmq-pika模块实现信息推送通知/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2018-01-07 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

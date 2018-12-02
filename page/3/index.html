@@ -1,0 +1,702 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>第 3 頁 | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 <div class="page-header">
+  <h1>记录Linux的点点滴滴（DevOps技术运维小学生）</h1>
+</div>
+
+<div class="row page">
+
+	
+	<div class="col-md-9">
+	
+
+		<div class="slogan">
+      <i class="fa fa-heart"></i>
+      Welcome to my blog.
+</div>    
+
+		<div class="mypage">
+		
+		<!-- title and entry -->
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-09-09 </div>
+			<div class="article-title"><a href="/2017/09/09/Pinpoint安装及配置/" >Pinpoint安装及配置</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <h2 id="一、介绍">一、介绍</h2><blockquote>
+<p>Pinpoint是一个开源的 APM (Application Performance Management/应用性能管理)工具，用于基于java的大规模分布式系统。<br>仿照 Google Dapper , Pinpoint 通过跟踪分布式应用之间的调用来提供解决方案，以帮助分析系统的总体结构和内部模块之间如何相互联系.<br>注：对于各个模块之间的通讯英文原文中用的是transaction一词，但是我觉得如果翻译为”事务”容易引起误解，所以替换为”交互”或者”调用”这种比较直白的字眼。</p>
+</blockquote>
+<p><strong>pinpoint主要有四个部分组成：</strong></p>
+<ul>
+<li><strong>agent:</strong>其中包含一些插件，用于客户端向收集器发送跟踪数据。</li>
+<li><strong>pinpoint-collector：</strong>收集器，处理agent端发送过来的数据，并持久化。</li>
+<li><strong>pinpoint-web：</strong>展示统计数据。</li>
+<li><strong> hbase：</strong> 持久化层。</li>
+</ul>
+<p>在使用上力图简单高效：<br>•    安装agent，不需要修改哪怕一行代码<br>•    最小化性能损失<br>•    官网地址：<a href="https://github.com/naver/pinpoint" target="_blank" rel="external">https://github.com/naver/pinpoint</a></p>
+<h2 id="二、概述">二、概述</h2><p>如今的服务通常由很多不同模块组成，他们之间相互调用并通过API调用外部服务。每个交互是如何被执行的通常是一个黑盒。Pinpoint跟踪这些模块之间的调用流并提供清晰的视图来定位问题区域和潜在瓶颈。<br>服务器地图(ServerMap)<br>通过可视化分布式系统的模块和他们之间的相互联系来理解系统拓扑。点击某个节点会展示这个模块的详情，比如它当前的状态和请求数量。<br>实时活动线程图表(Realtime Active Thread Chart)<br>实时监控应用内部的活动线程。<br>请求/应答分布图表(Request/Response Scatter Chart)<br>长期可视化请求数量和应答模式来定位潜在问题。通过在图表上拉拽可以选择请求查看更多的详细信息。</p>
+<h2 id="三、系统约定">三、系统约定</h2><p>控制端和WEB-UI应用服务器安装在192.168.162.113<br>监控端和WEB应用服务器安装在192.168.162.102<br>数据目录：/data<br>软件源码：/data/packages<br>脚本目录：/data/scripts<br>软件下载：<a href="https://github.com/naver/pinpoint/releases/tag/1.6.2" target="_blank" rel="external">https://github.com/naver/pinpoint/releases/tag/1.6.2</a></p>
+<h2 id="四、配置JDK环境">四、配置JDK环境</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /data/packages/</span><br><span class="line"><span class="comment">#上传JDK、kibana、elasticsearch </span></span><br><span class="line">tar xf jdk-<span class="number">8</span>u60-linux-x64.tar.gz </span><br><span class="line">mv jdk1<span class="number">.8</span><span class="number">.0</span>_60/ /usr/local/jdk1<span class="number">.8</span> </span><br><span class="line">vi /etc/profile </span><br><span class="line">export JAVA_HOME=/usr/local/jdk1<span class="number">.8</span> </span><br><span class="line">export JAVA_BIN=$JAVA_HOME/bin </span><br><span class="line">export PATH=$PATH:$JAVA_HOME/bin </span><br><span class="line">export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar </span><br><span class="line">export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH </span><br><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
+<h2 id="五、安装hbase-1-2-6">五、安装hbase-1.2.6</h2><h4 id="192-168-162-113：">192.168.162.113：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /data/packages/</span><br><span class="line">wget http://mirrors.hust.edu.cn/apache/hbase/<span class="number">1.2</span><span class="number">.6</span>/hbase-<span class="number">1.2</span><span class="number">.6</span>-bin.tar.gz</span><br><span class="line">tar xf hbase-<span class="number">1.2</span><span class="number">.6</span>-bin.tar.gz</span><br><span class="line">mv hbase-<span class="number">1.2</span><span class="number">.6</span> /data/hbase/</span><br><span class="line">mkdir /data/hbase/data</span><br></pre></td></tr></table></figure>
+<h5 id="指定java环境：（不设置使用全局的java配置也是可以的）">指定java环境：（不设置使用全局的java配置也是可以的）</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim +<span class="number">27</span> /data/hbase/conf/hbase-env.sh</span><br><span class="line">export JAVA_HOME=/usr/local/jdk<span class="number">.18</span></span><br></pre></td></tr></table></figure>
+<h5 id="修改Hbase的配置信息：">修改Hbase的配置信息：</h5><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vim /data/hbase/conf/hbase-site.xml  </span><br><span class="line">#配置如下信息</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.rootdir&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;file:///data/hbase/data&lt;/value&gt;</span><br><span class="line"> &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="启动Hbase：">启动Hbase：</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /data/hbase/bin/</span><br><span class="line">nohup ./start-hbase.sh</span><br></pre></td></tr></table></figure>
+<h5 id="初始化Hbase的pinpoint库：">初始化Hbase的pinpoint库：</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">./hbase shell hbase-create.hbase</span><br><span class="line">额外配置：</span><br><span class="line"></span><br><span class="line">修改hbase表的存储时间，建表的默认TTL时间比较长，需要比较大的磁盘空间，我们可以修改一下 默认的TTL时间</span><br><span class="line">修改的脚本地址为：alterTable7Days.hbase</span><br><span class="line">    到hbase安装目下，执行bin/hbase shell</span><br><span class="line">    然后复制脚本内容，粘贴执行。</span><br><span class="line">    执行完之后 可以查看表信息，describe <span class="string">'AgentInfo'</span></span><br><span class="line">    可以看到 TTL =&gt; <span class="string">'604800 SECONDS (7 DAYS)</span></span><br></pre></td></tr></table></figure>
+<h5 id="检查Hbase是否初始化成功：">检查Hbase是否初始化成功：</h5><p>登录<a href="http://192.168.162.113:16010/master-status#baseStats" target="_blank" rel="external">http://192.168.162.113:16010/master-status#baseStats</a></p>
+<p>  <img src="https://github.com/linuxunix/linuxunix.github.io/blob/master/img/201709/pinpoint01.png?raw=true" style="width: 550x;"></p>
+<h2 id="六、安装pinpoint-collector">六、安装pinpoint-collector</h2><h4 id="192-168-162-113：-1">192.168.162.113：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#解压Tomcat，将Tomcat重命名移动到/data/web下命名为：tomcat-pinpoint-collector</span></span><br><span class="line">cd /data/packages</span><br><span class="line">mkdir /data/web/tomcat-pinpoint-collector/webapps/ROOT</span><br><span class="line"><span class="comment">#上传pinpoint-collector-1.6.2.war </span></span><br><span class="line"><span class="comment">#unzip pinpoint-collector-1.6.2.war 到/data/web/tomcat-pinpoint-collector/webapps/ROOT</span></span><br></pre></td></tr></table></figure>
+<h5 id="启动pinpoint-collector：">启动pinpoint-collector：</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh /data/web/tomcat-pinpoint-collector/bin/startup.sh</span><br></pre></td></tr></table></figure>
+<h2 id="七、安装pinpoint-web-ui">七、安装pinpoint-web-ui</h2><h4 id="192-168-162-113：-2">192.168.162.113：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#解压Tomcat，将Tomcat重命名移动到/data/web下命名为：tomcat-pinpoint-web</span></span><br><span class="line">cd /data/packages</span><br><span class="line">mkdir /data/web/tomcat-pinpoint-web/webapps/ROOT</span><br><span class="line"><span class="comment">#上传pinpoint-web-1.6.2.war </span></span><br><span class="line"><span class="comment">#unzip pinpoint-web-1.6.2.war 到/data/web/tomcat-pinpoint-web/webapps/ROOT</span></span><br></pre></td></tr></table></figure>
+<h5 id="配置Hbase">配置Hbase</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /data/web/tomcat-pinpoint-web/webapps/ROOT /WEB-INF/classes</span><br><span class="line">vi hbase.properties <span class="comment">#hbase zk ip+port</span></span><br><span class="line">hbase.client.host=localhost</span><br><span class="line">hbase.client.port=<span class="number">2181</span></span><br></pre></td></tr></table></figure>
+<h5 id="启动pinpoint-collector：-1">启动pinpoint-collector：</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh /data/web/tomcat-pinpoint-web/bin/startup.sh</span><br></pre></td></tr></table></figure>
+<h2 id="八、安装pinpoint-agent">八、安装pinpoint-agent</h2><h5 id="192-168-162-102">192.168.162.102</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#上传到pinpoint-agent-1.6.2.tar.gz到/data/packages</span></span><br><span class="line">mkdir /data/pinpoint-agent</span><br><span class="line"><span class="comment">#把pinpoint-agent-1.6.2.tar.gz解压到/data/pinpoint-agent</span></span><br></pre></td></tr></table></figure>
+<h5 id="修改配置文件">修改配置文件</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim pinpoint.config</span><br><span class="line">profiler.collector.ip=<span class="number">192.168</span><span class="number">.162</span><span class="number">.113</span></span><br><span class="line">vim pinpoint-real-env-lowoverhead-sample.config</span><br><span class="line">profiler.collector.ip=<span class="number">192.168</span><span class="number">.162</span><span class="number">.113</span></span><br></pre></td></tr></table></figure>
+<h5 id="在tomcat应用服务器配置">在tomcat应用服务器配置</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost tomcat]<span class="comment"># vim +20 bin/catalina.sh</span></span><br><span class="line"></span><br><span class="line">CATALINA_OPTS=<span class="string">"$CATALINA_OPTS -javaagent:/data/pinpoint-agent/pinpoint-bootstrap-1.6.2.jar"</span></span><br><span class="line">CATALINA_OPTS=<span class="string">"$CATALINA_OPTS -Dpinpoint.agentId=jdapp20170812"</span></span><br><span class="line">CATALINA_OPTS=<span class="string">"$CATALINA_OPTS -Dpinpoint.applicationName=jd"</span></span><br></pre></td></tr></table></figure>
+<h5 id="启动tomcat并模拟浏览点击">启动tomcat并模拟浏览点击</h5><p> <img src="https://github.com/linuxunix/linuxunix.github.io/blob/master/img/201709/pinpoint02.png?raw=true" style="width: 550x;"></p>
+<h5 id="非tomcat的java项目:">非tomcat的java项目:</h5><p>  在启动命令行加上 -javaagent：（agent包所在的目录地址） -Dpinpoint.agentId=（不重复的ID） -Dpinpoint.applicationName=(应用名)</p>
+<h2 id="十、登录pinpoint-web-ui查看">十、登录pinpoint-web-ui查看</h2><p><a href="http://192.168.162.113:8080" target="_blank" rel="external">http://192.168.162.113:8080</a></p>
+<p> <img src="https://github.com/linuxunix/linuxunix.github.io/blob/master/img/201709/pinpoint03.png?raw=true" style="width: 550x;"><br> <img src="https://github.com/linuxunix/linuxunix.github.io/blob/master/img/201709/pinpoint04.png?raw=true" style="width: 550x;"><br> <img src="https://github.com/linuxunix/linuxunix.github.io/blob/master/img/201709/pinpoint05.png?raw=true" style="width: 550x;"></p>
+<h2 id="十一、调优配置">十一、调优配置</h2><p>修改hbase表的存储时间，建表的默认TTL时间比较长，需要比较大的磁盘空间，我们可以修改一下 默认的TTL时间<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">disable <span class="string">'AgentInfo'</span></span><br><span class="line">disable <span class="string">'AgentStat'</span></span><br><span class="line">disable <span class="string">'AgentStatV2'</span></span><br><span class="line">disable <span class="string">'AgentLifeCycle'</span></span><br><span class="line">disable <span class="string">'AgentEvent'</span></span><br><span class="line">disable <span class="string">'ApplicationIndex'</span></span><br><span class="line">disable <span class="string">'StringMetaData'</span></span><br><span class="line">disable <span class="string">'ApiMetaData'</span></span><br><span class="line">disable <span class="string">'SqlMetaData_Ver2'</span></span><br><span class="line">disable <span class="string">'ApplicationTraceIndex'</span></span><br><span class="line">disable <span class="string">'Traces'</span></span><br><span class="line">disable <span class="string">'TraceV2'</span></span><br><span class="line">disable <span class="string">'ApplicationMapStatisticsCaller_Ver2'</span></span><br><span class="line">disable <span class="string">'ApplicationMapStatisticsCallee_Ver2'</span></span><br><span class="line">disable <span class="string">'ApplicationMapStatisticsSelf_Ver2'</span></span><br><span class="line">disable <span class="string">'HostApplicationMap_Ver2'</span></span><br><span class="line">alter <span class="string">'AgentInfo'</span>, NAME =&gt; <span class="string">'Info'</span>, TTL =&gt; <span class="number">604800</span></span><br><span class="line">alter <span class="string">'AgentStat'</span>, NAME =&gt; <span class="string">'S'</span>, TTL =&gt; <span class="number">604800</span></span><br><span class="line">alter <span class="string">'AgentStatV2'</span>, NAME =&gt; <span class="string">'S'</span>, TTL =&gt; <span class="number">604800</span></span><br><span class="line">alter <span class="string">'ApplicationIndex'</span>, NAME =&gt; <span class="string">'Agents'</span>, TTL =&gt; <span class="number">604800</span></span><br><span class="line">alter <span class="string">'AgentLifeCycle'</span>, NAME =&gt; <span class="string">'S'</span>, TTL =&gt; <span class="number">604800</span></span><br><span class="line">alter <span class="string">'AgentEvent'</span>, NAME =&gt; <span class="string">'E'</span>, TTL =&gt; <span class="number">604800</span></span><br><span class="line">alter <span class="string">'StringMetaData'</span>, NAME =&gt; <span class="string">'Str'</span>, TTL =&gt; <span class="number">604800</span></span><br><span class="line">alter <span class="string">'ApiMetaData'</span>, NAME =&gt; <span class="string">'Api'</span>, TTL =&gt; <span class="number">604800</span></span><br><span class="line">alter <span class="string">'SqlMetaData_Ver2'</span>, NAME =&gt; <span class="string">'Sql'</span>, TTL =&gt; <span class="number">604800</span></span><br><span class="line">alter <span class="string">'Traces'</span>, NAME =&gt; <span class="string">'S'</span>, TTL =&gt; <span class="number">604800</span></span><br><span class="line">alter <span class="string">'Traces'</span>, NAME =&gt; <span class="string">'A'</span>, TTL =&gt; <span class="number">604800</span></span><br><span class="line">alter <span class="string">'Traces'</span>, NAME =&gt; <span class="string">'T'</span>, TTL =&gt; <span class="number">604800</span></span><br><span class="line">alter <span class="string">'TraceV2'</span>, NAME =&gt; <span class="string">'S'</span>, TTL =&gt; <span class="number">604800</span></span><br><span class="line">alter <span class="string">'ApplicationTraceIndex'</span>, NAME =&gt; <span class="string">'I'</span>, TTL =&gt; <span class="number">604800</span></span><br><span class="line">alter <span class="string">'ApplicationMapStatisticsCaller_Ver2'</span>, NAME =&gt; <span class="string">'C'</span>, TTL =&gt; <span class="number">604800</span></span><br><span class="line">alter <span class="string">'ApplicationMapStatisticsCallee_Ver2'</span>, NAME =&gt; <span class="string">'C'</span>, TTL =&gt; <span class="number">604800</span></span><br><span class="line">alter <span class="string">'ApplicationMapStatisticsSelf_Ver2'</span>, NAME =&gt; <span class="string">'C'</span>, TTL =&gt; <span class="number">604800</span></span><br><span class="line">alter <span class="string">'HostApplicationMap_Ver2'</span>, NAME =&gt; <span class="string">'M'</span>, TTL =&gt; <span class="number">604800</span></span><br><span class="line">enable  <span class="string">'AgentInfo'</span></span><br><span class="line">enable  <span class="string">'AgentStat'</span></span><br><span class="line">enable  <span class="string">'AgentStatV2'</span></span><br><span class="line">enable  <span class="string">'AgentLifeCycle'</span></span><br><span class="line">enable  <span class="string">'AgentEvent'</span></span><br><span class="line">enable  <span class="string">'ApplicationIndex'</span></span><br><span class="line">enable  <span class="string">'StringMetaData'</span></span><br><span class="line">enable  <span class="string">'ApiMetaData'</span></span><br><span class="line">enable  <span class="string">'SqlMetaData_Ver2'</span></span><br><span class="line">enable  <span class="string">'ApplicationTraceIndex'</span></span><br><span class="line">enable  <span class="string">'Traces'</span></span><br><span class="line">enable  <span class="string">'TraceV2'</span></span><br><span class="line">enable  <span class="string">'ApplicationMapStatisticsCaller_Ver2'</span></span><br><span class="line">enable  <span class="string">'ApplicationMapStatisticsCallee_Ver2'</span></span><br><span class="line">enable  <span class="string">'ApplicationMapStatisticsSelf_Ver2'</span></span><br><span class="line">enable  <span class="string">'HostApplicationMap_Ver2'</span></span><br><span class="line">exit</span><br></pre></td></tr></table></figure></p>
+<p>到hbase安装目下，执行bin/hbase shell<br>然后复制脚本内容，粘贴执行。<br>执行完之后 可以查看表信息，describe ‘AgentInfo’<br>可以看到 TTL =&gt; ‘604800 SECONDS (7 DAYS)</p>
+<h2 id="十二、pinpoint预警功能">十二、pinpoint预警功能</h2><p>官方有比较详细文档：<br><a href="https://skyao.gitbooks.io/learning-pinpoint/content/alarm/alarm.html" target="_blank" rel="external">https://skyao.gitbooks.io/learning-pinpoint/content/alarm/alarm.html</a></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/09/09/Pinpoint安装及配置/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-08-27 </div>
+			<div class="article-title"><a href="/2017/08/27/salt自定义变量传参执行/" >salt自定义变量传参执行</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <h1 id="salt自定义变量传参执行sls">salt自定义变量传参执行sls</h1><h2 id="以下使用安装redis为例子，动态传密码：">以下使用安装redis为例子，动态传密码：</h2><h3 id="一、redis_install-sls">一、redis_install.sls</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">redis-conf:</span><br><span class="line">  cmd.run:</span><br><span class="line">    - name: mkdir -p /data/redis6379/&#123;data,logs&#125; &amp;&amp; chown redis.redis -R /data/redis6379/ &amp;&amp; echo <span class="string">"su - redis -c '/usr/local/redis/bin/redis-server /usr/local/redis/conf/redis6379.conf &amp;'"</span> &gt;&gt; /etc/rc.local</span><br><span class="line">    - require:</span><br><span class="line">      - cmd: redis-install </span><br><span class="line">  &#123;% set redis_pass = salt[<span class="string">'pillar.get'</span>](<span class="string">'redis_pass'</span>,<span class="string">'xxxxx'</span>) %&#125;</span><br><span class="line">  file.recurse:</span><br><span class="line">    - name: /usr/local/redis/conf</span><br><span class="line">    - source: salt://Redis/file/conf</span><br><span class="line">    - user: redis</span><br><span class="line">    - group: redis</span><br><span class="line">    - dir_mode: <span class="number">731</span></span><br><span class="line">    - template: jinja </span><br><span class="line">    - defaults: </span><br><span class="line">        redis_pass: &#123;&#123; redis_pass &#125;&#125;   ==&gt;注意使用<span class="number">4</span>个空格</span><br><span class="line">    - require:</span><br><span class="line">      - cmd: redis-install</span><br></pre></td></tr></table></figure>
+<h3 id="二、file/conf/redis6379-conf">二、file/conf/redis6379.conf</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">requirepass &#123;&#123; redis_pass &#125;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="三、执行命令">三、执行命令</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">salt-ssh <span class="string">'192.168.162.113'</span> state.sls Redis.redis_install  pillar=<span class="string">'&#123;"redis_pass":"redis"&#125;'</span></span><br></pre></td></tr></table></figure>
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/08/27/salt自定义变量传参执行/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-08-19 </div>
+			<div class="article-title"><a href="/2017/08/19/python微信发送消息类/" >python微信发送消息类</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <h2 id="前言">前言</h2><blockquote>
+<p>记得刚做运维时候，主管就让我搞zabbix，那时候什么都不懂。当时发现网上大神通过python发送告警信息时候，由于那时还不懂python，便觉得异常厉害。最近有空花了不到半小时就能写出调用类，便感觉其实很多事情你只要用心做就不难。</p>
+<blockquote>
+<p>如果有需要通过微信发告警信息可以申请微信企业号，然后结合脚本可以轻松调用发送告警信息。</p>
+</blockquote>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WechatApi</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="string">"""</span><br><span class="line">    corpid：每个企业都拥有唯一的corpid，获取此信息可在管理后台“我的企业”－“企业信息”下查看（需要有管理员权限）</span><br><span class="line">    secret：secret是企业应用里面用于保障数据安全的“钥匙”，每一个应用都有一个独立的访问密钥，为了保证数据的安全，secret务必不能泄漏。通讯录接口的密钥在“管理工具”-“通讯录同步”里面查看，企业自定义的应用的密钥可以在企业应用的详情里面手动生成</span><br><span class="line">    access_token：access_token是企业后台去企业微信的后台获取信息时的重要票据，所有接口在通信时都需要携带此信息用于验证接口的访问权限</span><br><span class="line">    官方地址：https://work.weixin.qq.com/api/doc#10087</span><br><span class="line">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.__corpid=<span class="string">"corpid--xxxxxxxx"</span></span><br><span class="line">        self.__secret=<span class="string">"secret--xxxxx"</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">Get_access_token</span><span class="params">(self)</span>:</span></span><br><span class="line">        res = requests.get(url=<span class="string">"https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=&#123;id&#125;&amp;corpsecret=&#123;secrect&#125;"</span>.format(id=self.__corpid,secrect=self.__secret)).json()</span><br><span class="line">        <span class="keyword">return</span> res[<span class="string">"access_token"</span>]</span><br><span class="line">    <span class="comment">###获取部门列表</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">Get_department_list</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">print</span> requests.get(url=<span class="string">"https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=&#123;ACCESS_TOKEN&#125;&amp;id=&#123;ID&#125;"</span>.format(ACCESS_TOKEN=self.Get_access_token(),ID=<span class="number">1</span>)).text</span><br><span class="line"></span><br><span class="line">    <span class="comment">###获取应用列表</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">Get_agent_list</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">print</span> requests.get(</span><br><span class="line">            url=<span class="string">"https://qyapi.weixin.qq.com/cgi-bin/agent/list?access_token=&#123;ACCESS_TOKEN&#125;"</span>.format(ACCESS_TOKEN=self.Get_access_token()), ).text</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">Get_agent</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">print</span> requests.get(url=<span class="string">"https://qyapi.weixin.qq.com/cgi-bin/agent/get?access_token=&#123;ACCESS_TOKEN&#125;&amp;agentid=&#123;AGENTID&#125;"</span>.format(ACCESS_TOKEN=self.Get_access_token(),AGENTID=<span class="number">2000002</span>),).text</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">Send_message</span><span class="params">(self,data=None)</span>:</span></span><br><span class="line"></span><br><span class="line">        headers = &#123;<span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>&#125;</span><br><span class="line">        <span class="keyword">print</span> requests.post(url=<span class="string">"https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=&#123;ACCESS_TOKEN&#125;"</span>.format(ACCESS_TOKEN=self.Get_access_token()),headers=headers,data=json.dumps(data)).text</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    data=&#123;</span><br><span class="line">                    <span class="string">'touser'</span>: <span class="string">"@all"</span>,</span><br><span class="line">                    <span class="string">'toparty'</span>: <span class="string">"2"</span>,</span><br><span class="line">                    <span class="string">'msgtype'</span>: <span class="string">"text"</span>,</span><br><span class="line">                    <span class="string">'agentid'</span>: <span class="string">"2"</span>,</span><br><span class="line">                    <span class="string">'text'</span>: &#123;</span><br><span class="line">                            <span class="string">'content'</span>: <span class="string">"dddddddddddd"</span></span><br><span class="line">                    &#125;,</span><br><span class="line">                    <span class="string">'safe'</span>: <span class="string">"0"</span></span><br><span class="line">            &#125;</span><br><span class="line">    WechatApi().Send_message(data)</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><strong>注意</strong><blockquote>
+<p>每个应用对应的secret是不一样的，所以我们在调用时候需要检查”agentid”和”secret”是否一致。</p>
+</blockquote>
+</li>
+</ul>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/08/19/python微信发送消息类/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-08-19 </div>
+			<div class="article-title"><a href="/2017/08/19/通过post远程执行linux系统命令并返回结果/" >通过post远程执行linux系统命令并返回结果</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <h2 id="前言">前言</h2><blockquote>
+<p>最初做这个原因的是因为如何发布后查看实时日志,当然这种方案并不是当项目发布后查看日子的最佳方案，不过也可以给大家参考下。感谢以色列大神aviv给的指导,谢谢。</p>
+</blockquote>
+<h3 id="SocketServer方式实现">SocketServer方式实现</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> BaseHTTPServer <span class="keyword">import</span> BaseHTTPRequestHandler, HTTPServer</span><br><span class="line"><span class="keyword">import</span> SocketServer</span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LogServer</span><span class="params">(BaseHTTPRequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">do_GET</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">with</span> open(<span class="string">"/var/log/message.log"</span>, <span class="string">'r'</span>) <span class="keyword">as</span> log_fd:</span><br><span class="line">                        log = log_fd.read()</span><br><span class="line"></span><br><span class="line">            self.send_response(<span class="number">200</span>)</span><br><span class="line">            self.send_header(<span class="string">'Content-type'</span>, <span class="string">'text/html'</span>)</span><br><span class="line">            self.end_headers()</span><br><span class="line">            self.wfile.write(log)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            self.send_response(<span class="number">500</span>)</span><br><span class="line">            self.send_header(<span class="string">'Content-type'</span>, <span class="string">'text/html'</span>)</span><br><span class="line">            self.end_headers()</span><br><span class="line">            self.wfile.write(e.message)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">do_POST</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            content_length = int(self.headers.getheader(<span class="string">'content-length'</span>, <span class="number">0</span>))</span><br><span class="line">            body = self.rfile.read(content_length)</span><br><span class="line">            data = json.loads(body)</span><br><span class="line">            stdout = subprocess.check_output(data[<span class="string">'command'</span>], shell=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line">            self.send_response(<span class="number">200</span>)</span><br><span class="line">            self.send_header(<span class="string">'Content-type'</span>, <span class="string">'text/html'</span>)</span><br><span class="line">            self.end_headers()</span><br><span class="line">            self.wfile.write(stdout)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            self.send_response(<span class="number">500</span>)</span><br><span class="line">            self.send_header(<span class="string">'Content-type'</span>, <span class="string">'text/html'</span>)</span><br><span class="line">            self.end_headers()</span><br><span class="line">            self.wfile.write(e.message)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run_log_server</span><span class="params">(port)</span>:</span></span><br><span class="line">    server_address = (<span class="string">''</span>, port)</span><br><span class="line">    httpd = HTTPServer(server_address, LogServer)</span><br><span class="line">    print(<span class="string">'starting server on port %d'</span> % port)</span><br><span class="line">    httpd.serve_forever()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    parser = argparse.ArgumentParser()</span><br><span class="line">    parser.add_argument(<span class="string">"port"</span>, type=int)</span><br><span class="line">    args = parser.parse_args()</span><br><span class="line">    run_log_server(args.port)</span><br></pre></td></tr></table></figure>
+<h6 id="执行参数：">执行参数：</h6><p>POST JSON 例如：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    "<span class="attribute">command</span>": <span class="value"><span class="string">"df -h"</span></span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h3 id="flask实现方法">flask实现方法</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding:utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask,request</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="decorator">@app.route('/',methods=['POST'])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello_world</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> request.data</span><br><span class="line">    cmd = subprocess.check_output(request.data, shell=<span class="keyword">True</span>)</span><br><span class="line">    <span class="keyword">return</span> cmd</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    app.run()</span><br></pre></td></tr></table></figure>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/08/19/通过post远程执行linux系统命令并返回结果/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-07-23 </div>
+			<div class="article-title"><a href="/2017/07/23/Python-Selenium实现自动化测试/" >Python+Selenium实现自动化测试</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <h2 id="Selenium是啥？">Selenium是啥？</h2><p>Selenium是一个开源的和便携式的自动化软件测试工具，支持操作各种浏览器，包括 Chrome，Safari，Firefox 等主流浏览器。<br>官网地址：<a href="http://www.seleniumhq.org/" target="_blank" rel="external">http://www.seleniumhq.org/</a></p>
+<h2 id="WebDriver又是啥？">WebDriver又是啥？</h2><p>Selenium 2.0 最主要的一个新特性就是集成了 WebDriver API。WebDriver 提供更精简的编程几口，以解决 Selenium-RC API 中的一些限制。WebDriver 为那些页面元素可以不通过页面重新加载来更新的动态网页提供了更好的支持。WebDriver 的目标是提供一套精心设计的面向对象的 API 来更好的支持现代高级 web 应用的测试工作。Selenium-WebDriver 直接通过浏览器自动化的本地接口来调用浏览器。<br>下是火狐和谷歌浏览器的webdriver下载地址：</p>
+<ul>
+<li><strong>火狐webdriver下载地址：</strong> <a href="https://github.com/mozilla/geckodriver/releases" target="_blank" rel="external">https://github.com/mozilla/geckodriver/releases</a></li>
+<li><strong>谷歌 webdriver下载地: </strong> <a href="https://sites.google.com/a/chromium.org/chromedriver/downloads" target="_blank" rel="external">https://sites.google.com/a/chromium.org/chromedriver/downloads</a></li>
+</ul>
+<h2 id="安装Selenium和WebDriver">安装Selenium和WebDriver</h2><h4 id="系统约定">系统约定</h4><p>系统环境： win10专业版<br>Python版本： Python 2.7.3<br>Selenium版本：selenium-3.4.3<br>火狐webdriver版本：geckodriver-v0.18.0-win64</p>
+<h4 id="安装Selenium">安装Selenium</h4><p>安装模块习惯采用pip安装方式，简单粗暴：<br>pip install selenium</p>
+<h4 id="安装火狐webdriver">安装火狐webdriver</h4><p>1、    到<a href="https://github.com/mozilla/geckodriver/releases下载geckodriver-v0.18.0-win64.zip" target="_blank" rel="external">https://github.com/mozilla/geckodriver/releases下载geckodriver-v0.18.0-win64.zip</a><br>2、    解压放置在C盘根目录（可以自行选择放置地址）<br>3、    把C:\geckodriver-v0.18.0-win64添加到坏境变量<br>4、    打开cmd命令窗口，输入geckodriver –V查看是否安装成功<br> <img src="/img/201707/02.jpg" style="width: 550;"></p>
+<h2 id="Python+Selenium简单测试">Python+Selenium简单测试</h2><ul>
+<li><strong>这里拿百度搜索为例子，其它大同小异：</strong></li>
+</ul>
+<blockquote>
+<p>首先打开<a href="https://www.baidu.com/，通过F12打开开发者工具箱查看元素可以获得以下：" target="_blank" rel="external">https://www.baidu.com/，通过F12打开开发者工具箱查看元素可以获得以下：</a></p>
+</blockquote>
+<figure class="highlight django"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt;<span class="title">input</span> <span class="attribute">id</span>=<span class="value">"kw"</span> <span class="attribute">name</span>=<span class="value">"wd"</span> <span class="attribute">class</span>=<span class="value">"s_ipt"</span> <span class="attribute">value</span>=<span class="value">""</span> <span class="attribute">maxlength</span>=<span class="value">"255"</span> <span class="attribute">autocomplete</span>=<span class="value">"off"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">input</span> <span class="attribute">id</span>=<span class="value">"su"</span> <span class="attribute">value</span>=<span class="value">"百度一下"</span> <span class="attribute">class</span>=<span class="value">"bg s_btn"</span> <span class="attribute">type</span>=<span class="value">"submit"</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>通过以上可以获取到输入框的id为“kw”，提交按钮的id为“su”，现在可以简单编写python脚本，通过脚本打开火狐浏览器并搜索提交python字符。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span>  selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding(<span class="string">'utf-8'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_search_in_baidu</span><span class="params">()</span>:</span></span><br><span class="line">    driver = webdriver.Firefox()</span><br><span class="line">    driver.implicitly_wait(<span class="number">10</span>)</span><br><span class="line">    driver.get(<span class="string">"https://www.baidu.com/"</span>)</span><br><span class="line">    time.sleep(<span class="number">1</span>)  <span class="comment">##防止网络慢加载不完全</span></span><br><span class="line">    elem_input=driver.find_element_by_id(<span class="string">"kw"</span>)</span><br><span class="line">    elem_input.send_keys(unicode( <span class="string">"python"</span> , errors=<span class="string">'ignore'</span>))</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br><span class="line">    driver.find_element_by_id(<span class="string">"su"</span>).click()</span><br><span class="line">    driver.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    test_search_in_baidu()</span><br></pre></td></tr></table></figure></p>
+<p>具体元素获取可以通过官网的API查看: <a href="https://seleniumhq.github.io/selenium/docs/api/py/api.html" target="_blank" rel="external">https://seleniumhq.github.io/selenium/docs/api/py/api.html</a></p>
+<ul>
+<li><strong>如果我们在运行中出现以下错误：</strong><br>UnicodeDecodeError: ‘utf8’ codec can’t decode byte 0xe9 in position 0: unexpected end of data<br>可以采取对字符串进行unicode化，同时忽略错误，如下所示：<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unicode(<span class="string">"字符串"</span> , errors=<span class="string">'ignore'</span>))</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="要是放在Linux系统无图形界面怎么办？">要是放在Linux系统无图形界面怎么办？</h4><p>在实际中，可能有不少小伙伴可能放在linux服务器自动跑脚本，又不想安装图形界面。只是通过获取错误信息查看测试结果时候，可以使用phantomjs代替打开浏览器方式。这里只是一个抛砖引玉，具体使用可以参考官方文档，官网地址为：<a href="http://phantomjs.org/" target="_blank" rel="external">http://phantomjs.org/</a></p>
+<ul>
+<li><strong>官网参考文档：</strong> <a href="http://www.seleniumhq.org/docs" target="_blank" rel="external">http://www.seleniumhq.org/docs</a></li>
+<li><strong>中文文档地址：</strong> <a href="http://selenium-python-zh.readthedocs.io/en/latest/index.html" target="_blank" rel="external">http://selenium-python-zh.readthedocs.io/en/latest/index.html</a></li>
+</ul>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/07/23/Python-Selenium实现自动化测试/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-07-22 </div>
+			<div class="article-title"><a href="/2017/07/22/python检测服务状态并钉钉告警/" >python检测服务状态并钉钉告警</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<p>这个如题所示，直接上代码好了，要是没有钉钉的小伙伴可以触发邮件告警，后面会单独说下python怎么发送邮件的。</p>
+</blockquote>
+<ul>
+<li>注意执行脚本服务器需要提前安装requests模块.</li>
+<li><strong>官网参考链接：</strong> <a href="http://docs.python-requests.org/en/master/" target="_blank" rel="external">http://docs.python-requests.org/en/master/</a></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"><span class="comment"># /usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> os,sys</span><br><span class="line"><span class="keyword">from</span> subprocess <span class="keyword">import</span> Popen, PIPE</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">Service_start_cmd =<span class="string">"cmd启动命令"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Check_Port</span><span class="params">(port)</span>:</span></span><br><span class="line">    cmd_output = Popen(<span class="string">"netstat -ntlp|grep &#123;0&#125;"</span>.format(port), shell=<span class="keyword">True</span>, stdout=PIPE, stderr=PIPE).communicate()</span><br><span class="line">    <span class="keyword">if</span>  <span class="string">"LISTEN"</span> <span class="keyword">not</span> <span class="keyword">in</span> str(cmd_output):</span><br><span class="line">        data = <span class="string">'&#123;0&#125;端口没有启动'</span>.format(port)</span><br><span class="line">        Log_Write(data)</span><br><span class="line">        send_data= &#123;</span><br><span class="line">            <span class="string">"msgtype"</span>: <span class="string">"text"</span>,</span><br><span class="line">            <span class="string">"at"</span>: &#123;</span><br><span class="line">                <span class="string">"atMobiles"</span>: [</span><br><span class="line">                    <span class="string">"135xxx219"</span>,</span><br><span class="line">                ],</span><br><span class="line">                <span class="string">"isAtAll"</span>: <span class="string">'false'</span>,</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">"text"</span>: &#123;</span><br><span class="line">                <span class="string">"content"</span>: <span class="string">"ELK节点中的&#123;0&#125;,端口没有启动，正在执行启动。"</span>.format(port)</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;</span><br><span class="line">        Dingding_Send(send_data)</span><br><span class="line">        os.system(Service_start_cmd)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Check_Service</span><span class="params">(service)</span>:</span></span><br><span class="line">    cmd_output=Popen(<span class="string">"ps -ef |grep &#123;0&#125;|grep -v grep"</span>.format(service), shell=<span class="keyword">True</span>, stdout=PIPE, stderr=PIPE).communicate()</span><br><span class="line">    <span class="keyword">if</span> service  <span class="keyword">not</span> <span class="keyword">in</span> str(cmd_output):</span><br><span class="line">        data = <span class="string">'&#123;0&#125;服务没有启动'</span>.format(service)</span><br><span class="line">        Log_Write(data)</span><br><span class="line">        send_data = &#123;</span><br><span class="line">            <span class="string">"msgtype"</span>: <span class="string">"text"</span>,</span><br><span class="line">            <span class="string">"at"</span>: &#123;</span><br><span class="line">                <span class="string">"atMobiles"</span>: [</span><br><span class="line">                    <span class="string">"135xxx219"</span>,</span><br><span class="line">                ],</span><br><span class="line">                <span class="string">"isAtAll"</span>: <span class="string">'false'</span>,</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">"text"</span>: &#123;</span><br><span class="line">                <span class="string">"content"</span>: <span class="string">"ELK节点中的&#123;0&#125;服务没有启动，正在执行启动。"</span>.format(service)</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;</span><br><span class="line">        os.system(Service_start_cmd)</span><br><span class="line">        Dingding_Send(send_data)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Dingding_Send</span><span class="params">(data)</span>:</span></span><br><span class="line">    headers = &#123;<span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>&#125;</span><br><span class="line">    Api_Url = <span class="string">'https://oapi.dingtalk.com/robot/send?access_token=xxx'</span></span><br><span class="line">    <span class="keyword">print</span> requests.post(url=Api_Url, headers=headers, data=json.dumps(data)).text</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Log_Write</span><span class="params">(str)</span>:</span></span><br><span class="line">    date_time = time.strftime(<span class="string">"%Y-%m-%d %H:%M:%S"</span>,time.localtime())</span><br><span class="line">    pwd = os.getcwd()</span><br><span class="line">    <span class="keyword">with</span> open(pwd+<span class="string">'/'</span>+sys.argv[<span class="number">0</span>]+<span class="string">'_log'</span>,<span class="string">'a'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(date_time+<span class="string">'       '</span>+str+<span class="string">'\n'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    Check_Port(<span class="number">9200</span>)</span><br><span class="line">Check_Service(<span class="string">'elasticsearch'</span>)</span><br></pre></td></tr></table></figure>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/07/22/python检测服务状态并钉钉告警/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-07-22 </div>
+			<div class="article-title"><a href="/2017/07/22/python实现批量更改centos系统密码/" >python实现批量更改centos系统密码</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<p>作为一个系统管理员，有时候常常批量修改远程主机配置，当然这里有很多选择，可以选择最近比较热门的自动化工具ansible、saltstack等。</p>
+<p>以下介绍使用python实现,当然留心的小伙伴已经知道前面我写过一篇：<a href="http://linuxops.xyz/2015/11/29/ssh%E2%94%BC%C2%B7%E2%94%B4%E2%94%90%E2%95%A1%E2%95%9F%E2%94%AC%E2%95%9D%E2%96%93%D0%B2%E2%95%93%E2%94%A4%E2%95%A8%E2%95%A8%E2%94%9C%E2%84%96%E2%94%B4%D1%8E%D0%B3%D0%B8python%E2%95%A9%E2%95%A1%E2%95%A7%E2%95%93%D0%B3%D0%B9/">ssh批量登录并执行命令（python实现）</a></p>
+</blockquote>
+<h4 id="以下是通过python批量更改centos系统密码">以下是通过python批量更改centos系统密码</h4><blockquote>
+<p>由于考虑到小伙伴们并不是每一台主机都是使用相同密码，导致以前文章上写的方法并不适用，故写了份修改版供大家参考。</p>
+</blockquote>
+<ul>
+<li>注意执行脚本服务器需要提前安装paramiko模块.</li>
+<li><strong>官网链接：</strong> <a href="http://www.paramiko.org/" target="_blank" rel="external">http://www.paramiko.org/</a><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#-*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> paramiko</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">IP_list</span><span class="params">(ip_list)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(ip_list, <span class="string">'r'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        ip_list = f.readlines()</span><br><span class="line">        <span class="keyword">for</span> ip <span class="keyword">in</span> ip_list:</span><br><span class="line">            cmd=<span class="string">"echo '&#123;0&#125;' | passwd --stdin &#123;1&#125;"</span>.format(ip.strip(<span class="string">'\n'</span>).split(<span class="string">' '</span>)[<span class="number">3</span>],ip.strip(<span class="string">'\n'</span>).split(<span class="string">' '</span>)[<span class="number">1</span>])</span><br><span class="line">            a = threading.Thread(target=ssh2, args=(ip.strip(<span class="string">'\n'</span>).split(<span class="string">' '</span>)[<span class="number">0</span>], ip.strip(<span class="string">'\n'</span>).split(<span class="string">' '</span>)[<span class="number">1</span>], ip.strip(<span class="string">'\n'</span>).split(<span class="string">' '</span>)[<span class="number">2</span>], cmd))</span><br><span class="line">            a.start()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ssh2</span><span class="params">(ip,username,passwd,cmd)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        ssh = paramiko.SSHClient()</span><br><span class="line">        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())</span><br><span class="line">        ssh.connect(ip, <span class="number">22</span>, username, passwd, timeout=<span class="number">15</span>)</span><br><span class="line">        stdin, stdout, stderr = ssh.exec_command(cmd)</span><br><span class="line">        stdin.write(<span class="string">"Y"</span>)</span><br><span class="line">        out = stderr.readlines()</span><br><span class="line">        <span class="keyword">if</span> out:</span><br><span class="line">            <span class="keyword">print</span> <span class="string">'========'</span> + ip + <span class="string">"==================&gt;ERROR"</span></span><br><span class="line">            <span class="keyword">for</span> o <span class="keyword">in</span> out:</span><br><span class="line">                <span class="keyword">print</span> o[:-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            out = stdout.readlines()</span><br><span class="line">            <span class="keyword">print</span> <span class="string">'========'</span> + ip + <span class="string">"==================&gt;OK"</span></span><br><span class="line">            <span class="keyword">for</span> o <span class="keyword">in</span> out:</span><br><span class="line">                <span class="keyword">print</span> o[:-<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">except</span> Exception, e:</span><br><span class="line">        <span class="keyword">print</span> <span class="string">'%s\tError\n'</span> % (e)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">'__main__'</span>:</span><br><span class="line">    IP_list(<span class="string">'ip.list'</span>)</span><br><span class="line">    threads = [<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">===================================================</span><br><span class="line">ip_list格式</span><br><span class="line">ip username 更改前密码 更改后密码</span><br><span class="line"></span><br><span class="line">===================================================</span><br><span class="line">新增日志版本</span><br><span class="line"></span><br><span class="line"><span class="comment">#-*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> os,sys</span><br><span class="line"><span class="keyword">import</span> paramiko</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">IP_list</span><span class="params">(ip_list)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(ip_list, <span class="string">'r'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        ip_list = f.readlines()</span><br><span class="line">        <span class="keyword">for</span> ip <span class="keyword">in</span> ip_list:</span><br><span class="line">            cmd=<span class="string">"echo '&#123;0&#125;' | passwd --stdin &#123;1&#125;"</span>.format(ip.strip(<span class="string">'\n'</span>).split(<span class="string">' '</span>)[<span class="number">3</span>],ip.strip(<span class="string">'\n'</span>).split(<span class="string">' '</span>)[<span class="number">1</span>])</span><br><span class="line">            a = threading.Thread(target=ssh2, args=(ip.strip(<span class="string">'\n'</span>).split(<span class="string">' '</span>)[<span class="number">0</span>], ip.strip(<span class="string">'\n'</span>).split(<span class="string">' '</span>)[<span class="number">1</span>], ip.strip(<span class="string">'\n'</span>).split(<span class="string">' '</span>)[<span class="number">2</span>], cmd))</span><br><span class="line">            a.start()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Write_log</span><span class="params">(log)</span>:</span></span><br><span class="line">    pwd = os.getcwd()</span><br><span class="line">    <span class="keyword">with</span> open(pwd+<span class="string">'/'</span>+sys.argv[<span class="number">0</span>] + <span class="string">'_log'</span>,<span class="string">'a'</span>) <span class="keyword">as</span> f_log:</span><br><span class="line">        f_log.write(log)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ssh2</span><span class="params">(ip,username,passwd,cmd)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        ssh = paramiko.SSHClient()</span><br><span class="line">        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())</span><br><span class="line">        ssh.connect(ip, <span class="number">22</span>, username, passwd, timeout=<span class="number">15</span>)</span><br><span class="line">        stdin, stdout, stderr = ssh.exec_command(cmd)</span><br><span class="line">        stdin.write(<span class="string">"Y"</span>)</span><br><span class="line">        out = stderr.readlines()</span><br><span class="line">        <span class="keyword">if</span> out:</span><br><span class="line">            <span class="keyword">print</span> <span class="string">'========'</span> + ip + <span class="string">"==================&gt;ERROR"</span></span><br><span class="line">            Write_log( <span class="string">'========'</span> + ip + <span class="string">"==================&gt;ERROR\n"</span>)</span><br><span class="line">            <span class="keyword">for</span> o <span class="keyword">in</span> out:</span><br><span class="line">                <span class="keyword">print</span> o[:-<span class="number">1</span>]</span><br><span class="line">                Write_log(o[:-<span class="number">1</span>]+<span class="string">'\n'</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            out = stdout.readlines()</span><br><span class="line">            <span class="keyword">print</span> <span class="string">'========'</span> + ip + <span class="string">"==================&gt;OK"</span></span><br><span class="line">            Write_log(<span class="string">'========'</span> + ip + <span class="string">"==================&gt;OK\n"</span>)</span><br><span class="line">            <span class="keyword">for</span> o <span class="keyword">in</span> out:</span><br><span class="line">                <span class="keyword">print</span> o[:-<span class="number">1</span>]</span><br><span class="line">                Write_log(o[:-<span class="number">1</span>]+<span class="string">'\n'</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception, e:</span><br><span class="line">        <span class="keyword">print</span> <span class="string">'%s\tError\n'</span> % (e)</span><br><span class="line">        Write_log(<span class="string">'%s\tError\n'</span> % (e))</span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">'__main__'</span>:</span><br><span class="line">    IP_list(<span class="string">'ip.list'</span>)</span><br><span class="line">    threads = [<span class="number">2</span>]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="简单感概：">简单感概：</h4><p>Python是日后运维招聘必须掌握的一项基本技能，建议学习好语言过程，掌握多一门自动化工具，可选ansible或者是saltstack。两者精通其一即可。后面博主会多写关于运维过程中一些常用软件安装或者配置通过salt自动化工具实现的文章，在日常运维工作中尽量减轻重复工作的步骤。</p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/07/22/python实现批量更改centos系统密码/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-07-16 </div>
+			<div class="article-title"><a href="/2017/07/16/关于博客pythonyw停止运行的说明/" >关于博客pythonyw停止运行的说明</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<blockquote>
+<p>时间飞逝，转眼间从事运维工作也好几年了。由于已到年中，顺便也总结这几年的工作情况。</p>
+</blockquote>
+</blockquote>
+<ul>
+<li><strong>简单总结：</strong> 从当初的懵懵懂懂，到现在的基本入门。当然按照阿里技术专家陈喻说的运维三阶段来说，现在水平处于1-2阶段之间，主要还是基于shell+python+salt+linux等上工作。当然按照第三阶段来说 ，运维水平越高，自动化程序越高，工作越闲，最终实现上班就是天天玩手机（开下小玩笑，说明自动化程度达到比较高的水平。）<br><img src="/img/201707/01.jpg" style="width: 550x;"></li>
+<li><strong>个人定位：</strong> 从事运维开发工程师，通过网页web实现运维日常琐事</li>
+<li><strong>后继行动：</strong> 进一步学习python+django+salt（ansible）+docker+openstack等<br><a href="http://python.cn/" target="_blank" rel="external">http://python.cn/</a> 站点由于服务器取消后，现在正式下架。但是<a href="http://linuxops.xyz/">http://linuxops.xyz/</a> 将会继续运营，最近会计划续费此域名。当然有兴趣的小伙伴可以在<a href="https://github.com/linuxunix/pythonyw_blog" target="_blank" rel="external">https://github.com/linuxunix/pythonyw_blog</a> 查看相关源码，<a href="http://python.cn/" target="_blank" rel="external">http://python.cn/</a> 使用python+django+bootstrap搭建完成，部分前端代码是本人编写，由于前端学艺不精，导致手机版本适配存在不友好显示。<blockquote>
+<p>后继会把所有博客文章转到linuxops.xyz此站点,后继尽量偏向基于python类的文章，希望各位多多支持和鼓励，谢谢。</p>
+</blockquote>
+</li>
+</ul>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/07/16/关于博客pythonyw停止运行的说明/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-03-03 </div>
+			<div class="article-title"><a href="/2017/03/03/django上传图片和文件并保存在数据库/" >django上传图片和文件并保存在数据库</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p><strong>django上传图片和文件并保存在数据库</strong></p>
+<blockquote>
+<p>坏境：</p>
+</blockquote>
+<p>PyCharm2016.2<br>Python2.7<br>Django1.9.4<br>上传路径：./up_load/<br>参考：<a href="http://python.usyiyi.cn/django/topics/http/file-uploads.html" target="_blank" rel="external">http://python.usyiyi.cn/django/topics/http/file-uploads.html</a><br><a href="http://www.cnblogs.com/linjiqin/p/3731751.html" target="_blank" rel="external">http://www.cnblogs.com/linjiqin/p/3731751.html</a><br><a href="http://www.cnblogs.com/fnng/p/3740274.html" target="_blank" rel="external">http://www.cnblogs.com/fnng/p/3740274.html</a></p>
+<blockquote>
+<p>上传文件(推荐)</p>
+</blockquote>
+<p><strong>代码：</strong><br><strong>数据库model设计：</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UploadFile</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    title = models.CharField(max_length=<span class="number">50</span>)</span><br><span class="line">    file_path =  models.FileField(upload_to=<span class="string">'./up_load/'</span>)</span><br></pre></td></tr></table></figure></p>
+<p><strong>新增forms.py</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django <span class="keyword">import</span> forms</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UploadFileForm</span><span class="params">(forms.Form)</span>:</span></span><br><span class="line">    title = forms.CharField(max_length=<span class="number">50</span>)</span><br><span class="line">    file_path = forms.FileField()</span><br></pre></td></tr></table></figure></p>
+<p><strong>views.py</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># _*_ coding:utf-8 _*_</span></span><br><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> render,render_to_response,HttpResponse</span><br><span class="line"><span class="keyword">from</span> django.views.decorators.csrf <span class="keyword">import</span> csrf_exempt, csrf_protect</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> UploadFile</span><br><span class="line"><span class="keyword">from</span> .forms <span class="keyword">import</span> UploadFileForm</span><br><span class="line"><span class="decorator">@csrf_exempt</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">upload</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">'POST'</span>:</span><br><span class="line">        form = UploadFileForm(request.POST, request.FILES)</span><br><span class="line">        <span class="keyword">print</span> form</span><br><span class="line">        <span class="keyword">if</span> form.is_valid():</span><br><span class="line">            <span class="comment"># 获取表单信息</span></span><br><span class="line">            title = form.cleaned_data[<span class="string">'title'</span>]</span><br><span class="line">            file_path = form.cleaned_data[<span class="string">'file_path'</span>]</span><br><span class="line">            <span class="comment"># 写入数据库</span></span><br><span class="line">            uploadfile = UploadFile()</span><br><span class="line">            uploadfile.title = title</span><br><span class="line">            uploadfile.file_path = file_path</span><br><span class="line">            uploadfile.save()</span><br><span class="line">            <span class="keyword">return</span> HttpResponse(<span class="string">'上传 成功!'</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        form = UploadFileForm()</span><br><span class="line">    <span class="keyword">return</span> render_to_response(<span class="string">'upload.html'</span>, &#123;<span class="string">'form'</span>: form&#125;)</span><br></pre></td></tr></table></figure></p>
+<p><strong>Upload.html</strong><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;form method="post" enctype="multipart/form-data"&gt;  &#123;% csrf_token %&#125;</span><br><span class="line">    &#123;&#123; form.as_p &#125;&#125;</span><br><span class="line"> &lt;input type="submit" value="上次文件"&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>上传图片</p>
+</blockquote>
+<p><strong>代码：</strong><br><strong>数据库models设计：</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    username = models.CharField(max_length=<span class="number">50</span>)</span><br><span class="line">    headImg = models.FileField(upload_to=<span class="string">'./up_load/'</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__unicode__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.username</span><br><span class="line">forms.py</span><br><span class="line"><span class="keyword">from</span> django <span class="keyword">import</span>  forms</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UseerForm</span><span class="params">(forms.Form)</span>:</span></span><br><span class="line">    username = forms.CharField()</span><br><span class="line">    headImg = forms.FileField()</span><br><span class="line">views.py</span><br><span class="line"><span class="comment"># _*_ coding:utf-8 _*_</span></span><br><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> render,render_to_response</span><br><span class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse</span><br><span class="line"><span class="keyword">from</span> upload.forms <span class="keyword">import</span> UseerForm</span><br><span class="line"><span class="keyword">from</span> django.views.decorators.csrf <span class="keyword">import</span> csrf_exempt, csrf_protect</span><br><span class="line"><span class="keyword">from</span> upload.models <span class="keyword">import</span> User</span><br><span class="line"></span><br><span class="line"><span class="decorator">@csrf_exempt   防止报csrf错误</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">upload</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">'POST'</span>:</span><br><span class="line">        uf = UseerForm(request.POST,request.FILES)</span><br><span class="line">        <span class="keyword">if</span> uf.is_valid():</span><br><span class="line">            <span class="comment">#获取表单信息</span></span><br><span class="line">            username = uf.cleaned_data[<span class="string">'username'</span>]</span><br><span class="line">            headImg = uf.cleaned_data[<span class="string">'headImg'</span>]</span><br><span class="line">            <span class="comment"># 写入数据库</span></span><br><span class="line">            user = User()</span><br><span class="line">            user.username = username</span><br><span class="line">            user.headImg = headImg</span><br><span class="line">            user.save()</span><br><span class="line">            <span class="keyword">return</span> HttpResponse(<span class="string">'upload ok!'</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        uf = UseerForm()</span><br><span class="line">    <span class="keyword">return</span> render_to_response(<span class="string">'upload.html'</span>,&#123;<span class="string">'uf'</span>:uf&#125;)</span><br></pre></td></tr></table></figure></p>
+<p><strong>Upload.html</strong><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;form method="post" enctype="multipart/form-data"&gt;  &#123;% csrf_token %&#125;</span><br><span class="line">    &#123;&#123; uf.as_p &#125;&#125;</span><br><span class="line"> &lt;input type="submit" value="ok"&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>网页效果<br><img src="/img/201703/python-1.png" style="width: 550x;"><br><img src="/img/201703/python-2.png" style="width: 550x;"><br>mysql数据库展示<br><img src="/img/201703/python-3.png" style="width: 550x;"><br>不用form 方式，也可以使用以下形式</p>
+</blockquote>
+<p><strong>Index.html</strong><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;form action=" " enctype="multipart/form-data" method="post"&gt;&#123;% csrf_token %&#125;</span><br><span class="line">    &lt;input type="file" name="file"&gt;</span><br><span class="line">    &lt;input type="submit" value="upload"&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure></p>
+<p><strong>Views.py</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="keyword">if</span>  request.method == <span class="string">"POST"</span>:</span><br><span class="line">        upload_dir = <span class="string">"static/imgs/upload"</span></span><br><span class="line">        file_obj = request.FILES[<span class="string">'file'</span>]</span><br><span class="line">        <span class="keyword">with</span> open(<span class="string">'%s/%s'</span> % (upload_dir, file_obj.name), <span class="string">'wb'</span>) <span class="keyword">as</span> destination:</span><br><span class="line">            <span class="keyword">for</span> chunk <span class="keyword">in</span> file_obj.chunks():</span><br><span class="line">                destination.write(chunk)</span><br><span class="line">    <span class="keyword">return</span> render(request,<span class="string">'index.html'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>此方法需要提前新增好static/imgs/upload文件夹</p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/03/03/django上传图片和文件并保存在数据库/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-03-03 </div>
+			<div class="article-title"><a href="/2017/03/03/通过Jinja2模板以及Grain和Pillar扩展主机状态/" >通过Jinja2模板以及Grain和Pillar扩展主机状态</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<p>通过Jinja2模板以及Grain和Pillar扩展主机状态</p>
+</blockquote>
+<p><strong>Jinja2模板语言的基础</strong><br>Jinja2是一个强大的python模板引擎，可以使用代码动态生成内容和创建文件内容。可以理解为何django的模板用法一样。<br>官网地址：<a href="http://jinja.pocoo.org/" target="_blank" rel="external">http://jinja.pocoo.org/</a><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Jinja2变量：</span><br><span class="line">[root@localhost states]<span class="comment"># cat init/var.sls </span></span><br><span class="line">&#123;% set var = <span class="string">'hello'</span> %&#125;</span><br><span class="line">test_var:</span><br><span class="line">  cmd.run:</span><br><span class="line">    - name: echo <span class="string">"var is &#123;&#123; var &#125;&#125;"</span></span><br></pre></td></tr></table></figure></p>
+<p> <img src="/img/201703/salt-9.png" style="width: 550x;"></p>
+<p>由于和d’jango模板差不多，此处不作过多解析。</p>
+<blockquote>
+<p>Grains</p>
+</blockquote>
+<p><strong>Grains的概念</strong><br>grains是minion第一次启动的时候采集的静态数据，可以用在salt的模块和其他组件中。其实grains在每次的minion启动（重启）的时候都会采集，即向master汇报一次的。这个很重要，可以让某些同学企图使用grains值来做监控死心了。</p>
+<blockquote>
+<p>Grain相关命令</p>
+</blockquote>
+<p><strong>列出所有minion上的Grains项:</strong><br>[root@localhost states]# salt ‘*’ grains.ls<br>192.168.17.132:</p>
+<pre><code>-<span class="ruby"> <span class="constant">SSDs</span>
+</span>-<span class="ruby"> biosreleasedate
+</span>-<span class="ruby"> biosversion
+</span>-<span class="ruby"> cpu_flags
+</span>-<span class="ruby"> cpu_model
+</span>-<span class="ruby"> cpuarch</span>
+</code></pre><ul>
+<li>domain<br>…省略</li>
+</ul>
+<p><strong>查询minion上某一具体Grain的值：</strong><br>salt ‘*’ grains.item 选项</p>
+<p> <img src="/img/201703/salt-10.png" style="width: 550x;"></p>
+<p><strong>列出对应minion上所有Grain的详细信息：</strong><br>[root@localhost states]# salt ‘*’ grains.items<br>….省略部分数据</p>
+<h2 id="192-168-17-132:">192.168.17.132:</h2><pre><code>    <span class="number">192.168</span><span class="number">.17</span><span class="number">.132</span>
+
+manufacturer:
+    VMware, Inc.
+master:
+    <span class="number">192.168</span><span class="number">.17</span><span class="number">.135</span>
+mdadm:
+mem_total:
+    <span class="number">980</span>
+nodename:
+    localhost.localdomain
+num_cpus:
+    <span class="number">1</span>
+</code></pre><blockquote>
+<p>设置Grains数据  </p>
+</blockquote>
+<p><strong>命令行方式</strong></p>
+<p>单个值设置：<br>  <img src="/img/201703/salt-11.png" style="width: 550x;"><br>查询：<br>   <img src="/img/201703/salt-12.png" style="width: 550x;"><br>多个值设置：<br>    <img src="/img/201703/salt-13.png" style="width: 550x;"><br>列表结构设置：<br>    <img src="/img/201703/salt-14.png" style="width: 550x;"><br>查询：<br><img src="/img/201703/salt-15.png" style="width: 550x;"><br><strong>Grains_module的方式设置</strong><br>mkdir -p /etc/salt/states/_grains新增模块目录<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost salt]<span class="comment"># cat states/_grains/my_grain_mod.py </span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">now</span><span class="params">()</span>:</span></span><br><span class="line"> grains = ()</span><br><span class="line"> grains[<span class="string">'now'</span>] = time.time()</span><br><span class="line"> <span class="keyword">return</span> grains</span><br></pre></td></tr></table></figure></p>
+<p><strong>saltutil.sync_all同步模块到minion：</strong><br><img src="/img/201703/salt-16.png" style="width: 550x;"><br>重载一次模块：<br><img src="/img/201703/salt-17.png" style="width: 550x;"><br>自定义grains的item：编辑etc/salt/minion注意是有空格<br>grains:<br>  roles: nginx<br>  env: prod</p>
+<p>[root@localhost psycopg2]# salt -G ‘env:prod’ test.ping<br>192.168.17.130:<br>    True<br>在minion端新增以下，重启动客户端<br>[root@localhost ~]# cat /etc/salt/grains<br>web: nginx</p>
+<p>master可以<br><img src="/img/201703/salt-18.png" style="width: 550x;"><br>以下是采用刷新方式，不重启minion客户端<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@salt-minion ~]<span class="comment"># cat /etc/salt/grains </span></span><br><span class="line">web: nginx</span><br><span class="line">web: tomcat</span><br><span class="line"></span><br><span class="line">[root@ salt-master~]<span class="comment"># salt -G 'web:tomcat' test.ping</span></span><br><span class="line">No minions matched the target. No command was sent, no jid was assigned.</span><br><span class="line">ERROR: No <span class="keyword">return</span> received</span><br><span class="line">[root@ salt-master~]<span class="comment"># salt '*' saltutil.sync_grains</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.230</span>:</span><br><span class="line">test_lnmp<span class="number">.1</span><span class="number">.248</span>:</span><br><span class="line">CacheServer:</span><br><span class="line">[root@ salt-master~]<span class="comment"># salt -G 'web:tomcat' test.ping</span></span><br><span class="line">test_lnmp<span class="number">.1</span><span class="number">.248</span>:</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>Pillar</p>
+</blockquote>
+<p><strong>Pillar是什么？</strong></p>
+<p>Pillar是Salt非常重要的一个组件，它用于给特定的minion定义任何你需要的数据，这些数据可以被Salt的其他组件使用。Salt在 0.9.8版本中引入了Pillar。Pillar在解析完成后，是一个嵌套的dict结构；最上层的key是minion ID，其value是该minion所拥有的Pillar数据；每一个value也都是key/value。</p>
+<p><hr><br>这里可以看出Pillar的一个特点，Pillar数据是与特定minion关联的，也就是说每一个minion都只能看到自己的数据，所以 Pillar可以用来传递敏感数据（在Salt的设计中，Pillar使用独立的加密session，也是为了保证敏感数据的安全性）。<br><strong>Pillar可以用在哪些地方？</strong><br>•    敏感数据<br>例如ssh key，加密证书等，由于Pillar使用独立的加密session，可以确保这些敏感数据不被其他minion看到。<br>•    变量<br>可以在Pillar中处理平台差异性，比如针对不同的操作系统设置软件包的名字，然后在State中引用。<br>•    其他任何数据<br>可以在Pillar中添加任何需要用到的数据。比如定义用户和UID的对应关系，mnion的角色等。<br>•    用在Targetting中<br>Pillar可以用来选择minion，使用-I选项。</p>
+<p><strong>Pillar相关命令</strong><br>列出对应minion上所有的pillar的详细信息:<br>[root@localhost salt]# salt ‘<em>‘ pillar.items<br><em>*Pillar实战：</em></em><br><img src="/img/201703/salt-19.png" style="width: 550x;"><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost pillar]<span class="comment"># tree</span></span><br><span class="line">.</span><br><span class="line">├── init</span><br><span class="line">│ └── rsyclog.sls</span><br><span class="line">└── top.sls</span><br><span class="line">[root@localhost pillar]<span class="comment"># cat top.sls </span></span><br><span class="line">base:</span><br><span class="line">  <span class="string">'test_lnmp.1.248'</span>:</span><br><span class="line">- init.rsyslog</span><br><span class="line"></span><br><span class="line">[root@localhost pillar]<span class="comment"># cat init/rsyclog.sls </span></span><br><span class="line">&#123;% <span class="keyword">if</span> grains[<span class="string">'osfinger'</span>] == <span class="string">'CentOS-6'</span> %&#125;</span><br><span class="line">syslog: rsyslog</span><br><span class="line">&#123;% <span class="keyword">elif</span> grains[<span class="string">'osfinger'</span>] == <span class="string">'CentOS-5'</span> %&#125;</span><br><span class="line">syslog: syslog</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/img/201703/salt-20.png" style="width: 550x;"></p>
+<p><strong>Grains和Pillar区别</strong><br><img src="/img/201703/salt-21.png" style="width: 550x;"></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/03/03/通过Jinja2模板以及Grain和Pillar扩展主机状态/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+
+		</div>
+
+		<!-- pagination -->
+		<div>
+  		<center>
+		<div class="pagination">
+<ul class="pagination">
+	 
+		
+    	<li class="prev"><a href="/page/2/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i> 上一頁</a></li>
+  		
+
+        <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+
+		
+		   <li class="next"> <a href="/page/4/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a> </li>          
+        
+	
+</ul>
+</div>
+
+  		</center>
+		</div>
+
+		
+		
+	</div> <!-- col-md-9 -->
+
+	
+		<div class="col-md-3">
+	<div id="sidebar">
+	
+			
+  <div class="widget tag">
+    <h3 class="title">归档</h3>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+  </div>
+
+		
+			
+		
+			
+
+		
+			
+<div class="widget">
+  <h4>最新文章</h4>
+  <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2018/07/29/企业常用几种部署方式-蓝绿部署、滚动部署、金丝雀部署/" ><i class="fa fa-file-o"></i>企业常用几种部署方式(蓝绿部署、滚动部署、金丝雀部署)...</a>
+      </li>
+    
+      <li>
+        <a href="/2018/07/29/Pyecharts-生成图表-附Django支持/" ><i class="fa fa-file-o"></i>Pyecharts 生成图表(附Django支持)...</a>
+      </li>
+    
+      <li>
+        <a href="/2018/07/29/Python调用Zabbix-Api获取数据/" ><i class="fa fa-file-o"></i>Python调用Zabbix Api获取数据...</a>
+      </li>
+    
+      <li>
+        <a href="/2018/07/29/Django中的缓存配置/" ><i class="fa fa-file-o"></i>Django中的缓存配置...</a>
+      </li>
+    
+      <li>
+        <a href="/2018/06/16/Celery-分布式任务队列/" ><i class="fa fa-file-o"></i>Celery - 分布式任务队列...</a>
+      </li>
+    
+  </ul>
+</div>
+
+		
+			
+<div class="widget">
+	<h4>鏈接</h4>
+	<ul class="blogroll list-unstyled">
+	
+		<li><i class="fa fa-github"></i><a href="http://linuxops.cc" title="Macro博客" target="_blank"]);">Macro博客</a></li>
+	
+		<li><i class="fa fa-github"></i><a href="http://www.uinion.com/" title="uinion小站" target="_blank"]);">uinion小站</a></li>
+	
+	</ul>
+</div>
+
+
+		
+	</div> <!-- sidebar -->
+</div> <!-- col-md-3 -->
+
+	
+	
+</div> <!-- row-fluid -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

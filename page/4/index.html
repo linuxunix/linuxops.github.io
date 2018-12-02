@@ -1,0 +1,796 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>第 4 頁 | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 <div class="page-header">
+  <h1>记录Linux的点点滴滴（DevOps技术运维小学生）</h1>
+</div>
+
+<div class="row page">
+
+	
+	<div class="col-md-9">
+	
+
+		<div class="slogan">
+      <i class="fa fa-heart"></i>
+      Welcome to my blog.
+</div>    
+
+		<div class="mypage">
+		
+		<!-- title and entry -->
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-03-03 </div>
+			<div class="article-title"><a href="/2017/03/03/SaltStack数据系统之Grains【下】/" >SaltStack数据系统之Grains【下】</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<p>前言：</p>
+</blockquote>
+<p>是不是觉得系统自带的Grains不够用，配置文件写Grains又不灵活，那么没关系，SaltStack支持你自己编写Grains。</p>
+<blockquote>
+<p>编写Grains</p>
+</blockquote>
+<p>在minion配置文件中定义的grains是静态的，不能够动态的在minion上生成。可以用Python非常方便的写动态的grains。minion启动时，会执行grains包所带的模块及自定义grains模块中的函数，返回的结果就是grains。grains模块中的函数必须返回一个dict，其中key是grains的名字，value是值。<br>这里的动态 grains 是指 minion 启动时动态生成，事先并不知道内容，在启动后，这些值依然是不变的。</p>
+<blockquote>
+<p>自定义Grains</p>
+</blockquote>
+<p>很明显，自定义的grains并不是直接放在minion上，而是放在master配置文件中定义的file_roots下的_grains目录中。执行state.highstate，saltutil.sync_grains，saltutil.sync_all时，会将_grains中的文件分发到客户端上。<br>假定file_roots为/srv/salt，增加自定义grain的操作如下：</p>
+<h1 id="mkdir_/srv/salt/_grains/">mkdir /srv/salt/_grains/</h1><blockquote>
+<p>非常简单的案例</p>
+</blockquote>
+<p>下面我们来编写grains，记住：必须返回一个字典！<br> <img src="/img/201703/salt-7.png" style="width: 550x;"></p>
+<blockquote>
+<p>刷新grains</p>
+</blockquote>
+<p>刷新后，我们自定义的grains脚本会存放在minion配置文件制定的cache目录下：<br> [root@linux-node1~]# ls -l /var/cache/salt/minion/extmods/grains<br>总用量 8<br>-rw-r–r– 1 root root 120 11月 6 17:39 my_grain.py<br>现在我们可以获取到我们自己编写的grains。同时，除了执行saltutil.sync_grains进行刷新外，也可以执行saltutil.sync_grains进行刷新操作。或者在我们执行state.highstate的时候也会自动进行刷新。</p>
+<blockquote>
+<p>Grains的优先级</p>
+</blockquote>
+<p>到目前位置，我们知道Grains有四种存放的方法，或者说是位置：SaltStack自带的Grains，自定义的Grains和我们编写的grains的模块返回的Grains，如果grains的名称一样，到底以哪个为准呢？优先级从低到高如下：</p>
+<ol>
+<li>系统自带grains</li>
+<li>/etc/salt/grains里面指定的grains</li>
+<li>/etc/salt/minion里面设置的grains</li>
+<li>自已编写的grains模块</li>
+</ol>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/03/03/SaltStack数据系统之Grains【下】/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-03-03 </div>
+			<div class="article-title"><a href="/2017/03/03/SaltStack数据系统之Grains[上]/" >SaltStack数据系统之Grains【上】</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<p>什么是Grains？</p>
+</blockquote>
+<p>Grains是SaltStack的一个组件，存放着minion启动时收集的底层系统的静态信息。Grains中包含诸如运行的操作系统、内核版本、CPU个数、内存、主机名、IP地址、物理设备型号、甚至机器的SN号等非常多的信息。</p>
+<p><hr><br>Grains是存储在minion端的，当minion启动时，会进行Grains的采集工作，然后保存下来。在以后的生命周期（再次重启minion，会重新收集）是不会发生变化的，所以是静态数据。你可能已经想到这些数据可以用来做资产管理的信息收集。</p>
+<blockquote>
+<p>Grains应用场景</p>
+</blockquote>
+<p>•    Grains可以在state系统中使用，用于配置管理模块。<br>•    Grains可以target中使用，在用来匹配Minion，比如匹配操作系统，使用-G选项。<br>•    Grains可以用于信息查询，Grains保存着收集到的客户端的详细信息。</p>
+<blockquote>
+<p>Grains使用案例</p>
+</blockquote>
+<p><strong>1.Grains 信息查询</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> 列出Minion上所有可用的grains的名称。</span><br><span class="line"><span class="comment"># salt '*' grains.ls</span></span><br><span class="line"> 列出Minion上所有grains的的名称及内容。</span><br><span class="line"><span class="comment"># salt '*' grains.items</span></span><br><span class="line"> 查询salt版本</span><br><span class="line"><span class="comment"># salt '*' grains.get saltversion   </span></span><br><span class="line"> 查询eth0 所有IP 地址</span><br><span class="line"><span class="comment"># salt '*' grains.get ip_interfaces:eth0</span></span><br></pre></td></tr></table></figure></p>
+<p> <strong>2.使用Grains匹配Minion</strong><br>匹配所有系统是CentOS的客户端，并执行命令：</p>
+<p><strong>3.在Top文件中使用Grains匹配</strong></p>
+<p>这样我们可以使用grains进行非常灵活的来选择对应的服务器。<br><strong>4.在States文件中配合jinja模板使用Grains内容做判断。</strong></p>
+<p>   例如如果你的环境中有CentOS还有Debian系统，那么在快速入门中我们编写的apache.sls需要修改为下面的内容：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line">因为CentOS和Debian的apache的包名称是不同的，我们可以通过grains的os获取到操作系统名称，然后进行判断。注意这个｛% … %｝&#123;% <span class="keyword">elif</span> … %&#125;&#123;% endif %&#125;是jinja模版。</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>自定义Grains</p>
+</blockquote>
+<p>内置的Grains不一定能满足所有需求，所以SaltStack支持在Minion的配置文件中静态定义Grains，或者在/etc/salt/grains中，推荐后者。比如我们将一台服务器打一个标签。说明它是一台Nginx，运行在OpenStack平台中。这样我们在以后做远程管理的时候，比如重启下所有的Nginx服务，就可以通过这个自定义的Grains来进行了。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># vim /etc/salt/grains</span></span><br><span class="line">roles: nginx</span><br><span class="line">dept: dev</span><br><span class="line">cloud: openstack</span><br><span class="line"></span><br><span class="line">还记得前面说的Grains的特点吗，必须重启Minion才会重新收集Grains。</span><br><span class="line"><span class="comment"># /etc/init.d/salt-minion restart</span></span><br><span class="line"></span><br><span class="line">重启minion服务后，使用grains.item就可以列出roles等自定义的grains。</span><br><span class="line"><span class="comment"># salt '*' grains.item roles</span></span><br><span class="line">linux-node2.example.com:</span><br><span class="line"> roles: nginx</span><br></pre></td></tr></table></figure></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/03/03/SaltStack数据系统之Grains[上]/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-03-02 </div>
+			<div class="article-title"><a href="/2017/03/02/salt-ssh/" >salt-ssh</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p><strong>salt-ssh简介</strong><br>salt-ssh 是 0.17.0 新出现的一个功能，它是依赖 ssh 来进行远程命令执行的工具，好处就是不需要在客户端安装 minion，也不需要安装 master（直接安装 salt-ssh 这个包即可），有些时候你还真的需要 salt-ssh（例如：条件不允许安装 minion、不用长期管理某台 minion） 最重要的是 salt-ssh 并不只是单纯的 ssh 工具，它支持 salt 大部分的功能，如 grains、modules、state 等<br>需要注意的是，salt-ssh 并没有继承原来的通讯架构 (ZeroMQ)，也就是说它的执行速度啥的都会比较慢</p>
+<blockquote>
+<p>salt-ssh安装</p>
+</blockquote>
+<p> yum install salt-ssh –y</p>
+<p>salt-ssh 需要配合roster使用，首先配置roster,默认地址/etc/salt/roster，roster 语法很简答，定义 ID、host、user、password 即可<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost salt]<span class="comment"># cat /etc/salt/roster </span></span><br><span class="line">lnmp135:</span><br><span class="line">  host: <span class="number">192.168</span><span class="number">.1</span><span class="number">.135</span></span><br><span class="line">  user: root</span><br><span class="line">  passwd: mima123</span><br><span class="line">  port: <span class="number">22</span></span><br><span class="line">  timeout: <span class="number">10</span></span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>salt-ssh远程安装minion客户端</p>
+</blockquote>
+<p>在/etc/salt/states/下新增文件夹minions_init，以下文件皆放在此文件夹下<br>添加批量脚本方便写进/etc/salt/roster<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost minions_init]<span class="comment"># cat Ip_add.sh </span></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `cat /etc/salt/minions_init/Ip_list.txt`</span><br><span class="line">do </span><br><span class="line">        echo <span class="string">"$i:"</span> &gt;&gt; /etc/salt/roster  </span><br><span class="line">        echo <span class="string">"  host: $i"</span> &gt;&gt; /etc/salt/roster  </span><br><span class="line">        echo <span class="string">"  user: adminuser"</span> &gt;&gt; /etc/salt/roster  </span><br><span class="line">        echo <span class="string">"  passwd: ABC123"</span> &gt;&gt; /etc/salt/roster  </span><br><span class="line">        echo <span class="string">"  sudo: True"</span> &gt;&gt; /etc/salt/roster  </span><br><span class="line">        echo <span class="string">"  timeout: 10"</span> &gt;&gt; /etc/salt/roster  </span><br><span class="line">done</span><br><span class="line">IP地址格式：</span><br><span class="line">[root@localhost minions_init]<span class="comment"># cat Ip_list.txt </span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.235</span></span><br><span class="line">新增install.sls</span><br><span class="line"> [root@localhost minions_init]<span class="comment"># cat install.sls </span></span><br><span class="line">minion_install:  </span><br><span class="line">  pkg.installed:  </span><br><span class="line">    - pkgs:  </span><br><span class="line">      - salt-minion  </span><br><span class="line">    - unless: rpm -qa | grep salt-minion  当存在salt-minion客户端时候不执行minion_install</span><br><span class="line"></span><br><span class="line">minion_conf:  </span><br><span class="line">  file.managed:  </span><br><span class="line">    - name: /etc/salt/minion  </span><br><span class="line">    - source: salt://minions_init/file/minion  </span><br><span class="line">    - user: root  </span><br><span class="line">    - group: root  </span><br><span class="line">    - mode: <span class="number">640</span>  </span><br><span class="line">    - require:  </span><br><span class="line">      - pkg: minion_install      当执行完minion_install才能执行minion_conf</span><br><span class="line">minion_service:  </span><br><span class="line">  service.running:  </span><br><span class="line">    - name: salt-minion  </span><br><span class="line">    - enable: <span class="keyword">True</span>  </span><br><span class="line">    - require:  </span><br><span class="line">      - file: minion_conf</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>执行命令<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost salt]<span class="comment"># salt-ssh -i '*' state.sls minions_init.install</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.135</span>:</span><br><span class="line">----------</span><br><span class="line">          ID: minion_install</span><br><span class="line">    Function: pkg.installed</span><br><span class="line">      Result: <span class="keyword">True</span></span><br><span class="line">     Comment: unless execution succeeded</span><br><span class="line">     Started: <span class="number">11</span>:<span class="number">31</span>:<span class="number">21.058348</span></span><br><span class="line">    Duration: <span class="number">3028.149</span> ms</span><br><span class="line">     Changes:   </span><br><span class="line">----------</span><br><span class="line">          ID: minion_conf</span><br><span class="line">    Function: file.managed</span><br><span class="line">        Name: /etc/salt/minion</span><br><span class="line">      Result: <span class="keyword">True</span></span><br><span class="line">     Comment: File /etc/salt/minion updated</span><br><span class="line">     Started: <span class="number">11</span>:<span class="number">31</span>:<span class="number">24.088089</span></span><br><span class="line">    Duration: <span class="number">372.671</span> ms</span><br><span class="line">     Changes:   </span><br><span class="line">              ----------</span><br><span class="line">              diff:</span><br><span class="line">                  ---  </span><br><span class="line">                  +++  </span><br><span class="line"><span class="decorator">                  @@ -642,3 +642,5 @@</span></span><br><span class="line">                   <span class="comment">############################################</span></span><br><span class="line">                   <span class="comment"># Which returner(s) will be used for minion's result:</span></span><br><span class="line">                   <span class="comment">#return: mysql</span></span><br><span class="line">                  +master: <span class="number">192.168</span><span class="number">.1</span><span class="number">.248</span></span><br><span class="line">                  +<span class="comment">#id: &#123;&#123; minion_id &#125;&#125;</span></span><br><span class="line">----------</span><br><span class="line">          ID: minion_service</span><br><span class="line">    Function: service.running</span><br><span class="line">        Name: salt-minion</span><br><span class="line">      Result: <span class="keyword">True</span></span><br><span class="line">     Comment: Service salt-minion <span class="keyword">is</span> already enabled, <span class="keyword">and</span> <span class="keyword">is</span> running</span><br><span class="line">     Started: <span class="number">11</span>:<span class="number">31</span>:<span class="number">24.462094</span></span><br><span class="line">    Duration: <span class="number">2698.344</span> ms</span><br><span class="line">     Changes:   </span><br><span class="line">              ----------</span><br><span class="line">              salt-minion:</span><br><span class="line">                  <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">Summary</span><br><span class="line">------------</span><br><span class="line">Succeeded: <span class="number">3</span> (changed=<span class="number">2</span>)</span><br><span class="line">Failed:    <span class="number">0</span></span><br><span class="line">------------</span><br><span class="line">Total states run:     <span class="number">3</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>[root@localhost ~]# salt –versions-report<br>           Salt: 2015.5.10<br>         Python: 2.6.6 (r266:84292, Aug 18 2016, 15:13:37)<br>         Jinja2: 2.2.1<br>       M2Crypto: 0.20.2<br> msgpack-python: 0.4.6<br>   msgpack-pure: Not Installed<br>       pycrypto: 2.0.1<br>        libnacl: Not Installed<br>         PyYAML: 3.10<br>          ioflo: Not Installed<br>          PyZMQ: 14.3.1<br>           RAET: Not Installed<br>            ZMQ: 3.2.5<br>           Mako: 0.3.4<br>        Tornado: Not Installed<br>        timelib: Not Installed<br>       dateutil: Not Installed</p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/03/02/salt-ssh/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-03-02 </div>
+			<div class="article-title"><a href="/2017/03/02/编写自己的模块代码/" >编写salt的模块代码</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p><strong>编写自己的模块代码</strong><br>默认路径为/srv/salt/_modules，但是更改了环境位置，现在路径是在/etc/salt/states，新增一个_modules目录<br>  <img src="/img/201703/salt-2.png" style="width: 550x;"></p>
+<blockquote>
+<p>saltutil.sync_all或者saltutil.sync_modules同步：</p>
+</blockquote>
+<p>  <img src="/img/201703/salt-3.png" style="width: 550x;"></p>
+<blockquote>
+<p>执行所写hello3模块：</p>
+</blockquote>
+<p>  <img src="/img/201703/salt-4.png" style="width: 550x;"></p>
+<blockquote>
+<p>查看系统salt自带useradd模块：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat  /usr/lib/python2<span class="number">.6</span>/site-packages/salt/modules/useradd.py</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p><strong>编写一个完整的模块</strong><br>作为系统管理员我们可能经常需要查出当前系统最占用内存的程序以及当前系统中最占用<br>CPU的程序，当然通过salt的远程执行模块cmd.run用一行命令即可完成任务，但是作为一个<br>会被反复使用的功能，我们把它写成一个模块会更便捷，下面动手写一个统计系统负载的模块<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">cd /srv/salt/_modules</span><br><span class="line">[root@localhost _modules]<span class="comment"># cat test1.py </span></span><br><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">date</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> time.time()</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">()</span>:</span></span><br><span class="line">    cmd=[<span class="string">'df'</span>, <span class="string">'-h'</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> __salt__[<span class="string">'cmd.run'</span>](cmd,python_shell=<span class="keyword">False</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_osfinger</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> __grains__[<span class="string">'osfinger'</span>]</span><br></pre></td></tr></table></figure></p>
+<p>salt ‘*’ saltutil.sync_all  #同步</p>
+<p>实战使用：salt ‘*’  test1.foo<br>  <img src="/img/201703/salt-5.png" style="width: 550x;"><br>  <img src="/img/201703/salt-6.png" style="width: 550x;">  </p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/03/02/编写自己的模块代码/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-03-02 </div>
+			<div class="article-title"><a href="/2017/03/02/通过salt远程执行管理minion/" >通过salt远程执行管理minion</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p><strong>通过salt远程执行管理minion</strong></p>
+<blockquote>
+<p>远程命令执行结构</p>
+</blockquote>
+<p>[root@localhost ~]# salt –help<br>Usage: salt [options] ‘<target>‘ <function> [arguments]<br>…省略<br> <img src="/img/201703/salt-1.png" style="width: 550x;"></function></target></p>
+<p>命令行选项<br>–out：控制salt执行后输出格式：<br>如下以json格式输出执行结果：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># salt --out=json "192.168.1.135" file.stats /etc/yum.conf </span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"192.168.1.135"</span>: &#123;</span><br><span class="line">        <span class="string">"size"</span>: <span class="number">969</span>, </span><br><span class="line">        <span class="string">"group"</span>: <span class="string">"root"</span>, </span><br><span class="line">        <span class="string">"ctime"</span>: <span class="number">1452756899.5019996</span>, </span><br><span class="line">        <span class="string">"type"</span>: <span class="string">"file"</span>, </span><br><span class="line">        <span class="string">"mode"</span>: <span class="string">"0644"</span>, </span><br><span class="line">        <span class="string">"gid"</span>: <span class="number">0</span>, </span><br><span class="line">        <span class="string">"target"</span>: <span class="string">"/etc/yum.conf"</span>, </span><br><span class="line">        <span class="string">"user"</span>: <span class="string">"root"</span>, </span><br><span class="line">        <span class="string">"mtime"</span>: <span class="number">1437733679.0</span>, </span><br><span class="line">        <span class="string">"atime"</span>: <span class="number">1473108087.4774382</span>, </span><br><span class="line">        <span class="string">"inode"</span>: <span class="number">1835529</span>, </span><br><span class="line">        <span class="string">"uid"</span>: <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>目标主机</strong></p>
+<blockquote>
+<blockquote>
+<p>全局匹配：</p>
+</blockquote>
+</blockquote>
+<pre><code>*:代表任意字符串，也可以是空字符串
+?:代表一个字符串，但不能为空
+<span class="attr_selector">[]</span>：字符集合，例如<span class="attr_selector">[a~z]</span>代表任何一个小写字母，<span class="attr_selector">[0-9]</span>代表数字
+</code></pre><blockquote>
+<blockquote>
+<p>正则匹配:</p>
+</blockquote>
+</blockquote>
+<pre><code>Targets也可以使用正则表达式，但是需要配合-<span class="keyword">E</span>使用
+</code></pre><p>salt -E ‘virtmach[0-9]’ test.ping</p>
+<blockquote>
+<blockquote>
+<p>列表匹配:</p>
+</blockquote>
+</blockquote>
+<p>salt -L ‘foo,bar,baz,quo’ test.ping</p>
+<blockquote>
+<blockquote>
+<p>混合匹配：</p>
+</blockquote>
+</blockquote>
+<p>salt -C ‘G@os:Ubuntu and webser<em> or E@database.</em>‘ test.ping</p>
+<blockquote>
+<blockquote>
+<p>Grain和Pillar匹配：</p>
+</blockquote>
+<p>Targets可以使用Grains系统来通过minion的系统信息进行过滤:<br>salt -G ‘os:Ubuntu’ test.ping</p>
+</blockquote>
+<p>参考地址：<a href="http://docs.saltstack.cn/topics/tutorials/modules.html" target="_blank" rel="external">http://docs.saltstack.cn/topics/tutorials/modules.html</a><br><strong>远程执行模块和函数</strong><br>看模块中的函数sys.list_functions<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># salt "192.168.1.135" sys.list_functions user</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.135</span>:</span><br><span class="line">    - user.add</span><br><span class="line">    - user.chfullname</span><br><span class="line">    - user.chgid</span><br><span class="line">    - user.chgroups</span><br><span class="line">    - user.chhome</span><br><span class="line">    - user.chhomephone</span><br><span class="line">    - user.chloginclass</span><br><span class="line">    - user.chroomnumber</span><br><span class="line">    - user.chshell</span><br><span class="line">    - user.chuid</span><br><span class="line">    - user.chworkphone</span><br><span class="line">    - user.delete</span><br><span class="line">    - user.get_loginclass</span><br><span class="line">    - user.getent</span><br><span class="line">    - user.info</span><br><span class="line">    - user.list_groups</span><br><span class="line">    - user.list_users</span><br><span class="line">- user.rename</span><br></pre></td></tr></table></figure></p>
+<p>远程执行命令模块—cmd模块<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># salt "192.168.1.135" sys.list_functions cmd</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.135</span>:</span><br><span class="line">    - cmd.exec_code</span><br><span class="line">    - cmd.exec_code_all</span><br><span class="line">    - cmd.has_exec</span><br><span class="line">    - cmd.retcode</span><br><span class="line">    - cmd.run</span><br><span class="line">    - cmd.run_all</span><br><span class="line">    - cmd.run_chroot</span><br><span class="line">    - cmd.run_stderr</span><br><span class="line">    - cmd.run_stdout</span><br><span class="line">    - cmd.script</span><br><span class="line">    - cmd.script_retcode</span><br><span class="line">    - cmd.shell</span><br><span class="line">    - cmd.shells</span><br><span class="line">    - cmd.tty</span><br><span class="line">    - cmd.which</span><br><span class="line">    - cmd.which_bin</span><br></pre></td></tr></table></figure></p>
+<p>如多台主机执行free –m命令：</p>
+<p>Cmd_run_all显示更加详细信息：</p>
+<p><strong>安装包管理pkg模块：</strong><br>查看模块函数：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># salt "192.168.1.135" sys.list_functions pkg</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.135</span>:</span><br><span class="line">    - pkg.available_version</span><br><span class="line">    - pkg.check_db</span><br><span class="line">    - pkg.clean_metadata</span><br><span class="line">    - pkg.del_repo</span><br><span class="line">    - pkg.diff</span><br><span class="line">    - pkg.download</span><br><span class="line">    - pkg.expand_repo_def</span><br><span class="line">    - pkg.file_dict</span><br><span class="line">    - pkg.file_list</span><br><span class="line">    - pkg.get_locked_packages</span><br><span class="line">    - pkg.get_repo</span><br><span class="line">    - pkg.group_diff</span><br><span class="line">    - pkg.group_info</span><br><span class="line">    - pkg.group_install</span><br><span class="line">    - pkg.group_list</span><br><span class="line">    - pkg.hold</span><br><span class="line">    - pkg.install</span><br><span class="line">    - pkg.latest_version</span><br><span class="line">    - pkg.list_holds</span><br><span class="line">    - pkg.list_pkgs</span><br><span class="line">    - pkg.list_repo_pkgs</span><br><span class="line">    - pkg.list_repos</span><br><span class="line">    - pkg.list_upgrades</span><br><span class="line">    - pkg.mod_repo</span><br><span class="line">    - pkg.modified</span><br><span class="line">    - pkg.normalize_name</span><br><span class="line">    - pkg.owner</span><br><span class="line">    - pkg.purge</span><br><span class="line">    - pkg.refresh_db</span><br><span class="line">    - pkg.remove</span><br><span class="line">    - pkg.unhold</span><br><span class="line">    - pkg.upgrade</span><br><span class="line">    - pkg.upgrade_available</span><br><span class="line">    - pkg.verify</span><br><span class="line">    - pkg.version</span><br><span class="line">    - pkg.version_cmp</span><br></pre></td></tr></table></figure></p>
+<p>pkg.install安装软件：</p>
+<p>pkg.version查看已安装软件的版本信息：</p>
+<p>pkg.remove卸载软件：</p>
+<p><strong>Service管理服务模块</strong><br>查看service模块函数<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# salt "192.168.1.135" sys.list_functions service</span><br><span class="line">192.168.1.135:</span><br><span class="line">    -<span class="ruby"> service.available</span><br><span class="line"></span>    -<span class="ruby"> service.disable</span><br><span class="line"></span>    -<span class="ruby"> service.disabled</span><br><span class="line"></span>    -<span class="ruby"> service.enable</span><br><span class="line"></span>    -<span class="ruby"> service.enabled</span><br><span class="line"></span>    -<span class="ruby"> service.get_all</span><br><span class="line"></span>    -<span class="ruby"> service.get_disabled</span><br><span class="line"></span>    -<span class="ruby"> service.get_enabled</span><br><span class="line"></span>    -<span class="ruby"> service.missing</span><br><span class="line"></span>    -<span class="ruby"> service.reload</span><br><span class="line"></span>    -<span class="ruby"> service.restart</span><br><span class="line"></span>    -<span class="ruby"> service.start</span><br><span class="line"></span>    -<span class="ruby"> service.status</span><br><span class="line"></span>    -<span class="ruby"> service.stop</span></span><br></pre></td></tr></table></figure></p>
+<p>service.status查看软件运行状态：</p>
+<p>False代表关闭<br>True代表运行<br>Service.start启动软件：</p>
+<p>Service.stop关闭软件：</p>
+<p><strong>File文件管理模块</strong><br>查看file模块函数<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># salt  "192.168.1.135" sys.list_functions file</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.135</span>:</span><br><span class="line">    - file.access</span><br><span class="line">    - file.append</span><br><span class="line">    - file.basename</span><br><span class="line">    - file.blockreplace</span><br><span class="line">    - file.check_file_meta</span><br><span class="line">    - file.check_hash</span><br><span class="line">    - file.check_managed</span><br><span class="line">    - file.check_managed_changes</span><br><span class="line">    - file.check_perms</span><br><span class="line">    - file.chgrp</span><br><span class="line">    - file.chown</span><br><span class="line">    - file.comment</span><br><span class="line">    - file.comment_line</span><br><span class="line">    - file.contains</span><br><span class="line">    - file.contains_glob</span><br><span class="line">    - file.contains_regex</span><br><span class="line">    - file.contains_regex_multiline</span><br><span class="line">    - file.copy</span><br><span class="line">    - file.delete_backup</span><br><span class="line">    - file.directory_exists</span><br><span class="line">    - file.dirname</span><br><span class="line">    - file.diskusage</span><br><span class="line">    - file.extract_hash</span><br><span class="line">    - file.file_exists</span><br><span class="line">    - file.find</span><br><span class="line">    - file.get_devmm</span><br><span class="line">    - file.get_diff</span><br><span class="line">    - file.get_gid</span><br><span class="line">    - file.get_group</span><br><span class="line">    - file.get_hash</span><br><span class="line">    - file.get_managed</span><br><span class="line">    - file.get_mode</span><br><span class="line">    - file.get_selinux_context</span><br><span class="line">    - file.get_sum</span><br><span class="line">    - file.get_uid</span><br><span class="line">    - file.get_user</span><br><span class="line">    - file.gid_to_group</span><br><span class="line">    - file.grep</span><br><span class="line">    - file.group_to_gid</span><br><span class="line">    - file.is_blkdev</span><br><span class="line">    - file.is_chrdev</span><br><span class="line">    - file.is_fifo</span><br><span class="line">    - file.is_link</span><br><span class="line">    - file.join</span><br><span class="line">    - file.lchown</span><br><span class="line">    - file.link</span><br><span class="line">    - file.list_backup</span><br><span class="line">    - file.list_backups</span><br><span class="line">    - file.list_backups_dir</span><br><span class="line">    - file.lstat</span><br><span class="line">    - file.makedirs</span><br><span class="line">    - file.makedirs_perms</span><br><span class="line">    - file.manage_file</span><br><span class="line">    - file.mkdir</span><br><span class="line">    - file.mknod</span><br><span class="line">    - file.mknod_blkdev</span><br><span class="line">    - file.mknod_chrdev</span><br><span class="line">    - file.mknod_fifo</span><br><span class="line">    - file.move</span><br><span class="line">    - file.normpath</span><br><span class="line">    - file.open_files</span><br><span class="line">    - file.pardir</span><br><span class="line">    - file.patch</span><br><span class="line">    - file.path_exists_glob</span><br><span class="line">    - file.prepend</span><br><span class="line">    - file.psed</span><br><span class="line">    - file.readdir</span><br><span class="line">    - file.readlink</span><br><span class="line">    - file.remove</span><br><span class="line">    - file.remove_backup</span><br><span class="line">    - file.rename</span><br><span class="line">    - file.replace</span><br><span class="line">    - file.restore_backup</span><br><span class="line">    - file.restorecon</span><br><span class="line">    - file.rmdir</span><br><span class="line">    - file.search</span><br><span class="line">    - file.sed</span><br><span class="line">    - file.sed_contains</span><br><span class="line">    - file.seek_read</span><br><span class="line">    - file.seek_write</span><br><span class="line">    - file.set_mode</span><br><span class="line">    - file.set_selinux_context</span><br><span class="line">    - file.source_list</span><br><span class="line">    - file.stats</span><br><span class="line">    - file.statvfs</span><br><span class="line">    - file.symlink</span><br><span class="line">    - file.touch</span><br><span class="line">    - file.truncate</span><br><span class="line">    - file.uid_to_user</span><br><span class="line">    - file.uncomment</span><br><span class="line">    - file.user_to_uid</span><br><span class="line">    - file.write</span><br></pre></td></tr></table></figure></p>
+<p>file.stats查看文件信息：</p>
+<p>file.chown 改变文件所属用户和用户组：<br>语法：file.chown Path User Group</p>
+<p>file.directory_exists判断客户端文件夹是否存在</p>
+<p>file.is_link检测文件是否为链接</p>
+<p>File.get_diff 返回两个文件的差异，可以是本地文件，也可以是sallt://文件</p>
+<p>file.get_hash获取文件的hash值</p>
+<p>file.touch创建文件</p>
+<p>File.addend追加文件</p>
+<p>File.makedirs创建父文件夹</p>
+<p>File.mkidr创建文件夹</p>
+<p><strong>用户管理模块</strong><br>查看模块的所有函数<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># salt '*' sys.list_functions user</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.17</span><span class="number">.130</span>:</span><br><span class="line">    - user.add</span><br><span class="line">    - user.chfullname</span><br><span class="line">    - user.chgid</span><br><span class="line">    - user.chgroups</span><br><span class="line">    - user.chhome</span><br><span class="line">    - user.chhomephone</span><br><span class="line">    - user.chloginclass</span><br><span class="line">    - user.chroomnumber</span><br><span class="line">    - user.chshell</span><br><span class="line">    - user.chuid</span><br><span class="line">    - user.chworkphone</span><br><span class="line">    - user.delete</span><br><span class="line">    - user.get_loginclass</span><br><span class="line">    - user.getent</span><br><span class="line">    - user.info</span><br><span class="line">    - user.list_groups</span><br><span class="line">    - user.list_users</span><br><span class="line">    - user.rename</span><br></pre></td></tr></table></figure></p>
+<p>user.info查看用户信息：</p>
+<p>user.list_users列出所有用户：</p>
+<p>salt.modules.useradd.add(name, uid=None, gid=None, groups=None, home=None, shell=None, unique=True, system=False, fullname=’’, roomnumber=’’, workphone=’’, homephone=’’, createhome=True, loginclass=None)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">例：salt <span class="string">'*'</span> user.add name &lt;uid&gt; &lt;gid&gt; &lt;groups&gt; &lt;home&gt; &lt;shell&gt;</span><br></pre></td></tr></table></figure></p>
+<p>user.delete删除用户</p>
+<p>User.chhome更改用户家目录<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># salt '*' sys.doc user.chhome</span></span><br><span class="line"><span class="string">'user.chhome:'</span></span><br><span class="line">    Change the home directory of the user, <span class="keyword">pass</span> <span class="keyword">True</span> <span class="keyword">for</span> persist to move files</span><br><span class="line">    to the new home directory <span class="keyword">if</span> the old home directory exist.</span><br><span class="line">    CLI Example:</span><br><span class="line">        salt <span class="string">'*'</span> user.chhome foo /home/users/foo <span class="keyword">True</span></span><br></pre></td></tr></table></figure></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/03/02/通过salt远程执行管理minion/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-03-01 </div>
+			<div class="article-title"><a href="/2017/03/01/获取nginx日志访问前10名（附python做法/" >获取nginx日志访问前10名（附python做法)</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p><strong>获取nginx日志访问前10名（附python做法）</strong></p>
+<p>获取日志访问量基本作为合格的运维必须会的，这里我们讨论下shell和python实现方式</p>
+<blockquote>
+<p>shell实现方式</p>
+</blockquote>
+<p>shell实现较为简单，只需要一条命令即可，运用awk、sort、uniq即可<br>cat xxxx.log |awk ‘{print $1}’ | sort | uniq -c | sort -nr |head -10</p>
+<blockquote>
+<p>python实现<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding=utf8</span></span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line">ip_list=[ ]</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'xxx.log'</span>,<span class="string">'r'</span>) <span class="keyword">as</span> f_log:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> f_log.readlines():</span><br><span class="line">        ip_list.append(i.split(<span class="string">" "</span>)[<span class="number">0</span>])</span><br><span class="line">ip_list = sorted(dict(Counter(ip_list)).items(), key=<span class="keyword">lambda</span> x: x[<span class="number">1</span>], reverse=<span class="keyword">True</span>)[<span class="number">0</span>:<span class="number">10</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> ip_list:</span><br><span class="line">    <span class="keyword">print</span> i[<span class="number">0</span>],<span class="string">'访问次数为：%s'</span> %i[<span class="number">1</span>]</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/03/01/获取nginx日志访问前10名（附python做法/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-03-01 </div>
+			<div class="article-title"><a href="/2017/03/01/saltstack命令和端口介绍/" >saltstack命令和端口介绍</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p><strong>saltstack命令和端口介绍</strong></p>
+<blockquote>
+<p>运维自动化应该是这几年比较热的名字之一，自动化工具用的比较多的有puppt，ansible，saltstack。当然很多人会选择ansible时候会说salt不支持ssh，需要客户端，其实salt也有salt-ssh模块。在此推荐salt书给需要学习的同学学习。《saltstack运维实战》后继文章大部分会以这书内容+赵班长视频+个人实战组合起来给大家展示。</p>
+</blockquote>
+<p>|</p>
+<blockquote>
+<p>端口：</p>
+</blockquote>
+<p>Salt master启动后默认会监听两个端口：<br>4505（publish_port）—Salt Master pub接口 提供远程执行命令发送功能<br>4506（ret_port）—Salt Master Ret接口 支持认证、文件服务、结果收集等功能</p>
+<blockquote>
+<p>Centos6.x开启防火墙：</p>
+</blockquote>
+<p>-A INPUT -m state –state new -m tcp -p tcp –dport 4505 -j ACCEPT<br>-A INPUT -m state –state new -m tcp -p tcp –dport 4506 -j ACCEPT</p>
+<blockquote>
+<p>命令：</p>
+</blockquote>
+<p>对于很多minion情况下，可以在/etc/salt/master增加：<br>auto_accept：True<br>[root@localhost ~]# salt “*” test.ping  检查minion是否存活<br>192.168.1.135:<br>True<br>[root@localhost ~]# salt –help<br>Usage: salt [options] ‘<target>‘ <function> [arguments]</function></target></p>
+<p>…..省略….<br>    -G, –grain         Instead of using shell globs to evaluate the target<br>                        use a grain value to identify targets, the syntax for<br>                        the target is the grain key followed by a<br>                        globexpression: “os:Arch*”<br>    -N, –nodegroup     Instead of using shell globs to evaluate the target<br>                        use one of the predefined nodegroups to identify a<br>                        list of targets.<br>    –out=OUTPUT, –output=OUTPUT<br>                        Print the output from the ‘salt’ command using the<br>                        specified outputter. The builtins are ‘key’, ‘yaml’,<br>                        ‘overstatestage’, ‘txt’, ‘newline_values_only’,<br>                        ‘no_return’, ‘raw’, ‘virt_query’, ‘compact’, ‘json’,<br>                        ‘highstate’, ‘nested’, ‘quiet’, ‘pprint’.</p>
+<blockquote>
+<p>sys.list_functions查看模块包含哪些函数</p>
+</blockquote>
+<p>[root@localhost ~]# salt “192.168.1.135” sys.list_functions user<br>192.168.1.135:</p>
+<pre><code>-<span class="ruby"> user.add
+</span>-<span class="ruby"> user.chfullname
+</span>-<span class="ruby"> user.chgid
+</span>-<span class="ruby"> user.chgroups
+</span>-<span class="ruby"> user.chhome
+</span>-<span class="ruby"> user.chhomephone
+</span>-<span class="ruby"> user.chloginclass
+</span>-<span class="ruby"> user.chroomnumber
+</span>-<span class="ruby"> user.chshell
+</span>-<span class="ruby"> user.chuid
+</span>-<span class="ruby"> user.chworkphone
+</span>-<span class="ruby"> user.delete
+</span>-<span class="ruby"> user.get_loginclass
+</span>-<span class="ruby"> user.getent
+</span>-<span class="ruby"> user.info
+</span>-<span class="ruby"> user.list_groups
+</span>-<span class="ruby"> user.list_users
+</span>-<span class="ruby"> user.rename</span>
+</code></pre>
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/03/01/saltstack命令和端口介绍/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-03-01 </div>
+			<div class="article-title"><a href="/2017/03/01/Saltstack介绍及安装/" >Saltstack介绍及安装</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p><strong>Saltstack介绍及安装</strong></p>
+<blockquote>
+<p>Salt 是：</p>
+</blockquote>
+<p>•    一个配置管理系统，能够维护预定义状态的远程节点(比如，确保指定的报被安装，指定的服务在运行)<br>•    一个分布式远程执行系统，用来在远程节点（可以是单个节点，也可以是任意规则挑选出来的节点）上执行命令和查询数据<br>开发其的目的是为远程执行提供最好的解决方案，并使远程执行变得更好，更快，更简单。<br>并行执行</p>
+<blockquote>
+<p>Salt的核心功能</p>
+</blockquote>
+<p>•    使命令发送到远程系统是并行的而不是串行的<br>•    使用安全加密的协议<br>•    使用最小最快的网络载荷<br>•    提供简单的编程接口<br>Salt同样引入了更加细致化的领域控制系统来远程执行，使得系统成为目标不止可以通过主机名，还可以通过系统属性。<br>Python客户端接口<br>为了允许简单的扩展，Salt执行程序可以写为纯Python模块。数据从Salt执行过程中收集到可以发送回master服务端，或者发送到任何 任意程序。Salt可以从一个简单的Python API调用，或者从命令行被调用，所以Salt可以用来执行一次性命令，也可以作为一个更大的应用程序的一个组成部分。<br><strong>saltstack安装</strong><br>安装准备<br>rpm -Uvh <a href="http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm" target="_blank" rel="external">http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</a><br>Salt的master和minion包是分开的。机器只需要安装相应的包即可运行。通常情况下，会有一个master和多个minions。<br>在salt-master上，运行:<br>yum install salt-master<br>在salt-minion上，运行:<br>yum install salt-minion</p>
+<blockquote>
+<p>实战安装</p>
+</blockquote>
+<p>Master:192.168.108.129<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@server1 ~]<span class="comment"># rpm -Uvh http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</span></span><br><span class="line">Retrieving http://ftp.linux.ncsu.edu/pub/epel/<span class="number">6</span>/x86_64/epel-release-<span class="number">6</span>-<span class="number">8.</span>noarch.rpm</span><br><span class="line">warning: /var/tmp/rpm-tmp.iZuZME: Header V3 RSA/SHA256 Signature, key ID <span class="number">0608</span>b895: NOKEY</span><br><span class="line">Preparing… <span class="comment">########################################### [100%]</span></span><br><span class="line">package epel-release-<span class="number">6</span>-<span class="number">8.</span>noarch <span class="keyword">is</span> already installed</span><br><span class="line">[root@server1 ~]<span class="comment"># yum install -y salt-master</span></span><br><span class="line">已加载插件：fastestmirror, refresh-packagekit, security</span><br><span class="line">设置安装进程</span><br><span class="line">Loading mirror speeds <span class="keyword">from</span> cached hostfile</span><br><span class="line">epel/metalink | <span class="number">5.4</span> kB <span class="number">00</span>:<span class="number">00</span> </span><br><span class="line">•	base: mirrors.aliyun.com</span><br><span class="line">….省略</span><br><span class="line">Minion：<span class="number">192.168</span><span class="number">.108</span><span class="number">.141</span></span><br><span class="line">[root@server2 ~]<span class="comment"># rpm -Uvh http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</span></span><br><span class="line">[root@server2 ~]<span class="comment"># yum install -y salt-minion</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>Master</strong><br>配置master开机自动启动:<br>[root@server2 ~]# chkconfig salt-master on<br>启动Master:<br>[root@server1 ~]# service salt-master start<br>Starting salt-master daemon: [确定]<br>[root@server1 ~]# lsof -i:4505<br>COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME<br>salt-mast 2833 root 12u IPv4 22272 0t0 TCP <em>:4505 (LISTEN)<br><em>*Minion</em></em><br>配置Minion开机自动启动:<br>[root@server2 ~]# chkconfig salt-minion on<br>启动Minion:<br>[root@server2 ~]# chkconfig salt-minion on<br>Starting salt-minion daemon: [确定]<br>[root@server2 ~]# vim /etc/salt/minion —配置文件<br>[root@server2 ~]# grep -v ‘^#’ /etc/salt/minion<br>master: 192.168.108.129</p>
+<p><strong>Master</strong><br>[root@server1 ~]# salt-key<br>Accepted Keys:<br>Denied Keys:<br>Unaccepted Keys:<br>server2   #默认是主机2的系统名，可以修改/etc/salt/minion的id字段<br>Rejected Keys:<br>把server2加入监控列表<br>[root@server1 ~]# salt-key -a server2<br>The following keys are going to be accepted:<br>Unaccepted Keys:<br>server2<br>Proceed? [n/Y] y<br>Key for minion server2 accepted.<br>[root@server1 ~]# salt-key<br>Accepted Keys:<br>server2<br>Denied Keys:<br>Unaccepted Keys:<br>Rejected Keys:</p>
+<blockquote>
+<p>测试</p>
+</blockquote>
+<p>[root@server1 ~]# salt ‘*’ test.ping&lt;==代表所有主机<br>server2:<br>True</p>
+<blockquote>
+<p>* 是指向所有minions的目标。<br>test.ping 告诉minon运行 test.ping 函数。    </p>
+</blockquote>
+<p>[root@server1 ~]# salt ‘*’ cmd.run ‘df -h’&lt;==远程执行命令<br>server2:<br>Filesystem Size Used Avail Use% Mounted on<br>/dev/mapper/VolGroup-lv_root 18G 8.2G 8.4G 50% /<br>tmpfs 491M 92K 491M 1% /dev/shm<br>/dev/sda1 485M 35M 426M 8% /boot<br>/dev/sr0 4.2G 4.2G 0 100% /media/CentOS_6.5_Final</p>
+<blockquote>
+<p>错误排查：</p>
+</blockquote>
+<p>通过查看minion：tail -f /var/log/salt/minion<br>2016-08-28 23:29:25,272 [salt.config      ][ERROR   ] Error parsing configuration file: /etc/salt/minion - conf should be a document, not <type 'str'="">.<br>修改minion配置文件<br>master: 192.168.1.248<br>id: 192.168.1.230<br>master：后面跟空格，然后是mster的ip。id：后面有个空格，千万别忘了，否则启动会报错。</type></p>
+<p>最新centos7系列安装可以参考官网：<br><a href="https://docs.saltstack.com/en/latest/topics/installation/rhel.html" target="_blank" rel="external">https://docs.saltstack.com/en/latest/topics/installation/rhel.html</a></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/03/01/Saltstack介绍及安装/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-02-28 </div>
+			<div class="article-title"><a href="/2017/02/28/简谈ELK日志系统附搭建过程/" >简谈ELK日志系统附搭建过程</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p><strong>简谈ELK日志系统附搭建过程</strong></p>
+<blockquote>
+<p>生产上，无论运维还是开发都离不开日志，日志是我们遇到问题首先考虑查看的必要因素之。由于存在权限管理原因，大部分开发是无法直接接触服务器。只有运维人员才能管控操作服务器。这样一来，要是运维人员有事请假或者生产坏境是服务器众多时候，查看日志也是一件麻烦的事情。当然，开源社区为此产生了许多优秀应用，以下我们谈一谈elk日志系统。</p>
+</blockquote>
+<p>ELK是Elasticsearch、Logstash、Kibana的简称，这三者是核心套件，但并非全部。官网地址为：<a href="https://www.elastic.co" target="_blank" rel="external">https://www.elastic.co</a><br>•    Elasticsearch是实时全文搜索和分析引擎，提供搜集、分析、存储数据三大功能；是一套开放REST和JAVA API等结构提供高效搜索功能，可扩展的分布式系统。它构建于Apache Lucene搜索引擎库之上。<br>•    Logstash是一个用来搜集、分析、过滤日志的工具。它支持几乎任何类型的日志，包括系统日志、错误日志和自定义应用程序日志。它可以从许多来源接收日志，这些来源包括 syslog、消息传递（例如 RabbitMQ）和JMX，它能够以多种方式输出数据，包括电子邮件、websockets和Elasticsearch。<br>•    Kibana是一个基于Web的图形界面，用于搜索、分析和可视化存储在 Elasticsearch指标中的日志数据。它利用Elasticsearch的REST接口来检索数据，不仅允许用户创建他们自己的数据的定制仪表板视图，还允许他们以特殊的方式查询和过滤数据。</p>
+<blockquote>
+<p>简单来说需要收集日志的服务器上安装Logstash客户端，通过条件过滤等操作把日志发送到Elasticsearch服务器上，Elasticsearch服务器通过kibana图形界面进行查看、分析等一系列操作。</p>
+</blockquote>
+<p><strong>安装elasticsearch</strong><br>1、安装JDK<br>Elasticsearch requires at least Java 8. Specifically as of this writing, it is recommended that you use the Oracle JDK version 1.8.0_73.<br>安装JDK可以参考<a href="http://pythonyw.cn:90/article/?id=27" target="_blank" rel="external">http://pythonyw.cn:90/article/?id=27</a><br>或者<a href="http://linuxops.xyz/2017/02/27/JENKINS%E5%AE%89%E8%A3%85/">http://linuxops.xyz/2017/02/27/JENKINS%E5%AE%89%E8%A3%85/</a></p>
+<p>附：在 Windows 系统上安装 JDK 和设置 JAVA_HOME 的步骤<br>开始之前<br>仅在以下情况下执行此任务：<br>•    您计划安装 Java CAPS 的计算机上未安装 JDK<br>•    或者您计划安装 Java CAPS 的计算机上未设置 JAVA_HOME</p>
+<ol>
+<li>要安装 JDK，请转至 URL <a href="http://java.sun.com/javase/downloads/index.jsp。" target="_blank" rel="external">http://java.sun.com/javase/downloads/index.jsp。</a></li>
+<li>找到相应的 JDK 并单击 “Download”。<br>JDK 将安装到您的计算机上，例如 C:\Program Files\Java\jdk1.6.0_02 下。如果需要，您可以将 JDK 移动到其他位置。一旦安装了 JDK，您即可设置 JAVA_HOME。</li>
+<li>要设置 JDK，请右键单击“我的电脑”，然后选择“属性”。</li>
+<li><p>在“高级”选项卡上，选择“环境变量”，然后编辑 JAVA_HOME 以指向 JDK 所在的位置（例如：C:\Program Files\Java\jdk1.6.0_02\bin）。</p>
+<p><img src="/img/201702/elk-1.png" style="width: 550x;"></p>
+</li>
+</ol>
+<p>2、安装elasticsearch<br>由于安装时候选取了elasticsearch-5.0.1.tar.gz，现在最新版本是5.2.1，也可以安装最新版本的elasticsearch</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-<span class="number">5.0</span><span class="number">.1</span>.tar.gz</span><br><span class="line">tar -xzf elasticsearch-<span class="number">5.0</span><span class="number">.1</span>.tar.gz</span><br><span class="line">mv elasticsearch-<span class="number">5.0</span><span class="number">.1</span> /usr/local/elasticsearch</span><br></pre></td></tr></table></figure>
+<p>3、编辑elasticsearch.yml<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> [root@localhost elasticsearch]<span class="comment"># grep -v '^#' config/elasticsearch.yml </span></span><br><span class="line">cluster.name: nmtx-cluster</span><br><span class="line">node.name: node-<span class="number">1</span></span><br><span class="line">path.data: /usr/local/elasticsearch/data</span><br><span class="line">path.logs: /usr/local/elasticsearch/logs</span><br><span class="line">network.host: <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br></pre></td></tr></table></figure></p>
+<p>4、启动elasticsearch<br> /usr/local/elasticsearch/bin/elasticsearch -d<br>  <img src="/img/201702/elk-2.png" style="width: 550x;"></p>
+<p> 出现以上这是出于系统安全考虑设置的条件。由于ElasticSearch可以接收用户输入的脚本并且执行，为了系统安全考虑， 建议创建一个单独的用户用来运行ElasticSearch<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost elasticsearch-<span class="number">5.0</span><span class="number">.0</span>]<span class="comment"># groupadd elk</span></span><br><span class="line">[root@localhost elasticsearch-<span class="number">5.0</span><span class="number">.0</span>]<span class="comment"># useradd elk -g elk</span></span><br></pre></td></tr></table></figure></p>
+<p>更改elasticsearch文件夹及内部文件的所属用户及组为elk: elk<br>[root@localhost tools]#  chown -R elk:elk elasticsearch-5.0.0<br>切换到elk用户再启动<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost local]<span class="comment"># su elk</span></span><br><span class="line">[elsearch@localhost local]$ ./elasticsearch-<span class="number">5.0</span><span class="number">.0</span>/bin/elasticsearch –d</span><br><span class="line">[root@localhost salt]<span class="comment"># lsof -i:9200</span></span><br><span class="line">COMMAND   PID     USER   FD   TYPE DEVICE SIZE/OFF NODE NAME</span><br><span class="line">java    <span class="number">24491</span> elsearch  <span class="number">112</span>u  IPv6 <span class="number">354543</span>      <span class="number">0</span>t0  TCP localhost:wap-wsp (LISTEN)</span><br><span class="line">java    <span class="number">24491</span> elsearch  <span class="number">113</span>u  IPv6 <span class="number">354544</span>      <span class="number">0</span>t0  TCP localhost:wap-wsp (LISTEN)</span><br></pre></td></tr></table></figure></p>
+<p>  <img src="/img/201702/elk-3.png" style="width: 550x;"></p>
+<p>当访问ip:9200无法打开时候：<br>修改配置文件 config/elasticsearch.yml<br> network.host: 0.0.0.0 </p>
+<p>问题描述：<br>最新版本5.0release了，想着装上试试，结果一上来就报了两个错，然后就退出了，如下：<br>$ ./elasticsearch<br>…<br>ERROR: bootstrap checks failed<br>max file descriptors [4096] for elasticsearch process likely too low, increase to at least [65536]<br>max virtual memory areas vm.max_map_count [65530] likely too low, increase to at least [262144]<br>[2016-11-8T04:55:45,240][INFO ][o.e.n.Node] [vJDcSkt] stopping …<br>[2016-11-8T04:55:45,249][INFO ][o.e.n.Node] [vJDcSkt] stopped<br>[2016-11-8T04:55:45,249][INFO ][o.e.n.Node] [vJDcSkt] closing …<br>[2016-11-8T04:55:45,257][INFO ][o.e.n.Node] [vJDcSkt] closed</p>
+<p><strong> 遇到问题归总</strong><br>问题1：<br>max file descriptors [4096] for elasticsearch process likely too low, increase to at least [65536]<br>解决方案：<br>修改/etc/security/limits.conf文件，添加或修改如下行：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">*        hard    nofile           <span class="number">65536</span></span><br><span class="line">*        soft    nofile           <span class="number">65536</span></span><br></pre></td></tr></table></figure></p>
+<p>问题2：<br>max virtual memory areas vm.max_map_count [65530] likely too low, increase to at least [262144]<br>解决方案：<br>使用下面的方法临时使其生效<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ sudo sysctl -w vm.max_map_count=<span class="number">262144</span></span><br><span class="line">或者修改 /etc/sysctl.conf 文件，添加 “vm.max_map_count”设置</span><br><span class="line">设置后，可以使用</span><br><span class="line">$ sysctl -p</span><br></pre></td></tr></table></figure></p>
+<p>问题3：<br>要是启动时候出现killed，可能是由于内存不足，可以启动时候设置jvm内存容量（默认配置为2G）<br>解决方案：<br>vim config/jvm.options<br>-Xms512m<br>-Xmx512m</p>
+<p><strong>Logstash安装</strong><br> 1、安装JDK<br>Elasticsearch requires at least Java 8. Specifically as of this writing, it is recommended that you use the Oracle JDK version 1.8.0_73.<br>安装JDK可以参考<a href="http://pythonyw.cn:90/article/?id=27" target="_blank" rel="external">http://pythonyw.cn:90/article/?id=27</a><br>或者<a href="http://linuxops.xyz/2017/02/27/JENKINS%E5%AE%89%E8%A3%85/">http://linuxops.xyz/2017/02/27/JENKINS%E5%AE%89%E8%A3%85/</a></p>
+<p>2、Logstash安装</p>
+<p>Debian 平台<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget -O - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | apt-key add -</span><br><span class="line">cat &gt;&gt; /etc/apt/sources.list &lt;&lt;EOF</span><br><span class="line">deb http://packages.elasticsearch.org/logstash/<span class="number">5.0</span>/debian stable main</span><br><span class="line">EOF</span><br><span class="line">apt-get update</span><br><span class="line">apt-get install logstash</span><br></pre></td></tr></table></figure></p>
+<p>Redhat 平台<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">rpm --<span class="keyword">import</span> http://packages.elasticsearch.org/GPG-KEY-elasticsearch</span><br><span class="line">cat &gt; /etc/yum.repos.d/logstash.repo &lt;&lt;EOF</span><br><span class="line">[logstash-<span class="number">5.0</span>]</span><br><span class="line">name=logstash repository <span class="keyword">for</span> <span class="number">5.0</span>.x packages</span><br><span class="line">baseurl=http://packages.elasticsearch.org/logstash/<span class="number">5.0</span>/centos</span><br><span class="line">gpgcheck=<span class="number">1</span></span><br><span class="line">gpgkey=http://packages.elasticsearch.org/GPG-KEY-elasticsearch</span><br><span class="line">enabled=<span class="number">1</span></span><br><span class="line">EOF</span><br><span class="line">yum clean all</span><br><span class="line">yum install logstash</span><br></pre></td></tr></table></figure></p>
+<p>当然可以直接下载源码包：下载地址<a href="https://www.elastic.co/downloads/logstash" target="_blank" rel="external">https://www.elastic.co/downloads/logstash</a><br>logstach:[root@localhost elasticsearch]# whereis logstash<br>logstash: /etc/logstash    /usr/share/logstash<br>以下拿nginx访问日志演示<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># cat /etc/logstash/conf.d/nginx2.conf </span></span><br><span class="line">input &#123;</span><br><span class="line">  file &#123;</span><br><span class="line">    path =&gt; [<span class="string">"/usr/local/nginx/logs/access.log"</span>]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">filter &#123;</span><br><span class="line">  grok &#123;</span><br><span class="line">    match =&gt; &#123;</span><br><span class="line">      <span class="string">"message"</span> =&gt; <span class="string">"%&#123;IPORHOST:clientip&#125; \[%&#123;HTTPDATE:time&#125;\] \"%&#123;WORD:verb&#125; %&#123;URIPATHPARAM:request&#125; HTTP/%&#123;NUMBER:httpversion&#125;\" %&#123;NUMBER:http_status_code&#125; %&#123;NUMBER:bytes&#125; \"(?&lt;http_referer&gt;\S+)\" \"(?&lt;http_user_agent&gt;\S+)\" \"(?&lt;http_x_forwarded_for&gt;\S+)\""</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;  </span><br><span class="line">&#125;</span><br><span class="line">output &#123;</span><br><span class="line">  elasticsearch &#123;</span><br><span class="line">    hosts =&gt; [<span class="string">"192.168.1.234:9200"</span>]</span><br><span class="line">    index =&gt; <span class="string">"logstash-nginx-test-%&#123;+YYYY.MM.dd&#125;"</span></span><br><span class="line">    workers =&gt; <span class="number">1</span></span><br><span class="line">    flush_size =&gt; <span class="number">1</span></span><br><span class="line">    idle_flush_time =&gt; <span class="number">1</span></span><br><span class="line">    template_overwrite =&gt; true</span><br><span class="line">  &#125;</span><br><span class="line">  stdout&#123;codec =&gt; rubydebug&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>启动/usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/nginx.conf &amp;<br>如果出现以下报错：<br>  <img src="/img/201702/elk-4.png" style="width: 550x;"><br> 则运行<br>/usr/share/logstash/bin/logstash –path.settings /etc/logstash -f /etc/logstash/conf.d/nginx.conf &amp;<br>  <img src="/img/201702/elk-5.png" style="width: 550x;"><br>启动后打开：<br><a href="http://192.168.1.234:9200/_cat/indices" target="_blank" rel="external">http://192.168.1.234:9200/_cat/indices</a><br>看到yellow open logstash-nginx-test-2016.11.18 dKZ-nJkjRv66_1PSHJW8zQ 5 1   95  0  82.2kb  82.2kb这个后面配置kibana需要用到<br>  <img src="/img/201702/elk-6.png" style="width: 550x;"></p>
+<p><strong>安装kibana</strong><br>1、下载安装kibana<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget https://artifacts.elastic.co/downloads/kibana/kibana-<span class="number">5.0</span><span class="number">.1</span>-linux-x86_64.tar.gz</span><br><span class="line">tar -xzf kibana-<span class="number">5.0</span><span class="number">.1</span>-linux-x86_64.tar.gz</span><br><span class="line">mv kibana-<span class="number">5.0</span><span class="number">.0</span>-linux-x86_64 /usr/local/kibana</span><br></pre></td></tr></table></figure></p>
+<p>2配置kibana.yml<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost kibana-<span class="number">5.0</span><span class="number">.0</span>-linux-x86_64]<span class="comment"># grep -v '^#' config/kibana.yml </span></span><br><span class="line">server.port: <span class="number">8888</span></span><br><span class="line">elasticsearch.url: <span class="string">"http://localhost:9200"</span></span><br><span class="line">kibana.index: <span class="string">".kibana"</span></span><br></pre></td></tr></table></figure></p>
+<p>3、启动kibana：<br>/usr/local/kibana/bin/kibana<br>默认启动后外网无法访问</p>
+<p>4、配置nginx<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen <span class="number">80</span>;</span><br><span class="line">    server_name localhost;</span><br><span class="line">    auth_basic <span class="string">"Restricted Access"</span>;</span><br><span class="line">    auth_basic_user_file passwords;</span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://localhost:<span class="number">8888</span>;</span><br><span class="line">        proxy_http_version <span class="number">1.1</span>;</span><br><span class="line">        proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">        proxy_set_header Connection <span class="string">'upgrade'</span>;</span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line">        proxy_cache_bypass $http_upgrade;        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>打开IP网址后新增Index Patterns 和visualize后效果（还可以新增图标等系列操作）<br>  <img src="/img/201702/elk-7.png" style="width: 550x;"><br> 附几个不错的参考网站：<br> <a href="https://www.gitbook.com/book/chenryn/elk-stack-guide-cn/details" target="_blank" rel="external">https://www.gitbook.com/book/chenryn/elk-stack-guide-cn/details</a><br> <a href="https://es.xiaoleilu.com/010_Intro/05_What_is_it.html" target="_blank" rel="external">https://es.xiaoleilu.com/010_Intro/05_What_is_it.html</a><br> <a href="https://www.elastic.co" target="_blank" rel="external">https://www.elastic.co</a></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/02/28/简谈ELK日志系统附搭建过程/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-02-27 </div>
+			<div class="article-title"><a href="/2017/02/27/jenkins构建自动发布项目/" >jenkins构建自动发布项目</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p><strong>构建自动发布项目</strong></p>
+<blockquote>
+<p>需求：日常运维中，发布代码几乎占用运维时间的三分一，提高运维效率之一就是提交发布代码效率。当开发push代码到服务器时候，自动触发jenkins执行构建任务并推送到测试web服务器进而加快开发和运维效率。本文写出测试坏境，完美运行，成产坏境发布不方便放出来，小伙伴可以参考思路和脚本自行更改即可。在此非常感谢老男孩，这几年大部分技术来源老男孩架构师和运维培训等相关视频，当然python入门也是不可避免。</p>
+</blockquote>
+<p><img src="/img/201702/jenkins-1.png" style="width: 550x;"></p>
+<blockquote>
+<p>证书免密码登录：<br>系统：CentOS Linux release 7.3.1611<br>发布服务器（也是jenkins安装机）：192.168.1.248<br>Web服务器：192.168.1.234</p>
+</blockquote>
+<p><strong>发布服务器：192.168.1.248</strong><br>发布用户为www或者nginx，这里统一为www<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">useradd www</span><br><span class="line">su www</span><br><span class="line">ssh-keygen -t rsa</span><br><span class="line">[www@localhost tmp]$ cat /home/www/.ssh/id_rsa.pub </span><br><span class="line">ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDh/b/QBVGwxzsETwkY/DzxI/iFu8bn9Yr/+gUHOlrCsVjo3kLc7iVg8s/VE5VTNNWcjhzcTDT3wCOr+P/hMjmvWSpFagW4ZMHh+EY8YyUNh3/dXSVIPMD0X4GWWW+U957SwI4LCL+E3O7mQV7H7orTZMfJWR9FeJk6Ls7h/DaTOKWe7BbrGMbHI/Q2iQCBpyY8VuJnEQe7tuV71UnK7VQGCjZY4n+Ncy4/<span class="number">8J</span>a3bAVQt9QYlZfqlUXI+B3OP1HkkY3AQXhQdrA6qq4tJL4hHLZ9kCsq4EQxmw6N9jyzV3IyP1KGGxLRQT38MzwEfJIEvvYmdF83n7fx7M0Wcsp0ruz9 www@localhost.localdomain</span><br></pre></td></tr></table></figure></p>
+<p><strong>Web服务器：192.168.1.234</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">useradd www</span><br><span class="line">su www</span><br><span class="line">ssh-keygen -t rsa</span><br><span class="line">把上面服务器公匙复制到/home/www/.ssh/authorized_keys（需要新增）</span><br><span class="line">[www@localhost Webroot]$ vim /home/www/.ssh/authorized_keys</span><br><span class="line">ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDh/b/QBVGwxzsETwkY/DzxI/iFu8bn9Yr/+gUHOlrCsVjo3kLc7iVg8s/VE5VTNNWcjhzcTDT3wCOr+P/hMjmvWSpFagW4ZMHh+EY8YyUNh3/dXSVIPMD0X4GWWW+U957SwI4LCL+E3O7mQV7H7orTZMfJWR9FeJk6Ls7h/DaTOKWe7BbrGMbHI/Q2iQCBpyY8VuJnEQe7tuV71UnK7VQGCjZY4n+Ncy4/<span class="number">8J</span>a3bAVQt9QYlZfqlUXI+B3OP1HkkY3AQXhQdrA6qq4tJL4hHLZ9kCsq4EQxmw6N9jyzV3IyP1KGGxLRQT38MzwEfJIEvvYmdF83n7fx7M0Wcsp0ruz9 www@localhost.localdomain</span><br><span class="line">~</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意下文件授权</p>
+</blockquote>
+<p><strong>安装Gitlab Plugin和Gitlab Hook Plugin插件</strong><br>系统管理—管理插件—可选插件，选择安装Gitlab Plugin和Gitlab Hook Plugin（git和Build Authorization Token Root Plugin和Build Pipeline Plugin视图插件也需要安装上）</p>
+<p> <img src="/img/201702/jenkins-2.png" style="width: 550x;"></p>
+<p><strong>Gitlab配置发布用的key</strong><br>Gitlab安装请查看最后参考资料链接：<br>在发布机生成公钥<br> <img src="/img/201702/jenkins-3.png" style="width: 550x;"><br>  <img src="/img/201702/jenkins-4.png" style="width: 550x;"><br>复制公钥到以下：<br> <img src="/img/201702/jenkins-5.png" style="width: 550x;"></p>
+<p>在192.168.1.248机子上测试是否能拉取代码<br> <img src="/img/201702/jenkins-6.png" style="width: 550x;"></p>
+<p><strong>Jenkins新增认证方式</strong><br> <img src="/img/201702/jenkins-7.png" style="width: 550x;"><br>选择  Add Credentials<br> <img src="/img/201702/jenkins-8.png" style="width: 550x;"></p>
+<p><strong>配置发布项目</strong><br>选择新增，输入auto-deploy，选择构建一个自由风格的软件项目<br> <img src="/img/201702/jenkins-9.png" style="width: 550x;"><br>备注：ubuntu查看gitlab版本：dpkg -l|grep gitlab</p>
+<p>保存后，点击立即构建，选择控制台输出可以看出/root/.jenkins/workspace/<br> <img src="/img/201702/jenkins-10.png" style="width: 550x;"><br>随机生成10个数字用于token验证：<br>[root@localhost ~]# openssl rand -hex 10<br>f25b0694e4f519a04ee8<br><strong>配置jenkins触发器</strong><br> <img src="/img/201702/jenkins-11.png" style="width: 550x;"><br><strong>配置Gitlab Weboos</strong></p>
+<p> <img src="/img/201702/jenkins-12.png" style="width: 550x;"><br>  <img src="/img/201702/jenkins-13.png" style="width: 550x;"><br><strong>配置完成后点击test测试下是否自动触发jenkins构建</strong><br>  <img src="/img/201702/jenkins-14.png" style="width: 550x;"><br><strong>脚本配置参考前博客</strong><br><a href="http://pythonyw.cn:90/article/?id=38" target="_blank" rel="external">http://pythonyw.cn:90/article/?id=38</a><br>或者<a href="http://linuxops.xyz/2017/02/20/shell%E6%89%B9%E9%87%8F%E5%8F%91%E5%B8%83%E7%AB%99%E7%82%B9/">http://linuxops.xyz/2017/02/20/shell%E6%89%B9%E9%87%8F%E5%8F%91%E5%B8%83%E7%AB%99%E7%82%B9/</a><br><strong>配置jenkins构建执行命令</strong></p>
+<p>  <img src="/img/201702/jenkins-15.png" style="width: 550x;"></p>
+<p><strong>测试如下：</strong><br>1、更改index.html内容</p>
+<p>  <img src="/img/201702/jenkins-16.png" style="width: 550x;"></p>
+<p>2、查看控制台输出<br>  <img src="/img/201702/jenkins-17.png" style="width: 550x;"><br>3、访问测试站点</p>
+<p>  <img src="/img/201702/jenkins-18.png" style="width: 550x;"></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/02/27/jenkins构建自动发布项目/#more" class="btn btn-default more">閱讀本文</a>
+</div>
+
+		
+
+		</div>
+
+		<!-- pagination -->
+		<div>
+  		<center>
+		<div class="pagination">
+<ul class="pagination">
+	 
+		
+    	<li class="prev"><a href="/page/3/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i> 上一頁</a></li>
+  		
+
+        <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+
+		
+		   <li class="next"> <a href="/page/5/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a> </li>          
+        
+	
+</ul>
+</div>
+
+  		</center>
+		</div>
+
+		
+		
+	</div> <!-- col-md-9 -->
+
+	
+		<div class="col-md-3">
+	<div id="sidebar">
+	
+			
+  <div class="widget tag">
+    <h3 class="title">归档</h3>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+  </div>
+
+		
+			
+		
+			
+
+		
+			
+<div class="widget">
+  <h4>最新文章</h4>
+  <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2018/07/29/企业常用几种部署方式-蓝绿部署、滚动部署、金丝雀部署/" ><i class="fa fa-file-o"></i>企业常用几种部署方式(蓝绿部署、滚动部署、金丝雀部署)...</a>
+      </li>
+    
+      <li>
+        <a href="/2018/07/29/Pyecharts-生成图表-附Django支持/" ><i class="fa fa-file-o"></i>Pyecharts 生成图表(附Django支持)...</a>
+      </li>
+    
+      <li>
+        <a href="/2018/07/29/Python调用Zabbix-Api获取数据/" ><i class="fa fa-file-o"></i>Python调用Zabbix Api获取数据...</a>
+      </li>
+    
+      <li>
+        <a href="/2018/07/29/Django中的缓存配置/" ><i class="fa fa-file-o"></i>Django中的缓存配置...</a>
+      </li>
+    
+      <li>
+        <a href="/2018/06/16/Celery-分布式任务队列/" ><i class="fa fa-file-o"></i>Celery - 分布式任务队列...</a>
+      </li>
+    
+  </ul>
+</div>
+
+		
+			
+<div class="widget">
+	<h4>鏈接</h4>
+	<ul class="blogroll list-unstyled">
+	
+		<li><i class="fa fa-github"></i><a href="http://linuxops.cc" title="Macro博客" target="_blank"]);">Macro博客</a></li>
+	
+		<li><i class="fa fa-github"></i><a href="http://www.uinion.com/" title="uinion小站" target="_blank"]);">uinion小站</a></li>
+	
+	</ul>
+</div>
+
+
+		
+	</div> <!-- sidebar -->
+</div> <!-- col-md-3 -->
+
+	
+	
+</div> <!-- row-fluid -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

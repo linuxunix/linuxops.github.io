@@ -1,0 +1,241 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>centos 6.5下搭建zabbix 2.4 | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="centos 6.5下搭建zabbix 2.4"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> centos 6.5下搭建zabbix 2.4</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <p>由于最近刚换新工作，难免比较忙，加班是家常便饭了，博客有时间就会立即更新，谢谢。</p>
+<ul>
+<li><p><strong>ZABBIX简介</strong><br>zabbix是一个基于WEB界面的提供分布式系统监视以及网络监视功能的企业级的开源解决方案。zabbix不仅可以监控Linux、Windows主机还能监控防火墙、路由器、交换机、打印机等设备，能监视各种网络参数，保证服务器系统的安全运营；并提供灵活的通知机制以让系统管理员快速定位/解决存在的各种问题。</p>
+</li>
+<li><p><strong>环境准备</strong><br>[root@localhost ~]# lsb_release -a<br>LSB Version:    :base-4.0-amd64:base-4.0-noarch:core-4.0-amd64:core-4.0-noarch:graphics-4.0-amd64:graphics-4.0-noarch:printing-4.0-amd64:printing-4.0-noarch<br>Distributor ID: CentOS<br>Description:    CentOS release 6.5 (Final)<br>Release:        6.5<br>Codename:       Final</p>
+</li>
+<li><p><strong>安装Zabbix 官方源和epel源:</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment">#rpm -ivh http://repo.zabbix.com/zabbix/2.4/rhel/6/x86_64/zabbix-release-2.4-1.el6.noarch.rpm</span></span><br><span class="line">[root@localhost ~]<span class="comment">#rpm -ivh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</span></span><br><span class="line">[root@localhost ~]yum install -y zabbix zabbix-get zabbix-server-mysql  zabbix-server zabbix-web-mysql zabbix-web zabbix-agent  mysql-server</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>创建Zabbix 并导入Zabbix-Server 的数据库</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment">#chkconfig mysqld on</span></span><br><span class="line">[root@localhost ~]<span class="comment">#service mysqld start</span></span><br><span class="line">[root@localhost ~]<span class="comment">#mysqladmin -uroot password linuxunix</span></span><br><span class="line">[root@localhost ~]<span class="comment">#mysql -uroot -p</span></span><br><span class="line">输入刚刚创建mysql数据库root密码linuxunix</span><br><span class="line">mysql&gt; create database zabbix character set utf8;</span><br><span class="line">mysql&gt; grant all privileges on zabbix.* to zabbix@localhost identified by <span class="string">'zabbix'</span>;</span><br><span class="line">mysql&gt; flush privileges;</span><br><span class="line">mysql&gt; exit;</span><br><span class="line">[root@localhost ~]<span class="comment">#cd /usr/share/doc/zabbix-server-mysql-2.4.*/create/</span></span><br><span class="line">[root@localhost ~]<span class="comment">#mysql -uroot -p zabbix &lt; schema.sql</span></span><br><span class="line">[root@localhost ~]<span class="comment">#mysql -uroot -p zabbix &lt; images.sql</span></span><br><span class="line">[root@localhost ~]<span class="comment">#mysql -uroot -p zabbix &lt; data.sql</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>配置zabbix_server.conf</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment">#egrep -v "(^#|^$)" /etc/zabbix/zabbix_server.conf</span></span><br><span class="line">LogFile=/var/log/zabbix/zabbix_server.log</span><br><span class="line">PidFile=/var/run/zabbix/zabbix_server.pid</span><br><span class="line">DBHost=localhost </span><br><span class="line">DBName=zabbix </span><br><span class="line">DBUser=zabbix </span><br><span class="line">DBPassword=zabbix</span><br><span class="line">DBSocket=/var/lib/mysql/mysql.sock</span><br><span class="line">DBPort=<span class="number">3306</span> </span><br><span class="line">SNMPTrapperFile=/var/log/snmptt/snmptt.log</span><br><span class="line">ListenIP=<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>配置zabbix_server.conf</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment">#vim /etc/php.ini</span></span><br><span class="line">date.timezone = Asia/Shanghai</span><br><span class="line">max_execution_time = <span class="number">300</span></span><br><span class="line">post_max_size = <span class="number">16</span>M</span><br><span class="line">max_input_time=<span class="number">300</span></span><br><span class="line">memory_limit = <span class="number">128</span>M</span><br><span class="line">或者使用以下命令</span><br><span class="line">sed -i <span class="string">'s/^.*date.timezone =.*$/date.timezone = Asia\/Shanghai/g'</span> /etc/php.ini</span><br><span class="line">sed -i <span class="string">'s/^.*post_max_size =.*$/post_max_size = 16M/g'</span> /etc/php.ini</span><br><span class="line">sed -i <span class="string">'s/^.*max_execution_time =.*$/max_execution_time = 300/g'</span> /etc/php.ini</span><br><span class="line">sed -i <span class="string">'s/^.*max_input_time =.*$/max_input_time = 300/g'</span> /etc/php.ini</span><br><span class="line">sed -i <span class="string">'s/^.*memory_limit =.*$/memory_limit = 128M/g'</span> /etc/php.ini</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>配置Web 界面</strong><br>[root@localhost ~]# service zabbix-server start<br>[root@localhost ~]# chkconfig   zabbix-server  on<br>[root@localhost ~]#  service httpd start<br>[root@localhost ~]# chkconfig   httpd on<br>在浏览器输入<a href="http://IP地址/zabbix" target="_blank" rel="external">http://IP地址/zabbix</a></p>
+</li>
+</ul>
+<p><br><img src="/img/dec/zabbix/1.png" style="width: 600px;"><br><br><img src="/img/dec/zabbix/2.png" style="width: 600px;"><br><br><img src="/img/dec/zabbix/3.png" style="width: 600px;"><br><br><img src="/img/dec/zabbix/3-2.png" style="width: 600px;"><br><br><img src="/img/dec/zabbix/4.png" style="width: 600px;"><br><br><img src="/img/dec/zabbix/6.png" style="width: 600px;"><br><br><img src="/img/dec/zabbix/7.png" style="width: 600px;"><br>默认账号为admin,密码zabbix<br><br><img src="/img/dec/zabbix/8.png" style="width: 600px;"><br>如果登录后下图中的yes为no的时候，请查看SELinux状态：<br><br><img src="/img/dec/zabbix/8.png" style="width: 600px;"><br> [root@localhost ~]# getenforce 如果返回为enforcing则证明已经开启，如果是Permissive，则反之。</p>
+<p>关闭SELinux有以下两种方法：<br>1、临时关闭（不用重启机器）：<br> [root@localhost ~]#setenforce 0    设置SELinux 成为permissive模式<br>  [root@localhost ~]##setenforce 1 设置SELinux 成为enforcing模式<br>2、修改配置文件需要重启机器：<br>vim  /etc/selinux/config 文件<br>将SELINUX=enforcing改为SELINUX=disabled即可。</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2015/10/18/╛▓╠м┬╖╙╔╙ж╙├/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2015/10/07/╚ч║╬╜т╛Ўzabbix╓╨╬─┬╥┬ы╬╩╠т/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2015/10/12/centos-6-5╧┬┤ю╜иzabbix-2-4/" data-title="centos 6.5下搭建zabbix 2.4" data-url="http://linuxOps.xyz/2015/10/12/centos-6-5╧┬┤ю╜иzabbix-2-4/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2015-10-12 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

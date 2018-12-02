@@ -1,0 +1,281 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Python的logging模块（附带Django 实例） | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Python的logging模块（附带Django 实例）"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> Python的logging模块（附带Django 实例）</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <blockquote>
+<p>在日常开发或者运维中，日志是必不可少的。不仅方便我们排查问题，更能进行深一层数据挖掘。在Python的标准库中logging模块提供了日志记录的功能。</p>
+</blockquote>
+<h3 id="logger_配置包括以下四个方面：">logger 配置包括以下四个方面：</h3><ul>
+<li>Loggers   # 日志记录器，是程序中直接调用的接口</li>
+<li>Handlers  # 日志处理器，可配置存储路径等信息</li>
+<li>Filters   # 过滤器，例如定义输出级别等信息</li>
+<li>Formatters  # 格式化日志的输出格式</li>
+</ul>
+<h3 id="logger_日志级别分为以下：">logger 日志级别分为以下：</h3><ul>
+<li>DEBUG: Low level system information for debugging purposes</li>
+<li>INFO: General system information</li>
+<li>WARNING: Information describing a minor problem that has occurred.</li>
+<li>ERROR: Information describing a major problem that has occurred.</li>
+<li>CRITICAL: Information describing a critical problem that has occurred</li>
+</ul>
+<h3 id="简单举个例子：">简单举个例子：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line">FORMAT =<span class="string">'%(asctime)s - %(levelname)s - %(message)s'</span></span><br><span class="line">logging.basicConfig(format=FORMAT,level=logging.DEBUG)</span><br><span class="line"></span><br><span class="line">logging.debug(<span class="string">'debug message'</span>)</span><br><span class="line">logging.info(<span class="string">'info message'</span>)</span><br><span class="line">logging.warn(<span class="string">'warn message'</span>)</span><br><span class="line">logging.error(<span class="string">'error message'</span>)</span><br><span class="line">logging.critical(<span class="string">'critical message'</span>)</span><br></pre></td></tr></table></figure>
+<p>输出结果如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2018</span>-<span class="number">05</span>-<span class="number">25</span> <span class="number">16</span>:<span class="number">00</span>:<span class="number">13</span>,<span class="number">181</span> - DEBUG - debug message</span><br><span class="line"><span class="number">2018</span>-<span class="number">05</span>-<span class="number">25</span> <span class="number">16</span>:<span class="number">00</span>:<span class="number">13</span>,<span class="number">181</span> - INFO - info message</span><br><span class="line"><span class="number">2018</span>-<span class="number">05</span>-<span class="number">25</span> <span class="number">16</span>:<span class="number">00</span>:<span class="number">13</span>,<span class="number">181</span> - WARNING - warn message</span><br><span class="line"><span class="number">2018</span>-<span class="number">05</span>-<span class="number">25</span> <span class="number">16</span>:<span class="number">00</span>:<span class="number">13</span>,<span class="number">181</span> - ERROR - error message</span><br><span class="line"><span class="number">2018</span>-<span class="number">05</span>-<span class="number">25</span> <span class="number">16</span>:<span class="number">00</span>:<span class="number">13</span>,<span class="number">181</span> - CRITICAL - critical message</span><br></pre></td></tr></table></figure></p>
+<h3 id="如果我们去掉指定的DEBUG级别会不怎么样尼？">如果我们去掉指定的DEBUG级别会不怎么样尼？</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line">FORMAT =<span class="string">'%(asctime)s - %(levelname)s - %(message)s'</span></span><br><span class="line">logging.basicConfig(format=FORMAT)</span><br><span class="line"></span><br><span class="line">logging.debug(<span class="string">'debug message'</span>)</span><br><span class="line">logging.info(<span class="string">'info message'</span>)</span><br><span class="line">logging.warn(<span class="string">'warn message'</span>)</span><br><span class="line">logging.error(<span class="string">'error message'</span>)</span><br><span class="line">logging.critical(<span class="string">'critical message'</span>)</span><br></pre></td></tr></table></figure>
+<p>输出结果如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2018</span>-<span class="number">05</span>-<span class="number">25</span> <span class="number">16</span>:<span class="number">00</span>:<span class="number">13</span>,<span class="number">181</span> - WARNING - warn message</span><br><span class="line"><span class="number">2018</span>-<span class="number">05</span>-<span class="number">25</span> <span class="number">16</span>:<span class="number">00</span>:<span class="number">13</span>,<span class="number">181</span> - ERROR - error message</span><br><span class="line"><span class="number">2018</span>-<span class="number">05</span>-<span class="number">25</span> <span class="number">16</span>:<span class="number">00</span>:<span class="number">13</span>,<span class="number">181</span> - CRITICAL - critical message</span><br></pre></td></tr></table></figure></p>
+<p>这样我们是否会困惑尼？为何debug和info的日志并没有输出的尼？<br>通常按照博主的思维习惯，默认肯定是上官网查找问题，因为一般官网基本能解决80%的困惑。我们可以通过官网发现<a href="https://docs.python.org/3/library/logging.html以下" target="_blank" rel="external">https://docs.python.org/3/library/logging.html以下</a></p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Numeric value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CRITICAL</td>
+<td>50</td>
+</tr>
+<tr>
+<td>ERROR</td>
+<td>40</td>
+</tr>
+<tr>
+<td>WARNING</td>
+<td>30</td>
+</tr>
+<tr>
+<td>INFO</td>
+<td>20</td>
+</tr>
+<tr>
+<td>DEBUG</td>
+<td>10</td>
+</tr>
+<tr>
+<td>NOTSET</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>简单总结：当我们定义日志级别为INFO时候，当Numeric value&gt;=20时候才会输出的对应级别的日志</p>
+<h2 id="Django配置实例">Django配置实例</h2><h3 id="settings-py新增以下">settings.py新增以下</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">LOGGING = &#123;</span><br><span class="line">    <span class="string">'version'</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="string">'disable_existing_loggers'</span>: <span class="keyword">False</span>,</span><br><span class="line">    <span class="string">'formatters'</span>: &#123;</span><br><span class="line">        <span class="string">'verbose'</span>: &#123;</span><br><span class="line">            <span class="string">'format'</span>: <span class="string">'%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">'simple'</span>: &#123;</span><br><span class="line">            <span class="string">'format'</span>: <span class="string">'%(levelname)s %(message)s'</span></span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">'handlers'</span>: &#123;</span><br><span class="line">        <span class="string">'file'</span>: &#123;</span><br><span class="line">            <span class="string">'class'</span>: <span class="string">'logging.FileHandler'</span>,</span><br><span class="line">            <span class="string">'formatter'</span>: <span class="string">'verbose'</span>,</span><br><span class="line">            <span class="string">'filename'</span>: os.path.join(BASE_DIR, <span class="string">'logs'</span>, <span class="string">'ansible.log'</span>),</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">'loggers'</span>: &#123;</span><br><span class="line">        <span class="string">'django'</span>: &#123;</span><br><span class="line">            <span class="string">'handlers'</span>: [<span class="string">'file'</span>],</span><br><span class="line">            <span class="string">'level'</span>: os.getenv(<span class="string">'DJANGO_LOG_LEVEL'</span>, <span class="string">'INFO'</span>),</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="views-py配置如下：">views.py配置如下：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> logging.config</span><br><span class="line">logging.getLogger(<span class="string">'django'</span>) <span class="comment">#引用settings配置中的loggers下的django</span></span><br><span class="line"><span class="comment"># Create your views here.</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(request)</span>:</span></span><br><span class="line">    logging.info(request.method)</span><br><span class="line">    data=&#123;</span><br><span class="line">        <span class="string">'status'</span>:<span class="string">'success'</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> HttpResponse(json.dumps(data), content_type=<span class="string">"application/json"</span>)</span><br></pre></td></tr></table></figure>
+<p>启动django，模拟访问test接口，然后到logs目录下的ansible.log查看日志吧</p>
+<h3 id="附官网文档地址:">附官网文档地址:</h3><ul>
+<li><a href="https://docs.djangoproject.com/en/2.0/topics/logging/" target="_blank" rel="external">https://docs.djangoproject.com/en/2.0/topics/logging/</a></li>
+<li><a href="https://docs.python.org/3/library/logging.html" target="_blank" rel="external">https://docs.python.org/3/library/logging.html</a></li>
+</ul>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2018/05/28/日志监控应该如何做？附ELK-wather-通知告警/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2018/05/12/通过namedmanager搭建线上高可用DNS/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2018/05/28/Python的logging模块（附带Django-实例）/" data-title="Python的logging模块（附带Django 实例）" data-url="http://linuxOps.xyz/2018/05/28/Python的logging模块（附带Django-实例）/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2018-05-28 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

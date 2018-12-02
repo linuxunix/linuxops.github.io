@@ -1,0 +1,248 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>SaltStack数据系统之Grains【下】 | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="SaltStack数据系统之Grains【下】"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> SaltStack数据系统之Grains【下】</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <blockquote>
+<p>前言：</p>
+</blockquote>
+<p>是不是觉得系统自带的Grains不够用，配置文件写Grains又不灵活，那么没关系，SaltStack支持你自己编写Grains。</p>
+<blockquote>
+<p>编写Grains</p>
+</blockquote>
+<p>在minion配置文件中定义的grains是静态的，不能够动态的在minion上生成。可以用Python非常方便的写动态的grains。minion启动时，会执行grains包所带的模块及自定义grains模块中的函数，返回的结果就是grains。grains模块中的函数必须返回一个dict，其中key是grains的名字，value是值。<br>这里的动态 grains 是指 minion 启动时动态生成，事先并不知道内容，在启动后，这些值依然是不变的。</p>
+<blockquote>
+<p>自定义Grains</p>
+</blockquote>
+<p>很明显，自定义的grains并不是直接放在minion上，而是放在master配置文件中定义的file_roots下的_grains目录中。执行state.highstate，saltutil.sync_grains，saltutil.sync_all时，会将_grains中的文件分发到客户端上。<br>假定file_roots为/srv/salt，增加自定义grain的操作如下：</p>
+<h1 id="mkdir_/srv/salt/_grains/">mkdir /srv/salt/_grains/</h1><blockquote>
+<p>非常简单的案例</p>
+</blockquote>
+<p>下面我们来编写grains，记住：必须返回一个字典！<br> <img src="/img/201703/salt-7.png" style="width: 550x;"></p>
+<blockquote>
+<p>刷新grains</p>
+</blockquote>
+<p>刷新后，我们自定义的grains脚本会存放在minion配置文件制定的cache目录下：<br> [root@linux-node1~]# ls -l /var/cache/salt/minion/extmods/grains<br>总用量 8<br>-rw-r–r– 1 root root 120 11月 6 17:39 my_grain.py<br>现在我们可以获取到我们自己编写的grains。同时，除了执行saltutil.sync_grains进行刷新外，也可以执行saltutil.sync_grains进行刷新操作。或者在我们执行state.highstate的时候也会自动进行刷新。</p>
+<blockquote>
+<p>Grains的优先级</p>
+</blockquote>
+<p>到目前位置，我们知道Grains有四种存放的方法，或者说是位置：SaltStack自带的Grains，自定义的Grains和我们编写的grains的模块返回的Grains，如果grains的名称一样，到底以哪个为准呢？优先级从低到高如下：</p>
+<ol>
+<li>系统自带grains</li>
+<li>/etc/salt/grains里面指定的grains</li>
+<li>/etc/salt/minion里面设置的grains</li>
+<li>自已编写的grains模块</li>
+</ol>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2017/03/03/通过Jinja2模板以及Grain和Pillar扩展主机状态/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2017/03/03/SaltStack数据系统之Grains[上]/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2017/03/03/SaltStack数据系统之Grains【下】/" data-title="SaltStack数据系统之Grains【下】" data-url="http://linuxOps.xyz/2017/03/03/SaltStack数据系统之Grains【下】/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2017-03-03 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

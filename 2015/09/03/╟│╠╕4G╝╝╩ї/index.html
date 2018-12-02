@@ -1,0 +1,244 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>浅谈4G技术 | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="浅谈4G技术"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> 浅谈4G技术</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <p><strong>何为4G？</strong><br>相信大家不再陌生，4G其实就是第四代移动电话行动通信标准，即第四代移动通信技术。这里顺便普及下前面3代技术。1G（第一代移动通信技术）指最初的模拟、仅限语音的蜂窝电话标准，1G主要使用模拟技术和码分多址技术，1G是不能提供数据业务。2G(第二代手机通信技术),2G是一种数字技术—-使用数字语音传输技术。2G技术可以分为两种。<br>一种是源于欧洲的GSM，另一种是源于美国的CDMA。现阶段中国移动、联通使用的是2G是GSM，而电信使用的正是使用CDMA。由于双方使用的2G技术并不一样，这也导致很多手机只支持移动、联通，为何把卡插在电信手机却不能使用等问题，当然由于高通收取专利费问题，导致很多手机厂家把电信手机标价相对提高。3G（第三代移动通信技术）是指支持高速数据传输的蜂窝移动通讯技术。3G无可否认开启人类的新篇章，3G也开启了手机大屏幕时代，目前3G存在3种标准： TD-SCDMA（我国中的中国移动使用）、WCDMA（联通）、CDMA2000（电信）。</p>
+<blockquote>
+<p>以上是1-2代移动通信技术的简单介绍，在此我们详谈下3G技术。毕竟我们使用手机时的流量不断增加，通话时间却大幅下降（总的来说）。</p>
+</blockquote>
+<ul>
+<li><strong>先说下我国自主研发的3G标准TD-SCDMA</strong>，TD-SCDMA带宽为1.6MHZ，码片速率1.28Mcps。主要工作频段规划为时分双工（TDD）方式， 即1880～1920MHz为A频段、2010～2025MHz为B频段；补充工作频率为时分双工（TDD）方式，2300～2400MHz为C频段。TD-SCDMA的帧的长度是10ms，可以分成两个5ms的子帧，每个5ms的子帧有7个固定长度的业务时隙和3个特殊时隙。一个子帧5ms，7个业务时隙ts0~ts6（864*7 = 6048chip），3个特殊时隙dw,gp,up（96 + 96 +160 = 352chip），此时码片速率 6400chip / 5ms = 1.28Mcps。TD-SCDMA 理论下行速率可以达到384Kbps，理论上行速率为128Kbps。事实上目前现网具备HSDPA，理论2.8Mbps单载波速率（上下行时隙配比1:5）。</li>
+<li><strong>CDMA2000</strong>是由美国高通公司提出的（此公司还推出了高通骁龙手机芯片）窄带CDMA（CDMA IS95）技术发展而来的宽带CDMA技术，其中带宽为1.25MHz，码片速率为1.2288Mcps，中国电信使用的频段主要是1920MHz -1935MHz（上行）、2110MHz -2125MHz（下行）。电信现网使用的是CDMA2000 EVDO Rev A    ，下行理论速率为3.1Mbps {5120/(0.005/3)=3.072 ，5120前向业务信道的数据传输最大包，每时隙长(80/3)/16}，上行理论速率为1.8Mbps。</li>
+<li><strong>WCDMA</strong> 宽频分码多重存取，是欧洲提出的宽带CDMA技术，当然现网中国联通正在使用，它的带宽：5MHz，码片速率：3.84Mcps，联通使用上行频段1940MHz-1955MHz、下行频段2130MHz -2145MHz。说了那么多上下行，顺便也普及一下把，上行（Uplink）：移动台发、基站收，简称UL，下行（Downlink）：基站发、移动台收，简称DL。<blockquote>
+<p>说了那么多，以下正式说我们的主角4G，严格来说LTE并不是真正的4G，只能上3.9G，当然不考虑后面的载波聚合来说。现网做了CA（载波聚合）并不是所有，电信在广州，现在也就做了1-200多个站。从技术标准的角度看，按照ITU的定义，静态传输速率达到1Gbps，用户在 高速移动状态下可以达到100Mbps，就可以作为4G的技术之一。 </p>
+</blockquote>
+</li>
+</ul>
+<p>&gt;</p>
+<p>第四代移动通信系统具有如下特征：</p>
+<ul>
+<li><strong>输速率更快：</strong>对于大范围高速移动用户（250km/h）数据速率为 2Mbps；对于中<br>速移动用户（60km/h）数据速率为 20Mbps；对于低速移动用户（室内或步行者） ，<br>数据速率为 100Mbps；</li>
+<li><p><strong>谱利用效率更高：</strong>4G 在开发和研制过程中使用和引入许多功能强大的突破性技<br>术，无线频谱的利用比第二代和第三代系统有效得多，而且速度相当快，下载速率<br>可达到 5Mbps~10Mbps；</p>
+</li>
+<li><p><strong>容量更大：</strong>4G 将采用新的网络技术（如空分多址技术等）来极大地提高系统容量，<br>以满足未来大信息量的需求；</p>
+</li>
+<li><strong>灵活性更强：</strong> 4G 系统采用智能技术，可自适应地进行资源分配，采用智能信号处<br>理技术对信道条件不同的各种复杂环境进行信号的正常收发。 另外， 用户将使用各<br>式各样的设备接入到 4G 系统等等；<br>4G我们分为<strong>TDD-LTE和FDD-LTE</strong>。两者到底有啥区别呢？<br>频分双工(FDD)和时分双工(TDD)是两种不同的双工方式。<br><strong>FDD</strong>是在分离的两个对称频率信道上进行接收和发送，用保护频段来分离接收和发送信道。FDD必须采用成对的频率，依靠频率来区分上下行链路，其单方向的资源在时间上是连续的。FDD<br>在支持对称业务时，能充分利用上下行的频谱， 但在支持非对称业务时，频谱利用率将大大降低。<br><strong>TDD</strong>用时间来分离接收和发送信道。在TDD方式的移动通信系统中，接收和发送使用同一频率载波的不同时隙作为信道的承载，其单方向的资源在时间上是不连续的，时间资源在两个方向上进行了分配。某个时间段由基站发送信号给移动台，另外的时间由移动台发送信号给基站，基站和移动台之间必须协同一致才能顺利工作。</li>
+</ul>
+<p>除了双工方式不同外，在<strong>LTE帧的结构分类不同</strong>：<br><strong>FDD-LTE无线帧</strong>：1个无线帧（10ms）有10个子帧（1ms），1个子帧有2个时隙（0.5ms）；<br><strong>TDD-LTE无线帧</strong>：1个无线帧（10ms）有两个半子帧（5ms），1个半子帧有4个常规子帧（1ms）和1个特殊子帧（1ms）。1个常规子帧有2个时隙（0.5ms），特殊子帧是由DwPTS,GP,UpPTS。三个无论如何配置总是1ms。目前特殊子帧的配置有3：9：2，10：2：2等。<br>LTE使用的是OFDM即交频分复用技术，实际上OFDM是多载波调制的一种。其主要思想是：将信道分成若干正交子信道，将高速数据信号转换成并行的低速子数据流，调制到在每个子信道上进行传输。正交信号可以通过在接收端采用相关技术来分开，这样可以减少子信道之间的相互干扰ICI(Inter-Channel Interference)。每个子信道上的信号带宽小于信道的相关带宽，因此每个子信道上的可以看成平坦性衰落，从而可以消除符号间干扰。而且由于每个子信道的带宽仅仅是原信道带宽的一小部分，信道均衡变得相对容易。<br>LTE的设计目标<br>1、带宽灵活配置：支持1.4MHz（6RB）, 3MHz(15RB), 5MHz(20RB), 10Mhz(50RB), 15Mhz(75RB), 20MHz(100RB)<br>2、子载波宽度=15kHz<br>3、峰值速率(20MHz带宽）：下行100Mbps，上行50Mbps<br>4、控制面延时小于100ms，用户面延时小于5ms<br>这里说一下下行峰值是什么算的（TDD为例子）<br> <br><img src="/img/tdltespeet.png" style="width: 600px;"><br>其中1200是指带宽为1200个子载波、6bit是指调制方式为64QAM、2是指2*2MIMO复用、<br>3/5是指时隙配比、75%是系统开销、，10的-3次幂是指时间为1ms。</p>
+<blockquote>
+<p>当然后面聚合技术出现，今年移动在广州大学城成功进行了全国首个4G下行3载波聚合的外场业务测试，实现下行速率达到323Mbps，而本人在广州电信大厦看见中兴利用1.8和2.1G频段载波聚合，速率实测220多M，当然这里也是需要终端支持的，例如：手机中的海思麒麟920以上的基本支持CAT6,高通的骁龙810支持CAT9，日后相信后面4G速率越来越快，同时终端支持CA的类型也是日益增加。</p>
+</blockquote>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2015/09/08/Centos-6-5╕№╗╗yum/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2015/09/03/╣╚╕ш╧ы╦╡░о─у▓╗╚▌╥╫/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2015/09/03/╟│╠╕4G╝╝╩ї/" data-title="浅谈4G技术" data-url="http://linuxOps.xyz/2015/09/03/╟│╠╕4G╝╝╩ї/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2015-09-03 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

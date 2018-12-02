@@ -1,0 +1,276 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>闲聊一下企业上线发布经典案例 | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="闲聊一下企业上线发布经典案例"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> 闲聊一下企业上线发布经典案例</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <blockquote>
+<p>作为互联网企业，上线发布肯定是少不了。无疑，凡事也有个渐进过程，今天和大家吹吹水聊一下企业上线发布，还有几天就是过年,时间飞逝，转眼间又一年，本博在此祝各位新年快乐，提前给大家拜个早年。</p>
+</blockquote>
+<h4 id="一、小型创业公司代码上线经典案例">一、小型创业公司代码上线经典案例</h4><blockquote>
+<p>背景：小型企业可能只有几个开发，几台服务器，一般开发兼运维，并不会单独聘请运维工程师。由于服务器较少，通常使用手动拷贝，有部分还会使用FTP上传代码（如下图所示）</p>
+</blockquote>
+<p><img src="/img/201802/1.png" style="width: 550x;"></p>
+<h5 id="简单总结：">简单总结：</h5><ul>
+<li>优点：<br>  1、    上线流程快<br>  2、    可以减少公司的运营成本<br>  ……</li>
+<li>缺点：<br>  1、    流程不规范<br>  2、    手动发布容易出问题，例如替换错文件等等<br>  3、    开发往往很多不懂运维的专业知识，例如可能直接开放外网端口、直接开放ssh端口等，容易被黑客攻击、使用root启动，有些开发为了方便可能在线调试程序等<br>  ……</li>
+</ul>
+<h4 id="二、中小型公司代码上线经典案例">二、中小型公司代码上线经典案例</h4><blockquote>
+<p>背景：中型网站一般具备运维人员，但是运维人员相对不多，通常先会在内网测试，测试通过后才会发布外网，通常中小型使用shell脚本发布居多。</p>
+</blockquote>
+<p><img src="/img/201802/2.png" style="width: 550x;"></p>
+<h4 id="简单总结：-1">简单总结：</h4><ul>
+<li>优点：<br>  1、    存在运维人员，服务器权限管理相对有了规范<br>  2、    使用脚本式批量发布程序，上线或者回滚速度有效加快<br>  ……</li>
+<li>缺点：<br>  1、    每次上线/回滚可能需要登录服务器上操作<br>  2、    当项目较多时候容易出错<br>  ……</li>
+</ul>
+<h4 id="三、中型公司代码上线经典案例">三、中型公司代码上线经典案例</h4><blockquote>
+<p>背景：中型企业通常存在运维团队（人数达一定量），此时，运维人员一般会制定代码tag、程序路径、备份路径、脚本路径、启动用户等相关规范，同时流程相对较为规范。技术选型上可以采取jenkins/walle+ansible/ saltstack+sonar/jacoco等</p>
+</blockquote>
+<p><img src="/img/201802/3.png" style="width: 550x;"></p>
+<h5 id="简单描述下整个流程：">简单描述下整个流程：</h5><ul>
+<li>1、    开发提供代码到gitlab或者svn</li>
+<li>2、    触发钩子调用jenkins(或者手动构建)，Jenkins集成Sonar扫描，部分会接入jacoco生成代码覆盖率。当然这个需要达标才能正式上线</li>
+<li>3、    测试进行测试环境测试</li>
+<li>4、    开发提单上线，测试进行预发布环境测试（预发布环境部分公司存放在内网、部分会存放在正式环境上，通过网络隔离做成预发布环境）</li>
+<li>5、    预发布测试通过后测试拉单到运维审核，同时开发人员需要在gitlab/svn按照规范打tag</li>
+<li>6、    运维基于tag构建jenkins，拉取代码（java需要使用mvn/ant编译），调用ansible/saltstack上线发布，并发邮件通知相关人员</li>
+<li>7、    产品验收并结单</li>
+</ul>
+<h4 id="四、中大型及以上公司代码上线经典案例">四、中大型及以上公司代码上线经典案例</h4><blockquote>
+<p>中大型及以上公司通常存在多个运维团队（业务划分等），也有不少运维开发，所以通常会由自己的运维发布平台，当然上线流程基本并无差异,大体由以下类型组成：</p>
+</blockquote>
+<ul>
+<li>1、 确定语言类型，php还是java还是其它（Java重启tomcat）</li>
+<li>2、 获取代码</li>
+<li>3、 编辑（可选）使用ant maven</li>
+<li>4、 打包命名</li>
+<li>5、 文件分发 (scp salt-cp rsync ansible puppet saltsack)</li>
+<li>6、 将待部署节点，从集群中摘除（是否存在灰度坏境）</li>
+<li>7、 是否存在灰度坏境，先灰度发布</li>
+<li>8、 解压源码包</li>
+<li>9、 创建软链接</li>
+<li>10、 重启web服务（java需要重新启动）</li>
+<li>11、 测试验证</li>
+<li>12、 加入集群</li>
+<li>13、 回滚</li>
+</ul>
+<h5 id="但是中大型及以上公司可能会存在其它小、中型公司不一样的特色，以下简单列举几个：">但是中大型及以上公司可能会存在其它小、中型公司不一样的特色，以下简单列举几个：</h5><ul>
+<li><p><strong>1、HTTP动态负载均衡</strong><br>例如当负载均衡层我们使用nginx时候，后端服务器列表变更时候需要到服务器修改upstream规则，这样容易出错，同时也需要经常reload，消耗系统性能，这里简单说下实现原理：<br><img src="/img/201802/4.png" style="width: 550x;"><br>1.1    当程序启动时候insert或者delete数据库信息(数据库可使用consul/etcd)<br>1.2    Nginx定期获取数据库信息并生成配置信息<br>分享几个参考给大家：<br>微博：upsync+consul:    <a href="https://github.com/weibocom/nginx-upsync-module" target="_blank" rel="external">https://github.com/weibocom/nginx-upsync-module</a><br>又拍云开源slardar: balancer_by_lua+consul:   <a href="https://github.com/upyun/slardar" target="_blank" rel="external">https://github.com/upyun/slardar</a><br>京东：openresty balancer_by_lua+consul</p>
+</li>
+<li><p><strong>2、配置中心</strong><br>部分公司会存在配置中心，当程序启动时候，首先到配置中心获取配置。这样的好处也杜绝了账号密码经过开发手中，减少配置泄露性。有些配置中心能实现热更新，<br>当修改配置中心配置时候，下发配置更新信息，程序能重新加载配置信息。<br>分享开源配置中心给大家：<br>分布式配置管理平台:<a href="https://github.com/knightliao/disconf" target="_blank" rel="external">https://github.com/knightliao/disconf</a></p>
+</li>
+<li><p><strong>3、上线发布多彩</strong><br>蓝绿发布/小版本发布：不停老版本，部署新版本然后进行测试，验证通过后，将流量切到新版本，同时老版本也升级到新版本。<br>灰度/金丝雀发布：新老版本并行跑一段时间，部分用户访问老版本，待功能验证后再全量更新。</p>
+</li>
+</ul>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2018/03/10/JVM诊断调优必掌握的几个linux命令/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2018/02/11/python使用ConfigParser读取配置文件/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2018/02/11/闲聊一下企业上线发布经典案例/" data-title="闲聊一下企业上线发布经典案例" data-url="http://linuxOps.xyz/2018/02/11/闲聊一下企业上线发布经典案例/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2018-02-11 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

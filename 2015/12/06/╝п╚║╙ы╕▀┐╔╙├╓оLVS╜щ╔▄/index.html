@@ -1,0 +1,256 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>集群与高可用之LVS介绍 | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="集群与高可用之LVS介绍"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> 集群与高可用之LVS介绍</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <p>集群：随着互联网的发展，用户访问互联网也随之增加，服务器的负载也越来越大，如果使用单台服务器，负载能力非常有限。要是出现单点故障时候，将会导致整个网络服务中断。此时便需要使用集群架构，通过N台服务器主机结合在一起实现网络分流。集群产品可以选择硬件和软件。硬件方面有F5的GIG-IP、Radware的APPDirector。主流的软件有LVS、Nginx、HAProxy等产品。高可用性集群使服务器系统的运行速度和响应速度尽可能快。它们经常利用在多台机器上运行的冗余节点和服务，用来相互跟踪。如果某个节点失败，它的替补者将在几秒钟或更短时间内接管它的职责。</p>
+<ul>
+<li><strong>LVS负载均衡的简介 </strong></li>
+</ul>
+<p>LVS是Linux Virtual Server的简写，意即Linux虚拟服务器，是一个虚拟的服务器集群系统。1998年5月由我国的章文嵩博士主导开发的负载均衡项目，是中国国内最早出现的自由软件项目之一，目前LVS已经被集成到linux内核模块中。该项目在Linux内核中实现了基于IP的数据请求的负载均衡调度算案。<br>一般来说，LVS集群采用三层结构，其主要组成部分为：</p>
+<ul>
+<li><strong>A、负载调度器（load balancer）</strong>，它是整个集群对外面的前端机，负责将客户的请求发送到一组服务器上执行，而客户认为服务是来自一个IP地址（我们可称之为虚拟IP地址）上的。</li>
+<li><strong>B、服务器池（server pool） </strong>，是一组真正执行客户请求的服务器，执行的服务有WEB、MAIL、FTP和DNS等。</li>
+<li><p><strong>C、共享存储（shared storage） </strong>，它为服务器池提供一个共享的存储区，这样很容易使得服务器池拥有相同的内容，提供相同的服务。</p>
+</li>
+<li><p><strong>从工作模式上分LVS分为NAT模式、TUN模式、DR模式。</strong></p>
+</li>
+<li><p><strong>基于NAT的LVS负载均衡：</strong></p>
+</li>
+</ul>
+<p>NAT（Network Address Translation，网络地址转换）。当在专用网内部的一些主机本来已经分配到了本地IP地址（即仅在本专用网内使用的专用地址），但现在又想和因特网上的主机通信（并不需要加密）时，可使用NAT方法。最常见的就是我们购买了一个家用路由器，而家里连接N台设备时内部分配的是私用IP，此时通过NAT技术，修改数据报头，能内网设备能与外面互联网进行网络通信。</p>
+<p>1、LVS负载调度器使用两块网卡配置不同地址，Eth1设置为外网IP与外部网络通信，Eth0设置为内网IP通过交换机连接到内部Web服务器。<br>2、用户通过互联网NDS服务器解析到公司外网IP180.180.180.180，相对与真实服务器而言，Eth1称为VIP，用户以为VIP服务器是真实服务器，并不知道VIP后面存在多少台真实服务器。<br>3、当用户数据到达LVS服务器时候，此时LVS根据预设的算法选择后端一台真实的服务器，通过修改数据包的目的地址以及端口（修改为要到达服务器的目的地址以及端口），将数据请求转发给真实的服务器。<br>4、真实服务器处理请求信号后把响应数据包返回给LVS调度服务器，调度器将修改响应数据包的目的地址和端口修改为VIP 的地址和端口，最后由调度器将响应数据包发送回互联网终端用户。<br><br><img src="/img/12-LVS-1.png" style="width: 650x;"><br>缺点：在整个过程中，所有输入输出的流量都要经过LVS 调度服务器。显然，LVS 调度服务器的网络I/O压力将会非常大，因此很容易成为瓶颈，特别是对于请求流量很小，而响应流量很大的Web类应用来说尤为如此。<br>优点： NAT模式的优点在于配置及管理简单，由于了使用NAT技术，LVS 调度器及应用服务器可以在不同网段中，网络架构更灵活，应用服务器只需要进行简单的网络设定即可加入集群。</p>
+<ul>
+<li><strong>基于TUN的LVS负载均衡：</strong></li>
+</ul>
+<p>IP隧道（IP tunning）是一种数据包封装技术，它是将原始IP包（其报头包含原始发送者和最终目的地）封装在另一个数据包（称为封装的IP包）的数据净荷中进行传输，从而实现将一个目标为调度器的VIP地址的数据包封装，通过隧道转发给后端服务器（Real Server），通过将客户端发往调度器的原始数据包封装，调度器通过修改数据包的包头（修改为经过算法出来的真实服务器的IP和端口）。<br><br><img src="/img/12-LVS-2.png" style="width: 650x;"><br>缺点:由于后端web服务器处理数据后直接发送给终端用户，此时需要租借大量IP（特别是后端服务器使用较多的情况下）。<br>优点:实现IP Tunnel模式时，LVS 调度器将TCP/IP请求进行重新封装并转发给目标应用服务器，由目标应用服务器直接回复用户。应用服务器之间是通过IP Tunnel来进行转发，因此两者可以存在于不同的网段中。</p>
+<ul>
+<li><strong>基于DR的LVS负载均衡： </strong></li>
+</ul>
+<p>DR（Direct Routing）模式也被称为直接路由模式，实现此模式时LVS 调度器只实现IP分发功能，应用服务器收到IP数据包并处理后，通过自身来实现IP地址转换，将数据直接传送给用户。在此模式下，LVS 调度器只对TCP/IP数据包的头信息进行处理，然后直接路由到应用服务器，不需要处理应用服务器返回的数据信息，因此性能较高，是三种模式中最常用的一种。</p>
+<p>（1）LVS 调度器接收用户发来的消息，根据调度算法进行IP分流，将数据包发送到后端应用服务器。<br>（2）应用服务器执行相应的操作后，将结果直接返回给客户。<br>（3）与隧道模式不同的是，直接路由模式（DR模式）要求调度器 与后端服务器必须在同一个局域网内，VIP地址需要在调度器与后端服务器间共享，因为最终的真实服务器给客户端回应数据包时需要设置源IP地址为VIP地址，目标IP为客户端IP，这样客户端访问的是调度器的VIP地址，回应的地址依然是该VIP地址。<br><br><img src="/img/12-LVS-3.png" style="width: 650x;"><br>缺点：唯一的缺陷在于它要求LVS 调度器及所有应用服务器在同一个网段中，因此不能实现集群的跨网段应用。<br>优点：可见在处理过程中LVS Route只处理请求的直接路由转发，所有响应结果由各个应用服务器自行处理，并对用户进行回复，网络流量将集中在LVS调度器之上。</p>
+<ul>
+<li><p><strong>LVS在内核中的8种调度算法：</strong></p>
+</li>
+<li><p><strong>轮询调度： </strong>IP分发时逐个地对Real Server进行轮询。</p>
+</li>
+<li><strong>加权轮询调度：</strong>配合权值进行轮询策略计算。</li>
+<li><strong>最小连接调度： </strong>将新的IP请求分发到访问队列较短的Real Server。</li>
+<li><strong>加权最小连接调度： </strong>配合权值进行最小连接优先策略计算。</li>
+<li><strong>基于局部性最少的连接： </strong>以下简称LBLCS，根据目标IP地址找出最近使用的服务器，若该服务器可用并且没有超载（系统压力未达到一半），就将请求发送到该服务器，否则使用最小连接优先策略。此策略主要针对                                                     的是Cache网关服务器。</li>
+<li><strong>带复制的基于局部性最少连接： </strong>与LBLCS类似，在LBLCS的基础上加入复制调度策略，使得“热门”网站使用时尽量Cache在同一台网关服务器中，进一步避免了在多台服务器中保存相同的Cache信息。此策略主要针对的边是Cache网关网关服务器。</li>
+<li><strong>目标地址散列调度：Scheduling： </strong>通过对目标地址的Hash计算来确定目标服务器。此策略主要针对的是Cache网关服务器。<br>源地址散列调度:通过对源地址的Hash计算来确定目标服务器。此策略主要针对的是Cache网关服务器。</li>
+</ul>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2015/12/19/CentOS-6-5╧┬▒р╥ы░▓╫░MySQL-5-6-28/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2015/12/06/redis-░▓╫░┼ф╓├/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2015/12/06/╝п╚║╙ы╕▀┐╔╙├╓оLVS╜щ╔▄/" data-title="集群与高可用之LVS介绍" data-url="http://linuxOps.xyz/2015/12/06/╝п╚║╙ы╕▀┐╔╙├╓оLVS╜щ╔▄/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2015-12-06 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

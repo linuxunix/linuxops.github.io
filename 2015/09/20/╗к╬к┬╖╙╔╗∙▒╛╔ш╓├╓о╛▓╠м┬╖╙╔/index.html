@@ -1,0 +1,225 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>华为路由基本设置之静态路由  | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="华为路由基本设置之静态路由 "/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> 华为路由基本设置之静态路由 </h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <p> 关于华为路由基本设置一些基本命令<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Displayversion 显示系统软件版本号</span><br><span class="line"></span><br><span class="line">Displayclock  查看当前系统和时间</span><br><span class="line"></span><br><span class="line">Clockdatetime +时间+日期 修改系统时间参数</span><br><span class="line"></span><br><span class="line">“？”和“Tab”命令 在输入信息输入“？”，可查看以输入字母开头的命令</span><br><span class="line"></span><br><span class="line"> Tab补全命令。非常经常用的说</span><br></pre></td></tr></table></figure></p>
+<p>具体还是需要用到再说吧</p>
+<p>静态路由设置</p>
+<p><br><img src="/img/september/static-route.jpg" style="width: 600px;"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">R1路由</span><br><span class="line">&lt;Huawei&gt;system-view     //进入系统视图</span><br><span class="line"></span><br><span class="line">[Huawei]sysname r1      //更改路由名字r1</span><br><span class="line"></span><br><span class="line">[r1]interfaceEthernet0/<span class="number">0</span>/<span class="number">0</span>    //进入端口Ethernet0/<span class="number">0</span>/<span class="number">0</span></span><br><span class="line"></span><br><span class="line">[r1-Ethernet0/<span class="number">0</span>/<span class="number">0</span>]ip add <span class="number">192.168</span><span class="number">.67</span><span class="number">.1</span> <span class="number">24</span>   //配置端口ip和子代掩码<span class="number">24</span>表示<span class="number">255.255</span><span class="number">.255</span><span class="number">.0</span></span><br><span class="line"></span><br><span class="line">[r1-Ethernet0/<span class="number">0</span>/<span class="number">0</span>]quit     //退出端口Ethernet0/<span class="number">0</span>/<span class="number">0</span></span><br><span class="line"></span><br><span class="line">[r1]interface Ethernet0/<span class="number">0</span>/<span class="number">1</span>  //进入端口Ethernet0/<span class="number">0</span>/<span class="number">1</span></span><br><span class="line"></span><br><span class="line">[r1-Ethernet0/<span class="number">0</span>/<span class="number">1</span>]ip add <span class="number">192.168</span><span class="number">.56</span><span class="number">.1</span> <span class="number">24</span>  //进入端口Ethernet0/<span class="number">0</span>/<span class="number">0</span></span><br><span class="line"></span><br><span class="line">[r1-Ethernet0/<span class="number">0</span>/<span class="number">1</span>] quit     //退出端口Ethernet0/<span class="number">0</span>/<span class="number">1</span></span><br><span class="line"></span><br><span class="line">[r1]interface LoopBack <span class="number">0</span>    //进入回环 LoopBack <span class="number">0</span></span><br><span class="line"></span><br><span class="line">[r1-LoopBack0]ip add <span class="number">192.168</span><span class="number">.1</span><span class="number">.1</span> <span class="number">24</span>   //配置回环ip和子代掩码</span><br><span class="line"></span><br><span class="line">[r1-LoopBack0]quit          ////退出回环LoopBack <span class="number">0</span></span><br><span class="line">[r1]ip route-static <span class="number">192.168</span><span class="number">.57</span><span class="number">.0</span> <span class="number">255.255</span><span class="number">.255</span><span class="number">.0192</span><span class="number">.168</span><span class="number">.56</span><span class="number">.3</span></span><br><span class="line"></span><br><span class="line">[r1]ip route-static <span class="number">192.168</span><span class="number">.2</span><span class="number">.0</span> <span class="number">255.255</span><span class="number">.255</span><span class="number">.0192</span><span class="number">.168</span><span class="number">.67</span><span class="number">.2</span></span><br><span class="line"></span><br><span class="line">[r1]ip route-static <span class="number">192.168</span><span class="number">.3</span><span class="number">.0255</span><span class="number">.255</span><span class="number">.255</span><span class="number">.0</span> <span class="number">192.168</span><span class="number">.56</span><span class="number">.3</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">R2路由</span><br><span class="line"></span><br><span class="line">&lt;Huawei&gt;system-view</span><br><span class="line"></span><br><span class="line">[Huawei]sysname r2</span><br><span class="line"></span><br><span class="line">[r2]interfaceEthernet0/<span class="number">0</span>/<span class="number">0</span></span><br><span class="line"></span><br><span class="line">[r2-Ethernet0/<span class="number">0</span>/<span class="number">0</span>]ip add <span class="number">192.168</span><span class="number">.67</span><span class="number">.2</span> <span class="number">24</span></span><br><span class="line"></span><br><span class="line">[r2-Ethernet0/<span class="number">0</span>/<span class="number">0</span>]quit</span><br><span class="line"></span><br><span class="line">[r2]interface Ethernet0/<span class="number">0</span>/<span class="number">1</span></span><br><span class="line"></span><br><span class="line">[r2-Ethernet0/<span class="number">0</span>/<span class="number">1</span>]ip add <span class="number">192.168</span><span class="number">.57</span><span class="number">.2</span> <span class="number">24</span></span><br><span class="line"></span><br><span class="line">[r2-Ethernet0/<span class="number">0</span>/<span class="number">1</span>] quit</span><br><span class="line"></span><br><span class="line">[r2]interface LoopBack <span class="number">0</span></span><br><span class="line"></span><br><span class="line">[r2-LoopBack0]ip add <span class="number">192.168</span><span class="number">.2</span><span class="number">.2</span> <span class="number">24</span></span><br><span class="line"></span><br><span class="line">[r2-LoopBack0]quit</span><br><span class="line"></span><br><span class="line">[r2] ip route-static <span class="number">192.168</span><span class="number">.1</span><span class="number">.0255</span><span class="number">.255</span><span class="number">.255</span><span class="number">.0</span> <span class="number">192.168</span><span class="number">.67</span><span class="number">.1</span></span><br><span class="line"></span><br><span class="line">[r2] ip route-static <span class="number">192.168</span><span class="number">.3</span><span class="number">.0</span> <span class="number">255.255</span><span class="number">.255</span><span class="number">.0192</span><span class="number">.168</span><span class="number">.57</span><span class="number">.3</span></span><br><span class="line"></span><br><span class="line">[r2] ip route-static <span class="number">192.168</span><span class="number">.56</span><span class="number">.0</span> <span class="number">255.255</span><span class="number">.255</span><span class="number">.0192</span><span class="number">.168</span><span class="number">.67</span><span class="number">.1</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">R3路由</span><br><span class="line"></span><br><span class="line">&lt;Huawei&gt;system-view</span><br><span class="line"></span><br><span class="line">[Huawei]sysnamer3</span><br><span class="line"></span><br><span class="line">[r3]interfaceEthernet0/<span class="number">0</span>/<span class="number">0</span></span><br><span class="line"></span><br><span class="line">[r3-Ethernet0/<span class="number">0</span>/<span class="number">0</span>]ipadd <span class="number">192.168</span><span class="number">.57</span><span class="number">.3</span>  <span class="number">24</span></span><br><span class="line"></span><br><span class="line">[r3-Ethernet0/<span class="number">0</span>/<span class="number">0</span>]quit</span><br><span class="line"></span><br><span class="line">[r3]interfaceEthernet0/<span class="number">0</span>/<span class="number">1</span></span><br><span class="line"></span><br><span class="line">[r3-Ethernet0/<span class="number">0</span>/<span class="number">1</span>]ipadd <span class="number">192.168</span><span class="number">.56</span><span class="number">.3</span>  <span class="number">24</span></span><br><span class="line"></span><br><span class="line">[r3-Ethernet0/<span class="number">0</span>/<span class="number">1</span>]quit</span><br><span class="line"></span><br><span class="line">[r3]interfaceLoopBack <span class="number">0</span></span><br><span class="line"></span><br><span class="line">[r3-LoopBack0]ipadd <span class="number">192.168</span><span class="number">.2</span><span class="number">.2</span>  <span class="number">24</span></span><br><span class="line"></span><br><span class="line">[r3-LoopBack0]quit</span><br><span class="line"></span><br><span class="line">[r3] ip route-static192<span class="number">.168</span><span class="number">.1</span><span class="number">.0</span> <span class="number">255.255</span><span class="number">.255</span><span class="number">.0</span> <span class="number">192.168</span><span class="number">.56</span><span class="number">.1</span></span><br><span class="line"></span><br><span class="line">[r3] ip route-static192<span class="number">.168</span><span class="number">.2</span><span class="number">.0</span> <span class="number">255.255</span><span class="number">.255</span><span class="number">.0</span> <span class="number">192.168</span><span class="number">.57</span><span class="number">.2</span></span><br><span class="line"></span><br><span class="line">[r3] ip route-static192<span class="number">.168</span><span class="number">.67</span><span class="number">.0</span> <span class="number">255.255</span><span class="number">.255</span><span class="number">.0</span> <span class="number">192.168</span><span class="number">.57</span><span class="number">.2</span></span><br></pre></td></tr></table></figure>
+<p> 当然最好修改优先级配置主备份路由啦。。。</p>
+<p>总结：1、配置端口ip和回环ip（主要端口类型：E、G、S口）<br>      2、配置静态路由（通过ping命令、display current-configuration、display  this等命令去验证是否配置错误）</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2015/10/07/╚ч║╬╜т╛Ўzabbix╓╨╬─┬╥┬ы╬╩╠т/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2015/09/20/LINUX╗∙▒╛├№┴ю/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2015/09/20/╗к╬к┬╖╙╔╗∙▒╛╔ш╓├╓о╛▓╠м┬╖╙╔/" data-title="华为路由基本设置之静态路由 " data-url="http://linuxOps.xyz/2015/09/20/╗к╬к┬╖╙╔╗∙▒╛╔ш╓├╓о╛▓╠м┬╖╙╔/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2015-09-20 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

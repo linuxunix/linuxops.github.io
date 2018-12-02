@@ -1,0 +1,283 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>基于 memcached 的 tomcat 集群之 session 共享 | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="基于 memcached 的 tomcat 集群之 session 共享"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> 基于 memcached 的 tomcat 集群之 session 共享</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <blockquote>
+<p>Memcached 是一个高性能的分布式内存对象缓存系统，用于动态 Web  应用以减轻数据库负载。它通过在内存中缓存数据和对象来减少读取数据库的次数，从而提高动态、数据库驱动网站的速度。Memcached 是基于一个存储 key / value 的 hashmap。</p>
+</blockquote>
+<p><strong>Memcached安装</strong><br>安装环境</p>
+<p>CentOS 6.5<br>libevent-2.0.22-stable.tar.gz<br>memcached-1.4.24.tar.gz</p>
+<p>安装 libevent</p>
+<p>memcached 依赖 libevent 库，检查 libevent 是否已安装<br>[root@localhost ~]## rpm -qa | grep libevent<br>到 libevent 官网下载所需版本的安装文件<br>[root@localhost ~]# tar zxvf libevent-2.0.22-stable.tar.gz<br>[root@localhost ~]# cd libevent-2.0.22-stable<br>[root@localhost libevent-2.0.22-stable]# ./configure –prefix=/usr/local/libevent<br>[root@localhost ~]# make<br>[root@localhost ~]# make install</p>
+<p>安装 memcached</p>
+<p>到 memcached 官网下载所需版本的安装文件<br>[root@localhost ~]# tar zxvf memcached-1.4.24.tar.gz<br>[root@localhost memcached-1.4.24]# cd memcached-1.4.24<br>[root@localhost memcached-1.4.24]# ./configure –prefix=/usr/local/memcached –with-libevent=/usr/local/libevent/<br>[root@localhost memcached-1.4.24]# make<br>[root@localhost memcached-1.4.24]# make install</p>
+<p>启动 memcached</p>
+<p>[root@localhost memcached-1.4.24]# /usr/local/memcached/bin/memcached -d -m 128 -u root -p 11211 -c 1024 –P /tmp/memcached.pid<br>启动参数    描述<br>-d    启动一个守护进程<br>-m    分配给 memcached 的内存大小，单位 MB<br>-u    启动 memcached 的用户<br>-c    最大运行的并发连接数<br>-p    设置 memcached 监听的端口<br>-P    设置保存 memcached 的 pid 文件</p>
+<p>查看 memcached</p>
+<p>[root@localhost memcached-1.4.24]# ps -ef | grep memcached</p>
+<p>关闭 memcached</p>
+<p>[root@localhost memcached-1.4.24]# ps -ef | grep memcached</p>
+<p>root  92911009:09 ?  00:00:00 /usr/local/memcached/bin/memcached -d -m 128 -u root -p 11211 -c 1024 –P /tmp/memcached.pid</p>
+<p>[root@localhost memcached-1.4.24]# kill -99291</p>
+<p>防火墙开启 11211 端口</p>
+<p>[root@localhost memcached-1.4.24]# vi /etc/sysconfig/iptables<br>加入如下一行配置<br>-A INPUT -m state –state NEW -m tcp -p tcp –dport 11211 -j ACCEPT<br>重启防火墙服务<br>[root@localhost memcached-1.4.24]# service iptables restart</p>
+<p> <strong>基于 memcached 的 tomcat 集群之 session 共享</strong><br>实现在多台服务器之间共享 session 会话中的数据。</p>
+<blockquote>
+<p>JAR 包<br>asm-4.0.jar<br>kryo-1.04.jar<br>minlog-1.2.jar<br>reflectasm-1.04.jar<br>kryo-serializers-0.10.jar<br>spymemcached-2.8.12.jar<br>couchbase-client-1.1.4.jar<br>msm-kryo-serializer-1.6.4.jar<br>memcached-session-manager-1.6.4.jar<br>memcached-session-manager-tc7-1.6.4.jar</p>
+</blockquote>
+<ul>
+<li><strong>配置</strong></li>
+</ul>
+<p>将 JAR 包全部放到 $Tomcat/lib 目录下（$Tomcat 表示 Tomcat 安装的根目录，以下同）。<br>编辑 $Tomcat/conf/context.xml 文件，在 <context> 节点下加入如下配置<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;Manager className=<span class="string">"de.javakaffee.web.msm.MemcachedBackupSessionManager"</span></span><br><span class="line">         memcachedNodes=<span class="string">"n1:192.168.1.102:11211,n2:192.168.1.103:11211"</span></span><br><span class="line">         sticky=<span class="string">"false"</span></span><br><span class="line">         lockingMode=<span class="string">"auto"</span></span><br><span class="line">         sessionBackupAsync= <span class="string">"false"</span></span><br><span class="line">         sessionBackupTimeout=<span class="string">"300"</span></span><br><span class="line">         requestUriIgnorePattern= <span class="string">".*\.(png|gif|jpg|ico|css|js)$"</span></span><br><span class="line">         transcoderFactoryClass=<span class="string">"de.javakaffee.web.msm.serializer.kryo.KryoTranscoderFactory"</span> /&gt;</span><br></pre></td></tr></table></figure></context></p>
+<ul>
+<li><strong>memcachedNodes- </strong><br>必须项 </li>
+</ul>
+<p>配置 memcached 节点。格式：<id>:<host>:<port>，多个节点之间，用空格或英文逗号分隔</port></host></id></p>
+<ul>
+<li><strong>sticky </strong></li>
+</ul>
+<p>可选项<br>是否粘性。默认为 true。粘性会话需要保证每个用户的请求都路由到同一台 Tomcat 服务器中。否则，需要设置成非粘性会话。</p>
+<ul>
+<li><strong>lockingMode</strong></li>
+</ul>
+<p>可选项<br>用于非粘性会话。默认为 none。<br>可选值    描述<br>none    不锁定 session<br>all    每个请求访问 session 的期间，session 一直被锁定，直到请求结束<br>auto    只锁定写请求的 session，只读请求的 session 不会被锁定<br>uriPattern:<regexp>    通过正则表达式的方式来对请求的 URI 进行匹配，匹配上的会被锁定</regexp></p>
+<ul>
+<li><strong>sessionBackupAsync </strong></li>
+</ul>
+<p>可选项<br>设置 session 会话中的数据是否异步同步到 memcached 中，默认为 true。</p>
+<ul>
+<li><strong>requestUriIgnorePattern </strong></li>
+</ul>
+<p>可选项<br>设置忽略会话同步的请求的 URI 地址的正则表达式。这应该包含静态资源的请求。</p>
+<ul>
+<li><strong>failoverNodes </strong></li>
+</ul>
+<p>可选项<br>memcached 故障转移节点配置。用于粘性会话，非粘性会话不可用。如：<br>failoverNodes=”n1”，含义是告诉 msm 将 session 会话中的数据存储到 memcached 的 n2 节点中，如果 n2 节点宕掉等致使其不能正常提供服务，msm 才会将 session 会话中的数据存储到 memcached 的 n1 节点中。<br>sessionAttributeFilter</p>
+<p>可选项<br>配置同步 session 会话数据的属性名称的正则表达式。如果不设置，则将 session 中全部的属性保存到 memcached 中。</p>
+<ul>
+<li><strong>transcoderFactoryClass </strong></li>
+</ul>
+<p>可选项<br>配置序列化和反序列化 session 会话中的数据到 memcached 中的编码转换器的工厂类名。<br>默认是 de.javakaffee.web.msm.JavaSerializationTranscoderFactory</p>
+<ul>
+<li><strong>backupThreadCount</strong></li>
+</ul>
+<p>可选项<br>用于异步存储 session 会话中的数据到 memcached 中的线程数。（当 sessionBackupAsync=”true” 时，该配置项有效）</p>
+<ul>
+<li><strong>sessionBackupTimeout</strong></li>
+</ul>
+<p>可选项<br>备份 session 会话数据所需时间如果大于该值，将导致 session 会话数据同步失败。默认为 100（单位毫秒）</p>
+<p>以上由基友整理，博客地址为：<a href="http://fanlychie.github.io" target="_blank" rel="external">http://fanlychie.github.io</a></p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2016/01/05/centos░▓╫░glusterfs/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2015/12/23/MYSQLl╩¤╛▌┐т╡─SQL╙я╖и/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2016/01/05/╗∙╙┌-memcached-╡─-tomcat-╝п╚║╓о-session-╣▓╧э/" data-title="基于 memcached 的 tomcat 集群之 session 共享" data-url="http://linuxOps.xyz/2016/01/05/╗∙╙┌-memcached-╡─-tomcat-╝п╚║╓о-session-╣▓╧э/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2016-01-05 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>
