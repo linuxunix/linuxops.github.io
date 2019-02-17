@@ -1,0 +1,261 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>分布式时序数据库InfluxDB | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="分布式时序数据库InfluxDB">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
+
+  
+    <meta property="og:image" content="undefined">
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> 分布式时序数据库InfluxDB</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <h3 id="什么是InfluxDB？">什么是InfluxDB？</h3><blockquote>
+<p>InfluxDB 是一个开源分布式时序、事件和指标数据库。使用 Go 语言编写，无需外部依赖。其设计目标是实现分布式和水平伸缩扩展。</p>
+</blockquote>
+<p>它有三大特性：</p>
+<ul>
+<li><strong>Time Series （时间序列）：</strong> 你可以使用与时间有关的相关函数（如最大，最小，求和等）</li>
+<li>  <strong>Metrics（度量）：</strong>你可以实时对大量数据进行计算 </li>
+<li><strong>Eevents（事件）：</strong>它支持任意的事件数据</li>
+</ul>
+<p>官网介绍：<a href="https://www.influxdata.com/" target="_blank" rel="noopener">https://www.influxdata.com/</a></p>
+<h3 id="如何安装InfluxDB？">如何安装InfluxDB？</h3><p>系统环境：CentOS Linux release 7.3.1611 (Core)<br><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget https://dl.influxdata.com/influxdb/releases/influxdb-<span class="number">1.2</span>.<span class="number">4</span>.x86_64.rpm</span><br><span class="line">sudo yum localinstall influxdb-<span class="number">1.2</span>.<span class="number">4</span>.x86_64.rpm</span><br><span class="line">sudo systemctl  start  influxdb</span><br></pre></td></tr></table></figure></p>
+<p>官网下载连接：<a href="https://portal.influxdata.com/downloads" target="_blank" rel="noopener">https://portal.influxdata.com/downloads</a></p>
+<h3 id="简单介绍InfluxDB用法">简单介绍InfluxDB用法</h3><p>默认开启WEB访问界面地址为IP:8083,默认登录账号和密码为root/root</p>
+<p> <img src="/img/201902/influxBD01.png" style="width: 550x;"></p>
+<p>Linux字符进入直接输入influx</p>
+<h4 id="influxDB名词">influxDB名词</h4><ul>
+<li><strong>database：</strong> 数据库；</li>
+<li><strong>measurement：</strong> 数据库中的表；</li>
+<li><strong>points：</strong> 表里面的一行数据。</li>
+</ul>
+<h4 id="influxDB中独有的一些概念">influxDB中独有的一些概念</h4><p>Point由时间戳（time）、数据（field）和标签（tags）组成。</p>
+<ul>
+<li><strong>time：</strong> 每条数据记录的时间，也是数据库自动生成的主索引；</li>
+<li><strong>fields：</strong> 各记录的值；</li>
+<li><strong>tags：</strong> 各种有索引的属性。</li>
+</ul>
+<h4 id="新增数据库">新增数据库</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> <span class="string">"db_name"</span></span><br><span class="line"><span class="keyword">SHOW</span> <span class="keyword">DATABASES</span> <span class="comment">#显示所有数据库</span></span><br></pre></td></tr></table></figure>
+<h4 id="进入数据库">进入数据库</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">USE</span> <span class="string">"db_name"</span></span><br><span class="line"><span class="comment"># 显示该数据库中所有的表  </span></span><br><span class="line"><span class="keyword">show</span> measurements</span><br></pre></td></tr></table></figure>
+<h4 id="创建表，直接在插入数据的时候指定表名">创建表，直接在插入数据的时候指定表名</h4><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt; insert <span class="keyword">test</span>-measurements,host=<span class="number">127.0</span><span class="meta">.0</span><span class="meta">.1</span>,monitor_name=<span class="keyword">test</span> count=<span class="number">1</span></span><br><span class="line">&gt; SHOW MEASUREMENTS</span><br><span class="line"><span class="symbol">name:</span> measurements</span><br><span class="line">------------------</span><br><span class="line">name</span><br><span class="line"><span class="keyword">test</span>-measurements</span><br></pre></td></tr></table></figure>
+<h4 id="删除表">删除表</h4><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">drop</span> measurement <span class="string">"measurement_name"</span></span><br></pre></td></tr></table></figure>
+<h4 id="通过API插入数据">通过API插入数据</h4><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -<span class="selector-tag">i</span> -XPOST -u username:password <span class="string">"http://192.168.162.113:8086/write?db=test"</span> --data-binary <span class="string">'test-measurements  value=120'</span></span><br></pre></td></tr></table></figure>
+<p> <img src="/img/201902/influxBD02.png" style="width: 550x;"></p>
+<h6 id="注意是否存在test数据库，没有则新增">注意是否存在test数据库，没有则新增</h6><p> <img src="/img/201902/influxBD03.png" style="width: 550x;"></p>
+<h4 id="查询语法">查询语法</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT <span class="tag">&lt;<span class="name">field_key</span>&gt;</span>[,<span class="tag">&lt;<span class="name">field_key</span>&gt;</span>,<span class="tag">&lt;<span class="name">tag_key</span>&gt;</span>] FROM <span class="tag">&lt;<span class="name">measurement_name</span>&gt;</span>[,<span class="tag">&lt;<span class="name">measurement_name</span>&gt;</span>]</span><br></pre></td></tr></table></figure>
+<p>官方文档：<a href="https://docs.influxdata.com/influxdb/v1.0/query_language/data_exploration/?spm=5176.100239.blogcont61915.11.R6KaBi" target="_blank" rel="noopener">https://docs.influxdata.com/influxdb/v1.0/query_language/data_exploration/?spm=5176.100239.blogcont61915.11.R6KaBi</a></p>
+<h3 id="结合Grafana">结合Grafana</h3><h4 id="官网介绍：">官网介绍：</h4><ul>
+<li><a href="https://github.com/torkelo/grafana" target="_blank" rel="noopener">https://github.com/torkelo/grafana</a></li>
+<li><a href="http://docs.grafana.org/features/datasources/influxdb/" target="_blank" rel="noopener">http://docs.grafana.org/features/datasources/influxdb/</a></li>
+</ul>
+<h4 id="安装下载Grafana">安装下载Grafana</h4><p>下载链接：<a href="https://github.com/grafana/grafana/releases" target="_blank" rel="noopener">https://github.com/grafana/grafana/releases</a><br>或者直接使用rpm安装：<br><figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget https://s3-us-west<span class="string">-2</span>.amazonaws.com/grafana-releases/release/grafana<span class="string">-4</span>.4.1<span class="string">-1</span>.x86_64.rpm</span><br><span class="line">yum install initscripts fontconfig</span><br><span class="line">yum localinstall grafana<span class="string">-4</span>.4.1<span class="string">-1</span>.x86_64.rpm\</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl <span class="keyword">start</span> grafana-<span class="keyword">server</span></span><br><span class="line">systemctl <span class="keyword">status</span> grafana-<span class="keyword">server</span></span><br><span class="line">netstat -ntlp|grep <span class="number">3000</span></span><br><span class="line">lsof -i:<span class="number">3000</span></span><br></pre></td></tr></table></figure>
+<h4 id="简单配置Grafana">简单配置Grafana</h4><p>官方文档：<a href="http://docs.grafana.org/features/datasources/influxdb/" target="_blank" rel="noopener">http://docs.grafana.org/features/datasources/influxdb/</a></p>
+<p>安装后登陆地址为：<a href="http://IP:3000/login,默认账号和密码都是admin" target="_blank" rel="noopener">http://IP:3000/login,默认账号和密码都是admin</a><br> <img src="/img/201902/influxBD04.png" style="width: 550x;"><br> <img src="/img/201902/influxBD05.png" style="width: 550x;"><br> <img src="/img/201902/influxBD06.png" style="width: 550x;"></p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+		
+          <li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+        
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2018/07/29/企业常用几种部署方式-蓝绿部署、滚动部署、金丝雀部署/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2019/02/17/分布式时序数据库InfluxDB/" data-title="分布式时序数据库InfluxDB" data-url="http://linuxOps.xyz/2019/02/17/分布式时序数据库InfluxDB/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2019-02-17 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2019 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>闲聊一下企业上线发布经典案例 | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="闲聊一下企业上线发布经典案例"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="闲聊一下企业上线发布经典案例">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -144,9 +144,9 @@
 <li>13、 回滚</li>
 </ul>
 <h5 id="但是中大型及以上公司可能会存在其它小、中型公司不一样的特色，以下简单列举几个：">但是中大型及以上公司可能会存在其它小、中型公司不一样的特色，以下简单列举几个：</h5><ul>
-<li><p><strong>1、HTTP动态负载均衡</strong><br>例如当负载均衡层我们使用nginx时候，后端服务器列表变更时候需要到服务器修改upstream规则，这样容易出错，同时也需要经常reload，消耗系统性能，这里简单说下实现原理：<br><img src="/img/201802/4.png" style="width: 550x;"><br>1.1    当程序启动时候insert或者delete数据库信息(数据库可使用consul/etcd)<br>1.2    Nginx定期获取数据库信息并生成配置信息<br>分享几个参考给大家：<br>微博：upsync+consul:    <a href="https://github.com/weibocom/nginx-upsync-module" target="_blank" rel="external">https://github.com/weibocom/nginx-upsync-module</a><br>又拍云开源slardar: balancer_by_lua+consul:   <a href="https://github.com/upyun/slardar" target="_blank" rel="external">https://github.com/upyun/slardar</a><br>京东：openresty balancer_by_lua+consul</p>
+<li><p><strong>1、HTTP动态负载均衡</strong><br>例如当负载均衡层我们使用nginx时候，后端服务器列表变更时候需要到服务器修改upstream规则，这样容易出错，同时也需要经常reload，消耗系统性能，这里简单说下实现原理：<br><img src="/img/201802/4.png" style="width: 550x;"><br>1.1    当程序启动时候insert或者delete数据库信息(数据库可使用consul/etcd)<br>1.2    Nginx定期获取数据库信息并生成配置信息<br>分享几个参考给大家：<br>微博：upsync+consul:    <a href="https://github.com/weibocom/nginx-upsync-module" target="_blank" rel="noopener">https://github.com/weibocom/nginx-upsync-module</a><br>又拍云开源slardar: balancer_by_lua+consul:   <a href="https://github.com/upyun/slardar" target="_blank" rel="noopener">https://github.com/upyun/slardar</a><br>京东：openresty balancer_by_lua+consul</p>
 </li>
-<li><p><strong>2、配置中心</strong><br>部分公司会存在配置中心，当程序启动时候，首先到配置中心获取配置。这样的好处也杜绝了账号密码经过开发手中，减少配置泄露性。有些配置中心能实现热更新，<br>当修改配置中心配置时候，下发配置更新信息，程序能重新加载配置信息。<br>分享开源配置中心给大家：<br>分布式配置管理平台:<a href="https://github.com/knightliao/disconf" target="_blank" rel="external">https://github.com/knightliao/disconf</a></p>
+<li><p><strong>2、配置中心</strong><br>部分公司会存在配置中心，当程序启动时候，首先到配置中心获取配置。这样的好处也杜绝了账号密码经过开发手中，减少配置泄露性。有些配置中心能实现热更新，<br>当修改配置中心配置时候，下发配置更新信息，程序能重新加载配置信息。<br>分享开源配置中心给大家：<br>分布式配置管理平台:<a href="https://github.com/knightliao/disconf" target="_blank" rel="noopener">https://github.com/knightliao/disconf</a></p>
 </li>
 <li><p><strong>3、上线发布多彩</strong><br>蓝绿发布/小版本发布：不停老版本，部署新版本然后进行测试，验证通过后，将流量切到新版本，同时老版本也升级到新版本。<br>灰度/金丝雀发布：新老版本并行跑一段时间，部分用户访问老版本，待功能验证后再全量更新。</p>
 </li>
@@ -160,13 +160,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2018/03/10/JVM诊断调优必掌握的几个linux命令/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2018/03/10/JVM诊断调优必掌握的几个linux命令/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2018/02/11/python使用ConfigParser读取配置文件/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2018/02/11/python使用ConfigParser读取配置文件/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -178,7 +178,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2018/02/11/闲聊一下企业上线发布经典案例/" data-title="闲聊一下企业上线发布经典案例" data-url="http://linuxOps.xyz/2018/02/11/闲聊一下企业上线发布经典案例/"></div>  
@@ -222,7 +222,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

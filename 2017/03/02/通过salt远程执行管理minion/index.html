@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>通过salt远程执行管理minion | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="通过salt远程执行管理minion"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="通过salt远程执行管理minion">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -133,7 +133,7 @@
 </blockquote>
 <p>Targets可以使用Grains系统来通过minion的系统信息进行过滤:<br>salt -G ‘os:Ubuntu’ test.ping</p>
 </blockquote>
-<p>参考地址：<a href="http://docs.saltstack.cn/topics/tutorials/modules.html" target="_blank" rel="external">http://docs.saltstack.cn/topics/tutorials/modules.html</a><br><strong>远程执行模块和函数</strong><br>看模块中的函数sys.list_functions<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># salt "192.168.1.135" sys.list_functions user</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.135</span>:</span><br><span class="line">    - user.add</span><br><span class="line">    - user.chfullname</span><br><span class="line">    - user.chgid</span><br><span class="line">    - user.chgroups</span><br><span class="line">    - user.chhome</span><br><span class="line">    - user.chhomephone</span><br><span class="line">    - user.chloginclass</span><br><span class="line">    - user.chroomnumber</span><br><span class="line">    - user.chshell</span><br><span class="line">    - user.chuid</span><br><span class="line">    - user.chworkphone</span><br><span class="line">    - user.delete</span><br><span class="line">    - user.get_loginclass</span><br><span class="line">    - user.getent</span><br><span class="line">    - user.info</span><br><span class="line">    - user.list_groups</span><br><span class="line">    - user.list_users</span><br><span class="line">- user.rename</span><br></pre></td></tr></table></figure></p>
+<p>参考地址：<a href="http://docs.saltstack.cn/topics/tutorials/modules.html" target="_blank" rel="noopener">http://docs.saltstack.cn/topics/tutorials/modules.html</a><br><strong>远程执行模块和函数</strong><br>看模块中的函数sys.list_functions<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># salt "192.168.1.135" sys.list_functions user</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.135</span>:</span><br><span class="line">    - user.add</span><br><span class="line">    - user.chfullname</span><br><span class="line">    - user.chgid</span><br><span class="line">    - user.chgroups</span><br><span class="line">    - user.chhome</span><br><span class="line">    - user.chhomephone</span><br><span class="line">    - user.chloginclass</span><br><span class="line">    - user.chroomnumber</span><br><span class="line">    - user.chshell</span><br><span class="line">    - user.chuid</span><br><span class="line">    - user.chworkphone</span><br><span class="line">    - user.delete</span><br><span class="line">    - user.get_loginclass</span><br><span class="line">    - user.getent</span><br><span class="line">    - user.info</span><br><span class="line">    - user.list_groups</span><br><span class="line">    - user.list_users</span><br><span class="line">- user.rename</span><br></pre></td></tr></table></figure></p>
 <p>远程执行命令模块—cmd模块<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># salt "192.168.1.135" sys.list_functions cmd</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.135</span>:</span><br><span class="line">    - cmd.exec_code</span><br><span class="line">    - cmd.exec_code_all</span><br><span class="line">    - cmd.has_exec</span><br><span class="line">    - cmd.retcode</span><br><span class="line">    - cmd.run</span><br><span class="line">    - cmd.run_all</span><br><span class="line">    - cmd.run_chroot</span><br><span class="line">    - cmd.run_stderr</span><br><span class="line">    - cmd.run_stdout</span><br><span class="line">    - cmd.script</span><br><span class="line">    - cmd.script_retcode</span><br><span class="line">    - cmd.shell</span><br><span class="line">    - cmd.shells</span><br><span class="line">    - cmd.tty</span><br><span class="line">    - cmd.which</span><br><span class="line">    - cmd.which_bin</span><br></pre></td></tr></table></figure></p>
 <p>如多台主机执行free –m命令：</p>
 <p>Cmd_run_all显示更加详细信息：</p>
@@ -141,7 +141,7 @@
 <p>pkg.install安装软件：</p>
 <p>pkg.version查看已安装软件的版本信息：</p>
 <p>pkg.remove卸载软件：</p>
-<p><strong>Service管理服务模块</strong><br>查看service模块函数<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# salt "192.168.1.135" sys.list_functions service</span><br><span class="line">192.168.1.135:</span><br><span class="line">    -<span class="ruby"> service.available</span><br><span class="line"></span>    -<span class="ruby"> service.disable</span><br><span class="line"></span>    -<span class="ruby"> service.disabled</span><br><span class="line"></span>    -<span class="ruby"> service.enable</span><br><span class="line"></span>    -<span class="ruby"> service.enabled</span><br><span class="line"></span>    -<span class="ruby"> service.get_all</span><br><span class="line"></span>    -<span class="ruby"> service.get_disabled</span><br><span class="line"></span>    -<span class="ruby"> service.get_enabled</span><br><span class="line"></span>    -<span class="ruby"> service.missing</span><br><span class="line"></span>    -<span class="ruby"> service.reload</span><br><span class="line"></span>    -<span class="ruby"> service.restart</span><br><span class="line"></span>    -<span class="ruby"> service.start</span><br><span class="line"></span>    -<span class="ruby"> service.status</span><br><span class="line"></span>    -<span class="ruby"> service.stop</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>Service管理服务模块</strong><br>查看service模块函数<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-attr">[root@localhost ~]</span># <span class="selector-tag">salt</span> "192<span class="selector-class">.168</span><span class="selector-class">.1</span><span class="selector-class">.135</span>" <span class="selector-tag">sys</span><span class="selector-class">.list_functions</span> <span class="selector-tag">service</span></span><br><span class="line">192<span class="selector-class">.168</span><span class="selector-class">.1</span><span class="selector-class">.135</span>:</span><br><span class="line">    <span class="selector-tag">-</span> <span class="selector-tag">service</span><span class="selector-class">.available</span></span><br><span class="line">    <span class="selector-tag">-</span> <span class="selector-tag">service</span><span class="selector-class">.disable</span></span><br><span class="line">    <span class="selector-tag">-</span> <span class="selector-tag">service</span><span class="selector-class">.disabled</span></span><br><span class="line">    <span class="selector-tag">-</span> <span class="selector-tag">service</span><span class="selector-class">.enable</span></span><br><span class="line">    <span class="selector-tag">-</span> <span class="selector-tag">service</span><span class="selector-class">.enabled</span></span><br><span class="line">    <span class="selector-tag">-</span> <span class="selector-tag">service</span><span class="selector-class">.get_all</span></span><br><span class="line">    <span class="selector-tag">-</span> <span class="selector-tag">service</span><span class="selector-class">.get_disabled</span></span><br><span class="line">    <span class="selector-tag">-</span> <span class="selector-tag">service</span><span class="selector-class">.get_enabled</span></span><br><span class="line">    <span class="selector-tag">-</span> <span class="selector-tag">service</span><span class="selector-class">.missing</span></span><br><span class="line">    <span class="selector-tag">-</span> <span class="selector-tag">service</span><span class="selector-class">.reload</span></span><br><span class="line">    <span class="selector-tag">-</span> <span class="selector-tag">service</span><span class="selector-class">.restart</span></span><br><span class="line">    <span class="selector-tag">-</span> <span class="selector-tag">service</span><span class="selector-class">.start</span></span><br><span class="line">    <span class="selector-tag">-</span> <span class="selector-tag">service</span><span class="selector-class">.status</span></span><br><span class="line">    <span class="selector-tag">-</span> <span class="selector-tag">service</span><span class="selector-class">.stop</span></span><br></pre></td></tr></table></figure></p>
 <p>service.status查看软件运行状态：</p>
 <p>False代表关闭<br>True代表运行<br>Service.start启动软件：</p>
 <p>Service.stop关闭软件：</p>
@@ -171,13 +171,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2017/03/02/编写自己的模块代码/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2017/03/02/编写自己的模块代码/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2017/03/01/获取nginx日志访问前10名（附python做法/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2017/03/01/获取nginx日志访问前10名（附python做法/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -189,7 +189,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2017/03/02/通过salt远程执行管理minion/" data-title="通过salt远程执行管理minion" data-url="http://linuxOps.xyz/2017/03/02/通过salt远程执行管理minion/"></div>  
@@ -233,7 +233,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>第 10 頁 | BY DevOps | 今晚打老虎</title>
+  <title>Page 10 | BY DevOps | 今晚打老虎</title>
   <meta name="author" content="林文杰">
   
   <meta name="description" content="DevOps 技术运维小学生">
@@ -12,10 +12,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -95,8 +95,40 @@
 	
 	<!-- display as entry -->	
 		<h3 class="title">
+			<div class="date"> 2015-08-31 </div>
+			<div class="article-title"><a href="/2015/08/31/CentOS╓╒╢╦╚ч║╬╧╘╩╛╓╨╬─═м╩▒│Ў╧╓┬╥┬ы╘ї├┤░ьг┐/">CentOS终端如何显示中文同时出现乱码怎么办？</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p>1、运行date看出并不是显示中文<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@centos ~]<span class="comment"># date</span></span><br><span class="line">Mon Aug <span class="number">31</span> <span class="number">01</span>:<span class="number">334</span>:<span class="number">47</span> CST <span class="number">2015</span></span><br></pre></td></tr></table></figure></p>
+<p>2、运行locale命令（locale 命令将有关当前语言环境或全部公共语言环境的信息写到标准输出上。公共语言环境是所有应用程序可以使用的语言环境。）<br><br><img src="/img/8-31/locale.png" style="width: 600px;"><br>3、如果没有安装中文语言（rpm -qa | grep Chinese查看）<br>若没有安装则需要安装<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y <span class="string">"@Chinese Support"</span></span><br></pre></td></tr></table></figure></p>
+<p>4、观察下以下区别代码运行的区别：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@centos ~]<span class="comment"># echo $LANG</span></span><br><span class="line">zh_CN.UTF<span class="number">-8</span></span><br><span class="line">[root@centos ~]<span class="comment"># date</span></span><br><span class="line"><span class="number">2015</span>年 <span class="number">08</span>月 <span class="number">31</span>日 星期一 <span class="number">01</span>:<span class="number">36</span>:<span class="number">53</span> CST</span><br><span class="line">[root@centos ~]<span class="comment"># export LANG=en_US.UTF-8</span></span><br><span class="line">[root@centos ~]<span class="comment"># echo $LANG</span></span><br><span class="line">en_US.UTF<span class="number">-8</span></span><br><span class="line">[root@centos ~]<span class="comment"># date</span></span><br><span class="line">Mon Aug <span class="number">31</span> <span class="number">01</span>:<span class="number">39</span>:<span class="number">22</span> CST <span class="number">2015</span></span><br></pre></td></tr></table></figure></p>
+<p>当中文字体包和显示包已经安装时候，只需更改/etc/sysconfig/i18n文件下的LANG即可显示中文，但是注意export LANG=xx，这种更改重启电脑后失效。</p>
+<p>5、要是终端出现乱码，则：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#vi /etc/sysconfig/i18n</span></span><br><span class="line">将LANG=<span class="string">"en_US.UTF-8"</span></span><br><span class="line">SYSFONT=<span class="string">"latarcyrheb-sun16"</span></span><br><span class="line">修改原内容为</span><br><span class="line">LANG=<span class="string">"zh_CN.GB18030"</span></span><br><span class="line">LANGUAGE=<span class="string">"zh_CN.GB18030:zh_CN.GB2312:zh_CN"</span></span><br><span class="line">SUPPORTED=<span class="string">"zh_CN.UTF-8:zh_CN:zh:en_US.UTF-8:en_US:en"</span></span><br><span class="line">SYSFONT=<span class="string">"lat0-sun16"</span></span><br><span class="line">重启或者注销登录即可</span><br></pre></td></tr></table></figure></p>
+<p>6、要是linux系统内终端可以正确显示中文，无乱码现象出现，但是远程终端确出现乱码情况发生，则注意把远程终端编码改为UTF-8格式后再尝试是否问题得到解决。</p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2015/08/31/CentOS╓╒╢╦╚ч║╬╧╘╩╛╓╨╬─═м╩▒│Ў╧╓┬╥┬ы╘ї├┤░ьг┐/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
 			<div class="date"> 2015-08-30 </div>
-			<div class="article-title"><a href="/2015/08/30/CentOS6-5-┼ф╓├vsftpd/" >CentOS6-5-配置vsftpd</a></div>						
+			<div class="article-title"><a href="/2015/08/30/CentOS6-5-┼ф╓├vsftpd/">CentOS6-5-配置vsftpd</a></div>						
 		</h3>
 	
 
@@ -112,20 +144,20 @@
 </blockquote>
 <ul>
 <li><p><strong>使用装备：</strong> 阿里云服务器CentOS 6.5</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@iZ25ltulsmiZ ~]<span class="comment"># uname -a</span></span><br><span class="line">Linux iZ25ltulsmiZ <span class="number">2.6</span><span class="number">.32</span>-<span class="number">431.23</span><span class="number">.3</span>.el6.x86_64 <span class="comment">#1 SMP Thu Jul 31 17:20:51 UTC 2014 x86_64 x86_64 x86_64 GNU/Linux</span></span><br><span class="line">[root@iZ25ltulsmiZ ~]<span class="comment"># lsb_release -a</span></span><br><span class="line">LSB Version:    :base-<span class="number">4.0</span>-amd64:base-<span class="number">4.0</span>-noarch:core-<span class="number">4.0</span>-amd64:core-<span class="number">4.0</span>-noarch</span><br><span class="line">Distributor ID: CentOS</span><br><span class="line">Description:    CentOS release <span class="number">6.5</span> (Final)</span><br><span class="line">Release:        <span class="number">6.5</span></span><br><span class="line">Codename:       Final</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@iZ25ltulsmiZ ~]<span class="comment"># uname -a</span></span><br><span class="line">Linux iZ25ltulsmiZ <span class="number">2.6</span><span class="number">.32</span><span class="number">-431.23</span><span class="number">.3</span>.el6.x86_64 <span class="comment">#1 SMP Thu Jul 31 17:20:51 UTC 2014 x86_64 x86_64 x86_64 GNU/Linux</span></span><br><span class="line">[root@iZ25ltulsmiZ ~]<span class="comment"># lsb_release -a</span></span><br><span class="line">LSB Version:    :base<span class="number">-4.0</span>-amd64:base<span class="number">-4.0</span>-noarch:core<span class="number">-4.0</span>-amd64:core<span class="number">-4.0</span>-noarch</span><br><span class="line">Distributor ID: CentOS</span><br><span class="line">Description:    CentOS release <span class="number">6.5</span> (Final)</span><br><span class="line">Release:        <span class="number">6.5</span></span><br><span class="line">Codename:       Final</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>配置流程</strong><br>1、检查是否已经安装ftp软件</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@iZ25ltulsmiZ ~]# rpm -qa | grep vsftpd</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@iZ25ltulsmiZ ~]# rpm -qa | grep vsftpd</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>2、运行1命令后若为空则说明没有安装，输入以下命令进行安装<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@iZ25ltulsmiZ ~]# yum install -y vsftpd</span><br></pre></td></tr></table></figure></p>
-<p>3、运行vsftpd服务器<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@iZ25ltulsmiZ ~]# service vsftpd start</span><br></pre></td></tr></table></figure></p>
+<p>2、运行1命令后若为空则说明没有安装，输入以下命令进行安装<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@iZ25ltulsmiZ ~]# yum install -y vsftpd</span><br></pre></td></tr></table></figure></p>
+<p>3、运行vsftpd服务器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@iZ25ltulsmiZ ~]# service vsftpd start</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>service vsftpd start 开启vsftpd服务<br>service vsftpd status 查看vsftpd服务状态<br>service vsftpd restart 重启vsftpd服务</p>
 </blockquote>
 <p>4、vsftpd开启后直接可以输入ip访问，此时默认路径是/var/ftp/pub文件夹<br>5、vsftpd主要的配置文件如下:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/ctc/vsftpd/vsftpd.conf      <span class="comment">#vsftpd服务器主要配置文件 |  </span></span><br><span class="line">/etc/vsftpd/ftpusers         <span class="comment">#禁止访问vsftpd服务器的用户列表| </span></span><br><span class="line">/etc/vsftpd/user_list        <span class="comment">#根据vsftpd.conf许可或禁止访问vsftpd服务器的用户列表文件 |</span></span><br><span class="line">/var/ftp                     <span class="comment">#匿名用户的默认文件目录</span></span><br></pre></td></tr></table></figure></p>
 <p>6、/etc/vsftpd/vsftpd.conf内容说明<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">anonymous_enable=NO           <span class="comment">#禁止匿名</span></span><br><span class="line">local_enable=YES              <span class="comment">#允许本地登录</span></span><br><span class="line">write_enable=YES              <span class="comment">#允许写，如需上传，则必须</span></span><br><span class="line">local_umask=<span class="number">027</span>               <span class="comment">#将上传文件的权限设置为：777-local_umask  </span></span><br><span class="line">anon_upload_enable=YES         <span class="comment">#允许虚拟用户和匿名用户上传</span></span><br><span class="line">anon_other_write_enable=YES   <span class="comment">#允许虚拟用户和匿名用户修改文件名和删除文件</span></span><br><span class="line">xferlog_enable=YES            <span class="comment">#打开日志记录</span></span><br><span class="line">connect_from_port_20=YES</span><br><span class="line">xferlog_file=/var/log/vsftpd.log       <span class="comment">#日志存放位置</span></span><br><span class="line">xferlog_std_format=YES                 <span class="comment">#标准日志格式</span></span><br><span class="line">idle_session_timeout=<span class="number">600</span>               <span class="comment">#空闲连接超时</span></span><br><span class="line">data_connection_timeout=<span class="number">120</span></span><br><span class="line">ftpd_banner=Welcome to ChinaRise FTP service       <span class="comment">#欢迎信息</span></span><br><span class="line">guest_enable=yes                       <span class="comment">#允许虚拟用户</span></span><br><span class="line">guest_username=vsftpdguest             <span class="comment">#虚拟用户使用的系统账号</span></span><br><span class="line">virtual_use_local_privs=YES            <span class="comment">#虚拟用户拥有本地系统权限</span></span><br><span class="line">chroot_local_user=NO              chroot_list_enable=YES</span><br><span class="line"><span class="comment">#以上一行将虚拟用户限制在其目录下，不能访问其他目录，或者直接用                                                        </span></span><br><span class="line"> listen=yes                            <span class="comment">#监听/被动模式</span></span><br><span class="line"> listen_port=<span class="number">21</span>                        <span class="comment">#监听端口</span></span><br><span class="line"></span><br><span class="line"> chroot_list_file=/etc/vsftpd/vsftpd.chroot_list       <span class="comment">#虚拟用户名单保存在文件/etc/vsftpd/vsftpd.chroot_list 中</span></span><br><span class="line"> user_config_dir=/etc/vsftpd/vsftpd_user_conf   <span class="comment">#每个虚拟用户名的更加详细的培植保存在/etc/vsftpd/vsftpd_user_conf 中</span></span><br></pre></td></tr></table></figure></p>
-<p>7、限制用户不能登录服务器<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#22312;/etc/vsftpd/ftpusers&#28155;&#21152;&#35201;&#38480;&#21046;&#30340;&#29992;&#25143;&#21517;</span><br></pre></td></tr></table></figure></p>
+<p>7、限制用户不能登录服务器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在/etc/vsftpd/ftpusers添加要限制的用户名</span><br></pre></td></tr></table></figure></p>
 <p>8、限制用户只能登录固定路径文件夹<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">8.1</span>、修改配置文件中,这样用户就只能访问自己家的目录了:</span><br><span class="line">chroot_local_user=yes</span><br><span class="line"></span><br><span class="line"><span class="number">8.2</span>、或者通过修改chroot_list_enable和chroot_local_user搭配</span><br><span class="line">①当chroot_list_enable=YES，chroot_local_user=YES时，在/etc/vsftpd.chroot_list文件中列出的用户，可以切换到其他目录；未在文件中列出的用户，不能切换到其他目录。</span><br><span class="line">②当chroot_list_enable=YES，chroot_local_user=NO时，在/etc/vsftpd.chroot_list文件中列出的用户，不能切换到其他目录；未在文件中列出的用户，可以切换到其他目录。</span><br><span class="line">③当chroot_list_enable=NO，chroot_local_user=YES时，所有的用户均不能切换到其他目录。</span><br><span class="line">④当chroot_list_enable=NO，chroot_local_user=NO时，所有的用户均可以切换到其他目录。</span><br></pre></td></tr></table></figure></p>
 
 	
@@ -133,7 +165,7 @@
 	
   
 </div>
-	<a type="button" href="/2015/08/30/CentOS6-5-┼ф╓├vsftpd/#more" class="btn btn-default more">閱讀本文</a>
+	<a type="button" href="/2015/08/30/CentOS6-5-┼ф╓├vsftpd/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -142,7 +174,7 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2015-08-30 </div>
-			<div class="article-title"><a href="/2015/08/30/LINUX═№╝╟root╡╟┬╝├▄┬ы╘ї├┤░ьг┐/" >LINUX忘记root登录密码怎么办？</a></div>						
+			<div class="article-title"><a href="/2015/08/30/LINUX═№╝╟root╡╟┬╝├▄┬ы╘ї├┤░ьг┐/">LINUX忘记root登录密码怎么办？</a></div>						
 		</h3>
 	
 
@@ -158,7 +190,7 @@
 </blockquote>
 <ul>
 <li><p><strong>使用装备：</strong> 自家使用win10在虚拟机搭建的CentOS 6.4</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@centos ~]# uname -a&#10;[root@centos ~]# uname -a&#10;Linux centos 2.6.32-358.el6.x86_64 #1 SMP Fri Feb 22 00:31:26 UTC 2013 x86_64 x86_64 x86_64 GNU/Linux&#10;[root@centos ~]# lsb_release -a&#10;LSB Version:    :base-4.0-amd64:base-4.0-noarch:core-4.0-amd64:core-4.0-noarch&#10;Distributor ID: CentOS&#10;Description:    CentOS release 6.4 (Final)&#10;Release:        6.4&#10;Codename:       Final</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@centos ~]# uname -a</span><br><span class="line">[root@centos ~]# uname -a</span><br><span class="line">Linux centos 2.6.32-358.el6.x86_64 #1 SMP Fri Feb 22 00:31:26 UTC 2013 x86_64 x86_64 x86_64 GNU/Linux</span><br><span class="line">[root@centos ~]# lsb_release -a</span><br><span class="line">LSB Version:    :base-4.0-amd64:base-4.0-noarch:core-4.0-amd64:core-4.0-noarch</span><br><span class="line">Distributor ID: CentOS</span><br><span class="line">Description:    CentOS release 6.4 (Final)</span><br><span class="line">Release:        6.4</span><br><span class="line">Codename:       Final</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>一、更改密码之前我们需要知道inittab下的几种模式：</strong><br>1、运行 cat /etc/inittab 如下图所示：<br><br><img src="/img/inittab.png" style="width: 600px;"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 0 - halt (Do NOT set initdefault to this)   //关机</span></span><br><span class="line"><span class="comment"># 1 - Single user mode   //单用户模式</span></span><br><span class="line"><span class="comment"># 2 - Multiuser, without NFS (The same as 3, if you do not have networking)    //多用户模式，无NFS功能。</span></span><br><span class="line"><span class="comment"># 3 - Full multiuser mode //完整多用户模式</span></span><br><span class="line"><span class="comment"># 4 - unused    //这个暂时不用</span></span><br><span class="line"><span class="comment"># 5 - X11 //完整多用户模式，启动X11</span></span><br><span class="line"><span class="comment"># 6 - reboot (Do NOT set initdefault to this) //重启</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">id:<span class="number">5</span>:initdefault:  //默认以<span class="number">5</span>级别启动</span><br></pre></td></tr></table></figure>
@@ -175,7 +207,7 @@
 	
   
 </div>
-	<a type="button" href="/2015/08/30/LINUX═№╝╟root╡╟┬╝├▄┬ы╘ї├┤░ьг┐/#more" class="btn btn-default more">閱讀本文</a>
+	<a type="button" href="/2015/08/30/LINUX═№╝╟root╡╟┬╝├▄┬ы╘ї├┤░ьг┐/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -184,7 +216,7 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2015-08-29 </div>
-			<div class="article-title"><a href="/2015/08/29/win10╙╥╝№▓╗─▄╨┬╘Ў╬─╝■╝╨║═╬─▒╛╕├╚ч║╬┤ж└эг┐/" >win10右键不能新增文件夹和文本该如何处理？</a></div>						
+			<div class="article-title"><a href="/2015/08/29/win10╙╥╝№▓╗─▄╨┬╘Ў╬─╝■╝╨║═╬─▒╛╕├╚ч║╬┤ж└эг┐/">win10右键不能新增文件夹和文本该如何处理？</a></div>						
 		</h3>
 	
 
@@ -202,7 +234,7 @@
 <li><strong>以下是解决win10右键不能新增文件夹和文本问题方法</strong></li>
 </ul>
 <p>1、以管理员身份允许CMD命令提示符<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在桌面同时按下windows键+X键，选择命令提示符（管理员）即可</span><br></pre></td></tr></table></figure></p>
-<p>2、在cmd控制台运行以下命令<br>cmd /k reg add “HKEY_CLASSES_ROOT\Directory\Background\shellex\ContextMenuHandlers\New” /ve /t REG_SZ /d {D969A300-E7FF-11d0-A93B-00A0C90F2719} /f <strong>(如下面所示)</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Microsoft Windows [版本 <span class="number">10.0</span><span class="number">.10240</span>]</span><br><span class="line">(c) <span class="number">2015</span> Microsoft Corporation. All rights reserved.</span><br><span class="line"></span><br><span class="line">C:\WINDOWS\system32&gt;cmd /k reg add <span class="string">"HKEY_CLASSES_ROOT\Directory\Background\shellex\ContextMenuHandlers\New"</span> /ve /t REG_SZ /d &#123;D969A300-E7FF-<span class="number">11</span>d0-A93B-<span class="number">00</span>A0C90F2719&#125; /f</span><br><span class="line">操作成功完成。</span><br><span class="line"></span><br><span class="line">C:\WINDOWS\system32&gt;</span><br></pre></td></tr></table></figure></p>
+<p>2、在cmd控制台运行以下命令<br>cmd /k reg add “HKEY_CLASSES_ROOT\Directory\Background\shellex\ContextMenuHandlers\New” /ve /t REG_SZ /d {D969A300-E7FF-11d0-A93B-00A0C90F2719} /f <strong>(如下面所示)</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Microsoft Windows [版本 <span class="number">10.0</span><span class="number">.10240</span>]</span><br><span class="line">(c) <span class="number">2015</span> Microsoft Corporation. All rights reserved.</span><br><span class="line"></span><br><span class="line">C:\WINDOWS\system32&gt;cmd /k reg add <span class="string">"HKEY_CLASSES_ROOT\Directory\Background\shellex\ContextMenuHandlers\New"</span> /ve /t REG_SZ /d &#123;D969A300-E7FF<span class="number">-11</span>d0-A93B<span class="number">-00</span>A0C90F2719&#125; /f</span><br><span class="line">操作成功完成。</span><br><span class="line"></span><br><span class="line">C:\WINDOWS\system32&gt;</span><br></pre></td></tr></table></figure></p>
 <p>以上其实是通过修改注册表来解决右键不能新增文件夹问题，朋友们也是可以直接到注册表上修改，要是CMD提示符运行命令后还是不能解决，请再次检查是否使用了管理员身份。</p>
 
 	
@@ -210,7 +242,7 @@
 	
   
 </div>
-	<a type="button" href="/2015/08/29/win10╙╥╝№▓╗─▄╨┬╘Ў╬─╝■╝╨║═╬─▒╛╕├╚ч║╬┤ж└эг┐/#more" class="btn btn-default more">閱讀本文</a>
+	<a type="button" href="/2015/08/29/win10╙╥╝№▓╗─▄╨┬╘Ў╬─╝■╝╨║═╬─▒╛╕├╚ч║╬┤ж└эг┐/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -224,13 +256,13 @@
 <ul class="pagination">
 	 
 		
-    	<li class="prev"><a href="/page/9/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i> 上一頁</a></li>
+    	<li class="prev"><a href="/page/9/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i> Prev</a></li>
   		
 
         <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
 
 		
-          <li class="next disabled"><a>下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>
+          <li class="next disabled"><a>Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
         
 	
 </ul>
@@ -250,7 +282,7 @@
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -261,27 +293,27 @@
 		
 			
 <div class="widget">
-  <h4>最新文章</h4>
+  <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2018/07/29/企业常用几种部署方式-蓝绿部署、滚动部署、金丝雀部署/" ><i class="fa fa-file-o"></i>企业常用几种部署方式(蓝绿部署、滚动部署、金丝雀部署)...</a>
+        <a href="/2019/02/17/分布式时序数据库InfluxDB/"><i class="fa fa-file-o"></i>分布式时序数据库InfluxDB</a>
       </li>
     
       <li>
-        <a href="/2018/07/29/Pyecharts-生成图表-附Django支持/" ><i class="fa fa-file-o"></i>Pyecharts 生成图表(附Django支持)...</a>
+        <a href="/2018/07/29/企业常用几种部署方式-蓝绿部署、滚动部署、金丝雀部署/"><i class="fa fa-file-o"></i>企业常用几种部署方式(蓝绿部署、滚动部署、金丝雀部署)</a>
       </li>
     
       <li>
-        <a href="/2018/07/29/Python调用Zabbix-Api获取数据/" ><i class="fa fa-file-o"></i>Python调用Zabbix Api获取数据...</a>
+        <a href="/2018/07/29/Pyecharts-生成图表-附Django支持/"><i class="fa fa-file-o"></i>Pyecharts 生成图表(附Django支持)</a>
       </li>
     
       <li>
-        <a href="/2018/07/29/Django中的缓存配置/" ><i class="fa fa-file-o"></i>Django中的缓存配置...</a>
+        <a href="/2018/07/29/Python调用Zabbix-Api获取数据/"><i class="fa fa-file-o"></i>Python调用Zabbix Api获取数据</a>
       </li>
     
       <li>
-        <a href="/2018/06/16/Celery-分布式任务队列/" ><i class="fa fa-file-o"></i>Celery - 分布式任务队列...</a>
+        <a href="/2018/07/29/Django中的缓存配置/"><i class="fa fa-file-o"></i>Django中的缓存配置</a>
       </li>
     
   </ul>
@@ -290,12 +322,12 @@
 		
 			
 <div class="widget">
-	<h4>鏈接</h4>
+	<h4>Links</h4>
 	<ul class="blogroll list-unstyled">
 	
-		<li><i class="fa fa-github"></i><a href="http://linuxops.cc" title="Macro博客" target="_blank"]);">Macro博客</a></li>
+		<li><i class="fa fa-github"></i><a href="http://linuxops.cc" title="Macro博客" target="_blank" ]);">Macro博客</a></li>
 	
-		<li><i class="fa fa-github"></i><a href="http://www.uinion.com/" title="uinion小站" target="_blank"]);">uinion小站</a></li>
+		<li><i class="fa fa-github"></i><a href="http://www.uinion.com/" title="uinion小站" target="_blank" ]);">uinion小站</a></li>
 	
 	</ul>
 </div>
@@ -312,7 +344,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>第 7 頁 | BY DevOps | 今晚打老虎</title>
+  <title>Page 7 | BY DevOps | 今晚打老虎</title>
   <meta name="author" content="林文杰">
   
   <meta name="description" content="DevOps 技术运维小学生">
@@ -12,10 +12,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -95,8 +95,44 @@
 	
 	<!-- display as entry -->	
 		<h3 class="title">
+			<div class="date"> 2015-12-06 </div>
+			<div class="article-title"><a href="/2015/12/06/╩╣╙├zabbix API╜╙┐┌┤ю╜иgrafana/">使用zabbix API接口搭建grafana</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p>或许很多小伙伴都说zabbix难看，实际上真的难看吗？我们可以帮它穿上一件皇帝的新衣变得不难看，先直接让大家看看成果吧：<br><br><img src="/img/12-grafana-1.png" style="width: 650x;"><br>要是觉得看得不清晰，可以直接看grafana官方演示站点 <a href="http://play.grafana.org/" target="_blank" rel="noopener">http://play.grafana.org/</a></p>
+<ul>
+<li><strong>配置过程：</strong></li>
+</ul>
+<p>一、下载安装grafana<br>下载链接：<a href="http://docs.grafana.org/installation/rpm/" target="_blank" rel="noopener">http://docs.grafana.org/installation/rpm/</a><br>要是觉得麻烦可以直接下载：wget <a href="https://grafanarel.s3.amazonaws.com/builds/grafana-2.5.0-1.x86_64.rpm" target="_blank" rel="noopener">https://grafanarel.s3.amazonaws.com/builds/grafana-2.5.0-1.x86_64.rpm</a><br>安装：rpm -Uvh grafana-2.5.0-1.x86_64.rpm<br>二、安装grafana-zabbix插件</p>
+<p>shell #git clone  <a href="https://github.com/alexanderzobnin/grafana-zabbix/" target="_blank" rel="noopener">https://github.com/alexanderzobnin/grafana-zabbix/</a></p>
+<p>shell #sudo cp -r grafana-zabbix/zabbix/  /usr/share/grafana/public/app/plugins/datasource/<br>shell #ls  /usr/share/grafana/public/app/plugins/datasource/<br>shell #vim   /usr/share/grafana/public/app/plugins/datasource/zabbix/plugin.json<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="string">"pluginType"</span> :  <span class="string">"datasource"</span> ,</span><br><span class="line"><span class="string">"name"</span> :  <span class="string">"Zabbix"</span> ,</span><br><span class="line"><span class="string">"type"</span> :  <span class="string">"zabbix"</span> ,</span><br><span class="line"><span class="string">"serviceName"</span> :  <span class="string">"ZabbixAPIDatasource"</span> ,</span><br><span class="line"><span class="string">"module"</span> :  <span class="string">"plugins/datasource/zabbix/datasource"</span> ,</span><br><span class="line"><span class="string">"partials"</span> : &#123;</span><br><span class="line"><span class="string">"config"</span> :  <span class="string">"app/plugins/datasource/zabbix/partials/config.html"</span> ,</span><br><span class="line"><span class="string">"query"</span> :  <span class="string">"app/plugins/datasource/zabbix/partials/query.editor.html"</span> ,</span><br><span class="line"><span class="string">"annotations"</span> :  <span class="string">"app/plugins/datasource/zabbix/partials/annotations.editor.html"</span></span><br><span class="line">&#125;,</span><br><span class="line"><span class="string">"username"</span> :  <span class="string">"guest"</span> ,   <span class="comment">#配置用户名，注意此用户在zabbix中存在，且对zabbix数据有只读权限（不需要写权限）</span></span><br><span class="line"><span class="string">"password"</span> :  <span class="string">"guest"</span> ,   <span class="comment">#配置密码</span></span><br><span class="line">  <span class="string">"metrics"</span> :  true ,</span><br><span class="line"><span class="string">"annotations"</span> :  true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>安装完成后启动应用：service grafana-server restart</p>
+<p>登陆浏览器配置：IP:3000<br><br><img src="/img/12-grafana-2.png" style="width: 650x;"><br><br><img src="/img/12-grafana-3.png" style="width: 650x;"><br><br><img src="/img/12-grafana-4.png" style="width: 650x;"></p>
+<p>配置后效果如下：<br><br><img src="/img/12-grafana-5.png" style="width: 650x;"><br>由于一开始是参照<a href="http://www.tuicool.com/articles/b2miiuJ此文做的插件配置，现在也分享给大家" target="_blank" rel="noopener">http://www.tuicool.com/articles/b2miiuJ此文做的插件配置，现在也分享给大家</a></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2015/12/06/╩╣╙├zabbix API╜╙┐┌┤ю╜иgrafana/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
 			<div class="date"> 2015-11-29 </div>
-			<div class="article-title"><a href="/2015/11/29/ssh┼·┴┐╡╟┬╝▓в╓┤╨╨├№┴югиpython╩╡╧╓гй/" >ssh批量登录并执行命令（python实现）</a></div>						
+			<div class="article-title"><a href="/2015/11/29/ssh┼·┴┐╡╟┬╝▓в╓┤╨╨├№┴югиpython╩╡╧╓гй/">ssh批量登录并执行命令（python实现）</a></div>						
 		</h3>
 	
 
@@ -108,17 +144,17 @@
 	  
 	
 	  <p>作为一个系统管理员，有时候常常批量修改远程主机配置，当然这里有很多选择，可以选择最近比较热门的自动化工具ansible等，以下介绍使用python实现：(这里假设所有主机的用户名和密码都一致)</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#-*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#!/usr/bin/python </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> paramiko</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line">f = file (<span class="string">'ip.list'</span>,<span class="string">'r'</span>)</span><br><span class="line">IP = f.readlines()</span><br><span class="line">f.close() </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ssh2</span><span class="params">(ip,username,passwd,cmd)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line"></span><br><span class="line">        ssh = paramiko.SSHClient()</span><br><span class="line"></span><br><span class="line">        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())</span><br><span class="line"></span><br><span class="line">        ssh.connect(ip,<span class="number">22</span>,username,passwd,timeout=<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> m <span class="keyword">in</span> cmd:</span><br><span class="line"></span><br><span class="line">            stdin, stdout, stderr = ssh.exec_command(m)</span><br><span class="line"></span><br><span class="line">            stdin.write(<span class="string">"Y"</span>)</span><br><span class="line"></span><br><span class="line">            out = stdout.readlines()</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> o <span class="keyword">in</span> out:</span><br><span class="line"></span><br><span class="line">                <span class="keyword">print</span> o[:-<span class="number">1</span>]</span><br><span class="line">        f = file(<span class="string">'out.txt'</span>,<span class="string">'aw'</span>)</span><br><span class="line">        f.write(o)</span><br><span class="line">        f.close()</span><br><span class="line">        <span class="keyword">print</span> <span class="string">'%s\tOK\n'</span>%(ip)</span><br><span class="line">    f=file(<span class="string">'out.txt'</span>,<span class="string">'aw'</span>)</span><br><span class="line">    <span class="keyword">print</span> &gt;&gt; f,<span class="string">'%s\tOK\n'</span>%(ip)</span><br><span class="line">        f.close()</span><br><span class="line">    <span class="keyword">except</span> :</span><br><span class="line">        <span class="keyword">print</span> <span class="string">'%s\tError\n'</span>%(ip)</span><br><span class="line">    f = file(<span class="string">'out.txt'</span>,<span class="string">'aw'</span>)</span><br><span class="line">    <span class="keyword">print</span> &gt;&gt; f,<span class="string">'%s\tError\n'</span>%(ip)</span><br><span class="line">        f.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">'__main__'</span>:</span><br><span class="line"></span><br><span class="line">    cmd = [<span class="string">'date'</span>,<span class="string">'ifconfig'</span>] <span class="comment">#你要执行的命令列表，多个命令之间用,隔开</span></span><br><span class="line"></span><br><span class="line">    username=<span class="string">"账号"</span></span><br><span class="line">    passwd = <span class="string">"密码"</span>    </span><br><span class="line">    threads = []   <span class="comment">#多线程</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Begin......"</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> IP:</span><br><span class="line"></span><br><span class="line">        ip = str(i)</span><br><span class="line"></span><br><span class="line">        a=threading.Thread(target=ssh2,args=(ip,username,passwd,cmd))</span><br><span class="line">        a.start()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#-*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#!/usr/bin/python </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> paramiko</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line">f = file (<span class="string">'ip.list'</span>,<span class="string">'r'</span>)</span><br><span class="line">IP = f.readlines()</span><br><span class="line">f.close() </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ssh2</span><span class="params">(ip,username,passwd,cmd)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line"></span><br><span class="line">        ssh = paramiko.SSHClient()</span><br><span class="line"></span><br><span class="line">        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())</span><br><span class="line"></span><br><span class="line">        ssh.connect(ip,<span class="number">22</span>,username,passwd,timeout=<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> m <span class="keyword">in</span> cmd:</span><br><span class="line"></span><br><span class="line">            stdin, stdout, stderr = ssh.exec_command(m)</span><br><span class="line"></span><br><span class="line">            stdin.write(<span class="string">"Y"</span>)</span><br><span class="line"></span><br><span class="line">            out = stdout.readlines()</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> o <span class="keyword">in</span> out:</span><br><span class="line"></span><br><span class="line">                <span class="keyword">print</span> o[:<span class="number">-1</span>]</span><br><span class="line">        f = file(<span class="string">'out.txt'</span>,<span class="string">'aw'</span>)</span><br><span class="line">        f.write(o)</span><br><span class="line">        f.close()</span><br><span class="line">        <span class="keyword">print</span> <span class="string">'%s\tOK\n'</span>%(ip)</span><br><span class="line">    f=file(<span class="string">'out.txt'</span>,<span class="string">'aw'</span>)</span><br><span class="line">    <span class="keyword">print</span> &gt;&gt; f,<span class="string">'%s\tOK\n'</span>%(ip)</span><br><span class="line">        f.close()</span><br><span class="line">    <span class="keyword">except</span> :</span><br><span class="line">        <span class="keyword">print</span> <span class="string">'%s\tError\n'</span>%(ip)</span><br><span class="line">    f = file(<span class="string">'out.txt'</span>,<span class="string">'aw'</span>)</span><br><span class="line">    <span class="keyword">print</span> &gt;&gt; f,<span class="string">'%s\tError\n'</span>%(ip)</span><br><span class="line">        f.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">'__main__'</span>:</span><br><span class="line"></span><br><span class="line">    cmd = [<span class="string">'date'</span>,<span class="string">'ifconfig'</span>] <span class="comment">#你要执行的命令列表，多个命令之间用,隔开</span></span><br><span class="line"></span><br><span class="line">    username=<span class="string">"账号"</span></span><br><span class="line">    passwd = <span class="string">"密码"</span>    </span><br><span class="line">    threads = []   <span class="comment">#多线程</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Begin......"</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> IP:</span><br><span class="line"></span><br><span class="line">        ip = str(i)</span><br><span class="line"></span><br><span class="line">        a=threading.Thread(target=ssh2,args=(ip,username,passwd,cmd))</span><br><span class="line">        a.start()</span><br></pre></td></tr></table></figure>
 <hr>
 <p>ip.list格式<br>IP<br>IP</p>
-<p>本文参考<a href="http://www.cnblogs.com/ma6174/" target="_blank" rel="external">http://www.cnblogs.com/ma6174/</a> 文章作了部分改进</p>
+<p>本文参考<a href="http://www.cnblogs.com/ma6174/" target="_blank" rel="noopener">http://www.cnblogs.com/ma6174/</a> 文章作了部分改进</p>
 
 	
 	</div>
 	
   
 </div>
-	<a type="button" href="/2015/11/29/ssh┼·┴┐╡╟┬╝▓в╓┤╨╨├№┴югиpython╩╡╧╓гй/#more" class="btn btn-default more">閱讀本文</a>
+	<a type="button" href="/2015/11/29/ssh┼·┴┐╡╟┬╝▓в╓┤╨╨├№┴югиpython╩╡╧╓гй/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -127,7 +163,7 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2015-11-29 </div>
-			<div class="article-title"><a href="/2015/11/29/╘╦╬м╓о╡└╓о╧╡═│╣▄└э╓╨╡─╚¤┤є└√╚╨-htop-glances-dstat/" >运维之道之系统管理中的三大利刃(htop glances dstat)</a></div>						
+			<div class="article-title"><a href="/2015/11/29/╘╦╬м╓о╡└╓о╧╡═│╣▄└э╓╨╡─╚¤┤є└√╚╨-htop-glances-dstat/">运维之道之系统管理中的三大利刃(htop glances dstat)</a></div>						
 		</h3>
 	
 
@@ -146,14 +182,14 @@
 <p>相传当初傲日并非打算铸造「绝世好剑」，而是要铸造「败亡之剑」，可惜「败亡」的铸造过程太过邪异，每次铸剑，均会造成人命伤亡，故此傲家中人弃「败亡」而改铸「绝世」。铸剑的最后步骤是以三毒之血「贪」（剑贪之血），「瞋」（步惊云之血），「痴」（断浪之血）炼制。但所铸成的只是威力神髓所在的真元，而真正的剑体已藏于千万铸好的绝世好剑中，绝世好剑本身有吸摄天地灵气之能，同样也可吸收别人功力转为己用。位列当世十大神兵之一，见《风云》。而我们今天所说的第三把系统管理的兵刃，于绝世好剑有过之而不及，绝世好剑需要集三毒之血（剑贪之血）、（步惊云之血）、（断浪之血）炼制而成，而dstat整合了vmstat、iostat、netstat、ifstat四款工具的功能于一身，功能无比强大，首先来看看这个利刃的庐山真面目，如下图：<br><br><img src="/img/NOV/yunwei3.jpeg" style="width: 650x;"><br>通过上图可以更直观的看出系统各功能模块的使用状况，而且dstat是CentOS默认提供的一款工具，并且使用起来十分的灵活，可以通过不同的组合来显示出我们需要的功能模块，下面来认识一下dstat这款工具的主要选项有那些：<br>-c ：显示CPU相关的统计数据<br>-d ：显示磁盘相关的统计数据<br>-g ：显示Page相关的速率数据<br>-i ：显示中断相关的统计数据<br>-l ：显示load average相关的统计信息<br>-m：显示内存相关的统计信息<br>-n ：显示网络相关的统计数据速率信息<br>-N ：指定接口<br>-p ：显示进程相关的统计数据<br>-r ：显示IO请求的速率<br>-s ：显示swap交换分区的相关数据<br>-y ：显示系统相关的数据包括中断和进程间切换等相关信息<br>–top-cpu：显示最占用CPU的进程<br>–top-bio：显示最消耗块级别IO的进程<br>–top-time：显示最占用CPU时长的进程<br>–top-io：显示最占用io的进程<br>–top-mem：显示最占用内存的进程<br>–ipc：显示进程间通信相关的速率数据<br>–tcp：显示tcp套接字相关的数据<br>–udp：显示udp套接字的相关数据<br>–raw：显示raw套接字相关数据<br>–unix：显示unix sock接口相关的统计数据<br>-a ：相当于-cdngy</p>
 <p>以上就是dstat工具的常用选项，之所以说该使用该工具十分领过是因为它即可以加上众多的参数来显示系统运行时丰富的各个功能模块的状态信息，如下图：<br><br><img src="/img/NOV/yunwei4.jpeg" style="width: 650x;"><br>同时又可以根据自己的需要来单独显示某一个功能模块的信息或者显示当前系统最占用CPU的进程，如下图：<br><br><img src="/img/NOV/yunwei5.jpeg" style="width: 650x;">    </p>
 <p> 以上就是系统管理中的三把利刃，只要精通任何一个工具，都有助于我们更加深入的了解我们系统运行过程中的问题和不足，及时的发行并解决这些问题，但同时我们也应该认识到，所谓的这些工具都是通过整合或分析/proc/这个伪文件系统，为什么说它是伪文件系统那，因为它只存在内存当中而不占用外存空间，它是以文件系统的方式访问系统内核数据的操作提供接口，要想使用好以上三个工具，还需要更深入的理解系统是究竟怎么运行起来的，以及系统运行的原理是什么，当我们真的理解了这些，我想那个时候就是我们自己制作工具开始，正所谓真正的高手也都是制作工具的高手，就如同江湖里说的最好的境界乃是无剑胜有剑，摘叶飞花皆可伤人。</p>
-<p>转载请注明：linux运维部落 » 系统管理中的三大利刃(htop glances dstat)<br>原文链接：<a href="http://www.178linux.com/9255" target="_blank" rel="external">http://www.178linux.com/9255</a></p>
+<p>转载请注明：linux运维部落 » 系统管理中的三大利刃(htop glances dstat)<br>原文链接：<a href="http://www.178linux.com/9255" target="_blank" rel="noopener">http://www.178linux.com/9255</a></p>
 
 	
 	</div>
 	
   
 </div>
-	<a type="button" href="/2015/11/29/╘╦╬м╓о╡└╓о╧╡═│╣▄└э╓╨╡─╚¤┤є└√╚╨-htop-glances-dstat/#more" class="btn btn-default more">閱讀本文</a>
+	<a type="button" href="/2015/11/29/╘╦╬м╓о╡└╓о╧╡═│╣▄└э╓╨╡─╚¤┤є└√╚╨-htop-glances-dstat/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -162,7 +198,7 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2015-11-21 </div>
-			<div class="article-title"><a href="/2015/11/21/Nginx╡─╞Ї╢пбв╣╪▒╒║═╞╜╗м╓╪╞Ї/" >Nginx的启动、关闭和平滑重启</a></div>						
+			<div class="article-title"><a href="/2015/11/21/Nginx╡─╞Ї╢пбв╣╪▒╒║═╞╜╗м╓╪╞Ї/">Nginx的启动、关闭和平滑重启</a></div>						
 		</h3>
 	
 
@@ -184,7 +220,7 @@
 	
   
 </div>
-	<a type="button" href="/2015/11/21/Nginx╡─╞Ї╢пбв╣╪▒╒║═╞╜╗м╓╪╞Ї/#more" class="btn btn-default more">閱讀本文</a>
+	<a type="button" href="/2015/11/21/Nginx╡─╞Ї╢пбв╣╪▒╒║═╞╜╗м╓╪╞Ї/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -193,7 +229,7 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2015-11-21 </div>
-			<div class="article-title"><a href="/2015/11/21/nginx-╧╡┴╨╓о╚¤nginx░▓╫░║═┼ф╓├/" >nginx 系列之三nginx安装和配置</a></div>						
+			<div class="article-title"><a href="/2015/11/21/nginx-╧╡┴╨╓о╚¤nginx░▓╫░║═┼ф╓├/">nginx 系列之三nginx安装和配置</a></div>						
 		</h3>
 	
 
@@ -207,15 +243,15 @@
 	  <ul>
 <li><strong>1.4.1下载与安装Nginx </strong></li>
 </ul>
-<p>Nginx的官方网站是<a href="http://sysoev.ru/nginx/，英文主页为http://nginx.net，从这里可以获得Nginx的最新版本信息。Nginx有三个版本：稳定版、开发版和历史稳定版。开发版更新较快，包含最新的功能和bug的修复，但同时也可能会出现新的bug。开发版一旦更新稳定下来，就会被加入稳定版分支中。然而有些新功能不一定会被加到稳定版中去。稳定版更新较慢，但是bug较少，可以作为生产环境的首选，因此通常建议使用稳定版。历史稳定版为以往稳定版本的汇总，不包含最新的功能。" target="_blank" rel="external">http://sysoev.ru/nginx/，英文主页为http://nginx.net，从这里可以获得Nginx的最新版本信息。Nginx有三个版本：稳定版、开发版和历史稳定版。开发版更新较快，包含最新的功能和bug的修复，但同时也可能会出现新的bug。开发版一旦更新稳定下来，就会被加入稳定版分支中。然而有些新功能不一定会被加到稳定版中去。稳定版更新较慢，但是bug较少，可以作为生产环境的首选，因此通常建议使用稳定版。历史稳定版为以往稳定版本的汇总，不包含最新的功能。</a><br>这里选择当前的稳定版本nginx-0.7.65作为介绍对象，开始介绍编译安装。在安装Nginx之前，确保系统已经安装了gcc、openssl-devel、pcre-devel和zlib-devel软件库。<br>Linux开发库是在安装系统时通过手动选择安装的，gcc、openssl-devel、zlib-devel三个软件库可以通过安装光盘直接选择安装，而pcre-devel库默认不在系统光盘中，所以这里重点介绍pcre-devel库。</p>
+<p>Nginx的官方网站是<a href="http://sysoev.ru/nginx/，英文主页为http://nginx.net，从这里可以获得Nginx的最新版本信息。Nginx有三个版本：稳定版、开发版和历史稳定版。开发版更新较快，包含最新的功能和bug的修复，但同时也可能会出现新的bug。开发版一旦更新稳定下来，就会被加入稳定版分支中。然而有些新功能不一定会被加到稳定版中去。稳定版更新较慢，但是bug较少，可以作为生产环境的首选，因此通常建议使用稳定版。历史稳定版为以往稳定版本的汇总，不包含最新的功能。" target="_blank" rel="noopener">http://sysoev.ru/nginx/，英文主页为http://nginx.net，从这里可以获得Nginx的最新版本信息。Nginx有三个版本：稳定版、开发版和历史稳定版。开发版更新较快，包含最新的功能和bug的修复，但同时也可能会出现新的bug。开发版一旦更新稳定下来，就会被加入稳定版分支中。然而有些新功能不一定会被加到稳定版中去。稳定版更新较慢，但是bug较少，可以作为生产环境的首选，因此通常建议使用稳定版。历史稳定版为以往稳定版本的汇总，不包含最新的功能。</a><br>这里选择当前的稳定版本nginx-0.7.65作为介绍对象，开始介绍编译安装。在安装Nginx之前，确保系统已经安装了gcc、openssl-devel、pcre-devel和zlib-devel软件库。<br>Linux开发库是在安装系统时通过手动选择安装的，gcc、openssl-devel、zlib-devel三个软件库可以通过安装光盘直接选择安装，而pcre-devel库默认不在系统光盘中，所以这里重点介绍pcre-devel库。</p>
 <ul>
 <li><strong>1.安装Nginx所需的pcre-devel库 </strong></li>
 </ul>
-<p>安装pcre库是为了使Nginx支持HTTP Rewrite 模块。下面进行安装，过程如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost home]<span class="comment"># tar zxvf pcre-8.02.tar.gz  </span></span><br><span class="line">[root@localhost home]<span class="comment"># cd pcre-8.02  </span></span><br><span class="line">[root@localhost pcre-<span class="number">8.02</span>]<span class="comment">#make  </span></span><br><span class="line">[root@localhost pcre-<span class="number">8.02</span>]<span class="comment">#make install</span></span><br></pre></td></tr></table></figure></p>
+<p>安装pcre库是为了使Nginx支持HTTP Rewrite 模块。下面进行安装，过程如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost home]<span class="comment"># tar zxvf pcre-8.02.tar.gz  </span></span><br><span class="line">[root@localhost home]<span class="comment"># cd pcre-8.02  </span></span><br><span class="line">[root@localhost pcre<span class="number">-8.02</span>]<span class="comment">#make  </span></span><br><span class="line">[root@localhost pcre<span class="number">-8.02</span>]<span class="comment">#make install</span></span><br></pre></td></tr></table></figure></p>
 <ul>
 <li><strong>2.开始安装Nginx-</strong></li>
 </ul>
-<p>Nginx的安装非常简单。在默认情况下，经过编译安装的Nginx包含了大部分可用模块。可以通过“./configure  –help”选项设置各个模块的使用情况，例如对不需要的http_ssi模块，可通过“–without-http_ssi_module”方式关闭此。同理，如果需要“http_perl”模块，那么可以通过“–with-http_perl_module”方式进行安装。下面是安装过程：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost home]<span class="comment"># tar zxvf nginx-0.7.65.tar.gz  </span></span><br><span class="line">[root@localhost home]<span class="comment">#cd nginx-0.7.65  </span></span><br><span class="line">[root@localhostnginx-<span class="number">0.7</span><span class="number">.65</span>]<span class="comment">#./configure \  </span></span><br><span class="line">--<span class="keyword">with</span>-http_stub_status_module  --prefix=/opt/nginx  </span><br><span class="line">[root@localhost nginx-<span class="number">0.7</span><span class="number">.65</span>]<span class="comment">#make  </span></span><br><span class="line">[root@localhost nginx-<span class="number">0.7</span><span class="number">.65</span>]<span class="comment">#make install</span></span><br></pre></td></tr></table></figure></p>
+<p>Nginx的安装非常简单。在默认情况下，经过编译安装的Nginx包含了大部分可用模块。可以通过“./configure  –help”选项设置各个模块的使用情况，例如对不需要的http_ssi模块，可通过“–without-http_ssi_module”方式关闭此。同理，如果需要“http_perl”模块，那么可以通过“–with-http_perl_module”方式进行安装。下面是安装过程：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost home]<span class="comment"># tar zxvf nginx-0.7.65.tar.gz  </span></span><br><span class="line">[root@localhost home]<span class="comment">#cd nginx-0.7.65  </span></span><br><span class="line">[root@localhostnginx<span class="number">-0.7</span><span class="number">.65</span>]<span class="comment">#./configure \  </span></span><br><span class="line">--<span class="keyword">with</span>-http_stub_status_module  --prefix=/opt/nginx  </span><br><span class="line">[root@localhost nginx<span class="number">-0.7</span><span class="number">.65</span>]<span class="comment">#make  </span></span><br><span class="line">[root@localhost nginx<span class="number">-0.7</span><span class="number">.65</span>]<span class="comment">#make install</span></span><br></pre></td></tr></table></figure></p>
 <p>在上面的configure选项中，“–with-http_stub_status_module”可以用来启用 Nginx 的 NginxStatus 功能，以监控 Nginx 的当前状态。<br>至此，Nginx已经安装完成了。</p>
 <ul>
 <li><strong>1.4.2　Nginx配置文件的结构 </strong></li>
@@ -271,14 +307,14 @@
 </ul>
 <p>StubStatus模块能够获取Nginx自上次启动以来的工作状态，此模块非核心模块，需要在Nginx编译安装时手工指定才能使用。<br>以下指令指定启用获取Nginx工作状态的功能。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">   location /NginxStatus &#123;  </span><br><span class="line">                    stub_status     on;  </span><br><span class="line">access_log             logs/NginxStatus.log;  </span><br><span class="line">                    auth_basic             <span class="string">"NginxStatus"</span>;  </span><br><span class="line">            auth_basic_user_file    ../htpasswd;  </span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-<p>stub_status为“on”表示启用StubStatus的工作状态统计功能；access_log 用来指定StubStatus模块的访问日志文件；auth_basic是Nginx的一种认证机制；auth_basic_user_file用来指定认证的密码文件。由于Nginx的auth_basic认证采用的是与Apache兼容的密码文件，因此需要用Apache的htpasswd命令来生成密码文件。例如要添加一个webadmin用户，可以使用下面的方式生成密码文件：<br>/usr/local/apache/bin/htpasswd -c  /opt/nginx/conf/htpasswd webadmin<br>会得到以下提示信息：<br>New password:<br>输入密码之后，系统会要求再次输入密码，确认之后添加用户成功。<br>要查看Nginx的运行状态，可以输入<a href="http://ip/" target="_blank" rel="external">http://ip/</a> NginxStatus，然后输入刚刚创建的用户名和密码就可以看到如下信息：<br>Active connections: 1<br>server accepts handled requests<br>393411 393411 393799<br>Reading: 0 Writing: 1 Waiting: 0<br>Active connections表示当前活跃的连接数，第三行的3个数字表示 Nginx当前总共处理了393411个连接， 成功创建了393 411次握手，总共处理了393 799个请求。最后一行的Reading表示Nginx读取到客户端Header信息数； Writing表示Nginx返回给客户端的Header信息数；Waiting表示Nginx已经处理完、正在等候下一次请求指令时的驻留连接数。<br>在最后这段设置中，设置了虚拟主机的错误信息返回页面，通过error_page指令可以定制各种错误信息的返回页面。在默认情况下，Nginx会在主目录的html目录中查找指定的返回页面。特别需要注意的是，这些错误信息的返回页面大小一定要超过512KB，否则会被IE浏览器替换为IE默认的错误页面。<br>       error_page  404              /404.html;<br>       error_page   500 502 503 504  /50x.html;<br>       location = /50x.html {<br>           root   html;<br>       }<br>}<br>} </p>
+<p>stub_status为“on”表示启用StubStatus的工作状态统计功能；access_log 用来指定StubStatus模块的访问日志文件；auth_basic是Nginx的一种认证机制；auth_basic_user_file用来指定认证的密码文件。由于Nginx的auth_basic认证采用的是与Apache兼容的密码文件，因此需要用Apache的htpasswd命令来生成密码文件。例如要添加一个webadmin用户，可以使用下面的方式生成密码文件：<br>/usr/local/apache/bin/htpasswd -c  /opt/nginx/conf/htpasswd webadmin<br>会得到以下提示信息：<br>New password:<br>输入密码之后，系统会要求再次输入密码，确认之后添加用户成功。<br>要查看Nginx的运行状态，可以输入<a href="http://ip/" target="_blank" rel="noopener">http://ip/</a> NginxStatus，然后输入刚刚创建的用户名和密码就可以看到如下信息：<br>Active connections: 1<br>server accepts handled requests<br>393411 393411 393799<br>Reading: 0 Writing: 1 Waiting: 0<br>Active connections表示当前活跃的连接数，第三行的3个数字表示 Nginx当前总共处理了393411个连接， 成功创建了393 411次握手，总共处理了393 799个请求。最后一行的Reading表示Nginx读取到客户端Header信息数； Writing表示Nginx返回给客户端的Header信息数；Waiting表示Nginx已经处理完、正在等候下一次请求指令时的驻留连接数。<br>在最后这段设置中，设置了虚拟主机的错误信息返回页面，通过error_page指令可以定制各种错误信息的返回页面。在默认情况下，Nginx会在主目录的html目录中查找指定的返回页面。特别需要注意的是，这些错误信息的返回页面大小一定要超过512KB，否则会被IE浏览器替换为IE默认的错误页面。<br>       error_page  404              /404.html;<br>       error_page   500 502 503 504  /50x.html;<br>       location = /50x.html {<br>           root   html;<br>       }<br>}<br>} </p>
 
 	
 	</div>
 	
   
 </div>
-	<a type="button" href="/2015/11/21/nginx-╧╡┴╨╓о╚¤nginx░▓╫░║═┼ф╓├/#more" class="btn btn-default more">閱讀本文</a>
+	<a type="button" href="/2015/11/21/nginx-╧╡┴╨╓о╚¤nginx░▓╫░║═┼ф╓├/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -287,7 +323,7 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2015-11-21 </div>
-			<div class="article-title"><a href="/2015/11/21/nginx-╧╡┴╨╓о╢■Nginx╡──г┐щ╙ы╣д╫ў╘н└э/" >nginx 系列之二Nginx的模块与工作原理</a></div>						
+			<div class="article-title"><a href="/2015/11/21/nginx-╧╡┴╨╓о╢■Nginx╡──г┐щ╙ы╣д╫ў╘н└э/">nginx 系列之二Nginx的模块与工作原理</a></div>						
 		</h3>
 	
 
@@ -307,7 +343,7 @@
 	
   
 </div>
-	<a type="button" href="/2015/11/21/nginx-╧╡┴╨╓о╢■Nginx╡──г┐щ╙ы╣д╫ў╘н└э/#more" class="btn btn-default more">閱讀本文</a>
+	<a type="button" href="/2015/11/21/nginx-╧╡┴╨╓о╢■Nginx╡──г┐щ╙ы╣д╫ў╘н└э/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -316,7 +352,7 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2015-11-21 </div>
-			<div class="article-title"><a href="/2015/11/21/nginx-╧╡┴╨╓о╥╗╬к║╬╥к╤б╘ёnginx/" >nginx 系列之一为何要选择nginx</a></div>						
+			<div class="article-title"><a href="/2015/11/21/nginx-╧╡┴╨╓о╥╗╬к║╬╥к╤б╘ёnginx/">nginx 系列之一为何要选择nginx</a></div>						
 		</h3>
 	
 
@@ -341,7 +377,7 @@
 	
   
 </div>
-	<a type="button" href="/2015/11/21/nginx-╧╡┴╨╓о╥╗╬к║╬╥к╤б╘ёnginx/#more" class="btn btn-default more">閱讀本文</a>
+	<a type="button" href="/2015/11/21/nginx-╧╡┴╨╓о╥╗╬к║╬╥к╤б╘ёnginx/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -350,7 +386,7 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2015-11-21 </div>
-			<div class="article-title"><a href="/2015/11/21/PXE-Kickstart-╬▐╚╦╓╡╩╪Centos6-5░▓╫░▓┘╫ў/" >PXE+Kickstart 无人值守Centos6.5安装操作</a></div>						
+			<div class="article-title"><a href="/2015/11/21/PXE-Kickstart-╬▐╚╦╓╡╩╪Centos6-5░▓╫░▓┘╫ў/">PXE+Kickstart 无人值守Centos6.5安装操作</a></div>						
 		</h3>
 	
 
@@ -387,18 +423,18 @@
 </li>
 </ul>
 <p><br><img src="/img/NOV/PEX2.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX3.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX4.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX5.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX6.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX7.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX8.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX9.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX10.png" style="width: 650x;"></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#platform=x86, AMD64, 或 Intel EM64T</span></span><br><span class="line"><span class="comment">#version=DEVEL</span></span><br><span class="line"><span class="comment"># Firewall configuration</span></span><br><span class="line">firewall --disabled</span><br><span class="line"><span class="comment"># Install OS instead of upgrade</span></span><br><span class="line">install</span><br><span class="line"><span class="comment"># Use network installation</span></span><br><span class="line">url --url=<span class="string">"ftp://192.168.108.129/pub"</span></span><br><span class="line"><span class="comment"># Root password</span></span><br><span class="line">rootpw --iscrypted $<span class="number">1</span>$sWjalKUE$Q9CMBRc6GDre025<span class="number">.19</span>HGT0</span><br><span class="line"><span class="comment"># System authorization information</span></span><br><span class="line">auth  --useshadow  --passalgo=sha512</span><br><span class="line"><span class="comment"># Use graphical install</span></span><br><span class="line">graphical</span><br><span class="line">firstboot --disable</span><br><span class="line"><span class="comment"># System keyboard</span></span><br><span class="line">keyboard us</span><br><span class="line"><span class="comment"># System language</span></span><br><span class="line">lang en_US</span><br><span class="line"><span class="comment"># SELinux configuration</span></span><br><span class="line">selinux --disabled</span><br><span class="line"><span class="comment"># Installation logging level</span></span><br><span class="line">logging --level=info</span><br><span class="line">reboot                                     <span class="comment">##################################加上后自动启动，无需手工执行。</span></span><br><span class="line"><span class="comment"># System timezone</span></span><br><span class="line">timezone --isUtc Asia/Shanghai</span><br><span class="line"><span class="comment"># Network information</span></span><br><span class="line">network  --bootproto=dhcp --device=eth0 --onboot=on</span><br><span class="line"><span class="comment"># System bootloader configuration</span></span><br><span class="line">bootloader --location=mbr</span><br><span class="line"><span class="comment"># Clear the Master Boot Record</span></span><br><span class="line">zerombr</span><br><span class="line"><span class="comment"># Partition clearing information</span></span><br><span class="line">clearpart --all --initlabel </span><br><span class="line"><span class="comment"># Disk partitioning information</span></span><br><span class="line">part swap --fstype=<span class="string">"swap"</span> --size=<span class="number">2000</span></span><br><span class="line">part /home --fstype=<span class="string">"ext4"</span> --size=<span class="number">2000</span></span><br><span class="line">part / --fstype=<span class="string">"ext4"</span> --size=<span class="number">10000</span></span><br><span class="line"></span><br><span class="line">%packages</span><br><span class="line"><span class="decorator">@kde-desktop</span></span><br><span class="line">%end</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#platform=x86, AMD64, 或 Intel EM64T</span></span><br><span class="line"><span class="comment">#version=DEVEL</span></span><br><span class="line"><span class="comment"># Firewall configuration</span></span><br><span class="line">firewall --disabled</span><br><span class="line"><span class="comment"># Install OS instead of upgrade</span></span><br><span class="line">install</span><br><span class="line"><span class="comment"># Use network installation</span></span><br><span class="line">url --url=<span class="string">"ftp://192.168.108.129/pub"</span></span><br><span class="line"><span class="comment"># Root password</span></span><br><span class="line">rootpw --iscrypted $<span class="number">1</span>$sWjalKUE$Q9CMBRc6GDre025<span class="number">.19</span>HGT0</span><br><span class="line"><span class="comment"># System authorization information</span></span><br><span class="line">auth  --useshadow  --passalgo=sha512</span><br><span class="line"><span class="comment"># Use graphical install</span></span><br><span class="line">graphical</span><br><span class="line">firstboot --disable</span><br><span class="line"><span class="comment"># System keyboard</span></span><br><span class="line">keyboard us</span><br><span class="line"><span class="comment"># System language</span></span><br><span class="line">lang en_US</span><br><span class="line"><span class="comment"># SELinux configuration</span></span><br><span class="line">selinux --disabled</span><br><span class="line"><span class="comment"># Installation logging level</span></span><br><span class="line">logging --level=info</span><br><span class="line">reboot                                     <span class="comment">##################################加上后自动启动，无需手工执行。</span></span><br><span class="line"><span class="comment"># System timezone</span></span><br><span class="line">timezone --isUtc Asia/Shanghai</span><br><span class="line"><span class="comment"># Network information</span></span><br><span class="line">network  --bootproto=dhcp --device=eth0 --onboot=on</span><br><span class="line"><span class="comment"># System bootloader configuration</span></span><br><span class="line">bootloader --location=mbr</span><br><span class="line"><span class="comment"># Clear the Master Boot Record</span></span><br><span class="line">zerombr</span><br><span class="line"><span class="comment"># Partition clearing information</span></span><br><span class="line">clearpart --all --initlabel </span><br><span class="line"><span class="comment"># Disk partitioning information</span></span><br><span class="line">part swap --fstype=<span class="string">"swap"</span> --size=<span class="number">2000</span></span><br><span class="line">part /home --fstype=<span class="string">"ext4"</span> --size=<span class="number">2000</span></span><br><span class="line">part / --fstype=<span class="string">"ext4"</span> --size=<span class="number">10000</span></span><br><span class="line"></span><br><span class="line">%packages</span><br><span class="line"><span class="meta">@kde-desktop</span></span><br><span class="line">%end</span><br></pre></td></tr></table></figure>
 <p>ks.cfg放在pub文件夹下：</p>
 <p>下面新增一台虚拟机设置NAT网络，打开电源后，即可自动安装。</p>
 <p><br><img src="/img/NOV/PEX11-2.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX12-2.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX13-2.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX14-2.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX15-2.png" style="width: 650x;"></p>
-<p>参考  <a href="http://www.cnblogs.com/mchina/p/centos-pxe-kickstart-auto-install-os.html" target="_blank" rel="external">http://www.cnblogs.com/mchina/p/centos-pxe-kickstart-auto-install-os.html</a>    </p>
+<p>参考  <a href="http://www.cnblogs.com/mchina/p/centos-pxe-kickstart-auto-install-os.html" target="_blank" rel="noopener">http://www.cnblogs.com/mchina/p/centos-pxe-kickstart-auto-install-os.html</a>    </p>
 
 	
 	</div>
 	
   
 </div>
-	<a type="button" href="/2015/11/21/PXE-Kickstart-╬▐╚╦╓╡╩╪Centos6-5░▓╫░▓┘╫ў/#more" class="btn btn-default more">閱讀本文</a>
+	<a type="button" href="/2015/11/21/PXE-Kickstart-╬▐╚╦╓╡╩╪Centos6-5░▓╫░▓┘╫ў/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -407,7 +443,7 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2015-11-14 </div>
-			<div class="article-title"><a href="/2015/11/14/zabbix╝р┐╪nginx/" >zabbix监控nginx</a></div>						
+			<div class="article-title"><a href="/2015/11/14/zabbix╝р┐╪nginx/">zabbix监控nginx</a></div>						
 		</h3>
 	
 
@@ -418,20 +454,20 @@
 	<div class="col-md-12">
 	  
 	
-	  <p>本博来自<a href="http://www.linuxidc.com/Linux/2012-07/64798.htm，经本人测试成功后转发发出分享给大家：" target="_blank" rel="external">http://www.linuxidc.com/Linux/2012-07/64798.htm，经本人测试成功后转发发出分享给大家：</a></p>
+	  <p>本博来自<a href="http://www.linuxidc.com/Linux/2012-07/64798.htm，经本人测试成功后转发发出分享给大家：" target="_blank" rel="noopener">http://www.linuxidc.com/Linux/2012-07/64798.htm，经本人测试成功后转发发出分享给大家：</a></p>
 <p>1、首先开启nginx_status模块监控功能：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">server &#123; </span><br><span class="line">listen      <span class="number">8881</span>; </span><br><span class="line">server_name localhost;  </span><br><span class="line">root      html;  </span><br><span class="line">index  index.html; </span><br><span class="line">access_log off; </span><br><span class="line">location /status &#123; </span><br><span class="line">stub_status on; </span><br><span class="line">&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p><br><img src="/img/NOV/zabbix-nginx1.png" style="width: 650x;"></p>
-<p>开启之前先核查Nginx 是否包含 stub_status 模块<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost sbin]<span class="comment"># /usr/local/nginx/sbin/nginx -V </span></span><br><span class="line">nginx version: nginx/<span class="number">1.7</span><span class="number">.7</span></span><br><span class="line">built by gcc <span class="number">4.4</span><span class="number">.7</span> <span class="number">20120313</span> (Red Hat <span class="number">4.4</span><span class="number">.7</span>-<span class="number">16</span>) (GCC) </span><br><span class="line">conigure arguments: --<span class="keyword">with</span>-http_stub_status_module</span><br></pre></td></tr></table></figure></p>
+<p>开启之前先核查Nginx 是否包含 stub_status 模块<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost sbin]<span class="comment"># /usr/local/nginx/sbin/nginx -V </span></span><br><span class="line">nginx version: nginx/<span class="number">1.7</span><span class="number">.7</span></span><br><span class="line">built by gcc <span class="number">4.4</span><span class="number">.7</span> <span class="number">20120313</span> (Red Hat <span class="number">4.4</span><span class="number">.7</span><span class="number">-16</span>) (GCC) </span><br><span class="line">conigure arguments: --<span class="keyword">with</span>-http_stub_status_module</span><br></pre></td></tr></table></figure></p>
 <p>/usr/local/nginx/sbin/nginx -s reload</p>
 <p>要是木有安装则到源文件编译安装<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --<span class="keyword">with</span>-http_stub_status_module</span><br></pre></td></tr></table></figure></p>
-<p>2、测试：curl <a href="http://IP:端口/status" target="_blank" rel="external">http://IP:端口/status</a> </p>
+<p>2、测试：curl <a href="http://IP:端口/status" target="_blank" rel="noopener">http://IP:端口/status</a> </p>
 <p><br><img src="/img/NOV/zabbix-nginx2.png" style="width: 650x;"></p>
 <p>3、编写脚本过滤数据：（zabbix主要有数据就能出图）：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">[root@WEB_007 vhosts]<span class="comment"># cat /etc/zabbix/nginx_status  </span></span><br><span class="line"><span class="comment">#!/bin/bash  </span></span><br><span class="line"><span class="comment"># Script to fetch nginx statuses for tribily monitoring systems  </span></span><br><span class="line"><span class="comment"># Author: xiaoluo </span></span><br><span class="line"><span class="comment"># License: GPLv2  </span></span><br><span class="line">ip=<span class="number">192.168</span><span class="number">.0</span>:<span class="number">244</span>:<span class="number">8881</span></span><br><span class="line">function active &#123;  </span><br><span class="line">/usr/bin/curl <span class="string">"http://$ip/status"</span> <span class="number">2</span>&gt;/dev/null| grep <span class="string">'Active'</span> | awk <span class="string">'&#123;print $NF&#125;'</span>  </span><br><span class="line">&#125;  </span><br><span class="line">function reading &#123;  </span><br><span class="line">/usr/bin/curl <span class="string">"http://$ip/status"</span> <span class="number">2</span>&gt;/dev/null| grep <span class="string">'Reading'</span> | awk <span class="string">'&#123;print $2&#125;'</span>  </span><br><span class="line">&#125;  </span><br><span class="line">function writing &#123;  </span><br><span class="line">/usr/bin/curl <span class="string">"http://$ip/status"</span> <span class="number">2</span>&gt;/dev/null| grep <span class="string">'Writing'</span> | awk <span class="string">'&#123;print $4&#125;'</span>  </span><br><span class="line">&#125;  </span><br><span class="line">function waiting &#123;  </span><br><span class="line">/usr/bin/curl <span class="string">"http://$ip/status"</span> <span class="number">2</span>&gt;/dev/null| grep <span class="string">'Waiting'</span> | awk <span class="string">'&#123;print $6&#125;'</span>  </span><br><span class="line">&#125;  </span><br><span class="line">function accepts &#123;  </span><br><span class="line">/usr/bin/curl <span class="string">"http://$ip/status"</span> <span class="number">2</span>&gt;/dev/null| awk NR==<span class="number">3</span> | awk <span class="string">'&#123;print $1&#125;'</span>  </span><br><span class="line">&#125;  </span><br><span class="line">function handled &#123;  </span><br><span class="line">/usr/bin/curl <span class="string">"http://$ip/status"</span> <span class="number">2</span>&gt;/dev/null| awk NR==<span class="number">3</span> | awk <span class="string">'&#123;print $2&#125;'</span>  </span><br><span class="line">&#125;  </span><br><span class="line">function requests &#123;  </span><br><span class="line">/usr/bin/curl <span class="string">"http://$ip/status"</span> <span class="number">2</span>&gt;/dev/null| awk NR==<span class="number">3</span> | awk <span class="string">'&#123;print $3&#125;'</span>  </span><br><span class="line">&#125;  </span><br><span class="line"><span class="comment"># Run the requested function  </span></span><br><span class="line">$<span class="number">1</span></span><br></pre></td></tr></table></figure></p>
 <p>4、开启zabbix脚本功能、我现在是习惯把执行的key，放在另一个路径下，以后文件多了好区分，大家应该也建议这么做：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@WEB_007 zabbix_agentd.conf.d]<span class="comment"># vi /usr/local/zabbix/etc/zabbix_agentd.conf  </span></span><br><span class="line">UnsafeUserParameters=<span class="number">1</span></span><br><span class="line">Include=/usr/local/zabbix/etc/zabbix_agentd.conf.d/</span><br><span class="line">[root@WEB_007 zabbix_agentd.conf.d]<span class="comment">#cd /usr/local/zabbix/etc/zabbix_agentd.conf.d/ </span></span><br><span class="line">[root@WEB_007 zabbix_agentd.conf.d]<span class="comment">#vi nginx </span></span><br><span class="line"><span class="comment">#monitor nginx </span></span><br><span class="line">UserParameter=nginx[*],/etc/zabbix/nginx_status $<span class="number">1</span></span><br></pre></td></tr></table></figure></p>
 <p>5、导入模板：模块在我的附件可以自己下载：<br>这里演示，在那个时候我第一次制作，所以忘记添加图形了，大家可以自己根据模板添加图形,还有触发器我也没有创建，大家根据自己的需要进行创建<br>6、图形查看效果：<br><br><img src="/img/NOV/zabbix-nginx3.jpeg" style="width: 650x;"></p>
-<p>总结：zabbix可以很好的根据应用来进行监控，还很强大，慢慢研究<br>模板在下面自己下载：<br>——————————————分割线——————————————<br>免费下载地址在 <a href="http://linux.linuxidc.com/" target="_blank" rel="external">http://linux.linuxidc.com/</a><br>用户名与密码都是www.linuxidc.com<br>具体下载目录在 /2015年资料/5月/14日/Zabbix 监控Nginx状态/</p>
+<p>总结：zabbix可以很好的根据应用来进行监控，还很强大，慢慢研究<br>模板在下面自己下载：<br>——————————————分割线——————————————<br>免费下载地址在 <a href="http://linux.linuxidc.com/" target="_blank" rel="noopener">http://linux.linuxidc.com/</a><br>用户名与密码都是www.linuxidc.com<br>具体下载目录在 /2015年资料/5月/14日/Zabbix 监控Nginx状态/</p>
 <ul>
-<li><strong>压力测试</strong><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget http://blog.zyan.cc/soft/linux/webbench/webbench-<span class="number">1.5</span>.tar.gz</span><br><span class="line">tar zxvf webbench-<span class="number">1.5</span>.tar.gz</span><br><span class="line">cd webbench-<span class="number">1.5</span></span><br><span class="line">make &amp;&amp; make install</span><br><span class="line"></span><br><span class="line">webbench -c <span class="number">500</span> -t <span class="number">30</span>  http://<span class="number">192.168</span><span class="number">.0</span><span class="number">.244</span>/</span><br></pre></td></tr></table></figure>
+<li><strong>压力测试</strong><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget http://blog.zyan.cc/soft/linux/webbench/webbench<span class="number">-1.5</span>.tar.gz</span><br><span class="line">tar zxvf webbench<span class="number">-1.5</span>.tar.gz</span><br><span class="line">cd webbench<span class="number">-1.5</span></span><br><span class="line">make &amp;&amp; make install</span><br><span class="line"></span><br><span class="line">webbench -c <span class="number">500</span> -t <span class="number">30</span>  http://<span class="number">192.168</span><span class="number">.0</span><span class="number">.244</span>/</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p><br><img src="/img/NOV/zabbix-nginx4.png" style="width: 650x;"></p>
@@ -441,7 +477,7 @@
 	
   
 </div>
-	<a type="button" href="/2015/11/14/zabbix╝р┐╪nginx/#more" class="btn btn-default more">閱讀本文</a>
+	<a type="button" href="/2015/11/14/zabbix╝р┐╪nginx/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -450,7 +486,7 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2015-11-14 </div>
-			<div class="article-title"><a href="/2015/11/14/ssh╘┐│╫╡╟┬╝ги├т├▄┬ы╡╟┬╜гй/" >ssh钥匙登录（免密码登陆）</a></div>						
+			<div class="article-title"><a href="/2015/11/14/ssh╘┐│╫╡╟┬╝ги├т├▄┬ы╡╟┬╜гй/">ssh钥匙登录（免密码登陆）</a></div>						
 		</h3>
 	
 
@@ -472,34 +508,7 @@
 	
   
 </div>
-	<a type="button" href="/2015/11/14/ssh╘┐│╫╡╟┬╝ги├т├▄┬ы╡╟┬╜гй/#more" class="btn btn-default more">閱讀本文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2015-11-14 </div>
-			<div class="article-title"><a href="/2015/11/14/╟х└э╥╗╓▄╟░╚╒╓╛/" >清理一周前日志</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <p>作为管理员通常我们都需要清理日志释放部分硬盘资源，通常我们可以使用du -sh * 可以查看文件的占用空间。以下是使用find 命令清楚一周前日志。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">find 文件所在路径</span><br><span class="line">-mtime +<span class="number">7</span> -name <span class="string">"*.log"</span>  -<span class="keyword">exec</span> rm -rf &#123;&#125; \;  清理<span class="number">7</span>天前日志</span><br><span class="line"></span><br><span class="line">find / -size +<span class="number">100</span>M -<span class="keyword">exec</span> ls -lh &#123;&#125; \; 查找大于<span class="number">100</span>m的文件并显示输出</span><br></pre></td></tr></table></figure>
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2015/11/14/╟х└э╥╗╓▄╟░╚╒╓╛/#more" class="btn btn-default more">閱讀本文</a>
+	<a type="button" href="/2015/11/14/ssh╘┐│╫╡╟┬╝ги├т├▄┬ы╡╟┬╜гй/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -513,13 +522,13 @@
 <ul class="pagination">
 	 
 		
-    	<li class="prev"><a href="/page/6/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i> 上一頁</a></li>
+    	<li class="prev"><a href="/page/6/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i> Prev</a></li>
   		
 
         <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
 
 		
-		   <li class="next"> <a href="/page/8/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a> </li>          
+		   <li class="next"> <a href="/page/8/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a> </li>          
         
 	
 </ul>
@@ -539,7 +548,7 @@
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -550,27 +559,27 @@
 		
 			
 <div class="widget">
-  <h4>最新文章</h4>
+  <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2018/07/29/企业常用几种部署方式-蓝绿部署、滚动部署、金丝雀部署/" ><i class="fa fa-file-o"></i>企业常用几种部署方式(蓝绿部署、滚动部署、金丝雀部署)...</a>
+        <a href="/2019/02/17/分布式时序数据库InfluxDB/"><i class="fa fa-file-o"></i>分布式时序数据库InfluxDB</a>
       </li>
     
       <li>
-        <a href="/2018/07/29/Pyecharts-生成图表-附Django支持/" ><i class="fa fa-file-o"></i>Pyecharts 生成图表(附Django支持)...</a>
+        <a href="/2018/07/29/企业常用几种部署方式-蓝绿部署、滚动部署、金丝雀部署/"><i class="fa fa-file-o"></i>企业常用几种部署方式(蓝绿部署、滚动部署、金丝雀部署)</a>
       </li>
     
       <li>
-        <a href="/2018/07/29/Python调用Zabbix-Api获取数据/" ><i class="fa fa-file-o"></i>Python调用Zabbix Api获取数据...</a>
+        <a href="/2018/07/29/Pyecharts-生成图表-附Django支持/"><i class="fa fa-file-o"></i>Pyecharts 生成图表(附Django支持)</a>
       </li>
     
       <li>
-        <a href="/2018/07/29/Django中的缓存配置/" ><i class="fa fa-file-o"></i>Django中的缓存配置...</a>
+        <a href="/2018/07/29/Python调用Zabbix-Api获取数据/"><i class="fa fa-file-o"></i>Python调用Zabbix Api获取数据</a>
       </li>
     
       <li>
-        <a href="/2018/06/16/Celery-分布式任务队列/" ><i class="fa fa-file-o"></i>Celery - 分布式任务队列...</a>
+        <a href="/2018/07/29/Django中的缓存配置/"><i class="fa fa-file-o"></i>Django中的缓存配置</a>
       </li>
     
   </ul>
@@ -579,12 +588,12 @@
 		
 			
 <div class="widget">
-	<h4>鏈接</h4>
+	<h4>Links</h4>
 	<ul class="blogroll list-unstyled">
 	
-		<li><i class="fa fa-github"></i><a href="http://linuxops.cc" title="Macro博客" target="_blank"]);">Macro博客</a></li>
+		<li><i class="fa fa-github"></i><a href="http://linuxops.cc" title="Macro博客" target="_blank" ]);">Macro博客</a></li>
 	
-		<li><i class="fa fa-github"></i><a href="http://www.uinion.com/" title="uinion小站" target="_blank"]);">uinion小站</a></li>
+		<li><i class="fa fa-github"></i><a href="http://www.uinion.com/" title="uinion小站" target="_blank" ]);">uinion小站</a></li>
 	
 	</ul>
 </div>
@@ -601,7 +610,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

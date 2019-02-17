@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>Pyecharts 生成图表(附Django支持) | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Pyecharts 生成图表(附Django支持)"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="Pyecharts 生成图表(附Django支持)">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -105,7 +105,7 @@
 <li>add() 添加数据及配置项。</li>
 <li>render() 生成本地文件（html/svg/jpeg/png/pdf/gif）。</li>
 </ul>
-<p>add() 数据一般为两个列表（长度一致）。如果你的数据是字典或者是带元组的字典。可利用 cast() 方法转换。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="decorator">@staticmethod</span></span><br><span class="line">cast(seq)</span><br><span class="line">转换数据序列，将带字典和元组类型的序列转换为 k_lst,v_lst 两个列表</span><br></pre></td></tr></table></figure></p>
+<p>add() 数据一般为两个列表（长度一致）。如果你的数据是字典或者是带元组的字典。可利用 cast() 方法转换。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@staticmethod</span></span><br><span class="line">cast(seq)</span><br><span class="line">转换数据序列，将带字典和元组类型的序列转换为 k_lst,v_lst 两个列表</span><br></pre></td></tr></table></figure></p>
 <ul>
 <li><strong>元组列表</strong><br>[(A1, B1), (A2, B2), (A3, B3), (A4, B4)] –&gt; k_lst[ A[i1, i2…] ], v_lst[ B[i1, i2…] ]</li>
 <li><strong>字典列表</strong><br>[{A1: B1}, {A2: B2}, {A3: B3}, {A4: B4}] –&gt; k_lst[ A[i1, i2…] ], v_lst[ B[i1, i2…] ]</li>
@@ -120,10 +120,10 @@
 <ul>
 <li><p>script_list 是 Page() 类渲染网页所需要依赖的 echarts js 库，依赖的库的数量取决于所要渲染的图形种类。</p>
 </li>
-<li><p>host 是 echarts js 库的地址，默认提供的地址为 <a href="https://pyecharts.github.io/assets/js" target="_blank" rel="external">https://pyecharts.github.io/assets/js</a> 当然，如果你愿意你也可以改变这个地址，先克隆 <a href="https://github.com/pyecharts/assets" target="_blank" rel="external">https://github.com/pyecharts/assets</a> 然后将 js 文件夹挂载在你自己的服务器上即可。</p>
+<li><p>host 是 echarts js 库的地址，默认提供的地址为 <a href="https://pyecharts.github.io/assets/js" target="_blank" rel="noopener">https://pyecharts.github.io/assets/js</a> 当然，如果你愿意你也可以改变这个地址，先克隆 <a href="https://github.com/pyecharts/assets" target="_blank" rel="noopener">https://github.com/pyecharts/assets</a> 然后将 js 文件夹挂载在你自己的服务器上即可。</p>
 </li>
 </ul>
-<h4 id="templates/test/pyecharts-html">templates/test/pyecharts.html</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- myfirstvis/templates/pyecharts.html --&gt;</span></span><br><span class="line"><span class="doctype">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">html</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="title">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">charset</span>=<span class="value">"utf-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">title</span>&gt;</span>Proudly presented by PycCharts<span class="tag">&lt;/<span class="title">title</span>&gt;</span></span><br><span class="line">    &#123;% for jsfile_name in script_list %&#125;</span><br><span class="line">        <span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">"&#123;&#123; host &#125;&#125;/&#123;&#123; jsfile_name &#125;&#125;.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></span><br><span class="line">    &#123;% endfor %&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="title">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="title">body</span>&gt;</span></span><br><span class="line">  &#123;&#123; myechart|safe &#125;&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="title">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="title">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="templates/test/pyecharts-html">templates/test/pyecharts.html</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- myfirstvis/templates/pyecharts.html --&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Proudly presented by PycCharts<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    &#123;% for jsfile_name in script_list %&#125;</span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"&#123;&#123; host &#125;&#125;/&#123;&#123; jsfile_name &#125;&#125;.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    &#123;% endfor %&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  &#123;&#123; myechart|safe &#125;&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>启动django访问/test/即可</p>
 	  
 	</div>
@@ -134,13 +134,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2018/07/29/企业常用几种部署方式-蓝绿部署、滚动部署、金丝雀部署/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2018/07/29/企业常用几种部署方式-蓝绿部署、滚动部署、金丝雀部署/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2018/07/29/Python调用Zabbix-Api获取数据/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2018/07/29/Python调用Zabbix-Api获取数据/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -152,7 +152,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2018/07/29/Pyecharts-生成图表-附Django支持/" data-title="Pyecharts 生成图表(附Django支持)" data-url="http://linuxOps.xyz/2018/07/29/Pyecharts-生成图表-附Django支持/"></div>  
@@ -196,7 +196,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

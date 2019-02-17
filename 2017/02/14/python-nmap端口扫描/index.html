@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>python-nmap端口扫描 | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="python-nmap端口扫描"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="python-nmap端口扫描">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -97,13 +97,13 @@
 <p><strong>坏境准备：</strong></p>
 <p>###1、安装python-nmap和yum install nmap</p>
 <p>[root@localhost ~]# pip install python-nmap<br>You are using pip version 7.1.0, however version 9.0.1 is available.<br>You should consider upgrading via the ‘pip install –upgrade pip’ command.<br>Collecting python-nmap<br>  Downloading python-nmap-0.6.1.tar.gz (41kB)<br>    100%  45kB 40kBs<br>Installing collected packages python-nmap<br>  Running setup.py install for python-nmap<br>Successfully installed python-nmap-0.6.1</p>
-<p>具体查看链接：<a href="http://xael.org/pages/python-nmap-en.html" target="_blank" rel="external">http://xael.org/pages/python-nmap-en.html</a><br>[root@localhost ~]# yum install –y nmap</p>
+<p>具体查看链接：<a href="http://xael.org/pages/python-nmap-en.html" target="_blank" rel="noopener">http://xael.org/pages/python-nmap-en.html</a><br>[root@localhost ~]# yum install –y nmap</p>
 <p>###2、python 脚本代码<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost shell]<span class="comment"># cat saomiao.py </span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> nmap</span><br><span class="line"></span><br><span class="line">scan_row = [ ]</span><br><span class="line">input_data = raw_input(<span class="string">'Please input host and port: '</span>)</span><br><span class="line">scan_row = input_data.split(<span class="string">" "</span>)</span><br><span class="line"><span class="keyword">if</span> len( scan_row ) !=<span class="number">2</span>:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Input errors,example\"192.168.1.0/24 80,443,22\""</span></span><br><span class="line">    sys.exit(<span class="number">0</span>)</span><br><span class="line">hosts = scan_row[<span class="number">0</span>]  <span class="comment">#接收用户输入的主机</span></span><br><span class="line">port = scan_row[<span class="number">1</span>]  <span class="comment">#接收用户输入的端口</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    nm = nmap.PortScanner() <span class="comment">#创建端口扫描对象</span></span><br><span class="line"><span class="keyword">except</span> nmap.PortScannerError:</span><br><span class="line">    <span class="keyword">print</span> (<span class="string">'Nmap not found,'</span>,sys.exc_info()[<span class="number">0</span>])</span><br><span class="line">    sys.exit(<span class="number">0</span>)</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    nm.scan(hosts=hosts,arguments=<span class="string">'-v -sS -p '</span>+port)</span><br><span class="line"><span class="keyword">except</span> Exception,e:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Scan error:"</span>+str(e)</span><br><span class="line"><span class="keyword">for</span> host <span class="keyword">in</span> nm.all_hosts():</span><br><span class="line">    print(<span class="string">'----------------------------------------------------'</span>)</span><br><span class="line">    print(<span class="string">'Host : %s (%s)'</span> % (host, nm[host].hostname()))</span><br><span class="line">    print(<span class="string">'State : %s'</span> % nm[host].state())</span><br><span class="line">    <span class="keyword">for</span> proto <span class="keyword">in</span> nm[host].all_protocols():</span><br><span class="line">        print(<span class="string">'----------'</span>)</span><br><span class="line">        print(<span class="string">'Protocol : %s'</span> % proto)</span><br><span class="line">        lport = nm[host][proto].keys()</span><br><span class="line">        lport.sort()</span><br><span class="line">        <span class="keyword">for</span> port <span class="keyword">in</span> lport:</span><br><span class="line">            <span class="keyword">print</span> (<span class="string">'port : %s\tstate : %s'</span> % (port, nm[host][proto][port][<span class="string">'state'</span>]))</span><br></pre></td></tr></table></figure></p>
 <p>###3、执行测试<br>如果执行过程出现报错：<br>[root@localhost shell]# python nmap.py<br>Please input host and port: 192.168.1.200 80<br>Traceback (most recent call last):<br>  File “nmap.py”, line 4, in <module><br>    import nmap<br>  File “/data/shell/nmap.py”, line 16, in <module><br>    except nmap.PortScannerError:<br>AttributeError: ‘module’ object has no attribute ‘PortScannerError’</module></module></p>
 <p>发现，脚本名称为nmap.py 更改名称后执行正常。</p>
 <p>###Port scanning result： </p>
 <ul>
-<li><strong>10.6.17.83</strong> <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@<span class="number">10</span>-<span class="number">6</span>-<span class="number">17</span>-<span class="number">83</span> shell]<span class="comment"># python saomiao.py </span></span><br><span class="line">Please input host <span class="keyword">and</span> port: <span class="number">10.6</span><span class="number">.17</span><span class="number">.83</span> <span class="number">1</span>-<span class="number">65535</span></span><br><span class="line"> ---------------------------------------------------- </span><br><span class="line"> Host : <span class="number">10.6</span><span class="number">.17</span><span class="number">.83</span> (localhost) State : up </span><br><span class="line"> Protocol : tcp port : <span class="number">3306</span> state : open </span><br><span class="line"> port : <span class="number">8022</span> state : open </span><br><span class="line"> port : <span class="number">8080</span> state : open </span><br><span class="line"> port : <span class="number">10050</span> state : open </span><br><span class="line"> port : <span class="number">10051</span> state : open</span><br></pre></td></tr></table></figure>
+<li><strong>10.6.17.83</strong> <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@<span class="number">10</span><span class="number">-6</span><span class="number">-17</span><span class="number">-83</span> shell]<span class="comment"># python saomiao.py </span></span><br><span class="line">Please input host <span class="keyword">and</span> port: <span class="number">10.6</span><span class="number">.17</span><span class="number">.83</span> <span class="number">1</span><span class="number">-65535</span></span><br><span class="line"> ---------------------------------------------------- </span><br><span class="line"> Host : <span class="number">10.6</span><span class="number">.17</span><span class="number">.83</span> (localhost) State : up </span><br><span class="line"> Protocol : tcp port : <span class="number">3306</span> state : open </span><br><span class="line"> port : <span class="number">8022</span> state : open </span><br><span class="line"> port : <span class="number">8080</span> state : open </span><br><span class="line"> port : <span class="number">10050</span> state : open </span><br><span class="line"> port : <span class="number">10051</span> state : open</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 	  
@@ -115,13 +115,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2017/02/14/django登陆注销/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2017/02/14/django登陆注销/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2016/01/23/EXSI5-5░▓╫░vSphere/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2016/01/23/EXSI5-5░▓╫░vSphere/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -133,7 +133,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2017/02/14/python-nmap端口扫描/" data-title="python-nmap端口扫描" data-url="http://linuxOps.xyz/2017/02/14/python-nmap端口扫描/"></div>  
@@ -177,7 +177,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

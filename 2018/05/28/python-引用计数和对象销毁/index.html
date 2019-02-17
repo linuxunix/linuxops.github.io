@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>python 引用计数和对象销毁 | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="python 引用计数和对象销毁"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="python 引用计数和对象销毁">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -96,8 +96,8 @@
 	    <blockquote>
 <p>在Python中，对象会包括一个引用计数器。当对象被赋值给一个变量时，计算器会递增。反之，当变量被删除时候，计算器便递减。当计数器的指为0时，表示我们不再使用对象并可以销毁对象。正常来说，删除对象时候会调用<strong>del</strong>()方法。</p>
 </blockquote>
-<p>很多小伙伴可能觉得调用del x 会直接销毁对象，其实并非如此，我们可以通过官方文档查阅可以知道<a href="https://docs.python.org/2.0/ref/customization.html" target="_blank" rel="external">https://docs.python.org/2.0/ref/customization.html</a></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">__del__ (self)</span><br><span class="line">Called when the instance is about to be destroyed. This is also called a destructor. If a base class has a __del__() method, the derived class's __del__() method must explicitly call it to ensure proper deletion of the base class part of the instance. Note that it is possible (though not recommended!) for the __del__() method to postpone destruction of the instance by creating a new reference to it. It may then be called at a later time when this new reference is deleted. It is not guaranteed that __del__() methods are called for objects that still exist when the interpreter exits.</span><br><span class="line">Programmer's note: "del x" doesn't directly call x.__del__() -- the former decrements the reference count for x by one, and the latter is only called when its reference count reaches zero. Some common situations that may prevent the reference count of an object to go to zero include: circular references between objects (e.g., a doubly-linked list or a tree data structure with parent and child pointers); a reference to the object on the stack frame of a function that caught an exception (the traceback stored in sys.exc_traceback keeps the stack frame alive); or a reference to the object on the stack frame that raised an unhandled exception in interactive mode (the traceback stored in sys.last_traceback keeps the stack frame alive). The first situation can only be remedied by explicitly breaking the cycles; the latter two situations can be resolved by storing None in sys.exc_traceback or sys.last_traceback.</span><br><span class="line"></span><br><span class="line">Warning: due to the precarious circumstances under which __del__() methods are invoked, exceptions that occur during their execution are ignored, and a warning is printed to sys.stderr instead. Also, when __del__() is invoked is response to a module being deleted (e.g., when execution of the program is done), other globals referenced by the __del__() method may already have been deleted. For this reason, __del__() methods should do the absolute minimum needed to maintain external invariants. Python 1.5 guarantees that globals whose name begins with a single underscore are deleted from their module before other globals are deleted; if no other references to such globals exist, this may help in assuring that imported modules are still available at the time when the __del__() method is called.</span><br></pre></td></tr></table></figure>
+<p>很多小伙伴可能觉得调用del x 会直接销毁对象，其实并非如此，我们可以通过官方文档查阅可以知道<a href="https://docs.python.org/2.0/ref/customization.html" target="_blank" rel="noopener">https://docs.python.org/2.0/ref/customization.html</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">__del__ (self)</span><br><span class="line">Called when the instance is about to be destroyed. This is also called a destructor. If a base class has a __del__() method, the derived class's __del__() method must explicitly call it to ensure proper deletion of the base class part of the instance. Note that it is possible (though not recommended!) for the __del__() method to postpone destruction of the instance by creating a new reference to it. It may then be called at a later time when this new reference is deleted. It is not guaranteed that __del__() methods are called for objects that still exist when the interpreter exits.</span><br><span class="line">Programme<span class="string">r's note: "del x" doesn'</span>t directly call x.__del__() -- the former decrements the reference count <span class="keyword">for</span> x by one, <span class="keyword">and</span> the latter <span class="keyword">is</span> only called when its reference count reaches zero. Some common situations that may prevent the reference count of an object to go to zero include: circular references between objects (e.g., a doubly-linked list <span class="keyword">or</span> a tree data structure <span class="keyword">with</span> parent <span class="keyword">and</span> child pointers); a reference to the object on the stack frame of a function that caught an exception (the traceback stored <span class="keyword">in</span> sys.exc_traceback keeps the stack frame alive); <span class="keyword">or</span> a reference to the object on the stack frame that raised an unhandled exception <span class="keyword">in</span> interactive mode (the traceback stored <span class="keyword">in</span> sys.last_traceback keeps the stack frame alive). The first situation can only be remedied by explicitly breaking the cycles; the latter two situations can be resolved by storing <span class="keyword">None</span> <span class="keyword">in</span> sys.exc_traceback <span class="keyword">or</span> sys.last_traceback.</span><br><span class="line"></span><br><span class="line">Warning: due to the precarious circumstances under which __del__() methods are invoked, exceptions that occur during their execution are ignored, <span class="keyword">and</span> a warning <span class="keyword">is</span> printed to sys.stderr instead. Also, when __del__() <span class="keyword">is</span> invoked <span class="keyword">is</span> response to a module being deleted (e.g., when execution of the program <span class="keyword">is</span> done), other globals referenced by the __del__() method may already have been deleted. For this reason, __del__() methods should do the absolute minimum needed to maintain external invariants. Python <span class="number">1.5</span> guarantees that globals whose name begins <span class="keyword">with</span> a single underscore are deleted <span class="keyword">from</span> their module before other globals are deleted; <span class="keyword">if</span> no other references to such globals exist, this may help <span class="keyword">in</span> assuring that imported modules are still available at the time when the __del__() method <span class="keyword">is</span> called.</span><br></pre></td></tr></table></figure>
 <p>通过官方文档可以知：del x 不能直接调用x.<strong> del </strong>（）前者将x的引用计数递减1，后者仅在其引用计数达到零时调用。</p>
 <h5 id="以下简单举例说明：">以下简单举例说明：</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="class"><span class="keyword">class</span> <span class="title">Test</span>:</span></span><br><span class="line">   ...:         <span class="function"><span class="keyword">def</span> <span class="title">__del__</span><span class="params">(self)</span>:</span></span><br><span class="line">   ...:                 print(<span class="string">"Delete &#123;id&#125;"</span>.format(id=id(self)))</span><br><span class="line">   ...:         </span><br><span class="line">In [<span class="number">2</span>]: T=Test()</span><br><span class="line">In [<span class="number">3</span>]: <span class="keyword">del</span> T</span><br><span class="line">Delete <span class="number">140514893069920</span></span><br></pre></td></tr></table></figure>
 <ul>
@@ -114,13 +114,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2018/06/02/Django模板之全局变量/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2018/06/02/Django模板之全局变量/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2018/05/28/日志监控应该如何做？附ELK-wather-通知告警/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2018/05/28/日志监控应该如何做？附ELK-wather-通知告警/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -132,7 +132,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2018/05/28/python-引用计数和对象销毁/" data-title="python 引用计数和对象销毁" data-url="http://linuxOps.xyz/2018/05/28/python-引用计数和对象销毁/"></div>  
@@ -176,7 +176,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

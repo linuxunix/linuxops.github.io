@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>nginx 系列之三nginx安装和配置 | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="nginx 系列之三nginx安装和配置"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="nginx 系列之三nginx安装和配置">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -96,15 +96,15 @@
 	    <ul>
 <li><strong>1.4.1下载与安装Nginx </strong></li>
 </ul>
-<p>Nginx的官方网站是<a href="http://sysoev.ru/nginx/，英文主页为http://nginx.net，从这里可以获得Nginx的最新版本信息。Nginx有三个版本：稳定版、开发版和历史稳定版。开发版更新较快，包含最新的功能和bug的修复，但同时也可能会出现新的bug。开发版一旦更新稳定下来，就会被加入稳定版分支中。然而有些新功能不一定会被加到稳定版中去。稳定版更新较慢，但是bug较少，可以作为生产环境的首选，因此通常建议使用稳定版。历史稳定版为以往稳定版本的汇总，不包含最新的功能。" target="_blank" rel="external">http://sysoev.ru/nginx/，英文主页为http://nginx.net，从这里可以获得Nginx的最新版本信息。Nginx有三个版本：稳定版、开发版和历史稳定版。开发版更新较快，包含最新的功能和bug的修复，但同时也可能会出现新的bug。开发版一旦更新稳定下来，就会被加入稳定版分支中。然而有些新功能不一定会被加到稳定版中去。稳定版更新较慢，但是bug较少，可以作为生产环境的首选，因此通常建议使用稳定版。历史稳定版为以往稳定版本的汇总，不包含最新的功能。</a><br>这里选择当前的稳定版本nginx-0.7.65作为介绍对象，开始介绍编译安装。在安装Nginx之前，确保系统已经安装了gcc、openssl-devel、pcre-devel和zlib-devel软件库。<br>Linux开发库是在安装系统时通过手动选择安装的，gcc、openssl-devel、zlib-devel三个软件库可以通过安装光盘直接选择安装，而pcre-devel库默认不在系统光盘中，所以这里重点介绍pcre-devel库。</p>
+<p>Nginx的官方网站是<a href="http://sysoev.ru/nginx/，英文主页为http://nginx.net，从这里可以获得Nginx的最新版本信息。Nginx有三个版本：稳定版、开发版和历史稳定版。开发版更新较快，包含最新的功能和bug的修复，但同时也可能会出现新的bug。开发版一旦更新稳定下来，就会被加入稳定版分支中。然而有些新功能不一定会被加到稳定版中去。稳定版更新较慢，但是bug较少，可以作为生产环境的首选，因此通常建议使用稳定版。历史稳定版为以往稳定版本的汇总，不包含最新的功能。" target="_blank" rel="noopener">http://sysoev.ru/nginx/，英文主页为http://nginx.net，从这里可以获得Nginx的最新版本信息。Nginx有三个版本：稳定版、开发版和历史稳定版。开发版更新较快，包含最新的功能和bug的修复，但同时也可能会出现新的bug。开发版一旦更新稳定下来，就会被加入稳定版分支中。然而有些新功能不一定会被加到稳定版中去。稳定版更新较慢，但是bug较少，可以作为生产环境的首选，因此通常建议使用稳定版。历史稳定版为以往稳定版本的汇总，不包含最新的功能。</a><br>这里选择当前的稳定版本nginx-0.7.65作为介绍对象，开始介绍编译安装。在安装Nginx之前，确保系统已经安装了gcc、openssl-devel、pcre-devel和zlib-devel软件库。<br>Linux开发库是在安装系统时通过手动选择安装的，gcc、openssl-devel、zlib-devel三个软件库可以通过安装光盘直接选择安装，而pcre-devel库默认不在系统光盘中，所以这里重点介绍pcre-devel库。</p>
 <ul>
 <li><strong>1.安装Nginx所需的pcre-devel库 </strong></li>
 </ul>
-<p>安装pcre库是为了使Nginx支持HTTP Rewrite 模块。下面进行安装，过程如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost home]<span class="comment"># tar zxvf pcre-8.02.tar.gz  </span></span><br><span class="line">[root@localhost home]<span class="comment"># cd pcre-8.02  </span></span><br><span class="line">[root@localhost pcre-<span class="number">8.02</span>]<span class="comment">#make  </span></span><br><span class="line">[root@localhost pcre-<span class="number">8.02</span>]<span class="comment">#make install</span></span><br></pre></td></tr></table></figure></p>
+<p>安装pcre库是为了使Nginx支持HTTP Rewrite 模块。下面进行安装，过程如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost home]<span class="comment"># tar zxvf pcre-8.02.tar.gz  </span></span><br><span class="line">[root@localhost home]<span class="comment"># cd pcre-8.02  </span></span><br><span class="line">[root@localhost pcre<span class="number">-8.02</span>]<span class="comment">#make  </span></span><br><span class="line">[root@localhost pcre<span class="number">-8.02</span>]<span class="comment">#make install</span></span><br></pre></td></tr></table></figure></p>
 <ul>
 <li><strong>2.开始安装Nginx-</strong></li>
 </ul>
-<p>Nginx的安装非常简单。在默认情况下，经过编译安装的Nginx包含了大部分可用模块。可以通过“./configure  –help”选项设置各个模块的使用情况，例如对不需要的http_ssi模块，可通过“–without-http_ssi_module”方式关闭此。同理，如果需要“http_perl”模块，那么可以通过“–with-http_perl_module”方式进行安装。下面是安装过程：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost home]<span class="comment"># tar zxvf nginx-0.7.65.tar.gz  </span></span><br><span class="line">[root@localhost home]<span class="comment">#cd nginx-0.7.65  </span></span><br><span class="line">[root@localhostnginx-<span class="number">0.7</span><span class="number">.65</span>]<span class="comment">#./configure \  </span></span><br><span class="line">--<span class="keyword">with</span>-http_stub_status_module  --prefix=/opt/nginx  </span><br><span class="line">[root@localhost nginx-<span class="number">0.7</span><span class="number">.65</span>]<span class="comment">#make  </span></span><br><span class="line">[root@localhost nginx-<span class="number">0.7</span><span class="number">.65</span>]<span class="comment">#make install</span></span><br></pre></td></tr></table></figure></p>
+<p>Nginx的安装非常简单。在默认情况下，经过编译安装的Nginx包含了大部分可用模块。可以通过“./configure  –help”选项设置各个模块的使用情况，例如对不需要的http_ssi模块，可通过“–without-http_ssi_module”方式关闭此。同理，如果需要“http_perl”模块，那么可以通过“–with-http_perl_module”方式进行安装。下面是安装过程：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost home]<span class="comment"># tar zxvf nginx-0.7.65.tar.gz  </span></span><br><span class="line">[root@localhost home]<span class="comment">#cd nginx-0.7.65  </span></span><br><span class="line">[root@localhostnginx<span class="number">-0.7</span><span class="number">.65</span>]<span class="comment">#./configure \  </span></span><br><span class="line">--<span class="keyword">with</span>-http_stub_status_module  --prefix=/opt/nginx  </span><br><span class="line">[root@localhost nginx<span class="number">-0.7</span><span class="number">.65</span>]<span class="comment">#make  </span></span><br><span class="line">[root@localhost nginx<span class="number">-0.7</span><span class="number">.65</span>]<span class="comment">#make install</span></span><br></pre></td></tr></table></figure></p>
 <p>在上面的configure选项中，“–with-http_stub_status_module”可以用来启用 Nginx 的 NginxStatus 功能，以监控 Nginx 的当前状态。<br>至此，Nginx已经安装完成了。</p>
 <ul>
 <li><strong>1.4.2　Nginx配置文件的结构 </strong></li>
@@ -160,7 +160,7 @@
 </ul>
 <p>StubStatus模块能够获取Nginx自上次启动以来的工作状态，此模块非核心模块，需要在Nginx编译安装时手工指定才能使用。<br>以下指令指定启用获取Nginx工作状态的功能。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">   location /NginxStatus &#123;  </span><br><span class="line">                    stub_status     on;  </span><br><span class="line">access_log             logs/NginxStatus.log;  </span><br><span class="line">                    auth_basic             <span class="string">"NginxStatus"</span>;  </span><br><span class="line">            auth_basic_user_file    ../htpasswd;  </span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-<p>stub_status为“on”表示启用StubStatus的工作状态统计功能；access_log 用来指定StubStatus模块的访问日志文件；auth_basic是Nginx的一种认证机制；auth_basic_user_file用来指定认证的密码文件。由于Nginx的auth_basic认证采用的是与Apache兼容的密码文件，因此需要用Apache的htpasswd命令来生成密码文件。例如要添加一个webadmin用户，可以使用下面的方式生成密码文件：<br>/usr/local/apache/bin/htpasswd -c  /opt/nginx/conf/htpasswd webadmin<br>会得到以下提示信息：<br>New password:<br>输入密码之后，系统会要求再次输入密码，确认之后添加用户成功。<br>要查看Nginx的运行状态，可以输入<a href="http://ip/" target="_blank" rel="external">http://ip/</a> NginxStatus，然后输入刚刚创建的用户名和密码就可以看到如下信息：<br>Active connections: 1<br>server accepts handled requests<br>393411 393411 393799<br>Reading: 0 Writing: 1 Waiting: 0<br>Active connections表示当前活跃的连接数，第三行的3个数字表示 Nginx当前总共处理了393411个连接， 成功创建了393 411次握手，总共处理了393 799个请求。最后一行的Reading表示Nginx读取到客户端Header信息数； Writing表示Nginx返回给客户端的Header信息数；Waiting表示Nginx已经处理完、正在等候下一次请求指令时的驻留连接数。<br>在最后这段设置中，设置了虚拟主机的错误信息返回页面，通过error_page指令可以定制各种错误信息的返回页面。在默认情况下，Nginx会在主目录的html目录中查找指定的返回页面。特别需要注意的是，这些错误信息的返回页面大小一定要超过512KB，否则会被IE浏览器替换为IE默认的错误页面。<br>       error_page  404              /404.html;<br>       error_page   500 502 503 504  /50x.html;<br>       location = /50x.html {<br>           root   html;<br>       }<br>}<br>} </p>
+<p>stub_status为“on”表示启用StubStatus的工作状态统计功能；access_log 用来指定StubStatus模块的访问日志文件；auth_basic是Nginx的一种认证机制；auth_basic_user_file用来指定认证的密码文件。由于Nginx的auth_basic认证采用的是与Apache兼容的密码文件，因此需要用Apache的htpasswd命令来生成密码文件。例如要添加一个webadmin用户，可以使用下面的方式生成密码文件：<br>/usr/local/apache/bin/htpasswd -c  /opt/nginx/conf/htpasswd webadmin<br>会得到以下提示信息：<br>New password:<br>输入密码之后，系统会要求再次输入密码，确认之后添加用户成功。<br>要查看Nginx的运行状态，可以输入<a href="http://ip/" target="_blank" rel="noopener">http://ip/</a> NginxStatus，然后输入刚刚创建的用户名和密码就可以看到如下信息：<br>Active connections: 1<br>server accepts handled requests<br>393411 393411 393799<br>Reading: 0 Writing: 1 Waiting: 0<br>Active connections表示当前活跃的连接数，第三行的3个数字表示 Nginx当前总共处理了393411个连接， 成功创建了393 411次握手，总共处理了393 799个请求。最后一行的Reading表示Nginx读取到客户端Header信息数； Writing表示Nginx返回给客户端的Header信息数；Waiting表示Nginx已经处理完、正在等候下一次请求指令时的驻留连接数。<br>在最后这段设置中，设置了虚拟主机的错误信息返回页面，通过error_page指令可以定制各种错误信息的返回页面。在默认情况下，Nginx会在主目录的html目录中查找指定的返回页面。特别需要注意的是，这些错误信息的返回页面大小一定要超过512KB，否则会被IE浏览器替换为IE默认的错误页面。<br>       error_page  404              /404.html;<br>       error_page   500 502 503 504  /50x.html;<br>       location = /50x.html {<br>           root   html;<br>       }<br>}<br>} </p>
 	  
 	</div>
 
@@ -170,13 +170,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2015/11/21/Nginx╡─╞Ї╢пбв╣╪▒╒║═╞╜╗м╓╪╞Ї/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2015/11/21/Nginx╡─╞Ї╢пбв╣╪▒╒║═╞╜╗м╓╪╞Ї/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2015/11/21/nginx-╧╡┴╨╓о╢■Nginx╡──г┐щ╙ы╣д╫ў╘н└э/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2015/11/21/nginx-╧╡┴╨╓о╢■Nginx╡──г┐щ╙ы╣д╫ў╘н└э/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -188,7 +188,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2015/11/21/nginx-╧╡┴╨╓о╚¤nginx░▓╫░║═┼ф╓├/" data-title="nginx 系列之三nginx安装和配置" data-url="http://linuxOps.xyz/2015/11/21/nginx-╧╡┴╨╓о╚¤nginx░▓╫░║═┼ф╓├/"></div>  
@@ -232,7 +232,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

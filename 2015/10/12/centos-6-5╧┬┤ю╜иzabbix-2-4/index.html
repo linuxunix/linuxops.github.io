@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>centos 6.5下搭建zabbix 2.4 | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="centos 6.5下搭建zabbix 2.4"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="centos 6.5下搭建zabbix 2.4">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -111,7 +111,7 @@
 <li><p><strong>配置zabbix_server.conf</strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment">#vim /etc/php.ini</span></span><br><span class="line">date.timezone = Asia/Shanghai</span><br><span class="line">max_execution_time = <span class="number">300</span></span><br><span class="line">post_max_size = <span class="number">16</span>M</span><br><span class="line">max_input_time=<span class="number">300</span></span><br><span class="line">memory_limit = <span class="number">128</span>M</span><br><span class="line">或者使用以下命令</span><br><span class="line">sed -i <span class="string">'s/^.*date.timezone =.*$/date.timezone = Asia\/Shanghai/g'</span> /etc/php.ini</span><br><span class="line">sed -i <span class="string">'s/^.*post_max_size =.*$/post_max_size = 16M/g'</span> /etc/php.ini</span><br><span class="line">sed -i <span class="string">'s/^.*max_execution_time =.*$/max_execution_time = 300/g'</span> /etc/php.ini</span><br><span class="line">sed -i <span class="string">'s/^.*max_input_time =.*$/max_input_time = 300/g'</span> /etc/php.ini</span><br><span class="line">sed -i <span class="string">'s/^.*memory_limit =.*$/memory_limit = 128M/g'</span> /etc/php.ini</span><br></pre></td></tr></table></figure>
 </li>
-<li><p><strong>配置Web 界面</strong><br>[root@localhost ~]# service zabbix-server start<br>[root@localhost ~]# chkconfig   zabbix-server  on<br>[root@localhost ~]#  service httpd start<br>[root@localhost ~]# chkconfig   httpd on<br>在浏览器输入<a href="http://IP地址/zabbix" target="_blank" rel="external">http://IP地址/zabbix</a></p>
+<li><p><strong>配置Web 界面</strong><br>[root@localhost ~]# service zabbix-server start<br>[root@localhost ~]# chkconfig   zabbix-server  on<br>[root@localhost ~]#  service httpd start<br>[root@localhost ~]# chkconfig   httpd on<br>在浏览器输入<a href="http://IP地址/zabbix" target="_blank" rel="noopener">http://IP地址/zabbix</a></p>
 </li>
 </ul>
 <p><br><img src="/img/dec/zabbix/1.png" style="width: 600px;"><br><br><img src="/img/dec/zabbix/2.png" style="width: 600px;"><br><br><img src="/img/dec/zabbix/3.png" style="width: 600px;"><br><br><img src="/img/dec/zabbix/3-2.png" style="width: 600px;"><br><br><img src="/img/dec/zabbix/4.png" style="width: 600px;"><br><br><img src="/img/dec/zabbix/6.png" style="width: 600px;"><br><br><img src="/img/dec/zabbix/7.png" style="width: 600px;"><br>默认账号为admin,密码zabbix<br><br><img src="/img/dec/zabbix/8.png" style="width: 600px;"><br>如果登录后下图中的yes为no的时候，请查看SELinux状态：<br><br><img src="/img/dec/zabbix/8.png" style="width: 600px;"><br> [root@localhost ~]# getenforce 如果返回为enforcing则证明已经开启，如果是Permissive，则反之。</p>
@@ -125,13 +125,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2015/10/18/╛▓╠м┬╖╙╔╙ж╙├/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2015/10/18/╛▓╠м┬╖╙╔╙ж╙├/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2015/10/07/╚ч║╬╜т╛Ўzabbix╓╨╬─┬╥┬ы╬╩╠т/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2015/10/07/╚ч║╬╜т╛Ўzabbix╓╨╬─┬╥┬ы╬╩╠т/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -143,7 +143,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2015/10/12/centos-6-5╧┬┤ю╜иzabbix-2-4/" data-title="centos 6.5下搭建zabbix 2.4" data-url="http://linuxOps.xyz/2015/10/12/centos-6-5╧┬┤ю╜иzabbix-2-4/"></div>  
@@ -187,7 +187,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

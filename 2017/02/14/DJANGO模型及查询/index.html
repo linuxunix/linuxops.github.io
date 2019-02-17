@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>DJANGO模型及查询 | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="DJANGO模型及查询"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="DJANGO模型及查询">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -97,9 +97,9 @@
 <p><strong>数据库配置</strong><br>Mysql数据库需要安装mysqld-python：<br>yum install python-devel mysql-devel zlib-devel openssl-devel -y</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">vim settings.py</span><br><span class="line">DATABASES = &#123;</span><br><span class="line">    <span class="string">'default'</span>: &#123;</span><br><span class="line">        <span class="string">'ENGINE'</span>: <span class="string">'django.db.backends.mysql'</span>,   <span class="comment">###mysql</span></span><br><span class="line">        <span class="string">'NAME'</span>: <span class="string">'db_name'</span>, </span><br><span class="line">        <span class="string">'USER'</span>:<span class="string">'username'</span>,</span><br><span class="line">        <span class="string">'HOST'</span>:<span class="string">'db_host'</span>,</span><br><span class="line">        <span class="string">'PASSWORD'</span>:<span class="string">'db_password'</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>编写Model</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Article</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    title = models.CharField(max_length=<span class="number">254</span>,verbose_name=<span class="string">u'标题'</span>)</span><br><span class="line">    type_choices=(</span><br><span class="line">        (<span class="string">u'Linux运维'</span>,<span class="string">u'Linux运维'</span>),</span><br><span class="line">        (<span class="string">u'Python编程'</span>,<span class="string">u'Python编程'</span>),</span><br><span class="line">    )</span><br><span class="line">    type = models.CharField(choices=type_choices, max_length=<span class="number">128</span>,verbose_name=<span class="string">u'分类'</span>)</span><br><span class="line">    category = models.ForeignKey(<span class="string">'Category'</span>,verbose_name=<span class="string">u'标签'</span>)</span><br><span class="line">    summary = models.TextField(max_length=<span class="number">500</span>)</span><br><span class="line">    author = models.ForeignKey(<span class="string">'UserProfile'</span>)</span><br><span class="line">    content = models.TextField(max_length=<span class="number">100000</span>)</span><br><span class="line">    head_img = models.ImageField(upload_to=<span class="string">"static/imgs/upload"</span>)</span><br><span class="line">    publish_date =models.DateTimeField(auto_now_add=<span class="keyword">True</span>,verbose_name=<span class="string">u'创建时间'</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__unicode__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.title</span><br></pre></td></tr></table></figure></p>
-<p>执行thon manage.py migrate新增表<br><strong>查询</strong><br><img src="/img/201702/showtables.png" style="width: 550x;"><br>进入python manage.py  shell<br><strong>查询全部文章</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="keyword">from</span> blog <span class="keyword">import</span> models</span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>a=models.Article.objects.all()</span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="keyword">print</span> a</span><br><span class="line">&lt;QuerySet [&lt;Article: NGINX隐藏版本号&gt;, &lt;Article: MYSQL主从复制&gt;, &lt;Article: CentOS终端如何显示中文同时出现乱码怎么办？&gt;, &lt;Article: EXSI5<span class="number">.5</span>安装vSphere&gt;, &lt;Article: PYTHON 和MYSQL交互&gt;, &lt;Article: JENKINS安装&gt;, &lt;Article: python-nmap端口扫描&gt;, &lt;Article: MONGODB索引优化案例&gt;, &lt;Article: SSH批量登录并执行命令（PYTHON实现）&gt;, &lt;Article: 集群与高可用之LVS介绍&gt;, &lt;Article: DJANGO登陆注销&gt;]&gt;</span><br></pre></td></tr></table></figure></p>
-<p><strong>查询最新发表的前5篇文章</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="keyword">from</span> blog <span class="keyword">import</span> models</span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>b = models.Article.objects.all().order_by(<span class="string">'-publish_date'</span>)[<span class="number">0</span>:<span class="number">5</span>]</span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="keyword">print</span> b</span><br><span class="line">&lt;QuerySet [&lt;Article: DJANGO登陆注销&gt;, &lt;Article: 集群与高可用之LVS介绍&gt;, &lt;Article: SSH批量登录并执行命令（PYTHON实现）&gt;, &lt;Article: MONGODB索引优化案例&gt;, &lt;Article: python-nmap端口扫描&gt;]&gt;</span><br></pre></td></tr></table></figure></p>
-<p><strong>查询带有MYSQL的文章</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="prompt">&gt;&gt;&gt; </span>c= models.Article.objects.filter(title__icontains=<span class="string">'mysql'</span>)   <span class="comment">### icontains不区分大小写</span></span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="keyword">print</span> c</span><br><span class="line">&lt;QuerySet [&lt;Article: MYSQL主从复制&gt;, &lt;Article: PYTHON 和MYSQL交互&gt;]&gt;</span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>c= models.Article.objects.filter(title__contains=<span class="string">'MYSQL'</span>)</span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="keyword">print</span> c</span><br><span class="line">&lt;QuerySet [&lt;Article: MYSQL主从复制&gt;, &lt;Article: PYTHON 和MYSQL交互&gt;]&gt;</span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>c= models.Article.objects.filter(title__contains=<span class="string">'mysql'</span>)</span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="keyword">print</span> c</span><br><span class="line">&lt;QuerySet []&gt;</span><br></pre></td></tr></table></figure></p>
+<p>执行thon manage.py migrate新增表<br><strong>查询</strong><br><img src="/img/201702/showtables.png" style="width: 550x;"><br>进入python manage.py  shell<br><strong>查询全部文章</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> blog <span class="keyword">import</span> models</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a=models.Article.objects.all()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> a</span><br><span class="line">&lt;QuerySet [&lt;Article: NGINX隐藏版本号&gt;, &lt;Article: MYSQL主从复制&gt;, &lt;Article: CentOS终端如何显示中文同时出现乱码怎么办？&gt;, &lt;Article: EXSI5<span class="number">.5</span>安装vSphere&gt;, &lt;Article: PYTHON 和MYSQL交互&gt;, &lt;Article: JENKINS安装&gt;, &lt;Article: python-nmap端口扫描&gt;, &lt;Article: MONGODB索引优化案例&gt;, &lt;Article: SSH批量登录并执行命令（PYTHON实现）&gt;, &lt;Article: 集群与高可用之LVS介绍&gt;, &lt;Article: DJANGO登陆注销&gt;]&gt;</span><br></pre></td></tr></table></figure></p>
+<p><strong>查询最新发表的前5篇文章</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> blog <span class="keyword">import</span> models</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = models.Article.objects.all().order_by(<span class="string">'-publish_date'</span>)[<span class="number">0</span>:<span class="number">5</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> b</span><br><span class="line">&lt;QuerySet [&lt;Article: DJANGO登陆注销&gt;, &lt;Article: 集群与高可用之LVS介绍&gt;, &lt;Article: SSH批量登录并执行命令（PYTHON实现）&gt;, &lt;Article: MONGODB索引优化案例&gt;, &lt;Article: python-nmap端口扫描&gt;]&gt;</span><br></pre></td></tr></table></figure></p>
+<p><strong>查询带有MYSQL的文章</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>c= models.Article.objects.filter(title__icontains=<span class="string">'mysql'</span>)   <span class="comment">### icontains不区分大小写</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> c</span><br><span class="line">&lt;QuerySet [&lt;Article: MYSQL主从复制&gt;, &lt;Article: PYTHON 和MYSQL交互&gt;]&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c= models.Article.objects.filter(title__contains=<span class="string">'MYSQL'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> c</span><br><span class="line">&lt;QuerySet [&lt;Article: MYSQL主从复制&gt;, &lt;Article: PYTHON 和MYSQL交互&gt;]&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c= models.Article.objects.filter(title__contains=<span class="string">'mysql'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> c</span><br><span class="line">&lt;QuerySet []&gt;</span><br></pre></td></tr></table></figure></p>
 	  
 	</div>
 
@@ -109,13 +109,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2017/02/14/阿里云CDN缓存刷新（PYTHON实现）/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2017/02/14/阿里云CDN缓存刷新（PYTHON实现）/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2017/02/14/django登陆注销/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2017/02/14/django登陆注销/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -127,7 +127,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2017/02/14/DJANGO模型及查询/" data-title="DJANGO模型及查询" data-url="http://linuxOps.xyz/2017/02/14/DJANGO模型及查询/"></div>  
@@ -171,7 +171,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>CentOS终端如何显示中文同时出现乱码怎么办？ | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="CentOS终端如何显示中文同时出现乱码怎么办？"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="CentOS终端如何显示中文同时出现乱码怎么办？">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -95,7 +95,7 @@
 	<div class="mypage">		
 	    <p>1、运行date看出并不是显示中文<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@centos ~]<span class="comment"># date</span></span><br><span class="line">Mon Aug <span class="number">31</span> <span class="number">01</span>:<span class="number">334</span>:<span class="number">47</span> CST <span class="number">2015</span></span><br></pre></td></tr></table></figure></p>
 <p>2、运行locale命令（locale 命令将有关当前语言环境或全部公共语言环境的信息写到标准输出上。公共语言环境是所有应用程序可以使用的语言环境。）<br><br><img src="/img/8-31/locale.png" style="width: 600px;"><br>3、如果没有安装中文语言（rpm -qa | grep Chinese查看）<br>若没有安装则需要安装<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y <span class="string">"@Chinese Support"</span></span><br></pre></td></tr></table></figure></p>
-<p>4、观察下以下区别代码运行的区别：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@centos ~]<span class="comment"># echo $LANG</span></span><br><span class="line">zh_CN.UTF-<span class="number">8</span></span><br><span class="line">[root@centos ~]<span class="comment"># date</span></span><br><span class="line"><span class="number">2015</span>年 <span class="number">08</span>月 <span class="number">31</span>日 星期一 <span class="number">01</span>:<span class="number">36</span>:<span class="number">53</span> CST</span><br><span class="line">[root@centos ~]<span class="comment"># export LANG=en_US.UTF-8</span></span><br><span class="line">[root@centos ~]<span class="comment"># echo $LANG</span></span><br><span class="line">en_US.UTF-<span class="number">8</span></span><br><span class="line">[root@centos ~]<span class="comment"># date</span></span><br><span class="line">Mon Aug <span class="number">31</span> <span class="number">01</span>:<span class="number">39</span>:<span class="number">22</span> CST <span class="number">2015</span></span><br></pre></td></tr></table></figure></p>
+<p>4、观察下以下区别代码运行的区别：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@centos ~]<span class="comment"># echo $LANG</span></span><br><span class="line">zh_CN.UTF<span class="number">-8</span></span><br><span class="line">[root@centos ~]<span class="comment"># date</span></span><br><span class="line"><span class="number">2015</span>年 <span class="number">08</span>月 <span class="number">31</span>日 星期一 <span class="number">01</span>:<span class="number">36</span>:<span class="number">53</span> CST</span><br><span class="line">[root@centos ~]<span class="comment"># export LANG=en_US.UTF-8</span></span><br><span class="line">[root@centos ~]<span class="comment"># echo $LANG</span></span><br><span class="line">en_US.UTF<span class="number">-8</span></span><br><span class="line">[root@centos ~]<span class="comment"># date</span></span><br><span class="line">Mon Aug <span class="number">31</span> <span class="number">01</span>:<span class="number">39</span>:<span class="number">22</span> CST <span class="number">2015</span></span><br></pre></td></tr></table></figure></p>
 <p>当中文字体包和显示包已经安装时候，只需更改/etc/sysconfig/i18n文件下的LANG即可显示中文，但是注意export LANG=xx，这种更改重启电脑后失效。</p>
 <p>5、要是终端出现乱码，则：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#vi /etc/sysconfig/i18n</span></span><br><span class="line">将LANG=<span class="string">"en_US.UTF-8"</span></span><br><span class="line">SYSFONT=<span class="string">"latarcyrheb-sun16"</span></span><br><span class="line">修改原内容为</span><br><span class="line">LANG=<span class="string">"zh_CN.GB18030"</span></span><br><span class="line">LANGUAGE=<span class="string">"zh_CN.GB18030:zh_CN.GB2312:zh_CN"</span></span><br><span class="line">SUPPORTED=<span class="string">"zh_CN.UTF-8:zh_CN:zh:en_US.UTF-8:en_US:en"</span></span><br><span class="line">SYSFONT=<span class="string">"lat0-sun16"</span></span><br><span class="line">重启或者注销登录即可</span><br></pre></td></tr></table></figure></p>
 <p>6、要是linux系统内终端可以正确显示中文，无乱码现象出现，但是远程终端确出现乱码情况发生，则注意把远程终端编码改为UTF-8格式后再尝试是否问题得到解决。</p>
@@ -108,13 +108,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2015/08/31/shell│╠╨Є▒р╨┤╓о╥╗║╬╬кshellг┐/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2015/08/31/shell│╠╨Є▒р╨┤╓о╥╗║╬╬кshellг┐/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2015/08/30/CentOS6-5-┼ф╓├vsftpd/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2015/08/30/CentOS6-5-┼ф╓├vsftpd/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -126,10 +126,10 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
-  	 <div class="ds-thread" data-thread-key="2015/08/31/CentOS╓╒╢╦╚ч║╬╧╘╩╛╓╨╬─═м╩▒│Ў╧╓┬╥┬ы╘ї├┤░ьг┐/" data-title="CentOS终端如何显示中文同时出现乱码怎么办？" data-url="http://linuxOps.xyz/2015/08/31/CentOS╓╒╢╦╚ч║╬╧╘╩╛╓╨╬─═м╩▒│Ў╧╓┬╥┬ы╘ї├┤░ьг┐/"></div>  
+  	 <div class="ds-thread" data-thread-key="2015/08/31/CentOS╓╒╢╦╚ч║╬╧╘╩╛╓╨╬─═м╩▒│Ў╧╓┬╥┬ы╘ї├┤░ьг┐/" data-title="CentOS终端如何显示中文同时出现乱码怎么办？" data-url="http://linuxOps.xyz/2015/08/31/CentOS╓╒╢╦╚ч║╬╧╘╩╛╓╨╬─═м╩▒│Ў╧╓┬╥┬ы╘ї├┤░ьг┐/"></div>  
   
 </section>
 
@@ -170,7 +170,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

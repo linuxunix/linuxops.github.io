@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>运维之道之系统管理中的三大利刃(htop glances dstat) | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="运维之道之系统管理中的三大利刃(htop glances dstat)"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="运维之道之系统管理中的三大利刃(htop glances dstat)">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -101,7 +101,7 @@
 <p>相传当初傲日并非打算铸造「绝世好剑」，而是要铸造「败亡之剑」，可惜「败亡」的铸造过程太过邪异，每次铸剑，均会造成人命伤亡，故此傲家中人弃「败亡」而改铸「绝世」。铸剑的最后步骤是以三毒之血「贪」（剑贪之血），「瞋」（步惊云之血），「痴」（断浪之血）炼制。但所铸成的只是威力神髓所在的真元，而真正的剑体已藏于千万铸好的绝世好剑中，绝世好剑本身有吸摄天地灵气之能，同样也可吸收别人功力转为己用。位列当世十大神兵之一，见《风云》。而我们今天所说的第三把系统管理的兵刃，于绝世好剑有过之而不及，绝世好剑需要集三毒之血（剑贪之血）、（步惊云之血）、（断浪之血）炼制而成，而dstat整合了vmstat、iostat、netstat、ifstat四款工具的功能于一身，功能无比强大，首先来看看这个利刃的庐山真面目，如下图：<br><br><img src="/img/NOV/yunwei3.jpeg" style="width: 650x;"><br>通过上图可以更直观的看出系统各功能模块的使用状况，而且dstat是CentOS默认提供的一款工具，并且使用起来十分的灵活，可以通过不同的组合来显示出我们需要的功能模块，下面来认识一下dstat这款工具的主要选项有那些：<br>-c ：显示CPU相关的统计数据<br>-d ：显示磁盘相关的统计数据<br>-g ：显示Page相关的速率数据<br>-i ：显示中断相关的统计数据<br>-l ：显示load average相关的统计信息<br>-m：显示内存相关的统计信息<br>-n ：显示网络相关的统计数据速率信息<br>-N ：指定接口<br>-p ：显示进程相关的统计数据<br>-r ：显示IO请求的速率<br>-s ：显示swap交换分区的相关数据<br>-y ：显示系统相关的数据包括中断和进程间切换等相关信息<br>–top-cpu：显示最占用CPU的进程<br>–top-bio：显示最消耗块级别IO的进程<br>–top-time：显示最占用CPU时长的进程<br>–top-io：显示最占用io的进程<br>–top-mem：显示最占用内存的进程<br>–ipc：显示进程间通信相关的速率数据<br>–tcp：显示tcp套接字相关的数据<br>–udp：显示udp套接字的相关数据<br>–raw：显示raw套接字相关数据<br>–unix：显示unix sock接口相关的统计数据<br>-a ：相当于-cdngy</p>
 <p>以上就是dstat工具的常用选项，之所以说该使用该工具十分领过是因为它即可以加上众多的参数来显示系统运行时丰富的各个功能模块的状态信息，如下图：<br><br><img src="/img/NOV/yunwei4.jpeg" style="width: 650x;"><br>同时又可以根据自己的需要来单独显示某一个功能模块的信息或者显示当前系统最占用CPU的进程，如下图：<br><br><img src="/img/NOV/yunwei5.jpeg" style="width: 650x;">    </p>
 <p> 以上就是系统管理中的三把利刃，只要精通任何一个工具，都有助于我们更加深入的了解我们系统运行过程中的问题和不足，及时的发行并解决这些问题，但同时我们也应该认识到，所谓的这些工具都是通过整合或分析/proc/这个伪文件系统，为什么说它是伪文件系统那，因为它只存在内存当中而不占用外存空间，它是以文件系统的方式访问系统内核数据的操作提供接口，要想使用好以上三个工具，还需要更深入的理解系统是究竟怎么运行起来的，以及系统运行的原理是什么，当我们真的理解了这些，我想那个时候就是我们自己制作工具开始，正所谓真正的高手也都是制作工具的高手，就如同江湖里说的最好的境界乃是无剑胜有剑，摘叶飞花皆可伤人。</p>
-<p>转载请注明：linux运维部落 » 系统管理中的三大利刃(htop glances dstat)<br>原文链接：<a href="http://www.178linux.com/9255" target="_blank" rel="external">http://www.178linux.com/9255</a></p>
+<p>转载请注明：linux运维部落 » 系统管理中的三大利刃(htop glances dstat)<br>原文链接：<a href="http://www.178linux.com/9255" target="_blank" rel="noopener">http://www.178linux.com/9255</a></p>
 	  
 	</div>
 
@@ -111,13 +111,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2015/11/29/ssh┼·┴┐╡╟┬╝▓в╓┤╨╨├№┴югиpython╩╡╧╓гй/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2015/11/29/ssh┼·┴┐╡╟┬╝▓в╓┤╨╨├№┴югиpython╩╡╧╓гй/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2015/11/21/Nginx╡─╞Ї╢пбв╣╪▒╒║═╞╜╗м╓╪╞Ї/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2015/11/21/Nginx╡─╞Ї╢пбв╣╪▒╒║═╞╜╗м╓╪╞Ї/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -129,7 +129,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2015/11/29/╘╦╬м╓о╡└╓о╧╡═│╣▄└э╓╨╡─╚¤┤є└√╚╨-htop-glances-dstat/" data-title="运维之道之系统管理中的三大利刃(htop glances dstat)" data-url="http://linuxOps.xyz/2015/11/29/╘╦╬м╓о╡└╓о╧╡═│╣▄└э╓╨╡─╚¤┤є└√╚╨-htop-glances-dstat/"></div>  
@@ -173,7 +173,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

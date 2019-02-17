@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>python检测服务状态并钉钉告警 | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="python检测服务状态并钉钉告警"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="python检测服务状态并钉钉告警">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -98,7 +98,7 @@
 </blockquote>
 <ul>
 <li>注意执行脚本服务器需要提前安装requests模块.</li>
-<li><strong>官网参考链接：</strong> <a href="http://docs.python-requests.org/en/master/" target="_blank" rel="external">http://docs.python-requests.org/en/master/</a></li>
+<li><strong>官网参考链接：</strong> <a href="http://docs.python-requests.org/en/master/" target="_blank" rel="noopener">http://docs.python-requests.org/en/master/</a></li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"><span class="comment"># /usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> os,sys</span><br><span class="line"><span class="keyword">from</span> subprocess <span class="keyword">import</span> Popen, PIPE</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">Service_start_cmd =<span class="string">"cmd启动命令"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Check_Port</span><span class="params">(port)</span>:</span></span><br><span class="line">    cmd_output = Popen(<span class="string">"netstat -ntlp|grep &#123;0&#125;"</span>.format(port), shell=<span class="keyword">True</span>, stdout=PIPE, stderr=PIPE).communicate()</span><br><span class="line">    <span class="keyword">if</span>  <span class="string">"LISTEN"</span> <span class="keyword">not</span> <span class="keyword">in</span> str(cmd_output):</span><br><span class="line">        data = <span class="string">'&#123;0&#125;端口没有启动'</span>.format(port)</span><br><span class="line">        Log_Write(data)</span><br><span class="line">        send_data= &#123;</span><br><span class="line">            <span class="string">"msgtype"</span>: <span class="string">"text"</span>,</span><br><span class="line">            <span class="string">"at"</span>: &#123;</span><br><span class="line">                <span class="string">"atMobiles"</span>: [</span><br><span class="line">                    <span class="string">"135xxx219"</span>,</span><br><span class="line">                ],</span><br><span class="line">                <span class="string">"isAtAll"</span>: <span class="string">'false'</span>,</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">"text"</span>: &#123;</span><br><span class="line">                <span class="string">"content"</span>: <span class="string">"ELK节点中的&#123;0&#125;,端口没有启动，正在执行启动。"</span>.format(port)</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;</span><br><span class="line">        Dingding_Send(send_data)</span><br><span class="line">        os.system(Service_start_cmd)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Check_Service</span><span class="params">(service)</span>:</span></span><br><span class="line">    cmd_output=Popen(<span class="string">"ps -ef |grep &#123;0&#125;|grep -v grep"</span>.format(service), shell=<span class="keyword">True</span>, stdout=PIPE, stderr=PIPE).communicate()</span><br><span class="line">    <span class="keyword">if</span> service  <span class="keyword">not</span> <span class="keyword">in</span> str(cmd_output):</span><br><span class="line">        data = <span class="string">'&#123;0&#125;服务没有启动'</span>.format(service)</span><br><span class="line">        Log_Write(data)</span><br><span class="line">        send_data = &#123;</span><br><span class="line">            <span class="string">"msgtype"</span>: <span class="string">"text"</span>,</span><br><span class="line">            <span class="string">"at"</span>: &#123;</span><br><span class="line">                <span class="string">"atMobiles"</span>: [</span><br><span class="line">                    <span class="string">"135xxx219"</span>,</span><br><span class="line">                ],</span><br><span class="line">                <span class="string">"isAtAll"</span>: <span class="string">'false'</span>,</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">"text"</span>: &#123;</span><br><span class="line">                <span class="string">"content"</span>: <span class="string">"ELK节点中的&#123;0&#125;服务没有启动，正在执行启动。"</span>.format(service)</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;</span><br><span class="line">        os.system(Service_start_cmd)</span><br><span class="line">        Dingding_Send(send_data)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Dingding_Send</span><span class="params">(data)</span>:</span></span><br><span class="line">    headers = &#123;<span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>&#125;</span><br><span class="line">    Api_Url = <span class="string">'https://oapi.dingtalk.com/robot/send?access_token=xxx'</span></span><br><span class="line">    <span class="keyword">print</span> requests.post(url=Api_Url, headers=headers, data=json.dumps(data)).text</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Log_Write</span><span class="params">(str)</span>:</span></span><br><span class="line">    date_time = time.strftime(<span class="string">"%Y-%m-%d %H:%M:%S"</span>,time.localtime())</span><br><span class="line">    pwd = os.getcwd()</span><br><span class="line">    <span class="keyword">with</span> open(pwd+<span class="string">'/'</span>+sys.argv[<span class="number">0</span>]+<span class="string">'_log'</span>,<span class="string">'a'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(date_time+<span class="string">'       '</span>+str+<span class="string">'\n'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    Check_Port(<span class="number">9200</span>)</span><br><span class="line">Check_Service(<span class="string">'elasticsearch'</span>)</span><br></pre></td></tr></table></figure>
 	  
@@ -110,13 +110,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2017/07/23/Python-Selenium实现自动化测试/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2017/07/23/Python-Selenium实现自动化测试/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2017/07/22/python实现批量更改centos系统密码/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2017/07/22/python实现批量更改centos系统密码/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -128,7 +128,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2017/07/22/python检测服务状态并钉钉告警/" data-title="python检测服务状态并钉钉告警" data-url="http://linuxOps.xyz/2017/07/22/python检测服务状态并钉钉告警/"></div>  
@@ -172,7 +172,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

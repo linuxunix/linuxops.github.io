@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>Python Zabbix Api | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Python Zabbix Api"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="Python Zabbix Api">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -269,7 +269,7 @@
 </table>
 <p>请求事例：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_mem_total</span><span class="params">(self,hostid)</span>:</span></span><br><span class="line">    data=self.json_obj(method=<span class="string">"item.get"</span>,</span><br><span class="line">        params=&#123;</span><br><span class="line">            <span class="string">"output"</span>: <span class="string">"extend"</span>,</span><br><span class="line">            <span class="string">"hostids"</span>: hostid,</span><br><span class="line">            <span class="string">"search"</span>: &#123;</span><br><span class="line">                <span class="string">"key_"</span>: <span class="string">"vm.memory.size[total]"</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        auth=self.user_login())</span><br><span class="line">    <span class="keyword">return</span> int(json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)[<span class="string">"result"</span>][<span class="number">0</span>][<span class="string">"lastvalue"</span>])/<span class="number">1024</span>/<span class="number">1024</span>/<span class="number">1024</span></span><br></pre></td></tr></table></figure></p>
 <h3 id="以上完整事例">以上完整事例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> sys, argparse</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Zabbix_Api</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.url = <span class="string">'http://192.168.31.249/zabbix/api_jsonrpc.php'</span></span><br><span class="line">        self.header = &#123;<span class="string">"Content-Type"</span>: <span class="string">"application/json"</span>&#125;</span><br><span class="line">        self.id = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">json_obj</span><span class="params">(self,method,auth=True,params=&#123;&#125;)</span>:</span></span><br><span class="line">        obj = &#123;<span class="string">'jsonrpc'</span>: <span class="string">'2.0'</span>,</span><br><span class="line">               <span class="string">'method'</span>: method,</span><br><span class="line">               <span class="string">'params'</span>: params,</span><br><span class="line">               <span class="string">'auth'</span>: auth,</span><br><span class="line">               <span class="string">'id'</span>: self.id&#125;</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> auth:</span><br><span class="line">            <span class="keyword">del</span> obj[<span class="string">"auth"</span>]</span><br><span class="line">        <span class="keyword">return</span> obj</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">user_login</span><span class="params">(self)</span>:</span></span><br><span class="line">        data=self.json_obj(method=<span class="string">"user.login"</span>,auth=<span class="keyword">False</span>, params=&#123;<span class="string">"user"</span>: <span class="string">"yunwei"</span>, <span class="string">"password"</span>: <span class="string">"yunwei"</span>&#125;)</span><br><span class="line">        <span class="keyword">return</span> json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)[<span class="string">"result"</span>]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_host</span><span class="params">(self)</span>:</span></span><br><span class="line">        data=self.json_obj(method=<span class="string">"host.get"</span>,</span><br><span class="line">            params=&#123;</span><br><span class="line">                <span class="string">"output"</span>: [<span class="string">"hostid"</span>, <span class="string">"name"</span>]</span><br><span class="line">            &#125;,</span><br><span class="line">            auth=self.user_login())</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_mem_total</span><span class="params">(self,hostid)</span>:</span></span><br><span class="line">        data=self.json_obj(method=<span class="string">"item.get"</span>,</span><br><span class="line">            params=&#123;</span><br><span class="line">                <span class="string">"output"</span>: <span class="string">"extend"</span>,</span><br><span class="line">                <span class="string">"hostids"</span>: hostid,</span><br><span class="line">                <span class="string">"search"</span>: &#123;</span><br><span class="line">                    <span class="string">"key_"</span>: <span class="string">"vm.memory.size[total]"</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            auth=self.user_login())</span><br><span class="line">        <span class="keyword">return</span> int(json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)[<span class="string">"result"</span>][<span class="number">0</span>][<span class="string">"lastvalue"</span>])/<span class="number">1024</span>/<span class="number">1024</span>/<span class="number">1024</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="comment"># for k in Zabbix_Api().get_host()["result"]:</span></span><br><span class="line">    <span class="comment">#     print(k["hostid"],k["name"],str(round(Zabbix_Api().get_mem(k["hostid"]),2))+"G")</span></span><br><span class="line">    print(Zabbix_Api().get_mem_total(<span class="number">10084</span>))</span><br></pre></td></tr></table></figure>
-<p>以上只是简单举例，具体实践可参考官网文档(要永远相信官方文档是最好的文档)：<a href="https://www.zabbix.com/documentation/3.0/manual/api" target="_blank" rel="external">https://www.zabbix.com/documentation/3.0/manual/api</a></p>
+<p>以上只是简单举例，具体实践可参考官网文档(要永远相信官方文档是最好的文档)：<a href="https://www.zabbix.com/documentation/3.0/manual/api" target="_blank" rel="noopener">https://www.zabbix.com/documentation/3.0/manual/api</a></p>
 	  
 	</div>
 
@@ -279,13 +279,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2018/06/16/Celery-分布式任务队列/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2018/06/16/Celery-分布式任务队列/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2018/06/16/Python-AES-加解密/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2018/06/16/Python-AES-加解密/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -297,7 +297,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2018/06/16/Python-Zabbix-Api/" data-title="Python Zabbix Api" data-url="http://linuxOps.xyz/2018/06/16/Python-Zabbix-Api/"></div>  
@@ -341,7 +341,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>Python+Selenium实现自动化测试 | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Python+Selenium实现自动化测试"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="Python+Selenium实现自动化测试">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -93,32 +93,32 @@
 
 	<!-- content -->
 	<div class="mypage">		
-	    <h2 id="Selenium是啥？">Selenium是啥？</h2><p>Selenium是一个开源的和便携式的自动化软件测试工具，支持操作各种浏览器，包括 Chrome，Safari，Firefox 等主流浏览器。<br>官网地址：<a href="http://www.seleniumhq.org/" target="_blank" rel="external">http://www.seleniumhq.org/</a></p>
+	    <h2 id="Selenium是啥？">Selenium是啥？</h2><p>Selenium是一个开源的和便携式的自动化软件测试工具，支持操作各种浏览器，包括 Chrome，Safari，Firefox 等主流浏览器。<br>官网地址：<a href="http://www.seleniumhq.org/" target="_blank" rel="noopener">http://www.seleniumhq.org/</a></p>
 <h2 id="WebDriver又是啥？">WebDriver又是啥？</h2><p>Selenium 2.0 最主要的一个新特性就是集成了 WebDriver API。WebDriver 提供更精简的编程几口，以解决 Selenium-RC API 中的一些限制。WebDriver 为那些页面元素可以不通过页面重新加载来更新的动态网页提供了更好的支持。WebDriver 的目标是提供一套精心设计的面向对象的 API 来更好的支持现代高级 web 应用的测试工作。Selenium-WebDriver 直接通过浏览器自动化的本地接口来调用浏览器。<br>下是火狐和谷歌浏览器的webdriver下载地址：</p>
 <ul>
-<li><strong>火狐webdriver下载地址：</strong> <a href="https://github.com/mozilla/geckodriver/releases" target="_blank" rel="external">https://github.com/mozilla/geckodriver/releases</a></li>
-<li><strong>谷歌 webdriver下载地: </strong> <a href="https://sites.google.com/a/chromium.org/chromedriver/downloads" target="_blank" rel="external">https://sites.google.com/a/chromium.org/chromedriver/downloads</a></li>
+<li><strong>火狐webdriver下载地址：</strong> <a href="https://github.com/mozilla/geckodriver/releases" target="_blank" rel="noopener">https://github.com/mozilla/geckodriver/releases</a></li>
+<li><strong>谷歌 webdriver下载地: </strong> <a href="https://sites.google.com/a/chromium.org/chromedriver/downloads" target="_blank" rel="noopener">https://sites.google.com/a/chromium.org/chromedriver/downloads</a></li>
 </ul>
 <h2 id="安装Selenium和WebDriver">安装Selenium和WebDriver</h2><h4 id="系统约定">系统约定</h4><p>系统环境： win10专业版<br>Python版本： Python 2.7.3<br>Selenium版本：selenium-3.4.3<br>火狐webdriver版本：geckodriver-v0.18.0-win64</p>
 <h4 id="安装Selenium">安装Selenium</h4><p>安装模块习惯采用pip安装方式，简单粗暴：<br>pip install selenium</p>
-<h4 id="安装火狐webdriver">安装火狐webdriver</h4><p>1、    到<a href="https://github.com/mozilla/geckodriver/releases下载geckodriver-v0.18.0-win64.zip" target="_blank" rel="external">https://github.com/mozilla/geckodriver/releases下载geckodriver-v0.18.0-win64.zip</a><br>2、    解压放置在C盘根目录（可以自行选择放置地址）<br>3、    把C:\geckodriver-v0.18.0-win64添加到坏境变量<br>4、    打开cmd命令窗口，输入geckodriver –V查看是否安装成功<br> <img src="/img/201707/02.jpg" style="width: 550;"></p>
+<h4 id="安装火狐webdriver">安装火狐webdriver</h4><p>1、    到<a href="https://github.com/mozilla/geckodriver/releases下载geckodriver-v0.18.0-win64.zip" target="_blank" rel="noopener">https://github.com/mozilla/geckodriver/releases下载geckodriver-v0.18.0-win64.zip</a><br>2、    解压放置在C盘根目录（可以自行选择放置地址）<br>3、    把C:\geckodriver-v0.18.0-win64添加到坏境变量<br>4、    打开cmd命令窗口，输入geckodriver –V查看是否安装成功<br> <img src="/img/201707/02.jpg" style="width: 550;"></p>
 <h2 id="Python+Selenium简单测试">Python+Selenium简单测试</h2><ul>
 <li><strong>这里拿百度搜索为例子，其它大同小异：</strong></li>
 </ul>
 <blockquote>
-<p>首先打开<a href="https://www.baidu.com/，通过F12打开开发者工具箱查看元素可以获得以下：" target="_blank" rel="external">https://www.baidu.com/，通过F12打开开发者工具箱查看元素可以获得以下：</a></p>
+<p>首先打开<a href="https://www.baidu.com/，通过F12打开开发者工具箱查看元素可以获得以下：" target="_blank" rel="noopener">https://www.baidu.com/，通过F12打开开发者工具箱查看元素可以获得以下：</a></p>
 </blockquote>
-<figure class="highlight django"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt;<span class="title">input</span> <span class="attribute">id</span>=<span class="value">"kw"</span> <span class="attribute">name</span>=<span class="value">"wd"</span> <span class="attribute">class</span>=<span class="value">"s_ipt"</span> <span class="attribute">value</span>=<span class="value">""</span> <span class="attribute">maxlength</span>=<span class="value">"255"</span> <span class="attribute">autocomplete</span>=<span class="value">"off"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">input</span> <span class="attribute">id</span>=<span class="value">"su"</span> <span class="attribute">value</span>=<span class="value">"百度一下"</span> <span class="attribute">class</span>=<span class="value">"bg s_btn"</span> <span class="attribute">type</span>=<span class="value">"submit"</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight django"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">"kw"</span> <span class="attr">name</span>=<span class="string">"wd"</span> <span class="attr">class</span>=<span class="string">"s_ipt"</span> <span class="attr">value</span>=<span class="string">""</span> <span class="attr">maxlength</span>=<span class="string">"255"</span> <span class="attr">autocomplete</span>=<span class="string">"off"</span>&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">"su"</span> <span class="attr">value</span>=<span class="string">"百度一下"</span> <span class="attr">class</span>=<span class="string">"bg s_btn"</span> <span class="attr">type</span>=<span class="string">"submit"</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
 <p>通过以上可以获取到输入框的id为“kw”，提交按钮的id为“su”，现在可以简单编写python脚本，通过脚本打开火狐浏览器并搜索提交python字符。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span>  selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding(<span class="string">'utf-8'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_search_in_baidu</span><span class="params">()</span>:</span></span><br><span class="line">    driver = webdriver.Firefox()</span><br><span class="line">    driver.implicitly_wait(<span class="number">10</span>)</span><br><span class="line">    driver.get(<span class="string">"https://www.baidu.com/"</span>)</span><br><span class="line">    time.sleep(<span class="number">1</span>)  <span class="comment">##防止网络慢加载不完全</span></span><br><span class="line">    elem_input=driver.find_element_by_id(<span class="string">"kw"</span>)</span><br><span class="line">    elem_input.send_keys(unicode( <span class="string">"python"</span> , errors=<span class="string">'ignore'</span>))</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br><span class="line">    driver.find_element_by_id(<span class="string">"su"</span>).click()</span><br><span class="line">    driver.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    test_search_in_baidu()</span><br></pre></td></tr></table></figure></p>
-<p>具体元素获取可以通过官网的API查看: <a href="https://seleniumhq.github.io/selenium/docs/api/py/api.html" target="_blank" rel="external">https://seleniumhq.github.io/selenium/docs/api/py/api.html</a></p>
+<p>具体元素获取可以通过官网的API查看: <a href="https://seleniumhq.github.io/selenium/docs/api/py/api.html" target="_blank" rel="noopener">https://seleniumhq.github.io/selenium/docs/api/py/api.html</a></p>
 <ul>
 <li><strong>如果我们在运行中出现以下错误：</strong><br>UnicodeDecodeError: ‘utf8’ codec can’t decode byte 0xe9 in position 0: unexpected end of data<br>可以采取对字符串进行unicode化，同时忽略错误，如下所示：<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unicode(<span class="string">"字符串"</span> , errors=<span class="string">'ignore'</span>))</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h4 id="要是放在Linux系统无图形界面怎么办？">要是放在Linux系统无图形界面怎么办？</h4><p>在实际中，可能有不少小伙伴可能放在linux服务器自动跑脚本，又不想安装图形界面。只是通过获取错误信息查看测试结果时候，可以使用phantomjs代替打开浏览器方式。这里只是一个抛砖引玉，具体使用可以参考官方文档，官网地址为：<a href="http://phantomjs.org/" target="_blank" rel="external">http://phantomjs.org/</a></p>
+<h4 id="要是放在Linux系统无图形界面怎么办？">要是放在Linux系统无图形界面怎么办？</h4><p>在实际中，可能有不少小伙伴可能放在linux服务器自动跑脚本，又不想安装图形界面。只是通过获取错误信息查看测试结果时候，可以使用phantomjs代替打开浏览器方式。这里只是一个抛砖引玉，具体使用可以参考官方文档，官网地址为：<a href="http://phantomjs.org/" target="_blank" rel="noopener">http://phantomjs.org/</a></p>
 <ul>
-<li><strong>官网参考文档：</strong> <a href="http://www.seleniumhq.org/docs" target="_blank" rel="external">http://www.seleniumhq.org/docs</a></li>
-<li><strong>中文文档地址：</strong> <a href="http://selenium-python-zh.readthedocs.io/en/latest/index.html" target="_blank" rel="external">http://selenium-python-zh.readthedocs.io/en/latest/index.html</a></li>
+<li><strong>官网参考文档：</strong> <a href="http://www.seleniumhq.org/docs" target="_blank" rel="noopener">http://www.seleniumhq.org/docs</a></li>
+<li><strong>中文文档地址：</strong> <a href="http://selenium-python-zh.readthedocs.io/en/latest/index.html" target="_blank" rel="noopener">http://selenium-python-zh.readthedocs.io/en/latest/index.html</a></li>
 </ul>
 	  
 	</div>
@@ -129,13 +129,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2017/08/19/通过post远程执行linux系统命令并返回结果/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2017/08/19/通过post远程执行linux系统命令并返回结果/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2017/07/22/python检测服务状态并钉钉告警/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2017/07/22/python检测服务状态并钉钉告警/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -147,7 +147,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2017/07/23/Python-Selenium实现自动化测试/" data-title="Python+Selenium实现自动化测试" data-url="http://linuxOps.xyz/2017/07/23/Python-Selenium实现自动化测试/"></div>  
@@ -191,7 +191,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

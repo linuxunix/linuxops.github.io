@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>zabbix监控nginx | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="zabbix监控nginx"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="zabbix监控nginx">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -93,20 +93,20 @@
 
 	<!-- content -->
 	<div class="mypage">		
-	    <p>本博来自<a href="http://www.linuxidc.com/Linux/2012-07/64798.htm，经本人测试成功后转发发出分享给大家：" target="_blank" rel="external">http://www.linuxidc.com/Linux/2012-07/64798.htm，经本人测试成功后转发发出分享给大家：</a></p>
+	    <p>本博来自<a href="http://www.linuxidc.com/Linux/2012-07/64798.htm，经本人测试成功后转发发出分享给大家：" target="_blank" rel="noopener">http://www.linuxidc.com/Linux/2012-07/64798.htm，经本人测试成功后转发发出分享给大家：</a></p>
 <p>1、首先开启nginx_status模块监控功能：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">server &#123; </span><br><span class="line">listen      <span class="number">8881</span>; </span><br><span class="line">server_name localhost;  </span><br><span class="line">root      html;  </span><br><span class="line">index  index.html; </span><br><span class="line">access_log off; </span><br><span class="line">location /status &#123; </span><br><span class="line">stub_status on; </span><br><span class="line">&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p><br><img src="/img/NOV/zabbix-nginx1.png" style="width: 650x;"></p>
-<p>开启之前先核查Nginx 是否包含 stub_status 模块<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost sbin]<span class="comment"># /usr/local/nginx/sbin/nginx -V </span></span><br><span class="line">nginx version: nginx/<span class="number">1.7</span><span class="number">.7</span></span><br><span class="line">built by gcc <span class="number">4.4</span><span class="number">.7</span> <span class="number">20120313</span> (Red Hat <span class="number">4.4</span><span class="number">.7</span>-<span class="number">16</span>) (GCC) </span><br><span class="line">conigure arguments: --<span class="keyword">with</span>-http_stub_status_module</span><br></pre></td></tr></table></figure></p>
+<p>开启之前先核查Nginx 是否包含 stub_status 模块<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost sbin]<span class="comment"># /usr/local/nginx/sbin/nginx -V </span></span><br><span class="line">nginx version: nginx/<span class="number">1.7</span><span class="number">.7</span></span><br><span class="line">built by gcc <span class="number">4.4</span><span class="number">.7</span> <span class="number">20120313</span> (Red Hat <span class="number">4.4</span><span class="number">.7</span><span class="number">-16</span>) (GCC) </span><br><span class="line">conigure arguments: --<span class="keyword">with</span>-http_stub_status_module</span><br></pre></td></tr></table></figure></p>
 <p>/usr/local/nginx/sbin/nginx -s reload</p>
 <p>要是木有安装则到源文件编译安装<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --<span class="keyword">with</span>-http_stub_status_module</span><br></pre></td></tr></table></figure></p>
-<p>2、测试：curl <a href="http://IP:端口/status" target="_blank" rel="external">http://IP:端口/status</a> </p>
+<p>2、测试：curl <a href="http://IP:端口/status" target="_blank" rel="noopener">http://IP:端口/status</a> </p>
 <p><br><img src="/img/NOV/zabbix-nginx2.png" style="width: 650x;"></p>
 <p>3、编写脚本过滤数据：（zabbix主要有数据就能出图）：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">[root@WEB_007 vhosts]<span class="comment"># cat /etc/zabbix/nginx_status  </span></span><br><span class="line"><span class="comment">#!/bin/bash  </span></span><br><span class="line"><span class="comment"># Script to fetch nginx statuses for tribily monitoring systems  </span></span><br><span class="line"><span class="comment"># Author: xiaoluo </span></span><br><span class="line"><span class="comment"># License: GPLv2  </span></span><br><span class="line">ip=<span class="number">192.168</span><span class="number">.0</span>:<span class="number">244</span>:<span class="number">8881</span></span><br><span class="line">function active &#123;  </span><br><span class="line">/usr/bin/curl <span class="string">"http://$ip/status"</span> <span class="number">2</span>&gt;/dev/null| grep <span class="string">'Active'</span> | awk <span class="string">'&#123;print $NF&#125;'</span>  </span><br><span class="line">&#125;  </span><br><span class="line">function reading &#123;  </span><br><span class="line">/usr/bin/curl <span class="string">"http://$ip/status"</span> <span class="number">2</span>&gt;/dev/null| grep <span class="string">'Reading'</span> | awk <span class="string">'&#123;print $2&#125;'</span>  </span><br><span class="line">&#125;  </span><br><span class="line">function writing &#123;  </span><br><span class="line">/usr/bin/curl <span class="string">"http://$ip/status"</span> <span class="number">2</span>&gt;/dev/null| grep <span class="string">'Writing'</span> | awk <span class="string">'&#123;print $4&#125;'</span>  </span><br><span class="line">&#125;  </span><br><span class="line">function waiting &#123;  </span><br><span class="line">/usr/bin/curl <span class="string">"http://$ip/status"</span> <span class="number">2</span>&gt;/dev/null| grep <span class="string">'Waiting'</span> | awk <span class="string">'&#123;print $6&#125;'</span>  </span><br><span class="line">&#125;  </span><br><span class="line">function accepts &#123;  </span><br><span class="line">/usr/bin/curl <span class="string">"http://$ip/status"</span> <span class="number">2</span>&gt;/dev/null| awk NR==<span class="number">3</span> | awk <span class="string">'&#123;print $1&#125;'</span>  </span><br><span class="line">&#125;  </span><br><span class="line">function handled &#123;  </span><br><span class="line">/usr/bin/curl <span class="string">"http://$ip/status"</span> <span class="number">2</span>&gt;/dev/null| awk NR==<span class="number">3</span> | awk <span class="string">'&#123;print $2&#125;'</span>  </span><br><span class="line">&#125;  </span><br><span class="line">function requests &#123;  </span><br><span class="line">/usr/bin/curl <span class="string">"http://$ip/status"</span> <span class="number">2</span>&gt;/dev/null| awk NR==<span class="number">3</span> | awk <span class="string">'&#123;print $3&#125;'</span>  </span><br><span class="line">&#125;  </span><br><span class="line"><span class="comment"># Run the requested function  </span></span><br><span class="line">$<span class="number">1</span></span><br></pre></td></tr></table></figure></p>
 <p>4、开启zabbix脚本功能、我现在是习惯把执行的key，放在另一个路径下，以后文件多了好区分，大家应该也建议这么做：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@WEB_007 zabbix_agentd.conf.d]<span class="comment"># vi /usr/local/zabbix/etc/zabbix_agentd.conf  </span></span><br><span class="line">UnsafeUserParameters=<span class="number">1</span></span><br><span class="line">Include=/usr/local/zabbix/etc/zabbix_agentd.conf.d/</span><br><span class="line">[root@WEB_007 zabbix_agentd.conf.d]<span class="comment">#cd /usr/local/zabbix/etc/zabbix_agentd.conf.d/ </span></span><br><span class="line">[root@WEB_007 zabbix_agentd.conf.d]<span class="comment">#vi nginx </span></span><br><span class="line"><span class="comment">#monitor nginx </span></span><br><span class="line">UserParameter=nginx[*],/etc/zabbix/nginx_status $<span class="number">1</span></span><br></pre></td></tr></table></figure></p>
 <p>5、导入模板：模块在我的附件可以自己下载：<br>这里演示，在那个时候我第一次制作，所以忘记添加图形了，大家可以自己根据模板添加图形,还有触发器我也没有创建，大家根据自己的需要进行创建<br>6、图形查看效果：<br><br><img src="/img/NOV/zabbix-nginx3.jpeg" style="width: 650x;"></p>
-<p>总结：zabbix可以很好的根据应用来进行监控，还很强大，慢慢研究<br>模板在下面自己下载：<br>——————————————分割线——————————————<br>免费下载地址在 <a href="http://linux.linuxidc.com/" target="_blank" rel="external">http://linux.linuxidc.com/</a><br>用户名与密码都是www.linuxidc.com<br>具体下载目录在 /2015年资料/5月/14日/Zabbix 监控Nginx状态/</p>
+<p>总结：zabbix可以很好的根据应用来进行监控，还很强大，慢慢研究<br>模板在下面自己下载：<br>——————————————分割线——————————————<br>免费下载地址在 <a href="http://linux.linuxidc.com/" target="_blank" rel="noopener">http://linux.linuxidc.com/</a><br>用户名与密码都是www.linuxidc.com<br>具体下载目录在 /2015年资料/5月/14日/Zabbix 监控Nginx状态/</p>
 <ul>
-<li><strong>压力测试</strong><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget http://blog.zyan.cc/soft/linux/webbench/webbench-<span class="number">1.5</span>.tar.gz</span><br><span class="line">tar zxvf webbench-<span class="number">1.5</span>.tar.gz</span><br><span class="line">cd webbench-<span class="number">1.5</span></span><br><span class="line">make &amp;&amp; make install</span><br><span class="line"></span><br><span class="line">webbench -c <span class="number">500</span> -t <span class="number">30</span>  http://<span class="number">192.168</span><span class="number">.0</span><span class="number">.244</span>/</span><br></pre></td></tr></table></figure>
+<li><strong>压力测试</strong><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget http://blog.zyan.cc/soft/linux/webbench/webbench<span class="number">-1.5</span>.tar.gz</span><br><span class="line">tar zxvf webbench<span class="number">-1.5</span>.tar.gz</span><br><span class="line">cd webbench<span class="number">-1.5</span></span><br><span class="line">make &amp;&amp; make install</span><br><span class="line"></span><br><span class="line">webbench -c <span class="number">500</span> -t <span class="number">30</span>  http://<span class="number">192.168</span><span class="number">.0</span><span class="number">.244</span>/</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p><br><img src="/img/NOV/zabbix-nginx4.png" style="width: 650x;"></p>
@@ -119,13 +119,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2015/11/21/PXE-Kickstart-╬▐╚╦╓╡╩╪Centos6-5░▓╫░▓┘╫ў/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2015/11/21/PXE-Kickstart-╬▐╚╦╓╡╩╪Centos6-5░▓╫░▓┘╫ў/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2015/11/14/ssh╘┐│╫╡╟┬╝ги├т├▄┬ы╡╟┬╜гй/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2015/11/14/ssh╘┐│╫╡╟┬╝ги├т├▄┬ы╡╟┬╜гй/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -137,7 +137,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2015/11/14/zabbix╝р┐╪nginx/" data-title="zabbix监控nginx" data-url="http://linuxOps.xyz/2015/11/14/zabbix╝р┐╪nginx/"></div>  
@@ -181,7 +181,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

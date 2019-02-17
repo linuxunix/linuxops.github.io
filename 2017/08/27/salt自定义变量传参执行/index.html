@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>salt自定义变量传参执行 | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="salt自定义变量传参执行"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="salt自定义变量传参执行">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -93,7 +93,7 @@
 
 	<!-- content -->
 	<div class="mypage">		
-	    <h1 id="salt自定义变量传参执行sls">salt自定义变量传参执行sls</h1><h2 id="以下使用安装redis为例子，动态传密码：">以下使用安装redis为例子，动态传密码：</h2><h3 id="一、redis_install-sls">一、redis_install.sls</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">redis-conf:</span><br><span class="line">  cmd.run:</span><br><span class="line">    - name: mkdir -p /data/redis6379/&#123;data,logs&#125; &amp;&amp; chown redis.redis -R /data/redis6379/ &amp;&amp; echo <span class="string">"su - redis -c '/usr/local/redis/bin/redis-server /usr/local/redis/conf/redis6379.conf &amp;'"</span> &gt;&gt; /etc/rc.local</span><br><span class="line">    - require:</span><br><span class="line">      - cmd: redis-install </span><br><span class="line">  &#123;% set redis_pass = salt[<span class="string">'pillar.get'</span>](<span class="string">'redis_pass'</span>,<span class="string">'xxxxx'</span>) %&#125;</span><br><span class="line">  file.recurse:</span><br><span class="line">    - name: /usr/local/redis/conf</span><br><span class="line">    - source: salt://Redis/file/conf</span><br><span class="line">    - user: redis</span><br><span class="line">    - group: redis</span><br><span class="line">    - dir_mode: <span class="number">731</span></span><br><span class="line">    - template: jinja </span><br><span class="line">    - defaults: </span><br><span class="line">        redis_pass: &#123;&#123; redis_pass &#125;&#125;   ==&gt;注意使用<span class="number">4</span>个空格</span><br><span class="line">    - require:</span><br><span class="line">      - cmd: redis-install</span><br></pre></td></tr></table></figure>
+	    <h1 id="salt自定义变量传参执行sls">salt自定义变量传参执行sls</h1><h2 id="以下使用安装redis为例子，动态传密码：">以下使用安装redis为例子，动态传密码：</h2><h3 id="一、redis_install-sls">一、redis_install.sls</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">redis-conf:</span><br><span class="line">  cmd.run:</span><br><span class="line">    - name: mkdir -p /data/redis6379/&#123;data,logs&#125; &amp;&amp; chown redis.redis -R /data/redis6379/ &amp;&amp; echo <span class="string">"su - redis -c '/usr/local/redis/bin/redis-server /usr/local/redis/conf/redis6379.conf &amp;'"</span> &gt;&gt; /etc/rc.local</span><br><span class="line">    - require:</span><br><span class="line">      - cmd: redis-install </span><br><span class="line">  &#123;% set redis_pass = salt[<span class="string">'pillar.get'</span>](<span class="string">'redis_pass'</span>,<span class="string">'xxxxx'</span>) %&#125;</span><br><span class="line">  file.recurse:</span><br><span class="line">    - name: /usr/local/redis/conf</span><br><span class="line">    - source: salt://Redis/file/conf</span><br><span class="line">    - user: redis</span><br><span class="line">    - group: redis</span><br><span class="line">    - dir_mode: <span class="number">731</span></span><br><span class="line">    - template: jinja </span><br><span class="line">    - defaults: </span><br><span class="line">        redis_pass: &#123;&#123; redis_pass &#125;&#125;   ==&gt;注意使用4个空格</span><br><span class="line">    - require:</span><br><span class="line">      - cmd: redis-install</span><br></pre></td></tr></table></figure>
 <h3 id="二、file/conf/redis6379-conf">二、file/conf/redis6379.conf</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">requirepass &#123;&#123; redis_pass &#125;&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="三、执行命令">三、执行命令</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">salt-ssh <span class="string">'192.168.162.113'</span> state.sls Redis.redis_install  pillar=<span class="string">'&#123;"redis_pass":"redis"&#125;'</span></span><br></pre></td></tr></table></figure>	  
 	</div>
@@ -104,13 +104,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2017/09/09/Pinpoint安装及配置/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2017/09/09/Pinpoint安装及配置/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2017/08/19/python微信发送消息类/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2017/08/19/python微信发送消息类/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -122,7 +122,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2017/08/27/salt自定义变量传参执行/" data-title="salt自定义变量传参执行" data-url="http://linuxOps.xyz/2017/08/27/salt自定义变量传参执行/"></div>  
@@ -166,7 +166,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

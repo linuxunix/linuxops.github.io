@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>CentOS 6.5下编译安装MySQL 5.6.28 | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="CentOS 6.5下编译安装MySQL 5.6.28"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="CentOS 6.5下编译安装MySQL 5.6.28">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -106,7 +106,7 @@
 </ul>
 <p><strong>一、卸载旧版本</strong><br>1、检查是否安装有MySQL<br>[root@localhost ~]#rpm -qa | grep mysql<br>2、通过以下的命令来卸载<br>[root@localhost ~]#rpm -e mysql   //普通卸载模式<br>[root@localhost ~]#rpm -e –nodeps mysql    // 强力卸载模式(当普通卸载时候提示有依赖的其它文件，无法卸载情况下用该命令强行卸载)</p>
 <p><strong>二、安装MySQL</strong><br>1、由于安装建议用源码安装Mysql，先安装相关编译包：<br>[root@localhost ~]# yum install -y make gcc-c++ cmake bison-devel  ncurses-devel</p>
-<p>2、下载源码包<br>下载mysql5.6.28链接：<a href="http://dev.mysql.com/downloads/mysql/5.6.html" target="_blank" rel="external">http://dev.mysql.com/downloads/mysql/5.6.html</a><br>解压mysql-5.6.28.tar.gz<br>[root@localhost local]# pwd<br>/usr/local<br>[root@localhost local]# tar vxf mysql-5.6.28.tar.gz<br>[root@localhost local]# cd mysql-5.6.28<br>3、编译安装</p>
+<p>2、下载源码包<br>下载mysql5.6.28链接：<a href="http://dev.mysql.com/downloads/mysql/5.6.html" target="_blank" rel="noopener">http://dev.mysql.com/downloads/mysql/5.6.html</a><br>解压mysql-5.6.28.tar.gz<br>[root@localhost local]# pwd<br>/usr/local<br>[root@localhost local]# tar vxf mysql-5.6.28.tar.gz<br>[root@localhost local]# cd mysql-5.6.28<br>3、编译安装</p>
 <pre><code class="python">[root@localhost mysql-<span class="number">5.6</span><span class="number">.28</span>]<span class="comment">#cmake \</span>
 -DCMAKE_INSTALL_PREFIX=/usr/local/mysql \
 -DMYSQL_DATADIR=/usr/local/mysql/data \
@@ -151,13 +151,13 @@ mysql     <span class="number">20705</span>  <span class="number">20503</span>  
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2015/12/19/MYSQL╓ў┤╙╕┤╓╞/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2015/12/19/MYSQL╓ў┤╙╕┤╓╞/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2015/12/06/╝п╚║╙ы╕▀┐╔╙├╓оLVS╜щ╔▄/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2015/12/06/╝п╚║╙ы╕▀┐╔╙├╓оLVS╜щ╔▄/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -169,7 +169,7 @@ mysql     <span class="number">20705</span>  <span class="number">20503</span>  
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2015/12/19/CentOS-6-5╧┬▒р╥ы░▓╫░MySQL-5-6-28/" data-title="CentOS 6.5下编译安装MySQL 5.6.28" data-url="http://linuxOps.xyz/2015/12/19/CentOS-6-5╧┬▒р╥ы░▓╫░MySQL-5-6-28/"></div>  
@@ -213,7 +213,7 @@ mysql     <span class="number">20705</span>  <span class="number">20503</span>  
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

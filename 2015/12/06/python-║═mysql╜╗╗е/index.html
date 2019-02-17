@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>python 和mysql交互 | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="python 和mysql交互"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="python 和mysql交互">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -94,10 +94,10 @@
 	<!-- content -->
 	<div class="mypage">		
 	    <p>安装MySQLdb库：yum install -y mysqld-python</p>
-<p>要是无法安装可以从此下载：<a href="https://pypi.python.org/pypi/MySQL-python/" target="_blank" rel="external">https://pypi.python.org/pypi/MySQL-python/</a></p>
+<p>要是无法安装可以从此下载：<a href="https://pypi.python.org/pypi/MySQL-python/" target="_blank" rel="noopener">https://pypi.python.org/pypi/MySQL-python/</a></p>
 <p>  [root@localhost ~]# tar xzvf MySQL-python-1.2.5.tar.gz<br>  [root@localhost ~]# cd MySQL-python-1.2.5<br>  [root@localhost ~]# python setup.py build<br>  [root@localhost ~]# python setup.py install</p>
 <p>一般mysql和python交换时候我们会行五步曲：（1）连接数据库;（2）建立指针；（3）通过指针插入记录；（4）查询或修改数据库。（5）关闭数据库</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="comment">#导入模块&gt;&gt;&gt; import MySQLdb&gt;&gt;&gt; #连接数据库&gt;&gt;&gt; conn = MySQLdb.connect(host="localhost",user="root",passwd="密码",db="数据库名",port=3036,charset="utf8")</span></span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="comment">#建立指针&gt;&gt;&gt; cur = conn.cursor()</span></span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="comment">#插入记录&gt;&gt;&gt; cur.execute("MYSQL语句)</span></span><br><span class="line"><span class="number">1L</span></span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="comment">#提交保存&gt;&gt;&gt; conn.commit()</span></span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="comment">#关闭数据库</span></span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>cur.close()</span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>conn.close()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment">#导入模块&gt;&gt;&gt; import MySQLdb&gt;&gt;&gt; #连接数据库&gt;&gt;&gt; conn = MySQLdb.connect(host="localhost",user="root",passwd="密码",db="数据库名",port=3036,charset="utf8")</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment">#建立指针&gt;&gt;&gt; cur = conn.cursor()</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment">#插入记录&gt;&gt;&gt; cur.execute("MYSQL语句)</span></span><br><span class="line"><span class="number">1L</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment">#提交保存&gt;&gt;&gt; conn.commit()</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment">#关闭数据库</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cur.close()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>conn.close()</span><br></pre></td></tr></table></figure>
 <p>以下是具体连接例子：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/sbin/env python</span></span><br><span class="line"><span class="comment">#-*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> MySQLdb</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:                 </span><br><span class="line">     conn=MySQLdb.connect(host=<span class="string">'localhost'</span>,user=<span class="string">'root'</span>,passwd=<span class="string">'linuxunix'</span>,db=<span class="string">'zabbix'</span>)</span><br><span class="line">     cur=conn.cursor()</span><br><span class="line">     recount=cur.execute(<span class="string">'select * from screens'</span>)</span><br><span class="line">     date = cur.fetchall()</span><br><span class="line">     <span class="keyword">print</span> recount</span><br><span class="line">     <span class="keyword">for</span> i <span class="keyword">in</span> date:</span><br><span class="line">        <span class="keyword">print</span> i</span><br><span class="line">     cur.close()</span><br><span class="line">     conn.close()</span><br><span class="line"><span class="keyword">except</span> MySQLdb.Error,e:</span><br><span class="line">     <span class="keyword">print</span> <span class="string">"Mysql Error %d:%s"</span> %(e.args[<span class="number">0</span>],e.args[<span class="number">1</span>])</span><br></pre></td></tr></table></figure></p>
 <p><br><img src="/img/12-python-mysql-1.png" style="width: 650x;"><br><br><img src="/img/12-python-mysql-2.png" style="width: 650x;"></p>
 	  
@@ -109,13 +109,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2015/12/06/redis-░▓╫░┼ф╓├/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2015/12/06/redis-░▓╫░┼ф╓├/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2015/12/06/╩╣╙├zabbix API╜╙┐┌┤ю╜иgrafana/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2015/12/06/╩╣╙├zabbix API╜╙┐┌┤ю╜иgrafana/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -127,7 +127,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2015/12/06/python-║═mysql╜╗╗е/" data-title="python 和mysql交互" data-url="http://linuxOps.xyz/2015/12/06/python-║═mysql╜╗╗е/"></div>  
@@ -171,7 +171,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

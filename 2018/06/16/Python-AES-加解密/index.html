@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>Python AES 加解密 | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Python AES 加解密"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="Python AES 加解密">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -96,7 +96,7 @@
 	    <blockquote>
 <p>高级加密标准（英语：Advanced Encryption Standard，缩写：AES），在密码学中又称Rijndael加密法，是美国联邦政府采用的一种区块加密标准。这个标准用来替代原先的DES，已经被多方分析且广为全世界所使用。经过五年的甄选流程，高级加密标准由美国国家标准与技术研究院（NIST）于2001年11月26日发布于FIPS PUB 197，并在2002年5月26日成为有效的标准。2006年，高级加密标准已然成为对称密钥加密中最流行的算法之一。</p>
 </blockquote>
-<p>如需进一步了解可以参考：<a href="https://zh.wikipedia.org/wiki/%E9%AB%98%E7%BA%A7%E5%8A%A0%E5%AF%86%E6%A0%87%E5%87%86#%E5%AF%86%E7%A0%81%E8%AF%B4%E6%98%8E" target="_blank" rel="external">https://zh.wikipedia.org/wiki/%E9%AB%98%E7%BA%A7%E5%8A%A0%E5%AF%86%E6%A0%87%E5%87%86#%E5%AF%86%E7%A0%81%E8%AF%B4%E6%98%8E</a></p>
+<p>如需进一步了解可以参考：<a href="https://zh.wikipedia.org/wiki/%E9%AB%98%E7%BA%A7%E5%8A%A0%E5%AF%86%E6%A0%87%E5%87%86#%E5%AF%86%E7%A0%81%E8%AF%B4%E6%98%8E" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E9%AB%98%E7%BA%A7%E5%8A%A0%E5%AF%86%E6%A0%87%E5%87%86#%E5%AF%86%E7%A0%81%E8%AF%B4%E6%98%8E</a></p>
 <p>AES5种常见加密模式：</p>
 <pre><code><span class="bullet">1. </span>电码本模式（Electronic Codebook Book (ECB)）
 
@@ -108,8 +108,8 @@
 
 <span class="bullet">5. </span>输出反馈模式（Output FeedBack (OFB)）
 </code></pre><p>pip install pycrypto</p>
-<p>官方链接:<a href="https://pypi.org/project/pycrypto/" target="_blank" rel="external">https://pypi.org/project/pycrypto/</a></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'''</span><br><span class="line">new(key, *args, **kwargs)</span><br><span class="line">    Create a new AES cipher</span><br><span class="line">    </span><br><span class="line">    :Parameters:</span><br><span class="line">      key : byte string</span><br><span class="line">        The secret key to use in the symmetric cipher.</span><br><span class="line">        It must be 16 (*AES-128*), 24 (*AES-192*), or 32 (*AES-256*) bytes long.</span><br><span class="line">    :Keywords:</span><br><span class="line">      mode : a *MODE_** constant</span><br><span class="line">        The chaining mode to use for encryption or decryption.</span><br><span class="line">        Default is `MODE_ECB`.</span><br><span class="line">      IV : byte string</span><br><span class="line">        The initialization vector to use for encryption or decryption.</span><br><span class="line">        </span><br><span class="line">        It is ignored for `MODE_ECB` and `MODE_CTR`.</span><br><span class="line">    </span><br><span class="line">        For `MODE_OPENPGP`, IV must be `block_size` bytes long for encryption</span><br><span class="line">        and `block_size` +2 bytes for decryption (in the latter case, it is</span><br><span class="line">        actually the *encrypted* IV which was prefixed to the ciphertext).</span><br><span class="line">        It is mandatory.</span><br><span class="line">       </span><br><span class="line">        For all other modes, it must be `block_size` bytes longs. It is optional and</span><br><span class="line">        when not present it will be given a default value of all zeroes.</span><br><span class="line">      counter : callable</span><br><span class="line">        (*Only* `MODE_CTR`). A stateful function that returns the next</span><br><span class="line">        *counter block*, which is a byte string of `block_size` bytes.</span><br><span class="line">        For better performance, use `Crypto.Util.Counter`.</span><br><span class="line">      segment_size : integer</span><br><span class="line">        (*Only* `MODE_CFB`).The number of bits the plaintext and ciphertext</span><br><span class="line">        are segmented in.</span><br><span class="line">        It must be a multiple of 8. If 0 or not specified, it will be assumed to be 8.</span><br><span class="line">    </span><br><span class="line">    :Return: an `AESCipher` object</span><br><span class="line">'''</span></span><br></pre></td></tr></table></figure>
+<p>官方链接:<a href="https://pypi.org/project/pycrypto/" target="_blank" rel="noopener">https://pypi.org/project/pycrypto/</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">new(key, *args, **kwargs)</span></span><br><span class="line"><span class="string">    Create a new AES cipher</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    :Parameters:</span></span><br><span class="line"><span class="string">      key : byte string</span></span><br><span class="line"><span class="string">        The secret key to use in the symmetric cipher.</span></span><br><span class="line"><span class="string">        It must be 16 (*AES-128*), 24 (*AES-192*), or 32 (*AES-256*) bytes long.</span></span><br><span class="line"><span class="string">    :Keywords:</span></span><br><span class="line"><span class="string">      mode : a *MODE_** constant</span></span><br><span class="line"><span class="string">        The chaining mode to use for encryption or decryption.</span></span><br><span class="line"><span class="string">        Default is `MODE_ECB`.</span></span><br><span class="line"><span class="string">      IV : byte string</span></span><br><span class="line"><span class="string">        The initialization vector to use for encryption or decryption.</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        It is ignored for `MODE_ECB` and `MODE_CTR`.</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">        For `MODE_OPENPGP`, IV must be `block_size` bytes long for encryption</span></span><br><span class="line"><span class="string">        and `block_size` +2 bytes for decryption (in the latter case, it is</span></span><br><span class="line"><span class="string">        actually the *encrypted* IV which was prefixed to the ciphertext).</span></span><br><span class="line"><span class="string">        It is mandatory.</span></span><br><span class="line"><span class="string">       </span></span><br><span class="line"><span class="string">        For all other modes, it must be `block_size` bytes longs. It is optional and</span></span><br><span class="line"><span class="string">        when not present it will be given a default value of all zeroes.</span></span><br><span class="line"><span class="string">      counter : callable</span></span><br><span class="line"><span class="string">        (*Only* `MODE_CTR`). A stateful function that returns the next</span></span><br><span class="line"><span class="string">        *counter block*, which is a byte string of `block_size` bytes.</span></span><br><span class="line"><span class="string">        For better performance, use `Crypto.Util.Counter`.</span></span><br><span class="line"><span class="string">      segment_size : integer</span></span><br><span class="line"><span class="string">        (*Only* `MODE_CFB`).The number of bits the plaintext and ciphertext</span></span><br><span class="line"><span class="string">        are segmented in.</span></span><br><span class="line"><span class="string">        It must be a multiple of 8. If 0 or not specified, it will be assumed to be 8.</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    :Return: an `AESCipher` object</span></span><br><span class="line"><span class="string">'''</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES</span><br><span class="line"><span class="keyword">from</span> binascii <span class="keyword">import</span> b2a_hex, a2b_hex</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Aes_Crypto</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, key)</span>:</span></span><br><span class="line">        <span class="comment">#self.key = key</span></span><br><span class="line">        <span class="comment">##建议使用以下方式</span></span><br><span class="line">        self.key=hashlib.md5(key).hexdigest()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 这里密钥key 长度必须为16（AES-128）、24（AES-192）、或32（AES-256）Bytes 长度</span></span><br><span class="line">        self.iv=<span class="number">16</span>*<span class="string">'0'</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">encrypt</span><span class="params">(self,data)</span>:</span></span><br><span class="line">        <span class="comment"># 不足16位补'\0'</span></span><br><span class="line">        data+=int(<span class="number">16</span>-(len(data) % <span class="number">16</span>)) * <span class="string">'\0'</span></span><br><span class="line">        obj = AES.new(self.key, AES.MODE_CBC, self.iv)</span><br><span class="line">        ciphertext =obj.encrypt(data)</span><br><span class="line">        <span class="comment"># 转化为16进制字符串</span></span><br><span class="line">        <span class="keyword">return</span> b2a_hex(ciphertext)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decrypt</span><span class="params">(self,data)</span>:</span></span><br><span class="line">        obj = AES.new(self.key, AES.MODE_CBC, self.iv)</span><br><span class="line">        <span class="keyword">return</span> obj.decrypt(a2b_hex(data)).rstrip(<span class="string">'\0'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    a=Aes_Crypto(<span class="number">16</span>*<span class="string">'1'</span>)</span><br><span class="line">    b=a.encrypt(<span class="string">'123456782dd000'</span>)</span><br><span class="line">    print(<span class="string">"加密后结果："</span>+b)</span><br><span class="line">    c=a.decrypt(b)</span><br><span class="line">    print(<span class="string">"解密后结果："</span>+c)</span><br></pre></td></tr></table></figure>
 <p>执行后的结果：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> python test2.py </span><br><span class="line">加密后结果：a0ac1a2c639fd4bce1e3804be22bbcbb</span><br><span class="line">解密后结果：<span class="number">1234567890123456</span></span><br></pre></td></tr></table></figure></p>
 	  
@@ -121,13 +121,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2018/06/16/Python-Zabbix-Api/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2018/06/16/Python-Zabbix-Api/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2018/06/16/简单封装Ansible-Api-接口/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2018/06/16/简单封装Ansible-Api-接口/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -139,7 +139,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2018/06/16/Python-AES-加解密/" data-title="Python AES 加解密" data-url="http://linuxOps.xyz/2018/06/16/Python-AES-加解密/"></div>  
@@ -183,7 +183,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

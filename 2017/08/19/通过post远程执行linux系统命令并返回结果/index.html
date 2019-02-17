@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>通过post远程执行linux系统命令并返回结果 | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="通过post远程执行linux系统命令并返回结果"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="通过post远程执行linux系统命令并返回结果">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -97,9 +97,9 @@
 <p>最初做这个原因的是因为如何发布后查看实时日志,当然这种方案并不是当项目发布后查看日子的最佳方案，不过也可以给大家参考下。感谢以色列大神aviv给的指导,谢谢。</p>
 </blockquote>
 <h3 id="SocketServer方式实现">SocketServer方式实现</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> BaseHTTPServer <span class="keyword">import</span> BaseHTTPRequestHandler, HTTPServer</span><br><span class="line"><span class="keyword">import</span> SocketServer</span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LogServer</span><span class="params">(BaseHTTPRequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">do_GET</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">with</span> open(<span class="string">"/var/log/message.log"</span>, <span class="string">'r'</span>) <span class="keyword">as</span> log_fd:</span><br><span class="line">                        log = log_fd.read()</span><br><span class="line"></span><br><span class="line">            self.send_response(<span class="number">200</span>)</span><br><span class="line">            self.send_header(<span class="string">'Content-type'</span>, <span class="string">'text/html'</span>)</span><br><span class="line">            self.end_headers()</span><br><span class="line">            self.wfile.write(log)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            self.send_response(<span class="number">500</span>)</span><br><span class="line">            self.send_header(<span class="string">'Content-type'</span>, <span class="string">'text/html'</span>)</span><br><span class="line">            self.end_headers()</span><br><span class="line">            self.wfile.write(e.message)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">do_POST</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            content_length = int(self.headers.getheader(<span class="string">'content-length'</span>, <span class="number">0</span>))</span><br><span class="line">            body = self.rfile.read(content_length)</span><br><span class="line">            data = json.loads(body)</span><br><span class="line">            stdout = subprocess.check_output(data[<span class="string">'command'</span>], shell=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line">            self.send_response(<span class="number">200</span>)</span><br><span class="line">            self.send_header(<span class="string">'Content-type'</span>, <span class="string">'text/html'</span>)</span><br><span class="line">            self.end_headers()</span><br><span class="line">            self.wfile.write(stdout)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            self.send_response(<span class="number">500</span>)</span><br><span class="line">            self.send_header(<span class="string">'Content-type'</span>, <span class="string">'text/html'</span>)</span><br><span class="line">            self.end_headers()</span><br><span class="line">            self.wfile.write(e.message)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run_log_server</span><span class="params">(port)</span>:</span></span><br><span class="line">    server_address = (<span class="string">''</span>, port)</span><br><span class="line">    httpd = HTTPServer(server_address, LogServer)</span><br><span class="line">    print(<span class="string">'starting server on port %d'</span> % port)</span><br><span class="line">    httpd.serve_forever()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    parser = argparse.ArgumentParser()</span><br><span class="line">    parser.add_argument(<span class="string">"port"</span>, type=int)</span><br><span class="line">    args = parser.parse_args()</span><br><span class="line">    run_log_server(args.port)</span><br></pre></td></tr></table></figure>
-<h6 id="执行参数：">执行参数：</h6><p>POST JSON 例如：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    "<span class="attribute">command</span>": <span class="value"><span class="string">"df -h"</span></span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure></p>
+<h6 id="执行参数：">执行参数：</h6><p>POST JSON 例如：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"command"</span>: <span class="string">"df -h"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <hr>
-<h3 id="flask实现方法">flask实现方法</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding:utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask,request</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="decorator">@app.route('/',methods=['POST'])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello_world</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> request.data</span><br><span class="line">    cmd = subprocess.check_output(request.data, shell=<span class="keyword">True</span>)</span><br><span class="line">    <span class="keyword">return</span> cmd</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    app.run()</span><br></pre></td></tr></table></figure>
+<h3 id="flask实现方法">flask实现方法</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding:utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask,request</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="meta">@app.route('/',methods=['POST'])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello_world</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> request.data</span><br><span class="line">    cmd = subprocess.check_output(request.data, shell=<span class="keyword">True</span>)</span><br><span class="line">    <span class="keyword">return</span> cmd</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    app.run()</span><br></pre></td></tr></table></figure>
 	  
 	</div>
 
@@ -109,13 +109,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2017/08/19/python微信发送消息类/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2017/08/19/python微信发送消息类/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2017/07/23/Python-Selenium实现自动化测试/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2017/07/23/Python-Selenium实现自动化测试/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -127,7 +127,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2017/08/19/通过post远程执行linux系统命令并返回结果/" data-title="通过post远程执行linux系统命令并返回结果" data-url="http://linuxOps.xyz/2017/08/19/通过post远程执行linux系统命令并返回结果/"></div>  
@@ -171,7 +171,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

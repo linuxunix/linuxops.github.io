@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>centos安装glusterfs和实战 | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="centos安装glusterfs和实战"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="centos安装glusterfs和实战">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -99,10 +99,10 @@
 <p>分布式文件系统（Distributed File System）是指文件系统管理的物理存储资源不一定直接连接在本地节点上，而是通过计算机网络与节点相连。分布式文件系统的设计基于客户机/服务器模 式。一个典型的网络可能包括多个供多用户访问的服务器。另外，对等特性允许一些系统扮演客户机和服务器的双重角色。例如，用户可以“发表”一个允许其他客 户机访问的目录，一旦被访问，这个目录对客户机来说就像使用本地驱动器一样。</p>
 </blockquote>
 <p><strong>分区磁盘</strong><br>[root@localhost src]# fdisk -l<br>[root@localhost src]# mkfs.etx4  /dev/sdb</p>
-<p><strong>1、下载glusterfs源码包到/usr/local/urc</strong><br><a href="http://www.gluster.org/download/" target="_blank" rel="external">http://www.gluster.org/download/</a></p>
+<p><strong>1、下载glusterfs源码包到/usr/local/urc</strong><br><a href="http://www.gluster.org/download/" target="_blank" rel="noopener">http://www.gluster.org/download/</a></p>
 <p><strong>2、解压</strong><br>[root@localhost src]# tar zvxf glusterfs-3.6.6.tar.gz </p>
-<p><strong>3、编译安装</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost glusterfs-<span class="number">3.6</span><span class="number">.6</span>]<span class="comment"># ./configure   --prefix=/usr/local/glusterfs -enable-systemt</span></span><br><span class="line">--------------------------------------------------------------------------------------------------------------------</span><br><span class="line"><span class="comment"># 如果出现下面错误</span></span><br><span class="line">checking <span class="keyword">for</span> flex... no</span><br><span class="line">checking <span class="keyword">for</span> lex... no</span><br><span class="line">configure: error: Flex <span class="keyword">or</span> lex required to build glusterfs.</span><br><span class="line">解决方法 [root@localhost glusterfs-<span class="number">3.6</span><span class="number">.6</span>]<span class="comment"># yum -y install flex</span></span><br><span class="line"><span class="comment"># 如果出现下面错误</span></span><br><span class="line">configure: error: GNU Bison required to build glusterfs.</span><br><span class="line">解决方法 [root@localhost glusterfs-<span class="number">3.6</span><span class="number">.6</span>]<span class="comment"># yum -y install bison</span></span><br><span class="line"><span class="comment"># 如果出现下面错误</span></span><br><span class="line">configure: error: OpenSSL crypto library <span class="keyword">is</span> required to build glusterfs</span><br><span class="line">解决方法 [root@localhost glusterfs-<span class="number">3.6</span><span class="number">.6</span>]<span class="comment"># yum -y install openssl-devel</span></span><br><span class="line"></span><br><span class="line">configure: error: libxml2 devel libraries <span class="keyword">not</span> found</span><br><span class="line">解决方法：[root@localhost glusterfs-<span class="number">3.6</span><span class="number">.6</span>]<span class="comment"># yum install libxml2 libxml2-devel</span></span><br><span class="line">--------------------------------------------------------------------------------------------------------------------</span><br><span class="line">[root@localhost glusterfs-<span class="number">3.6</span><span class="number">.6</span>]<span class="comment">#make &amp;&amp; make install</span></span><br></pre></td></tr></table></figure></p>
-<p><strong>4、查看版本信息</strong><br>[root@localhost sbin]# ./gluster –version<br>glusterfs 3.6.6 built on Dec 27 2015 03:48:07<br>Repository revision: git://git.gluster.com/glusterfs.git<br>Copyright (c) 2006-2011 Gluster Inc. <a href="http://www.gluster.com" target="_blank" rel="external">http://www.gluster.com</a><br>GlusterFS comes with ABSOLUTELY NO WARRANTY.<br>You may redistribute copies of GlusterFS under the terms of the GNU General Public License.</p>
+<p><strong>3、编译安装</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost glusterfs<span class="number">-3.6</span><span class="number">.6</span>]<span class="comment"># ./configure   --prefix=/usr/local/glusterfs -enable-systemt</span></span><br><span class="line">--------------------------------------------------------------------------------------------------------------------</span><br><span class="line"><span class="comment"># 如果出现下面错误</span></span><br><span class="line">checking <span class="keyword">for</span> flex... no</span><br><span class="line">checking <span class="keyword">for</span> lex... no</span><br><span class="line">configure: error: Flex <span class="keyword">or</span> lex required to build glusterfs.</span><br><span class="line">解决方法 [root@localhost glusterfs<span class="number">-3.6</span><span class="number">.6</span>]<span class="comment"># yum -y install flex</span></span><br><span class="line"><span class="comment"># 如果出现下面错误</span></span><br><span class="line">configure: error: GNU Bison required to build glusterfs.</span><br><span class="line">解决方法 [root@localhost glusterfs<span class="number">-3.6</span><span class="number">.6</span>]<span class="comment"># yum -y install bison</span></span><br><span class="line"><span class="comment"># 如果出现下面错误</span></span><br><span class="line">configure: error: OpenSSL crypto library <span class="keyword">is</span> required to build glusterfs</span><br><span class="line">解决方法 [root@localhost glusterfs<span class="number">-3.6</span><span class="number">.6</span>]<span class="comment"># yum -y install openssl-devel</span></span><br><span class="line"></span><br><span class="line">configure: error: libxml2 devel libraries <span class="keyword">not</span> found</span><br><span class="line">解决方法：[root@localhost glusterfs<span class="number">-3.6</span><span class="number">.6</span>]<span class="comment"># yum install libxml2 libxml2-devel</span></span><br><span class="line">--------------------------------------------------------------------------------------------------------------------</span><br><span class="line">[root@localhost glusterfs<span class="number">-3.6</span><span class="number">.6</span>]<span class="comment">#make &amp;&amp; make install</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>4、查看版本信息</strong><br>[root@localhost sbin]# ./gluster –version<br>glusterfs 3.6.6 built on Dec 27 2015 03:48:07<br>Repository revision: git://git.gluster.com/glusterfs.git<br>Copyright (c) 2006-2011 Gluster Inc. <a href="http://www.gluster.com" target="_blank" rel="noopener">http://www.gluster.com</a><br>GlusterFS comes with ABSOLUTELY NO WARRANTY.<br>You may redistribute copies of GlusterFS under the terms of the GNU General Public License.</p>
 <p><strong>5、glusterfs 启动</strong><br>[root@localhost sbin]#  service glusterd start<br>Starting glusterd:                                         [确定]</p>
 <p>[root@localhost sbin]# ps -ef |grep glusterd<br>root      49226      1  0 03:56 ?        00:00:00 /usr/local/glusterfs/sbin/glusterd –pid-file=/var/run/glusterd.pid<br>root      49363   6751  0 03:57 pts/2    00:00:00 grep glusterd</p>
 <p><strong>6、gluster基本操作</strong><br>6.1、创建并启动volume<br>[root@localhost sbin]# ./gluster volume create help<br>Usage: volume create <new-volname> [stripe <count>] [replica <count>] [disperse [<count>]] [redundancy <count>] [transport <tcp|rdma|tcp,rdma>] <new-brick>… [force]<br>[root@localhost sbin]# ./gluster volume create  testvol 192.168.108.141:/data/brick1 192.168.108.141:/data/brick2<br>volume create: testvol: failed: The brick 192.168.108.141:/data/brick1 is being created in the root partition. It is recommended that you don’t use the system’s root partition for storage backend. Or use ‘force’ at the end of the command if you want to override this behavior.<br>提示：建议您不使用系统的根分区来存储后端。或使用“强制”命令结束时，如果你想重写此行为。<br>[root@localhost sbin]# ./gluster volume create  testvol 192.168.108.141:/data/brick1 192.168.108.141:/data/brick2 force<br>volume create: testvol: success: please start the volume to access data<br>[root@localhost sbin]# ./gluster volume info<br>Volume Name: testvol<br>Type: Distribute<br>Volume ID: 1b1c1b4d-cd7e-4770-beb4-8dfa1499d723<br>Status: Created<br>Number of Bricks: 2<br>Transport-type: tcp<br>Bricks:<br>Brick1: 192.168.108.141:/data/brick1<br>Brick2: 192.168.108.141:/data/brick2</new-brick></tcp|rdma|tcp,rdma></count></count></count></count></new-volname></p>
@@ -135,13 +135,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2016/01/23/NGINX╥■▓╪░ц▒╛║┼/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2016/01/23/NGINX╥■▓╪░ц▒╛║┼/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2016/01/05/╗∙╙┌-memcached-╡─-tomcat-╝п╚║╓о-session-╣▓╧э/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2016/01/05/╗∙╙┌-memcached-╡─-tomcat-╝п╚║╓о-session-╣▓╧э/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -153,7 +153,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2016/01/05/centos░▓╫░glusterfs/" data-title="centos安装glusterfs和实战" data-url="http://linuxOps.xyz/2016/01/05/centos░▓╫░glusterfs/"></div>  
@@ -197,7 +197,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

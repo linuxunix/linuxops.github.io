@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>openresty针对不同IP或者不同目录做权限认证 | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="openresty针对不同IP或者不同目录做权限认证"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="openresty针对不同IP或者不同目录做权限认证">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -104,8 +104,8 @@
 <h3 id="如果使用auth_basic方式">如果使用auth_basic方式</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">       location / &#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> ($remote_addr = <span class="string">"8.8.8.8"</span>)&#123;</span><br><span class="line">                auth_basic <span class="string">"User Authentication"</span>;</span><br><span class="line">                auth_basic_user_file /usr/local/nginx/conf/solf_pass.db;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ($remote_addr !~ <span class="string">"8.8.8.8|192.168.\*.\*"</span>)</span><br><span class="line">                &#123;<span class="keyword">return</span> <span class="number">403</span>;&#125;</span><br><span class="line">    proxy_pass http://<span class="number">192.168</span><span class="number">.162</span><span class="number">.113</span>/test2;</span><br><span class="line">...省略部分跳转代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>当执行nginx -t报错<br>[root@log1 upstream]# nginx -t<br>nginx: [emerg] “auth_basic” directive is not allowed here in /usr/local/nginx/conf/upstream/soft.xxxx.com.conf:13<br>nginx: configuration file /usr/local/nginx/conf/nginx.conf test failed</p>
 <h3 id="使用openresty结合lua">使用openresty结合lua</h3><p>当我们遇到以上需要时候，采用NGINX或者有点吃力。这时可以推荐春哥的openresty。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">       location / &#123;</span><br><span class="line">        if ($remote_addr = "8.8.8.8")&#123;</span><br><span class="line">   access_by_lua '</span><br><span class="line">        if ngx.var.remote_user == "test" and ngx.var.remote_passwd == "test" then</span><br><span class="line">            return</span><br><span class="line">        end</span><br><span class="line">        ngx.header.www_authenticate = [[Basic realm="Restricted"]]</span><br><span class="line">        ngx.exit(401)</span><br><span class="line">    ';&#125;</span><br><span class="line">        if ($remote_addr !~ "8.8.8.8|192.168.\*.\*")</span><br><span class="line">        &#123;return 403;&#125;</span><br><span class="line">        proxy_pass http://192.168.162.113/test2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>通过实践证明，使用lua是可以完美解决我们的需求，当然lua并非只能做这些简单需求。我们可以把openresty+lua直接变成web服务器也可，直接对数据库操作。详情可以参考<a href="https://github.com/openresty/lua-nginx-module#name" target="_blank" rel="external">https://github.com/openresty/lua-nginx-module#name</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">       location / &#123;</span><br><span class="line">        <span class="keyword">if</span> ($remote_addr = <span class="string">"8.8.8.8"</span>)&#123;</span><br><span class="line">   access_by_lua <span class="string">'</span></span><br><span class="line"><span class="string">        if ngx.var.remote_user == "test" and ngx.var.remote_passwd == "test" then</span></span><br><span class="line"><span class="string">            return</span></span><br><span class="line"><span class="string">        end</span></span><br><span class="line"><span class="string">        ngx.header.www_authenticate = [[Basic realm="Restricted"]]</span></span><br><span class="line"><span class="string">        ngx.exit(401)</span></span><br><span class="line"><span class="string">    '</span>;&#125;</span><br><span class="line">        <span class="keyword">if</span> ($remote_addr !~ <span class="string">"8.8.8.8|192.168.\*.\*"</span>)</span><br><span class="line">        &#123;<span class="keyword">return</span> <span class="number">403</span>;&#125;</span><br><span class="line">        proxy_pass http://<span class="number">192.168</span><span class="number">.162</span><span class="number">.113</span>/test2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过实践证明，使用lua是可以完美解决我们的需求，当然lua并非只能做这些简单需求。我们可以把openresty+lua直接变成web服务器也可，直接对数据库操作。详情可以参考<a href="https://github.com/openresty/lua-nginx-module#name" target="_blank" rel="noopener">https://github.com/openresty/lua-nginx-module#name</a></p>
 	  
 	</div>
 
@@ -115,13 +115,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2018/01/07/Kanban-Rabbitmq-pika模块实现信息推送通知/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2018/01/07/Kanban-Rabbitmq-pika模块实现信息推送通知/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2017/09/09/Pinpoint安装及配置/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2017/09/09/Pinpoint安装及配置/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -133,7 +133,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2017/11/18/openresty针对不同IP或者不同目录做权限认证/" data-title="openresty针对不同IP或者不同目录做权限认证" data-url="http://linuxOps.xyz/2017/11/18/openresty针对不同IP或者不同目录做权限认证/"></div>  
@@ -177,7 +177,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

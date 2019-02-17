@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>PXE+Kickstart 无人值守Centos6.5安装操作 | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="PXE+Kickstart 无人值守Centos6.5安装操作"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="PXE+Kickstart 无人值守Centos6.5安装操作">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -119,11 +119,11 @@
 </li>
 </ul>
 <p><br><img src="/img/NOV/PEX2.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX3.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX4.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX5.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX6.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX7.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX8.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX9.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX10.png" style="width: 650x;"></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#platform=x86, AMD64, 或 Intel EM64T</span></span><br><span class="line"><span class="comment">#version=DEVEL</span></span><br><span class="line"><span class="comment"># Firewall configuration</span></span><br><span class="line">firewall --disabled</span><br><span class="line"><span class="comment"># Install OS instead of upgrade</span></span><br><span class="line">install</span><br><span class="line"><span class="comment"># Use network installation</span></span><br><span class="line">url --url=<span class="string">"ftp://192.168.108.129/pub"</span></span><br><span class="line"><span class="comment"># Root password</span></span><br><span class="line">rootpw --iscrypted $<span class="number">1</span>$sWjalKUE$Q9CMBRc6GDre025<span class="number">.19</span>HGT0</span><br><span class="line"><span class="comment"># System authorization information</span></span><br><span class="line">auth  --useshadow  --passalgo=sha512</span><br><span class="line"><span class="comment"># Use graphical install</span></span><br><span class="line">graphical</span><br><span class="line">firstboot --disable</span><br><span class="line"><span class="comment"># System keyboard</span></span><br><span class="line">keyboard us</span><br><span class="line"><span class="comment"># System language</span></span><br><span class="line">lang en_US</span><br><span class="line"><span class="comment"># SELinux configuration</span></span><br><span class="line">selinux --disabled</span><br><span class="line"><span class="comment"># Installation logging level</span></span><br><span class="line">logging --level=info</span><br><span class="line">reboot                                     <span class="comment">##################################加上后自动启动，无需手工执行。</span></span><br><span class="line"><span class="comment"># System timezone</span></span><br><span class="line">timezone --isUtc Asia/Shanghai</span><br><span class="line"><span class="comment"># Network information</span></span><br><span class="line">network  --bootproto=dhcp --device=eth0 --onboot=on</span><br><span class="line"><span class="comment"># System bootloader configuration</span></span><br><span class="line">bootloader --location=mbr</span><br><span class="line"><span class="comment"># Clear the Master Boot Record</span></span><br><span class="line">zerombr</span><br><span class="line"><span class="comment"># Partition clearing information</span></span><br><span class="line">clearpart --all --initlabel </span><br><span class="line"><span class="comment"># Disk partitioning information</span></span><br><span class="line">part swap --fstype=<span class="string">"swap"</span> --size=<span class="number">2000</span></span><br><span class="line">part /home --fstype=<span class="string">"ext4"</span> --size=<span class="number">2000</span></span><br><span class="line">part / --fstype=<span class="string">"ext4"</span> --size=<span class="number">10000</span></span><br><span class="line"></span><br><span class="line">%packages</span><br><span class="line"><span class="decorator">@kde-desktop</span></span><br><span class="line">%end</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#platform=x86, AMD64, 或 Intel EM64T</span></span><br><span class="line"><span class="comment">#version=DEVEL</span></span><br><span class="line"><span class="comment"># Firewall configuration</span></span><br><span class="line">firewall --disabled</span><br><span class="line"><span class="comment"># Install OS instead of upgrade</span></span><br><span class="line">install</span><br><span class="line"><span class="comment"># Use network installation</span></span><br><span class="line">url --url=<span class="string">"ftp://192.168.108.129/pub"</span></span><br><span class="line"><span class="comment"># Root password</span></span><br><span class="line">rootpw --iscrypted $<span class="number">1</span>$sWjalKUE$Q9CMBRc6GDre025<span class="number">.19</span>HGT0</span><br><span class="line"><span class="comment"># System authorization information</span></span><br><span class="line">auth  --useshadow  --passalgo=sha512</span><br><span class="line"><span class="comment"># Use graphical install</span></span><br><span class="line">graphical</span><br><span class="line">firstboot --disable</span><br><span class="line"><span class="comment"># System keyboard</span></span><br><span class="line">keyboard us</span><br><span class="line"><span class="comment"># System language</span></span><br><span class="line">lang en_US</span><br><span class="line"><span class="comment"># SELinux configuration</span></span><br><span class="line">selinux --disabled</span><br><span class="line"><span class="comment"># Installation logging level</span></span><br><span class="line">logging --level=info</span><br><span class="line">reboot                                     <span class="comment">##################################加上后自动启动，无需手工执行。</span></span><br><span class="line"><span class="comment"># System timezone</span></span><br><span class="line">timezone --isUtc Asia/Shanghai</span><br><span class="line"><span class="comment"># Network information</span></span><br><span class="line">network  --bootproto=dhcp --device=eth0 --onboot=on</span><br><span class="line"><span class="comment"># System bootloader configuration</span></span><br><span class="line">bootloader --location=mbr</span><br><span class="line"><span class="comment"># Clear the Master Boot Record</span></span><br><span class="line">zerombr</span><br><span class="line"><span class="comment"># Partition clearing information</span></span><br><span class="line">clearpart --all --initlabel </span><br><span class="line"><span class="comment"># Disk partitioning information</span></span><br><span class="line">part swap --fstype=<span class="string">"swap"</span> --size=<span class="number">2000</span></span><br><span class="line">part /home --fstype=<span class="string">"ext4"</span> --size=<span class="number">2000</span></span><br><span class="line">part / --fstype=<span class="string">"ext4"</span> --size=<span class="number">10000</span></span><br><span class="line"></span><br><span class="line">%packages</span><br><span class="line"><span class="meta">@kde-desktop</span></span><br><span class="line">%end</span><br></pre></td></tr></table></figure>
 <p>ks.cfg放在pub文件夹下：</p>
 <p>下面新增一台虚拟机设置NAT网络，打开电源后，即可自动安装。</p>
 <p><br><img src="/img/NOV/PEX11-2.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX12-2.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX13-2.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX14-2.png" style="width: 650x;"><br><br><img src="/img/NOV/PEX15-2.png" style="width: 650x;"></p>
-<p>参考  <a href="http://www.cnblogs.com/mchina/p/centos-pxe-kickstart-auto-install-os.html" target="_blank" rel="external">http://www.cnblogs.com/mchina/p/centos-pxe-kickstart-auto-install-os.html</a>    </p>
+<p>参考  <a href="http://www.cnblogs.com/mchina/p/centos-pxe-kickstart-auto-install-os.html" target="_blank" rel="noopener">http://www.cnblogs.com/mchina/p/centos-pxe-kickstart-auto-install-os.html</a>    </p>
 	  
 	</div>
 
@@ -133,13 +133,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2015/11/21/nginx-╧╡┴╨╓о╥╗╬к║╬╥к╤б╘ёnginx/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2015/11/21/nginx-╧╡┴╨╓о╥╗╬к║╬╥к╤б╘ёnginx/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2015/11/14/zabbix╝р┐╪nginx/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2015/11/14/zabbix╝р┐╪nginx/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -151,10 +151,10 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
-  	 <div class="ds-thread" data-thread-key="2015/11/21/PXE-Kickstart-╬▐╚╦╓╡╩╪Centos6-5░▓╫░▓┘╫ў/" data-title="PXE+Kickstart 无人值守Centos6.5安装操作" data-url="http://linuxOps.xyz/2015/11/21/PXE-Kickstart-╬▐╚╦╓╡╩╪Centos6-5░▓╫░▓┘╫ў/"></div>  
+  	 <div class="ds-thread" data-thread-key="2015/11/21/PXE-Kickstart-╬▐╚╦╓╡╩╪Centos6-5░▓╫░▓┘╫ў/" data-title="PXE+Kickstart 无人值守Centos6.5安装操作" data-url="http://linuxOps.xyz/2015/11/21/PXE-Kickstart-╬▐╚╦╓╡╩╪Centos6-5░▓╫░▓┘╫ў/"></div>  
   
 </section>
 
@@ -195,7 +195,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

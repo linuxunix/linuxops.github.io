@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>Django模板之全局变量 | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Django模板之全局变量"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="Django模板之全局变量">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -97,7 +97,7 @@
 <p>作为一个Web框架，Django需要一种方便的方式来动态生成HTML。最常用的方法依赖于模板。相信Django中的templates模板大家遇到很多，今天我们来简单探讨下模板变量。</p>
 </blockquote>
 <p>在说模板变量之前我们可以先看看以下例子，在编写web日常中，我们经常会简单判断是否登录，如果没有登录，则显示请登录(或跳转到登录界面)。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;% if user.is_authenticated %&#125;</span><br><span class="line">    &lt;span class="username username-hide-on-mobile"&gt; &#123;&#123; user.username &#125;&#125; &lt;/span&gt;</span><br><span class="line">&#123;% else %&#125;</span><br><span class="line">    &lt;span class="username username-hide-on-mobile"&gt; Please log in &lt;/span&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;% <span class="keyword">if</span> user.is_authenticated %&#125;</span><br><span class="line">    &lt;span class="username username-hide-on-mobile"&gt; &#123;&#123; user.username &#125;&#125; &lt;/span&gt;</span><br><span class="line">&#123;% <span class="keyword">else</span> %&#125;</span><br><span class="line">    &lt;span class="username username-hide-on-mobile"&gt; Please log in &lt;/span&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
 <p>事实上，我们都清楚Django的MTV，但是这里很明显views.py并没有定义user.is_authenticated，那么这里变量是如何产生的尼？</p>
 <p>如果细心的应该可以发现在Django的settings.py配置文件上会默认存在以下配置：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">TEMPLATES = [</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">'BACKEND'</span>: <span class="string">'django.template.backends.django.DjangoTemplates'</span>,</span><br><span class="line">        <span class="string">'DIRS'</span>: [os.path.join(BASE_DIR, <span class="string">'templates'</span>)]</span><br><span class="line">        ,</span><br><span class="line">        <span class="string">'APP_DIRS'</span>: <span class="keyword">True</span>,</span><br><span class="line">        <span class="string">'OPTIONS'</span>: &#123;</span><br><span class="line">            <span class="string">'context_processors'</span>: [</span><br><span class="line">                <span class="string">'django.template.context_processors.debug'</span>,</span><br><span class="line">                <span class="string">'django.template.context_processors.request'</span>,</span><br><span class="line">                </span><br><span class="line">                <span class="string">'django.contrib.messages.context_processors.messages'</span>,</span><br><span class="line">            ],</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
 <ul>
@@ -109,8 +109,8 @@
 <li><strong>OPTIONS</strong> 包含后端特定的设置。</li>
 </ul>
 <p>认真的你,通过django.contrib.auth.context_processors.auth可以发现以下代码:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">auth</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="string">"""</span><br><span class="line">    Return context variables required by apps that use Django's authentication</span><br><span class="line">    system.</span><br><span class="line"></span><br><span class="line">    If there is no 'user' attribute in the request, use AnonymousUser (from</span><br><span class="line">    django.contrib.auth).</span><br><span class="line">    """</span></span><br><span class="line">    <span class="keyword">if</span> hasattr(request, <span class="string">'user'</span>):</span><br><span class="line">        user = request.user</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">from</span> django.contrib.auth.models <span class="keyword">import</span> AnonymousUser</span><br><span class="line">        user = AnonymousUser()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">'user'</span>: user,</span><br><span class="line">        <span class="string">'perms'</span>: PermWrapper(user),</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>看到这里是否明白了点尼？我们称之为默认变量或者全局变量。要是小伙伴还不明白可以进一步查阅官方文档 <a href="https://docs.djangoproject.com/zh-hans/2.0/topics/templates/" target="_blank" rel="external">https://docs.djangoproject.com/zh-hans/2.0/topics/templates/</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">auth</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Return context variables required by apps that use Django's authentication</span></span><br><span class="line"><span class="string">    system.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    If there is no 'user' attribute in the request, use AnonymousUser (from</span></span><br><span class="line"><span class="string">    django.contrib.auth).</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">if</span> hasattr(request, <span class="string">'user'</span>):</span><br><span class="line">        user = request.user</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">from</span> django.contrib.auth.models <span class="keyword">import</span> AnonymousUser</span><br><span class="line">        user = AnonymousUser()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">'user'</span>: user,</span><br><span class="line">        <span class="string">'perms'</span>: PermWrapper(user),</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>看到这里是否明白了点尼？我们称之为默认变量或者全局变量。要是小伙伴还不明白可以进一步查阅官方文档 <a href="https://docs.djangoproject.com/zh-hans/2.0/topics/templates/" target="_blank" rel="noopener">https://docs.djangoproject.com/zh-hans/2.0/topics/templates/</a></p>
 <h3 id="例子：">例子：</h3><blockquote>
 <p>既然上面说了那么多，全局变量到底怎么使用尼？简单举个例子，假设WEB前端存在多个页面都需要获取同一个相同的数据，那样子则可以设置全局变量，在需要使用的页面上直接应用就行了。</p>
 </blockquote>
@@ -118,7 +118,7 @@
 <p>修改django配置文件settings.py</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">TEMPLATES = [</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">'BACKEND'</span>: <span class="string">'django.template.backends.django.DjangoTemplates'</span>,</span><br><span class="line">        <span class="string">'DIRS'</span>: [os.path.join(BASE_DIR, <span class="string">'templates'</span>)]</span><br><span class="line">        ,</span><br><span class="line">        <span class="string">'APP_DIRS'</span>: <span class="keyword">True</span>,</span><br><span class="line">        <span class="string">'OPTIONS'</span>: &#123;</span><br><span class="line">            <span class="string">'context_processors'</span>: [</span><br><span class="line">                <span class="string">'django.template.context_processors.debug'</span>,</span><br><span class="line">                <span class="string">'django.template.context_processors.request'</span>,</span><br><span class="line">                <span class="string">'django.contrib.auth.context_processors.auth'</span>,</span><br><span class="line">                <span class="string">'django.contrib.messages.context_processors.messages'</span>,</span><br><span class="line">                <span class="string">'apps.utils.contexts.django_verison'</span>,</span><br><span class="line">            ],</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 <p>前端页面html页面引用：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">span&gt;&#123;&#123; django_verison &#125;&#125;<span class="tag">&lt;/<span class="title">span</span>&gt;</span></span><br></pre></td></tr></table></figure>	  
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">span&gt;&#123;&#123; django_verison &#125;&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>	  
 	</div>
 
 	<div>
@@ -127,13 +127,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2018/06/02/Django之密码验证/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2018/06/02/Django之密码验证/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2018/05/28/python-引用计数和对象销毁/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2018/05/28/python-引用计数和对象销毁/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -145,7 +145,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2018/06/02/Django模板之全局变量/" data-title="Django模板之全局变量" data-url="http://linuxOps.xyz/2018/06/02/Django模板之全局变量/"></div>  
@@ -189,7 +189,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>

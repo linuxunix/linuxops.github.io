@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
   <title>JENKINS安装 | BY DevOps | 今晚打老虎</title>
@@ -11,11 +11,11 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="JENKINS安装"/>
-  <meta property="og:site_name" content="BY DevOps | 今晚打老虎"/>
+  <meta property="og:title" content="JENKINS安装">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
-    <meta property="og:image" content="undefined"/>
+    <meta property="og:image" content="undefined">
   
 
   
@@ -38,7 +38,7 @@
 
 
 </head>
-
+</html>
  <body>  
   <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -117,7 +117,7 @@
 <p>3.查看java环境变量是否生效</p>
 <p>java -version</p>
 <p>说明安装成功！<br>安装Tomcat8</p>
-<p>1、下载安装<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cd /data/tools                              //软件包存放目录</span><br><span class="line"></span><br><span class="line">wget http://mirror.bit.edu.cn/apache/tomcat/tomcat-<span class="number">8</span>/v8<span class="number">.0</span><span class="number">.36</span>/bin/apache-tomcat-<span class="number">8.0</span><span class="number">.36</span>.tar.gz</span><br><span class="line"></span><br><span class="line">tar zxf apache-tomcat-<span class="number">8.0</span><span class="number">.36</span>.tar.gz         //解压</span><br><span class="line"></span><br><span class="line">mv apache-tomcat-<span class="number">8.0</span><span class="number">.36</span> /usr/local/tomcat8</span><br></pre></td></tr></table></figure></p>
+<p>1、下载安装<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cd /data/tools                              //软件包存放目录</span><br><span class="line"></span><br><span class="line">wget http://mirror.bit.edu.cn/apache/tomcat/tomcat<span class="number">-8</span>/v8<span class="number">.0</span><span class="number">.36</span>/bin/apache-tomcat<span class="number">-8.0</span><span class="number">.36</span>.tar.gz</span><br><span class="line"></span><br><span class="line">tar zxf apache-tomcat<span class="number">-8.0</span><span class="number">.36</span>.tar.gz         //解压</span><br><span class="line"></span><br><span class="line">mv apache-tomcat<span class="number">-8.0</span><span class="number">.36</span> /usr/local/tomcat8</span><br></pre></td></tr></table></figure></p>
 <p>2、配置环境变量（此操作也可省略）<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">vi /etc/profile         //在文件末尾添加以下代码：</span><br><span class="line"></span><br><span class="line">export TOMCAT_HOME=/usr/local/tomcat8</span><br><span class="line"></span><br><span class="line">export CATALINA_HOME=/usr/local/tomcat8</span><br><span class="line"></span><br><span class="line">:wq                       //保存退出</span><br><span class="line"></span><br><span class="line">source /etc/profile       //使配置立即生效</span><br></pre></td></tr></table></figure></p>
 <p>3、操作命令</p>
 <p>启动：</p>
@@ -138,7 +138,7 @@
 <pre><code>到官网下载war包<span class="string">https:</span><span class="comment">//jenkins.io/index.html</span>
 上传war到<span class="regexp">/usr/</span>local<span class="regexp">/tomcat8/</span>webapps/并命令为war
 启动tomcat sh <span class="regexp">/usr/</span>local<span class="regexp">/tomcat8/</span>bin/startup.sh
-</code></pre><p>访问<a href="http://ip:8080安装就可" target="_blank" rel="external">http://ip:8080安装就可</a></p>
+</code></pre><p>访问<a href="http://ip:8080安装就可" target="_blank" rel="noopener">http://ip:8080安装就可</a></p>
 	  
 	</div>
 
@@ -148,13 +148,13 @@
 <ul class="pagination">
 	 
 				
-    	<li class="prev"><a href="/2017/02/27/jenkins构建自动发布项目/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一頁</a></li>
+    	<li class="prev"><a href="/2017/02/27/jenkins构建自动发布项目/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
   		
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2017/02/20/shell批量发布站点/" class="alignright next">下一頁<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2017/02/20/shell批量发布站点/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -166,7 +166,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">留言</h2>
+  <h2 class="title">Comments</h2>
 
   
   	 <div class="ds-thread" data-thread-key="2017/02/27/JENKINS安装/" data-title="JENKINS安装" data-url="http://linuxOps.xyz/2017/02/27/JENKINS安装/"></div>  
@@ -210,7 +210,7 @@
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2018 林文杰
+  &copy; 2019 林文杰
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
 </p> </footer>
