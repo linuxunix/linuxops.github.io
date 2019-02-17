@@ -1,0 +1,229 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Python调用Jenkins api 文档 | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Python调用Jenkins api 文档">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
+
+  
+    <meta property="og:image" content="undefined">
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> Python调用Jenkins api 文档</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <h3 id="1、引言：">1、引言：</h3><p>现阶段大部分公司，在日常运维中使用jenkins频率还是相对多，今天我们简单探讨下jenkins api的使用。</p>
+<h3 id="2、Python库">2、Python库</h3><h4 id="2-1、python-jenkins">2.1、python-jenkins</h4><p>python-jenkins官方链接：<br><a href="http://python-jenkins.readthedocs.io/en/latest/examples.html#example-1-get-version-of-jenkins" target="_blank" rel="noopener">http://python-jenkins.readthedocs.io/en/latest/examples.html#example-1-get-version-of-jenkins</a></p>
+<h4 id="2-2、jenkinsapi">2.2、jenkinsapi</h4><p>jenkinsapi 官方链接：<br><a href="https://pypi.org/project/jenkinsapi/#description" target="_blank" rel="noopener">https://pypi.org/project/jenkinsapi/#description</a></p>
+<h3 id="3、python-jenkins库">3、python-jenkins库</h3><h4 id="3-1安装">3.1安装</h4><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip <span class="keyword">install </span>python-<span class="keyword">jenkins</span></span><br><span class="line"><span class="keyword"># </span>或者</span><br><span class="line">easy_install python-<span class="keyword">jenkins</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-2案例">3.2案例</h3><h4 id="3-2-1_获取版本号">3.2.1 获取版本号</h4><figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import jenkins </span><br><span class="line"><span class="keyword">server</span> = jenkins.Jenkins(<span class="string">'http://localhost:8080'</span>, username=<span class="string">'admin'</span>, password=<span class="string">'admin'</span>) </span><br><span class="line">user = <span class="keyword">server</span>.get_whoami() </span><br><span class="line">version = <span class="keyword">server</span>.get_version() </span><br><span class="line">print(<span class="string">'Hello %s from Jenkins %s'</span> % (user[<span class="string">'fullName'</span>], version))</span><br></pre></td></tr></table></figure>
+<p>3.2.2 简单API<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line">import jenkins</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Jenkins_Api</span>(<span class="title">object</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(<span class="keyword">self</span>)</span></span><span class="symbol">:</span></span><br><span class="line">        <span class="keyword">self</span>._url=<span class="string">'http://192.168.72.128:8080'</span></span><br><span class="line">        <span class="keyword">self</span>._username=<span class="string">"admin"</span></span><br><span class="line">        <span class="keyword">self</span>._password=<span class="string">"admin"</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_server_instance</span><span class="params">(<span class="keyword">self</span>)</span></span><span class="symbol">:</span></span><br><span class="line">        server=jenkins.Jenkins(<span class="keyword">self</span>._url, username=<span class="keyword">self</span>._username, password=<span class="keyword">self</span>._password)</span><br><span class="line">        user=server.get_whoami()</span><br><span class="line">        <span class="keyword">return</span> server</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_version</span><span class="params">(<span class="keyword">self</span>)</span></span><span class="symbol">:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">self</span>.get_server_instance().get_version()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_jobs</span><span class="params">(<span class="keyword">self</span>)</span></span><span class="symbol">:</span></span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="string">"jobs_count"</span><span class="symbol">:self</span>.get_server_instance().jobs_count(),</span><br><span class="line">             <span class="string">"get_jobs"</span><span class="symbol">:self</span>.get_server_instance().get_jobs()&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_job</span><span class="params">(<span class="keyword">self</span>,job_name)</span></span><span class="symbol">:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">self</span>.get_server_instance().create_job(job_name)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_job_confing</span><span class="params">(<span class="keyword">self</span>,job_name)</span></span><span class="symbol">:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">self</span>.get_server_instance().get_job_config(job_name)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">copy_job</span><span class="params">(<span class="keyword">self</span>,job_name,new_job_name)</span></span><span class="symbol">:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">self</span>.get_server_instance().copy_job(job_name,new_job_name)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">build_job</span><span class="params">(<span class="keyword">self</span>,job_name,parameters=None,)</span></span><span class="symbol">:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">self</span>.get_server_instance().build_job(job_name,parameters=parameters)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">delete_build</span><span class="params">(<span class="keyword">self</span>,job_name,number)</span></span><span class="symbol">:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">self</span>.get_server_instance().delete_build(job_name,number)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_job_info</span><span class="params">(<span class="keyword">self</span>,job_name)</span></span><span class="symbol">:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">self</span>.get_server_instance().get_job_info(<span class="string">'test'</span>)[<span class="string">'lastCompletedBuild'</span>][<span class="string">'number'</span>]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_build_info</span><span class="params">(<span class="keyword">self</span>,job_name,number)</span></span><span class="symbol">:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">self</span>.get_server_instance().get_build_info(job_name, number)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_build_console_output</span><span class="params">(<span class="keyword">self</span>, job_name, number)</span></span><span class="symbol">:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">self</span>.get_server_instance().get_build_console_output(job_name, number)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_view</span><span class="params">(<span class="keyword">self</span>,view_name)</span></span><span class="symbol">:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">self</span>.get_server_instance().create_view(view_name,config_xml=jenkins.EMPTY_VIEW_CONFIG_XML)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_views</span><span class="params">(<span class="keyword">self</span>)</span></span><span class="symbol">:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">self</span>.get_server_instance().get_views()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name_<span class="number">_</span>==<span class="string">'__main__'</span><span class="symbol">:</span></span><br><span class="line">    print(Jenkins_Api().get_views())</span><br><span class="line">    <span class="comment"># print(Jenkins_Api().get_build_console_output(job_name='test',number=7))</span></span><br><span class="line">    print(Jenkins_Api().build_job(job_name=<span class="string">'test'</span>,parameters=&#123;<span class="string">"Branch"</span><span class="symbol">:<span class="string">"origin/master"</span></span>&#125;))</span><br></pre></td></tr></table></figure></p>
+<h3 id="4、jenkinsapi库">4、jenkinsapi库</h3><h4 id="4-1安装">4.1安装</h4><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip <span class="keyword">install </span>python-<span class="keyword">jenkins</span></span><br><span class="line"><span class="keyword"># </span>或者</span><br><span class="line">easy_install python-<span class="keyword">jenkins</span></span><br></pre></td></tr></table></figure>
+<h3 id="4-2案例">4.2案例</h3><h4 id="4-2-1获取版本号">4.2.1获取版本号</h4><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import jenkinsapi</span><br><span class="line">from jenkinsapi<span class="selector-class">.jenkins</span> import Jenkins</span><br><span class="line">J=Jenkins(<span class="string">'http://192.168.72.128:8080'</span>,username=<span class="string">"admin"</span>,password=<span class="string">"admin"</span>)</span><br><span class="line"><span class="function"><span class="title">print</span><span class="params">(J.version)</span></span></span><br></pre></td></tr></table></figure>
+<h4 id="4-2-2_获取Job详细输出">4.2.2 获取Job详细输出</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Jenkins server</span><br><span class="line"><span class="keyword">from</span> jenkinsapi.jenkins <span class="keyword">import</span> Jenkins</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_server_instance</span><span class="params">()</span>:</span></span><br><span class="line">    jenkins_url = <span class="string">'http://jenkins_host:8080'</span></span><br><span class="line">    server = Jenkins(<span class="string">'http://192.168.72.128:8080'</span>,username=<span class="string">"admin"</span>,password=<span class="string">"admin"</span>)</span><br><span class="line">    <span class="keyword">return</span> server</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_job_details</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># Refer Example #1 for definition of function 'get_server_instance'</span></span><br><span class="line">    server = get_server_instance()</span><br><span class="line">    <span class="keyword">for</span> job_name, job_instance <span class="keyword">in</span> server.get_jobs():</span><br><span class="line">        print(<span class="string">"-"</span>*<span class="number">20</span>)</span><br><span class="line">        print(<span class="string">'Job Name:%s'</span> % (job_instance.name))</span><br><span class="line">        print(<span class="string">'Job Description:%s'</span> % (job_instance.get_description()))</span><br><span class="line">        print(<span class="string">'Is Job running:%s'</span> % (job_instance.is_running()))</span><br><span class="line">        print(<span class="string">'Is Job enabled:%s'</span> % (job_instance.is_enabled()))</span><br></pre></td></tr></table></figure>
+<h4 id="4-2-3_获取最新构建输出">4.2.3 获取最新构建输出</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> jenkinsapi</span><br><span class="line"><span class="keyword">from</span> jenkinsapi.jenkins <span class="keyword">import</span> Jenkins</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_server_instance</span><span class="params">()</span>:</span></span><br><span class="line">    jenkins_url = <span class="string">'http://jenkins_host:8080'</span></span><br><span class="line">    server = Jenkins(<span class="string">'http://192.168.72.128:8080'</span>,username=<span class="string">"admin"</span>,password=<span class="string">"admin"</span>)</span><br><span class="line">    <span class="keyword">return</span> server</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_last_console</span><span class="params">()</span>:</span></span><br><span class="line">    server = get_server_instance()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> server.keys():</span><br><span class="line">        print(server[i].get_last_completed_build().get_console())</span><br></pre></td></tr></table></figure>
+<h4 id="4-2-4_简单API">4.2.4 简单API</h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">from jenkinsapi.jenkins import Jenkins</span><br><span class="line">import json</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Jenkins_Api</span>(<span class="title">object</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(<span class="keyword">self</span>)</span></span><span class="symbol">:</span></span><br><span class="line">        <span class="keyword">self</span>._url=<span class="string">'http://192.168.72.128:8080'</span></span><br><span class="line">        <span class="keyword">self</span>._username=<span class="string">"admin"</span></span><br><span class="line">        <span class="keyword">self</span>._password=<span class="string">"admin"</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_server_instance</span><span class="params">(<span class="keyword">self</span>)</span></span><span class="symbol">:</span></span><br><span class="line">        server = Jenkins(<span class="keyword">self</span>._url, username=<span class="keyword">self</span>._username, password=<span class="keyword">self</span>._password)</span><br><span class="line">        <span class="keyword">return</span> server</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_version</span><span class="params">(<span class="keyword">self</span>)</span></span><span class="symbol">:</span></span><br><span class="line">        <span class="keyword">return</span>  <span class="keyword">self</span>.get_server_instance().version</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_job_last_console</span><span class="params">(<span class="keyword">self</span>,job_name)</span></span><span class="symbol">:</span></span><br><span class="line">        data=&#123;</span><br><span class="line">                <span class="string">'time'</span>: str(<span class="keyword">self</span>.get_server_instance()[job_name].get_last_completed_build().get_timestamp()),</span><br><span class="line">                <span class="string">'status'</span><span class="symbol">:self</span>.get_server_instance()[job_name].get_last_completed_build().get_status(),</span><br><span class="line">                 <span class="string">'res'</span><span class="symbol">:self</span>.get_server_instance()[job_name].get_last_completed_build().get_console()</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">return</span> data</span><br><span class="line">        <span class="comment">#return json.dumps(data)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name_<span class="number">_</span>==<span class="string">'__main__'</span><span class="symbol">:</span></span><br><span class="line">    print(Jenkins_Api().get_job_last_console(job_name=<span class="string">'test'</span>))</span><br></pre></td></tr></table></figure>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+		
+          <li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+        
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2019/02/17/centos7-docker-使用ss科学上网/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2019/02/17/Python调用Jenkins-api-文档/" data-title="Python调用Jenkins api 文档" data-url="http://linuxOps.xyz/2019/02/17/Python调用Jenkins-api-文档/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2019-02-17 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2019 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

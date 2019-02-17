@@ -96,6 +96,75 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2015-12-06 </div>
+			<div class="article-title"><a href="/2015/12/06/redis-░▓╫░┼ф╓├/">redis 安装配置</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p>redis官网：  <a href="http://redis.io/" target="_blank" rel="noopener">http://redis.io/</a><br>redis中文网：<a href="http://www.redis.cn/" target="_blank" rel="noopener">http://www.redis.cn/</a><br>解压：tar zxvf redis-2.8.19.tar.gz<br>指定安装路径：make&amp;&amp;make PREFIX=/opt/redis install<br>配置环境变量：echo ‘PATH=/opt/redis/bin:$PATH’ &gt;&gt; /etc/profile<br>                         source /etc/profile<br>[root@localhost bin]# redis-server –help<br>Usage: ./redis-server [/path/to/redis.conf] [options]<br>       ./redis-server - (read config from stdin)<br>       ./redis-server -v or –version<br>       ./redis-server -h or –help<br>       ./redis-server –test-memory <megabytes></megabytes></p>
+<p>Examples:<br>       ./redis-server (run the server with default conf)<br>       ./redis-server /etc/redis/6379.conf<br>       ./redis-server –port 7777<br>       ./redis-server –port 7777 –slaveof 127.0.0.1 8888<br>       ./redis-server /etc/myredis.conf –loglevel verbose</p>
+<p>Sentinel mode:<br>       ./redis-server /etc/sentinel.conf –sentinel</p>
+<hr>
+<p><br><img src="/img/12-redis-1.png" style="width: 650x;"></p>
+<p>启动redis：./opt/redis/redis-server<br>[root@localhost bin]# redis-cli<br>127.0.0.1:6379&gt; set xiaomi dami<br>OK<br>127.0.0.1:6379&gt; get xiaomi<br>“dami”<br>127.0.0.1:6379&gt;<br>一般只需要这则可：</p>
+<p><br><img src="/img/12-redis-2.png" style="width: 650x;"></p>
+<hr>
+<p>主从复制设置：vim redis.conf 添加  slaveof IP 端口<br><br><img src="/img/12-redis-3.png" style="width: 650x;"><br><br><img src="/img/12-redis-4.png" style="width: 650x;"><br>在主库上操作：<br><br><img src="/img/12-redis-5.png" style="width: 650x;"><br>从库读写监控：<br><br><img src="/img/12-redis-6.png" style="width: 650x;"><br><br><img src="/img/12-redis-7.png" style="width: 650x;"></p>
+<hr>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2015/12/06/redis-░▓╫░┼ф╓├/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2015-12-06 </div>
+			<div class="article-title"><a href="/2015/12/06/python-║═mysql╜╗╗е/">python 和mysql交互</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p>安装MySQLdb库：yum install -y mysqld-python</p>
+<p>要是无法安装可以从此下载：<a href="https://pypi.python.org/pypi/MySQL-python/" target="_blank" rel="noopener">https://pypi.python.org/pypi/MySQL-python/</a></p>
+<p>  [root@localhost ~]# tar xzvf MySQL-python-1.2.5.tar.gz<br>  [root@localhost ~]# cd MySQL-python-1.2.5<br>  [root@localhost ~]# python setup.py build<br>  [root@localhost ~]# python setup.py install</p>
+<p>一般mysql和python交换时候我们会行五步曲：（1）连接数据库;（2）建立指针；（3）通过指针插入记录；（4）查询或修改数据库。（5）关闭数据库</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment">#导入模块&gt;&gt;&gt; import MySQLdb&gt;&gt;&gt; #连接数据库&gt;&gt;&gt; conn = MySQLdb.connect(host="localhost",user="root",passwd="密码",db="数据库名",port=3036,charset="utf8")</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment">#建立指针&gt;&gt;&gt; cur = conn.cursor()</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment">#插入记录&gt;&gt;&gt; cur.execute("MYSQL语句)</span></span><br><span class="line"><span class="number">1L</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment">#提交保存&gt;&gt;&gt; conn.commit()</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment">#关闭数据库</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cur.close()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>conn.close()</span><br></pre></td></tr></table></figure>
+<p>以下是具体连接例子：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/sbin/env python</span></span><br><span class="line"><span class="comment">#-*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> MySQLdb</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:                 </span><br><span class="line">     conn=MySQLdb.connect(host=<span class="string">'localhost'</span>,user=<span class="string">'root'</span>,passwd=<span class="string">'linuxunix'</span>,db=<span class="string">'zabbix'</span>)</span><br><span class="line">     cur=conn.cursor()</span><br><span class="line">     recount=cur.execute(<span class="string">'select * from screens'</span>)</span><br><span class="line">     date = cur.fetchall()</span><br><span class="line">     <span class="keyword">print</span> recount</span><br><span class="line">     <span class="keyword">for</span> i <span class="keyword">in</span> date:</span><br><span class="line">        <span class="keyword">print</span> i</span><br><span class="line">     cur.close()</span><br><span class="line">     conn.close()</span><br><span class="line"><span class="keyword">except</span> MySQLdb.Error,e:</span><br><span class="line">     <span class="keyword">print</span> <span class="string">"Mysql Error %d:%s"</span> %(e.args[<span class="number">0</span>],e.args[<span class="number">1</span>])</span><br></pre></td></tr></table></figure></p>
+<p><br><img src="/img/12-python-mysql-1.png" style="width: 650x;"><br><br><img src="/img/12-python-mysql-2.png" style="width: 650x;"></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2015/12/06/python-║═mysql╜╗╗е/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2015-12-06 </div>
 			<div class="article-title"><a href="/2015/12/06/╩╣╙├zabbix API╜╙┐┌┤ю╜иgrafana/">使用zabbix API接口搭建grafana</a></div>						
 		</h3>
 	
@@ -438,80 +507,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2015-11-14 </div>
-			<div class="article-title"><a href="/2015/11/14/zabbix╝р┐╪nginx/">zabbix监控nginx</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <p>本博来自<a href="http://www.linuxidc.com/Linux/2012-07/64798.htm，经本人测试成功后转发发出分享给大家：" target="_blank" rel="noopener">http://www.linuxidc.com/Linux/2012-07/64798.htm，经本人测试成功后转发发出分享给大家：</a></p>
-<p>1、首先开启nginx_status模块监控功能：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">server &#123; </span><br><span class="line">listen      <span class="number">8881</span>; </span><br><span class="line">server_name localhost;  </span><br><span class="line">root      html;  </span><br><span class="line">index  index.html; </span><br><span class="line">access_log off; </span><br><span class="line">location /status &#123; </span><br><span class="line">stub_status on; </span><br><span class="line">&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><br><img src="/img/NOV/zabbix-nginx1.png" style="width: 650x;"></p>
-<p>开启之前先核查Nginx 是否包含 stub_status 模块<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost sbin]<span class="comment"># /usr/local/nginx/sbin/nginx -V </span></span><br><span class="line">nginx version: nginx/<span class="number">1.7</span><span class="number">.7</span></span><br><span class="line">built by gcc <span class="number">4.4</span><span class="number">.7</span> <span class="number">20120313</span> (Red Hat <span class="number">4.4</span><span class="number">.7</span><span class="number">-16</span>) (GCC) </span><br><span class="line">conigure arguments: --<span class="keyword">with</span>-http_stub_status_module</span><br></pre></td></tr></table></figure></p>
-<p>/usr/local/nginx/sbin/nginx -s reload</p>
-<p>要是木有安装则到源文件编译安装<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --<span class="keyword">with</span>-http_stub_status_module</span><br></pre></td></tr></table></figure></p>
-<p>2、测试：curl <a href="http://IP:端口/status" target="_blank" rel="noopener">http://IP:端口/status</a> </p>
-<p><br><img src="/img/NOV/zabbix-nginx2.png" style="width: 650x;"></p>
-<p>3、编写脚本过滤数据：（zabbix主要有数据就能出图）：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">[root@WEB_007 vhosts]<span class="comment"># cat /etc/zabbix/nginx_status  </span></span><br><span class="line"><span class="comment">#!/bin/bash  </span></span><br><span class="line"><span class="comment"># Script to fetch nginx statuses for tribily monitoring systems  </span></span><br><span class="line"><span class="comment"># Author: xiaoluo </span></span><br><span class="line"><span class="comment"># License: GPLv2  </span></span><br><span class="line">ip=<span class="number">192.168</span><span class="number">.0</span>:<span class="number">244</span>:<span class="number">8881</span></span><br><span class="line">function active &#123;  </span><br><span class="line">/usr/bin/curl <span class="string">"http://$ip/status"</span> <span class="number">2</span>&gt;/dev/null| grep <span class="string">'Active'</span> | awk <span class="string">'&#123;print $NF&#125;'</span>  </span><br><span class="line">&#125;  </span><br><span class="line">function reading &#123;  </span><br><span class="line">/usr/bin/curl <span class="string">"http://$ip/status"</span> <span class="number">2</span>&gt;/dev/null| grep <span class="string">'Reading'</span> | awk <span class="string">'&#123;print $2&#125;'</span>  </span><br><span class="line">&#125;  </span><br><span class="line">function writing &#123;  </span><br><span class="line">/usr/bin/curl <span class="string">"http://$ip/status"</span> <span class="number">2</span>&gt;/dev/null| grep <span class="string">'Writing'</span> | awk <span class="string">'&#123;print $4&#125;'</span>  </span><br><span class="line">&#125;  </span><br><span class="line">function waiting &#123;  </span><br><span class="line">/usr/bin/curl <span class="string">"http://$ip/status"</span> <span class="number">2</span>&gt;/dev/null| grep <span class="string">'Waiting'</span> | awk <span class="string">'&#123;print $6&#125;'</span>  </span><br><span class="line">&#125;  </span><br><span class="line">function accepts &#123;  </span><br><span class="line">/usr/bin/curl <span class="string">"http://$ip/status"</span> <span class="number">2</span>&gt;/dev/null| awk NR==<span class="number">3</span> | awk <span class="string">'&#123;print $1&#125;'</span>  </span><br><span class="line">&#125;  </span><br><span class="line">function handled &#123;  </span><br><span class="line">/usr/bin/curl <span class="string">"http://$ip/status"</span> <span class="number">2</span>&gt;/dev/null| awk NR==<span class="number">3</span> | awk <span class="string">'&#123;print $2&#125;'</span>  </span><br><span class="line">&#125;  </span><br><span class="line">function requests &#123;  </span><br><span class="line">/usr/bin/curl <span class="string">"http://$ip/status"</span> <span class="number">2</span>&gt;/dev/null| awk NR==<span class="number">3</span> | awk <span class="string">'&#123;print $3&#125;'</span>  </span><br><span class="line">&#125;  </span><br><span class="line"><span class="comment"># Run the requested function  </span></span><br><span class="line">$<span class="number">1</span></span><br></pre></td></tr></table></figure></p>
-<p>4、开启zabbix脚本功能、我现在是习惯把执行的key，放在另一个路径下，以后文件多了好区分，大家应该也建议这么做：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@WEB_007 zabbix_agentd.conf.d]<span class="comment"># vi /usr/local/zabbix/etc/zabbix_agentd.conf  </span></span><br><span class="line">UnsafeUserParameters=<span class="number">1</span></span><br><span class="line">Include=/usr/local/zabbix/etc/zabbix_agentd.conf.d/</span><br><span class="line">[root@WEB_007 zabbix_agentd.conf.d]<span class="comment">#cd /usr/local/zabbix/etc/zabbix_agentd.conf.d/ </span></span><br><span class="line">[root@WEB_007 zabbix_agentd.conf.d]<span class="comment">#vi nginx </span></span><br><span class="line"><span class="comment">#monitor nginx </span></span><br><span class="line">UserParameter=nginx[*],/etc/zabbix/nginx_status $<span class="number">1</span></span><br></pre></td></tr></table></figure></p>
-<p>5、导入模板：模块在我的附件可以自己下载：<br>这里演示，在那个时候我第一次制作，所以忘记添加图形了，大家可以自己根据模板添加图形,还有触发器我也没有创建，大家根据自己的需要进行创建<br>6、图形查看效果：<br><br><img src="/img/NOV/zabbix-nginx3.jpeg" style="width: 650x;"></p>
-<p>总结：zabbix可以很好的根据应用来进行监控，还很强大，慢慢研究<br>模板在下面自己下载：<br>——————————————分割线——————————————<br>免费下载地址在 <a href="http://linux.linuxidc.com/" target="_blank" rel="noopener">http://linux.linuxidc.com/</a><br>用户名与密码都是www.linuxidc.com<br>具体下载目录在 /2015年资料/5月/14日/Zabbix 监控Nginx状态/</p>
-<ul>
-<li><strong>压力测试</strong><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget http://blog.zyan.cc/soft/linux/webbench/webbench<span class="number">-1.5</span>.tar.gz</span><br><span class="line">tar zxvf webbench<span class="number">-1.5</span>.tar.gz</span><br><span class="line">cd webbench<span class="number">-1.5</span></span><br><span class="line">make &amp;&amp; make install</span><br><span class="line"></span><br><span class="line">webbench -c <span class="number">500</span> -t <span class="number">30</span>  http://<span class="number">192.168</span><span class="number">.0</span><span class="number">.244</span>/</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p><br><img src="/img/NOV/zabbix-nginx4.png" style="width: 650x;"></p>
-
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2015/11/14/zabbix╝р┐╪nginx/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2015-11-14 </div>
-			<div class="article-title"><a href="/2015/11/14/ssh╘┐│╫╡╟┬╝ги├т├▄┬ы╡╟┬╜гй/">ssh钥匙登录（免密码登陆）</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <p>1、生成密匙<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># ssh-keygen -t rsa</span></span><br></pre></td></tr></table></figure></p>
-<p>Generating public/private rsa key pair.<br>Enter file in which to save the key (/root/.ssh/id_rsa): #密钥报存的位置和名称<br>Enter passphrase (empty for no passphrase): #密钥为空<br>Enter same passphrase again: #再一次输入<br>Your identification has been saved in /root/.ssh/id_rsa. #私钥的位置<br>Your public key has been saved in /root/.ssh/id_rsa.pub. #公钥的位置</p>
-<p>2、发送密匙到远程服务器<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># cd  /root/.ssh</span></span><br><span class="line">[root@localhost .ssh]<span class="comment"># ssh-copy-id -i id_rsa.pub "-p22113 root@192.168.108.141"</span></span><br></pre></td></tr></table></figure></p>
-<p>3、修改ssh配置文件，设置公钥认证登录<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/ssh/ssh_config</span><br><span class="line">RSAAuthentication yes</span><br><span class="line"></span><br><span class="line">/etc/init.d/sshd restart <span class="comment">#重启sshd服务</span></span><br></pre></td></tr></table></figure></p>
-<p><br><img src="/img/NOV/sshd.png" style="width: 650x;"></p>
-
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2015/11/14/ssh╘┐│╫╡╟┬╝ги├т├▄┬ы╡╟┬╜гй/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -548,7 +543,7 @@
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -563,6 +558,14 @@
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2019/02/17/Python调用Jenkins-api-文档/"><i class="fa fa-file-o"></i>Python调用Jenkins api 文档</a>
+      </li>
+    
+      <li>
+        <a href="/2019/02/17/centos7-docker-使用ss科学上网/"><i class="fa fa-file-o"></i>centos7 docker 使用ss科学上网</a>
+      </li>
+    
+      <li>
         <a href="/2019/02/17/分布式时序数据库InfluxDB/"><i class="fa fa-file-o"></i>分布式时序数据库InfluxDB</a>
       </li>
     
@@ -572,14 +575,6 @@
     
       <li>
         <a href="/2018/07/29/Pyecharts-生成图表-附Django支持/"><i class="fa fa-file-o"></i>Pyecharts 生成图表(附Django支持)</a>
-      </li>
-    
-      <li>
-        <a href="/2018/07/29/Python调用Zabbix-Api获取数据/"><i class="fa fa-file-o"></i>Python调用Zabbix Api获取数据</a>
-      </li>
-    
-      <li>
-        <a href="/2018/07/29/Django中的缓存配置/"><i class="fa fa-file-o"></i>Django中的缓存配置</a>
       </li>
     
   </ul>
