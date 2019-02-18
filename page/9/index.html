@@ -95,6 +95,36 @@
 	
 	<!-- display as entry -->	
 		<h3 class="title">
+			<div class="date"> 2015-10-27 </div>
+			<div class="article-title"><a href="/2015/10/27/zabbix╩╣╙├╫╘╢п╗п╠э╝╙╓ў╗·/">zabbix使用自动化添加主机</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p>1.组态—探索—创建发现规则（Configuration—Discovery）<br><br><img src="/img/dec/zabbix/10.png" style="width: 750px;"><br><br><img src="/img/dec/zabbix/11.png" style="width: 750px;"></p>
+<p>2.组态—动作—事件源—探索—创建动作（Configuration—Action—Discovery）</p>
+<p><br><img src="/img/dec/zabbix/12.png" style="width: 750px;"><br><br><img src="/img/dec/zabbix/13.png" style="width: 750px;"><br>把探测的网段加进去<br><br><img src="/img/dec/zabbix/14.png" style="width: 750px;"><br>添加到群组和连接到模板<br><br><img src="/img/dec/zabbix/15.png" style="width: 750px;"></p>
+<p>具体还需要根据实际情况设置具体参数，万变不离其中，懂基本则通。</p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2015/10/27/zabbix╩╣╙├╫╘╢п╗п╠э╝╙╓ў╗·/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
 			<div class="date"> 2015-10-25 </div>
 			<div class="article-title"><a href="/2015/10/25/╘╦╬м╓о╡└-╬к║╬─┌┤ц╩╣╙├─╟├┤╕▀г┐/">运维之道-为何内存使用那么高？</a></div>						
 		</h3>
@@ -481,49 +511,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2015-09-12 </div>
-			<div class="article-title"><a href="/2015/09/12/shell│╠╨Є▒р╨┤╓о╢■/">shell程序编写之二</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <blockquote>
-<p>shell是一个功能相当强大的编程语言，易编写，易调试，灵活性强。<br>语法分为：和C。Bourne 家族主要包括sh、ksh、Bash、psh、zsh；C家族包括csh、tcsh。<br>现在Linux还是主要使用Bash作为用户的基本shell。</p>
-</blockquote>
-<p>通常开始学shell基本都要懂echo用法<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">echo [-ne][字符串]或 echo [--help][--version]</span><br><span class="line">补充说明：echo会将输入的字符串送往标准输出。输出的字符串间以空白字符隔开, 并在最后加上换行号。</span><br><span class="line">参　　 数：-n 不要在最后自动换行</span><br><span class="line">-e 若字符串中出现以下字符，则特别加以处理，而不会将它当成一般</span><br><span class="line">文字输出：</span><br><span class="line">   \a 发出警告声；</span><br><span class="line">   \b 删除前一个字符；</span><br><span class="line">   \c 最后不加上换行符号；</span><br><span class="line">   \f 换行但光标仍旧停留在原来的位置；</span><br><span class="line">   \n 换行且光标移至行首；</span><br><span class="line">   \r 光标移至行首，但不换行；</span><br><span class="line">   \t 插入tab；</span><br><span class="line">   \v 与\f相同；</span><br><span class="line">   \\ 插入\字符；</span><br><span class="line">   \nnn 插入nnn（八进制）所代表的AsCII字符；</span><br><span class="line">–help 显示帮助</span><br><span class="line">–version 显示版本信息</span><br></pre></td></tr></table></figure></p>
-<p>随便普及grep和wc基本用法<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">grep [选项] <span class="string">"搜索内容"</span>  <span class="string">"文件名"</span></span><br><span class="line">选项： -i 忽略大小写 -n 输出行号 -v反向查找  --color=auto 搜索出的关键字用颜色显</span><br><span class="line"></span><br><span class="line">wc [选项] 文件名   </span><br><span class="line"> 选项：  -c 统计字节数 -w 统计单词数 -l统计行数</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li><strong>输出重定向</strong><br><br><img src="/img/september/chongdingxiang1.png" style="width: 600px;"><br>注意2和&gt;之间不能有空格<br><br><img src="/img/september/chongdingxiang2.png" style="width: 600px;"></li>
-<li><strong>多命令顺序执行</strong><br><br><img src="/img/september/duomingling.png" style="width: 600px;"></li>
-</ul>
-<p>|管道符 ：命令1|命令2  #命令1的正确输出作为命令2的操作对象</p>
-<ul>
-<li><strong>通配符</strong> </li>
-</ul>
-<p><br><img src="/img/september/tongpeifu.png" style="width: 600px;"></p>
-<ul>
-<li><strong>Bash中其它特殊符号</strong><br><br><img src="/img/september/other.png" style="width: 600px;"></li>
-</ul>
-
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2015/09/12/shell│╠╨Є▒р╨┤╓о╢■/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -560,7 +547,7 @@
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -573,6 +560,10 @@
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2019/02/18/Ansible模块中核心类（附执行剧本实例代码）/"><i class="fa fa-file-o"></i>Ansible模块中核心类（附执行剧本实例代码）</a>
+      </li>
     
       <li>
         <a href="/2019/02/18/Docker如何推送镜像到Harbor？/"><i class="fa fa-file-o"></i>Docker如何推送镜像到Harbor？</a>
@@ -588,10 +579,6 @@
     
       <li>
         <a href="/2019/02/17/centos7-docker-使用ss科学上网/"><i class="fa fa-file-o"></i>centos7 docker 使用ss科学上网</a>
-      </li>
-    
-      <li>
-        <a href="/2019/02/17/分布式时序数据库InfluxDB/"><i class="fa fa-file-o"></i>分布式时序数据库InfluxDB</a>
       </li>
     
   </ul>

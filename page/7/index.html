@@ -96,6 +96,61 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2015-12-19 </div>
+			<div class="article-title"><a href="/2015/12/19/MYSQL╓ў┤╙╕┤╓╞/">MYSQL主从复制</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<p>啥是MYSQL主从复制？</p>
+</blockquote>
+<p>MYSQL主从复制:是指复制多一个和主数据库数据完全一样的数据库坏境，当然我我们称其为从数据库。</p>
+<blockquote>
+<p>MYSQL主从复制使用场景?</p>
+</blockquote>
+<p>例如：<br>1、作为后备数据库，当主数据库服务器出现故障后，可切换到从数据库继续工作；<br>2、可以在从数据库作备份、数据统计等工作，这样不影响主数据库的性能(当然建立主从复制本身就是一个备份)；<br>3、减轻主库负载，可以在一些实时性要求并不太高的情况建立读写分离，主库为写，从库为读。</p>
+<blockquote>
+<p>mysql支持的复制类型：</p>
+</blockquote>
+<p>1、基于语句的复制：  在主服务器上执行的SQL语句，在从服务器上执行同样的语句。MySQL默认采用基于语句的复制，效率比较高。一旦发现没法精确复制时，   会自动选着基于行的复制。<br>2、基于行的复制：把改变的内容复制过去，而不是把命令在从服务器上执行一遍. 从mysql5.0开始支持<br>3、混合类型的复制: 默认采用基于语句的复制，一旦发现基于语句的无法精确的复制时，就会采用基于行的复制。</p>
+<blockquote>
+<p>常见主从复制方式:</p>
+</blockquote>
+<p>1、一主单从或者多从的Mysql架构方案(此架构只能在Master端进行数据写入)<br><br><img src="/img/12-master-slave-1.png" style="width: 650x;"><br>2、双向主主同步逻辑图，此架构可以在Master1或者Master2端进行数据读写。<br> <br><img src="/img/12-master-slave-2.png" style="width: 650x;"><br>3、线性级联单项双主同步逻辑图，此架构只能在Master1端进行数据写入<br> <br><img src="/img/12-master-slave-3.png" style="width: 650x;"><br>4、环状循环复制<br><br><img src="/img/12-master-slave-4.png" style="width: 650x;"><br><strong>单向一主一从实战：</strong><br><br><img src="/img/12-master-slave-5.png" style="width: 650x;"></p>
+<p>Master主机：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mysql]<span class="comment"># vim  /etc/my.cnf </span></span><br><span class="line">[mysqld]</span><br><span class="line">datadir=/var/lib/mysql</span><br><span class="line">socket=/var/lib/mysql/mysql.sock</span><br><span class="line">user=mysql</span><br><span class="line">symbolic-links=<span class="number">0</span></span><br><span class="line">log-bin=mysql_bak-bin 	<span class="comment">#启用二进制日志(主必须开启）</span></span><br><span class="line">server-id = <span class="number">141</span>		<span class="comment">#服务器唯一ID，默认是1，取IP最后一段</span></span><br></pre></td></tr></table></figure></p>
+<p>Slave机子：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mysql]<span class="comment"># vim  /etc/my.cnf </span></span><br><span class="line">log-bin=mysql_bak-bin   <span class="comment">#启用二进制日志</span></span><br><span class="line">server-id=<span class="number">129</span></span><br></pre></td></tr></table></figure></p>
+<p>master授权：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; grant replication slave on *.* to rep@<span class="string">'192.168.0.129'</span> identified by <span class="string">'centos'</span>;</span><br><span class="line">Query OK, <span class="number">0</span> rows affected (<span class="number">0.00</span> sec)</span><br><span class="line">mysql&gt; flush privileges;</span><br><span class="line">Query OK, <span class="number">0</span> rows affected (<span class="number">0.00</span> sec)</span><br><span class="line">mysql&gt; select user,host <span class="keyword">from</span> mysql.user;</span><br><span class="line">+--------+-----------------------+</span><br><span class="line">| user   | host                  |</span><br><span class="line">+--------+-----------------------+</span><br><span class="line">| root   | <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>             |</span><br><span class="line">| rep    | <span class="number">192.168</span><span class="number">.108</span><span class="number">.129</span>         |</span><br><span class="line">| root   | localhost.localdomain |</span><br><span class="line">+--------+-----------------------+</span><br><span class="line"><span class="number">8</span> rows <span class="keyword">in</span> set (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; show grants <span class="keyword">for</span> rep@<span class="string">'192.168.108.129'</span>;</span><br><span class="line">+------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Grants <span class="keyword">for</span> rep@<span class="number">192.168</span><span class="number">.108</span><span class="number">.129</span>                                                                                               |</span><br><span class="line">+------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| GRANT REPLICATION SLAVE ON *.* TO <span class="string">'rep'</span>@<span class="string">'192.168.108.129'</span> IDENTIFIED BY PASSWORD <span class="string">'*128977E278358FF80A246B5046F51043A2B1FCED'</span> |</span><br><span class="line">+------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line"><span class="number">1</span> row <span class="keyword">in</span> set (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure></p>
+<p>进行锁表：<br>mysql&gt; flush tables with read lock;<br>Query OK, 0 rows affected (0.01 sec)</p>
+<p>查询master的状态:<br>mysql&gt; show master status;<br>+———————-+———-+————–+——————+<br>| File                 | Position | Binlog_Do_DB | Binlog_Ignore_DB |<br>+———————-+———-+————–+——————+<br>| mysql_bak-bin.000005 |   136959 |              |                  |<br>+———————-+———-+————–+——————+<br>1 row in set (0.00 sec)</p>
+<p>备份数据库：<br>[root@localhost ~]# mysqldump -root -pcentos –events -A -B|gzip &gt; slave_bak.sql.gz</p>
+<p>[root@localhost ~]# scp slave_bak.sql.gz root@192.168.108.129:/opt<br>root@192.168.108.129’s password:<br>slave_bak.sql.gz                                    100%   20     0.0KB/s   00:00</p>
+<p>slave备份：<br>[root@localhost opt]# gunzip  change master to MASTER_HOST=’192.168.108.141’,MASTER_USER=’rep’,MASTER_PASSWORD=’centos’,MASTER_LOG_FILE=’mysql_bak-bin.000005’,MASTER_LOG_POS=136959;<br>Query OK, 0 rows affected (0.03 sec)</p>
+<p>mysql&gt; start slave;<br>Query OK, 0 rows affected (0.00 sec)</p>
+<p>mysql&gt; show slave status\G<br><strong><strong><strong><strong><strong><strong><em>*</em></strong></strong></strong></strong></strong></strong> 1. row <strong><strong><strong><strong><strong><strong><em>*</em></strong></strong></strong></strong></strong></strong><br>               Slave_IO_State: Waiting for master to send event<br>                  Master_Host: 192.168.108.141<br>                  Master_User: rep<br>                  Master_Port: 3306<br>                Connect_Retry: 60<br>              Master_Log_File: mysql_bak-bin.000005<br>          Read_Master_Log_Pos: 202132<br>               Relay_Log_File: mysqld-relay-bin.000002<br>                Relay_Log_Pos: 65428<br>        Relay_Master_Log_File: mysql_bak-bin.000005<br>             Slave_IO_Running: Yes<br>            Slave_SQL_Running: Yes<br>              Replicate_Do_DB:<br>          Replicate_Ignore_DB:<br>           Replicate_Do_Table:<br>       Replicate_Ignore_Table:<br>      Replicate_Wild_Do_Table:<br>  Replicate_Wild_Ignore_Table:<br>                   Last_Errno: 0<br>                   Last_Error:<br>                 Skip_Counter: 0<br>          Exec_Master_Log_Pos: 202132<br>              Relay_Log_Space: 65584<br>              Until_Condition: None<br>               Until_Log_File:<br>                Until_Log_Pos: 0<br>           Master_SSL_Allowed: No<br>           Master_SSL_CA_File:<br>           Master_SSL_CA_Path:<br>              Master_SSL_Cert:<br>            Master_SSL_Cipher:<br>               Master_SSL_Key:<br>        Seconds_Behind_Master: 0<br>Master_SSL_Verify_Server_Cert: No<br>                Last_IO_Errno: 0<br>                Last_IO_Error:<br>               Last_SQL_Errno: 0<br>               Last_SQL_Error:<br>1 row in set (0.00 sec)</p>
+<p>Master主机建库测试：<br>mysql&gt; create database testmaster_slave;<br>Query OK, 1 row affected (0.00 sec)</p>
+<p>mysql&gt; show databases;<br>+——————–+<br>| Database           |<br>+——————–+<br>| information_schema |<br>| mysql              |<br>| python             |<br>| test               |<br>| testmaster_slave   |<br>| zabbix             |<br>+——————–+<br>6 rows in set (0.00 sec)</p>
+<p>Slave主机：<br>mysql&gt; show databases;<br>+——————–+<br>| Database           |<br>+——————–+<br>| information_schema |<br>| mysql              |<br>| test               |<br>| testmaster_slave   |<br>| zabbix             |<br>+——————–+<br>6 rows in set (0.00 sec)</p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2015/12/19/MYSQL╓ў┤╙╕┤╓╞/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2015-12-19 </div>
 			<div class="article-title"><a href="/2015/12/19/CentOS-6-5╧┬▒р╥ы░▓╫░MySQL-5-6-28/">CentOS 6.5下编译安装MySQL 5.6.28</a></div>						
 		</h3>
 	
@@ -526,35 +581,6 @@ mysql     <span class="number">20705</span>  <span class="number">20503</span>  
 </div>
 
 		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2015-11-21 </div>
-			<div class="article-title"><a href="/2015/11/21/nginx-╧╡┴╨╓о╢■Nginx╡──г┐щ╙ы╣д╫ў╘н└э/">nginx 系列之二Nginx的模块与工作原理</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <p>这里给大家推荐本书，对运维学习非常有用，以下基本是《高性能Linux服务器构建实战：运维监控、性能调优与集群应用》本书抄下来分享给大家。</p>
-<p>《高性能Linux服务器构建实战：运维监控、性能调优与集群应用 》   高俊峰</p>
-<p>Nginx由内核和模块组成，其中，内核的设计非常微小和简洁，完成的工作也非常简单，仅仅通过查找配置文件将客户端请求映射到一个location block（location是Nginx配置中的一个指令，用于URL匹配），而在这个location中所配置的每个指令将会启动不同的模块去完成相应的工作。<br>Nginx的模块从结构上分为核心模块、基础模块和第三方模块， HTTP模块、EVENT模块和MAIL模块等属于核心模块，HTTP Access模块、HTTP FastCGI模块、HTTP Proxy模块和HTTP Rewrite模块属于基础模块，而HTTP Upstream Request Hash模块、Notice模块和HTTP Access Key模块属于第三方模块，用户根据自己的需要开发的模块都属于第三方模块。正是有了这么多模块的支撑，Nginx的功能才会如此强大。<br>Nginx的模块从功能上分为如下三类。<br>Handlers（处理器模块）。此类模块直接处理请求，并进行输出内容和修改headers信息等操作。Handlers处理器模块一般只能有一个。<br>Filters （过滤器模块）。此类模块主要对其他处理器模块输出的内容进行修改操作，最后由Nginx输出。<br>Proxies （代理类模块）。此类模块是Nginx的HTTP Upstream之类的模块，这些模块主要与后端一些服务比如FastCGI等进行交互，实现服务代理和负载均衡等功能。<br>图1-1展示了Nginx模块常规的HTTP请求和响应的过程。<br> <br><img src="/img/NOV/nginx1.jpeg" style="width: 650x;"><br>图1-1　Nginx模块的HTTP请求和响应过程<br>在工作方式上，Nginx分为单工作进程和多工作进程两种模式。在单工作进程模式下，除主进程外，还有一个工作进程，工作进程是单线程的；在多工作进程模式下，每个工作进程包含多个线程。Nginx默认为单工作进程模式。<br>Nginx的模块直接被编译进Nginx，因此属于静态编译方式。启动Nginx后，Nginx的模块被自动加载，不像Apache，首先将模块编译为一个so文件，然后在配置文件中指定是否进行加载。在解析配置文件时，Nginx的每个模块都有可能去处理某个请求，但是同一个处理请求只能由一个模块来完成。</p>
-
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2015/11/21/nginx-╧╡┴╨╓о╢■Nginx╡──г┐щ╙ы╣д╫ў╘н└э/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -591,7 +617,7 @@ mysql     <span class="number">20705</span>  <span class="number">20503</span>  
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -604,6 +630,10 @@ mysql     <span class="number">20705</span>  <span class="number">20503</span>  
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2019/02/18/Ansible模块中核心类（附执行剧本实例代码）/"><i class="fa fa-file-o"></i>Ansible模块中核心类（附执行剧本实例代码）</a>
+      </li>
     
       <li>
         <a href="/2019/02/18/Docker如何推送镜像到Harbor？/"><i class="fa fa-file-o"></i>Docker如何推送镜像到Harbor？</a>
@@ -619,10 +649,6 @@ mysql     <span class="number">20705</span>  <span class="number">20503</span>  
     
       <li>
         <a href="/2019/02/17/centos7-docker-使用ss科学上网/"><i class="fa fa-file-o"></i>centos7 docker 使用ss科学上网</a>
-      </li>
-    
-      <li>
-        <a href="/2019/02/17/分布式时序数据库InfluxDB/"><i class="fa fa-file-o"></i>分布式时序数据库InfluxDB</a>
       </li>
     
   </ul>
