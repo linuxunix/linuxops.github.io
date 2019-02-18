@@ -96,6 +96,40 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2015-11-21 </div>
+			<div class="article-title"><a href="/2015/11/21/nginx-╧╡┴╨╓о╥╗╬к║╬╥к╤б╘ёnginx/">nginx 系列之一为何要选择nginx</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p>这里给大家推荐本书，对运维学习非常有用，以下基本是《高性能Linux服务器构建实战：运维监控、性能调优与集群应用》本书抄下来分享给大家。</p>
+<p>《高性能Linux服务器构建实战：运维监控、性能调优与集群应用》本书以构建高性能Linux服务器为核心内容，从Web应用、数据备份与恢复、网络存储应用、运维监控与性能优化、集群高级应用等多个方面深入讲解了如何构建高性能的Linux服务器。全书以实战性为导向，所有内容都来自于作者多年实践经验的总结，同时从社区中收集了大量Linux运维人员遇到的有代表性的疑难问题，并给出了优秀的解决方案，实践指导意义极强。</p>
+<ul>
+<li><p><strong>为何要选择NginxNginx与Apache的异同</strong><br>Nginx和Apache一样，都是HTTP服务器软件，在功能实现上都采用模块化结构设计，都支持通用的语言接口，如PHP、Perl、Python等，同时还支持正向和反向代理、虚拟主机、URL重写、压缩传输、SSL加密传输等。它们之间最大的差别是Apache的处理速度很慢，且占用很多内存资源，而Nginx却恰恰相反；在功能实现上，Apache的所有模块都支持动、静态编译，而Nginx模块都是静态编译的，同时，Apache对Fcgi的支持不好，而Nginx对Fcgi的支持非常好；在处理连接方式上，Nginx支持epoll，而Apache却不支持；在空间使用上，Nginx安装包仅仅只有几百K，和Nginx比起来Apache绝对是庞然大物。在了解了Nginx和Apache之间的异同点后基本上就知道了Nginx作为HTTP服务器的优势所在。</p>
+</li>
+<li><p><strong>选择Nginx的优势所在</strong><br>作为Web服务器，Nginx处理静态文件、索引文件，自动索引的效率非常高。<br>作为代理服务器，Nginx可以实现无缓存的反向代理加速，提高网站运行速度。<br>作为负载均衡服务器，Nginx既可以在内部直接支持Rails和PHP，也可以支持HTTP代理服务器对外进行服务，同时还支持简单的容错和利用算法进行负载均衡。<br>在性能方面，Nginx是专门为性能优化而开发的，在实现上非常注重效率。它采用内核Poll模型，可以支持更多的并发连接，最大可以支持对50 000个并发连接数的响应，而且只占用很低的内存资源。<br>在稳定性方面，Nginx采取了分阶段资源分配技术，使得CPU与内存的占用率非常低。Nginx官方表示，Nginx保持10 000个没有活动的连接，而这些连接只占用2.5MB内存，因此，类似DOS这样的攻击对Nginx来说基本上是没有任何作用的。<br>在高可用性方面，Nginx支持热部署，启动速度特别迅速，因此可以在不间断服务的情况下，对软件版本或者配置进行升级，即使运行数月也无需重新启动，几乎可以做到7×24小时不间断地运行。</p>
+</li>
+</ul>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2015/11/21/nginx-╧╡┴╨╓о╥╗╬к║╬╥к╤б╘ёnginx/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2015-11-21 </div>
 			<div class="article-title"><a href="/2015/11/21/PXE-Kickstart-╬▐╚╦╓╡╩╪Centos6-5░▓╫░▓┘╫ў/">PXE+Kickstart 无人值守Centos6.5安装操作</a></div>						
 		</h3>
 	
@@ -496,47 +530,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2015-10-25 </div>
-			<div class="article-title"><a href="/2015/10/25/╘╦╬м╓о╡└-╬к║╬─┌┤ц╩╣╙├─╟├┤╕▀г┐/">运维之道-为何内存使用那么高？</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <blockquote>
-<p>由来：最近zabbix监控发现服务器主机发生内存告警通知，同时内存使用率越来越高甚至超过90%使用率，这个不得不引起运维人员高度注意。</p>
-</blockquote>
-<p>经过核查原来主要是cached作怪，我们可以通过free -m得出以下：<br><br><img src="/img/dec/cached/1.png" style="width: 600px;"><br>total : 物理内存的总大小<br>used ：已经使用内存大小<br>shared：共享的内存大小<br>buffers:缓冲区内存：（磁盘块的读写频繁,linux内存机制做缓冲池）<br>cached:高速缓存</p>
-<ul>
-<li><strong>cached和 buffer的区别： </strong></li>
-</ul>
-<p>Buffer：缓冲区，一个用于存储速度不同步的设备或优先级不同的设备之间传输数据的区域。通过缓冲区，可以使进程之间的相互等待变少，从而使从速度慢的设备读入数据时，速度快的设备的操作进程不发生间断。<br>Cache：高速缓存，是位于CPU与主内存间的一种容量较小但速度很高的存储器。由于CPU的速度远高于主内存，CPU直接从内存中存取数据要等待一定时间周期，Cache中保存着CPU刚用过或循环使用的一部分数据，当CPU再次使用该部分数据时可从Cache中直接调用,这样就减少了CPU的等待时间,提高了系统的效率。Cache又分为一级Cache(L1 Cache)和二级Cache(L2 Cache)，L1 Cache集成在CPU内部，L2 Cache早期一般是焊在主板上,现在也都集成在CPU内部，常见的容量有256KB或512KB L2 Cache。<br>Cache的工作原理图如下：<br><br><img src="/img/dec/cached/2.jpeg" style="width: 600px;"></p>
-<ul>
-<li><strong>以下是清理cache</strong></li>
-</ul>
-<p>cat /proc/sys/vm/drop_caches 默认是0，参照如下图吗，可以根据自己需求清理。<br><br><img src="/img/dec/cached/3.png" style="width: 600px;"></p>
-<p>使用前最好首先执行sync命令<br>sync - 强制将内存中的文件缓冲内容写到磁盘<br><br><img src="/img/dec/cached/4.png" style="width: 600px;"></p>
-<p>更改后监控得出以下：</p>
-<p><br><img src="/img/dec/cached/5-2.png" style="width: 600px;"></p>
-
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2015/10/25/╘╦╬м╓о╡└-╬к║╬─┌┤ц╩╣╙├─╟├┤╕▀г┐/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -573,7 +566,7 @@
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -586,6 +579,10 @@
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2019/02/18/Docker如何推送镜像到Harbor？/"><i class="fa fa-file-o"></i>Docker如何推送镜像到Harbor？</a>
+      </li>
     
       <li>
         <a href="/2019/02/18/如何搭建高可用Docker-Harbor仓库/"><i class="fa fa-file-o"></i>如何搭建高可用Docker Harbor仓库</a>
@@ -601,10 +598,6 @@
     
       <li>
         <a href="/2019/02/17/分布式时序数据库InfluxDB/"><i class="fa fa-file-o"></i>分布式时序数据库InfluxDB</a>
-      </li>
-    
-      <li>
-        <a href="/2018/07/29/企业常用几种部署方式-蓝绿部署、滚动部署、金丝雀部署/"><i class="fa fa-file-o"></i>企业常用几种部署方式(蓝绿部署、滚动部署、金丝雀部署)</a>
       </li>
     
   </ul>

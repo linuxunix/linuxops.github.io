@@ -96,6 +96,41 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2017-03-01 </div>
+			<div class="article-title"><a href="/2017/03/01/获取nginx日志访问前10名（附python做法/">获取nginx日志访问前10名（附python做法)</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p><strong>获取nginx日志访问前10名（附python做法）</strong></p>
+<p>获取日志访问量基本作为合格的运维必须会的，这里我们讨论下shell和python实现方式</p>
+<blockquote>
+<p>shell实现方式</p>
+</blockquote>
+<p>shell实现较为简单，只需要一条命令即可，运用awk、sort、uniq即可<br>cat xxxx.log |awk ‘{print $1}’ | sort | uniq -c | sort -nr |head -10</p>
+<blockquote>
+<p>python实现<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding=utf8</span></span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line">ip_list=[ ]</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'xxx.log'</span>,<span class="string">'r'</span>) <span class="keyword">as</span> f_log:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> f_log.readlines():</span><br><span class="line">        ip_list.append(i.split(<span class="string">" "</span>)[<span class="number">0</span>])</span><br><span class="line">ip_list = sorted(dict(Counter(ip_list)).items(), key=<span class="keyword">lambda</span> x: x[<span class="number">1</span>], reverse=<span class="keyword">True</span>)[<span class="number">0</span>:<span class="number">10</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> ip_list:</span><br><span class="line">    <span class="keyword">print</span> i[<span class="number">0</span>],<span class="string">'访问次数为：%s'</span> %i[<span class="number">1</span>]</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/03/01/获取nginx日志访问前10名（附python做法/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-03-01 </div>
 			<div class="article-title"><a href="/2017/03/01/saltstack命令和端口介绍/">saltstack命令和端口介绍</a></div>						
 		</h3>
 	
@@ -535,36 +570,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2017-02-14 </div>
-			<div class="article-title"><a href="/2017/02/14/django登陆注销/">django登陆注销</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <p>#django登陆注销<br>任何一个动态系统基本离不开登录和注销，现在作为运维自动化的追随者使用python语言的较多。当然你坚持PHP是世界上最好的语言那我也没有办法。下面介绍下DJANGO框架的登录和注销<br><strong>Views代码</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># _*_ coding:utf-8 _*_</span></span><br><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> render,HttpResponseRedirect</span><br><span class="line"><span class="keyword">from</span> django.contrib.auth <span class="keyword">import</span> authenticate,login,logout</span><br><span class="line"><span class="keyword">from</span> django.contrib.auth.decorators <span class="keyword">import</span> login_required<span class="comment">#登陆后才能进入系统的模块</span></span><br><span class="line"><span class="meta">@login_required  #登陆后才能进入系统</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">acc_login</span><span class="params">(request)</span>:</span></span><br><span class="line">    login_err = <span class="string">''</span></span><br><span class="line">    <span class="comment"># print request.POST</span></span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">'POST'</span>:</span><br><span class="line">        username = request.POST.get(<span class="string">'inputUsername'</span>)</span><br><span class="line">        password = request.POST.get(<span class="string">'inputPassword'</span>)</span><br><span class="line">        user = authenticate(username=username, password=password)</span><br><span class="line">        <span class="keyword">if</span> user <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">            login(request,user)</span><br><span class="line">            <span class="keyword">if</span> user.is_active:</span><br><span class="line">                <span class="keyword">return</span> HttpResponseRedirect(<span class="string">'/'</span>)</span><br><span class="line">        login_err = <span class="string">"请检查用户名和密码是否正确"</span></span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">'login.html'</span>, &#123;</span><br><span class="line">        <span class="string">'login_err'</span>: login_err</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">acc_logout</span><span class="params">(request)</span>:</span></span><br><span class="line">    logout(request)</span><br><span class="line">    <span class="keyword">return</span>  HttpResponseRedirect(<span class="string">"/"</span>)</span><br></pre></td></tr></table></figure></p>
-<p><strong>URLS代码</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.conf.urls <span class="keyword">import</span> url</span><br><span class="line"><span class="keyword">from</span> django.contrib <span class="keyword">import</span> admin</span><br><span class="line"><span class="keyword">from</span> app1 <span class="keyword">import</span> views</span><br><span class="line">urlpatterns = [</span><br><span class="line">    url(<span class="string">r'^admin/'</span>, admin.site.urls),</span><br><span class="line">    url(<span class="string">r'^$'</span>,views.index),</span><br><span class="line">    url(<span class="string">r'^index.html'</span>,views.index),</span><br><span class="line">    url(<span class="string">r'^login/$'</span>,views.acc_login),</span><br><span class="line">    url(<span class="string">r'^logout/$'</span>,views.acc_logout,name=<span class="string">'acc_logout'</span>), <span class="comment">####添加name作用是在前端使用&#123;% url 'acc_logout' %&#125;</span></span><br></pre></td></tr></table></figure></p>
-<p><strong>前端index.html</strong><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;ul class="nav navbar-nav navbar-right"&gt;</span><br><span class="line">    &#123;% if request.user.is_authenticated %&#125;  &lt;!-- 判断用户是否已登录 --&gt;</span><br><span class="line">      &lt;li&gt;&lt;a href="#"&gt;欢迎您：&#123;&#123; request.user &#125;&#125;&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">      &lt;li&gt;&lt;a href="&#123;% url 'acc_logout' %&#125;"&gt;注销&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">    &#123;% <span class="keyword">else</span> %&#125;</span><br><span class="line">         &lt;li&gt;&lt;a href="/login/"&gt;登陆&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">         &lt;li&gt;&lt;a href="/reg/"&gt;注册&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">    &#123;% endif %&#125;</span><br><span class="line">&lt;/ul&gt;</span><br></pre></td></tr></table></figure></p>
-<p><strong>前端login.htm</strong><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class="container"&gt;</span><br><span class="line">  &lt;form class="form-signin" method="post"&gt;&#123;% csrf_token %&#125;</span><br><span class="line">    &lt;h2 class="form-signin-heading"&gt;Please sign in&lt;/h2&gt;</span><br><span class="line">    &lt;label for="text" class="sr-only"&gt;Username&lt;/label&gt;</span><br><span class="line">    &lt;input type="text" name="inputUsername" class="form-control" placeholder="Username" required autofocus&gt;</span><br><span class="line">    &lt;label for="inputPassword" class="sr-only"&gt;Password&lt;/label&gt;</span><br><span class="line">    &lt;input type="password" name="inputPassword" class="form-control" placeholder="Password" required&gt;</span><br><span class="line">    &lt;div class="checkbox"&gt;</span><br><span class="line">      &lt;label&gt;</span><br><span class="line">        &lt;input type=<span class="string">"checkbox"</span> value=<span class="string">"remember-me"</span>&gt; Remember me</span><br><span class="line">      &lt;/label&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;span style="color: red;"&gt;&#123;&#123; login_err &#125;&#125;&lt;/span&gt;</span><br><span class="line">    &lt;button class="btn btn-lg btn-primary btn-block" type="submit"&gt;Sign in&lt;/button&gt;</span><br></pre></td></tr></table></figure></p>
-
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2017/02/14/django登陆注销/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -601,7 +606,7 @@
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -614,6 +619,10 @@
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2019/02/18/Docker如何推送镜像到Harbor？/"><i class="fa fa-file-o"></i>Docker如何推送镜像到Harbor？</a>
+      </li>
     
       <li>
         <a href="/2019/02/18/如何搭建高可用Docker-Harbor仓库/"><i class="fa fa-file-o"></i>如何搭建高可用Docker Harbor仓库</a>
@@ -629,10 +638,6 @@
     
       <li>
         <a href="/2019/02/17/分布式时序数据库InfluxDB/"><i class="fa fa-file-o"></i>分布式时序数据库InfluxDB</a>
-      </li>
-    
-      <li>
-        <a href="/2018/07/29/企业常用几种部署方式-蓝绿部署、滚动部署、金丝雀部署/"><i class="fa fa-file-o"></i>企业常用几种部署方式(蓝绿部署、滚动部署、金丝雀部署)</a>
       </li>
     
   </ul>

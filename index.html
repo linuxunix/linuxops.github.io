@@ -96,6 +96,39 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2019-02-18 </div>
+			<div class="article-title"><a href="/2019/02/18/Docker如何推送镜像到Harbor？/">Docker如何推送镜像到Harbor？</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <h3 id="登录">登录</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 harbor]# docker login -u admin -p Harbor12345  http://10.80.80.251</span><br><span class="line">WARNING! Using --password via the CLI is insecure. Use --password-stdin.</span><br><span class="line">Error response from daemon: Get https://10.80.80.251/v2/: read tcp 10.80.80.251:50374-&gt;10.80.80.251:443: read: connection reset by peer</span><br></pre></td></tr></table></figure>
+<h6 id="原因如下：">原因如下：</h6><p>docker 默认使用https，如果仓库使用了http，则要修改下Docker的配置:/etc/docker/daemon.json, 添加参数insecure-registries:<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 harbor]#  cat /etc/docker/daemon.json</span><br><span class="line">&#123;</span><br><span class="line">  "registry-mirrors": ["https://v5d7kh0f.mirror.aliyuncs.com"],</span><br><span class="line">  "insecure-registries": ["10.80.80.251"]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 重启docker</span><br><span class="line">[root@node1 harbor]# systemctl restart docker</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 重启后登录</span><br><span class="line">[root@node1 harbor]# docker login -u admin -p Harbor12345  http://10.80.80.251</span><br><span class="line">WARNING! Using --password via the CLI is insecure. Use --password-stdin.</span><br><span class="line">WARNING! Your password will be stored unencrypted in /root/.docker/config.json.</span><br><span class="line">Configure a credential helper to remove this warning. See</span><br><span class="line">https://docs.docker.com/engine/reference/commandline/login/#credentials-store</span><br><span class="line"></span><br><span class="line">Login Succeeded</span><br></pre></td></tr></table></figure></p>
+<h3 id="查看镜像列表">查看镜像列表</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 harbor]# docker images</span><br><span class="line">REPOSITORY                                                                         TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line"></span><br><span class="line">gcr.io/google_containers/cluster-proportional-autoscaler-amd64                     1.3.0               33813c948942        3 months ago        45.8MB</span><br><span class="line">registry.cn-hangzhou.aliyuncs.com/ringtail/cluster-proportional-autoscaler-amd64   v1.3.0              33813c948942        3 months ago        45.8MB</span><br><span class="line">cr.io/google_containers/cluster-proportional-autoscaler-amd64                      1.3.0               33813c948942        3 months ago        45.8MB</span><br><span class="line">google_containers/cluster-proportional-autoscaler-amd64                            1.3.0               33813c948942        3 months ago        45.8MB</span><br></pre></td></tr></table></figure>
+<p>例如需要把 registry.cn-hangzhou.aliyuncs.com/google_containers/cluster-proportional-autoscaler-amd64 上传到horbar仓库，则步操如下：</p>
+<h4 id="1、打tag">1、打tag</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag registry.cn-hangzhou.aliyuncs.com/ringtail/cluster-proportional-autoscaler-amd64:v1.3.0 10.80.80.251/google_containers/cluster-proportional-autoscaler-amd64:1.3.0</span><br></pre></td></tr></table></figure>
+<h4 id="2、登录">2、登录</h4><p>看开头上文</p>
+<h4 id="3、PUSH(需要提前在Horbar新增项目google_containers)">3、PUSH(需要提前在Horbar新增项目google_containers)</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 harbor]# docker push   10.80.80.251/google_containers/cluster-proportional-autoscaler-amd64:1.3.0</span><br><span class="line">The push refers to repository [10.80.80.251/google_containers/cluster-proportional-autoscaler-amd64]</span><br><span class="line">a636ea940e54: Pushed </span><br><span class="line">1.3.0: digest: sha256:4fd37c5b29a38b02c408c56254bd1a3a76f3e236610bc7a8382500bbf9ecfc76 size: 528</span><br></pre></td></tr></table></figure>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2019/02/18/Docker如何推送镜像到Harbor？/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2019-02-18 </div>
 			<div class="article-title"><a href="/2019/02/18/如何搭建高可用Docker-Harbor仓库/">如何搭建高可用Docker Harbor仓库</a></div>						
 		</h3>
 	
@@ -890,209 +923,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2018-06-16 </div>
-			<div class="article-title"><a href="/2018/06/16/Python-Zabbix-Api/">Python Zabbix Api</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <h3 id="请求的方法参数">请求的方法参数</h3><p>官方原文：</p>
-<ul>
-<li><strong>jsonrpc</strong> - the version of the JSON-RPC protocol used by the API; the  Zabbix API implements JSON-RPC version 2.0;</li>
-<li><strong>method</strong> - the API method being called;</li>
-<li><strong>params</strong> - parameters that will be passed to the API method;</li>
-<li><strong>id</strong> - an arbitrary identifier of the request;</li>
-<li><strong>auth</strong> - a user authentication token; since we don’t have one yet, it’s set to null.</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>参数名称</th>
-<th style="text-align:center">值类型</th>
-<th style="text-align:left">说明</th>
-<th>是否必须</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>jsonrpc</td>
-<td style="text-align:center">str</td>
-<td style="text-align:left">接口版本</td>
-<td>是</td>
-</tr>
-<tr>
-<td>method</td>
-<td style="text-align:center">str</td>
-<td style="text-align:left">请求方法</td>
-<td>是</td>
-</tr>
-<tr>
-<td>params</td>
-<td style="text-align:center">json</td>
-<td style="text-align:left">请求方法参数</td>
-<td>是</td>
-</tr>
-<tr>
-<td>user</td>
-<td style="text-align:center">str</td>
-<td style="text-align:left">zabbix账号</td>
-<td>是</td>
-</tr>
-<tr>
-<td>password</td>
-<td style="text-align:center">str</td>
-<td style="text-align:left">zabbix密码</td>
-<td>是</td>
-</tr>
-<tr>
-<td>auth</td>
-<td style="text-align:center">str</td>
-<td style="text-align:left">认证的key</td>
-<td>是</td>
-</tr>
-<tr>
-<td>id</td>
-<td style="text-align:center">int</td>
-<td style="text-align:left">认证id</td>
-<td>是</td>
-</tr>
-</tbody>
-</table>
-<p>请求事例：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">POST http://company.com/zabbix/api_jsonrpc.php HTTP/1.1</span><br><span class="line">Content-Type: application/json-rpc</span><br><span class="line"></span><br><span class="line">&#123;"jsonrpc":"2.0","method":"apiinfo.version","id":1,"auth":null,"params":&#123;&#125;&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="python获取token">python获取token</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> sys, argparse</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Zabbix_Api</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.url = <span class="string">'http://IP/zabbix/api_jsonrpc.php'</span></span><br><span class="line">        self.header = &#123;<span class="string">"Content-Type"</span>: <span class="string">"application/json"</span>&#125;</span><br><span class="line">        self.id = <span class="number">1</span></span><br><span class="line">        self.user=<span class="string">"zabbix登录账号"</span></span><br><span class="line">        self.password=<span class="string">"zabbix登录密码"</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">json_obj</span><span class="params">(self,method,auth=True,params=&#123;&#125;)</span>:</span></span><br><span class="line">        obj = &#123;<span class="string">'jsonrpc'</span>: <span class="string">'2.0'</span>,</span><br><span class="line">               <span class="string">'method'</span>: method,</span><br><span class="line">               <span class="string">'params'</span>: params,</span><br><span class="line">               <span class="string">'auth'</span>: auth,</span><br><span class="line">               <span class="string">'id'</span>: self.id&#125;</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> auth:</span><br><span class="line">            <span class="keyword">del</span> obj[<span class="string">"auth"</span>]</span><br><span class="line">        <span class="keyword">return</span> obj</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">user_login</span><span class="params">(self)</span>:</span></span><br><span class="line">        data=self.json_obj(method=<span class="string">"user.login"</span>,auth=<span class="keyword">False</span>, params=&#123;<span class="string">"user"</span>: self.user, <span class="string">"password"</span>: self.password&#125;)</span><br><span class="line">        <span class="keyword">return</span> json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)[<span class="string">"result"</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    print(Zabbix_Api().user_login())</span><br></pre></td></tr></table></figure>
-<h3 id="获取版本信息">获取版本信息</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_version</span><span class="params">(self)</span>:</span></span><br><span class="line">    data=self.json_obj(method=<span class="string">"apiinfo.version"</span>,</span><br><span class="line">        params=&#123;</span><br><span class="line">            <span class="string">"output"</span>: []</span><br><span class="line">        &#125;,</span><br><span class="line">        auth=<span class="keyword">False</span>)</span><br><span class="line">    <span class="keyword">return</span> json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)</span><br></pre></td></tr></table></figure>
-<h3 id="host-get方法获取所有的主机ID">host.get方法获取所有的主机ID</h3><table>
-<thead>
-<tr>
-<th>参数名称</th>
-<th style="text-align:center">值类型</th>
-<th style="text-align:left">说明</th>
-<th>是否必须</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>jsonrpc</td>
-<td style="text-align:center">str</td>
-<td style="text-align:left">接口版本</td>
-<td>是</td>
-</tr>
-<tr>
-<td>method</td>
-<td style="text-align:center">str</td>
-<td style="text-align:left">请求方法</td>
-<td>是</td>
-</tr>
-<tr>
-<td>params</td>
-<td style="text-align:center">json</td>
-<td style="text-align:left">请求方法参数</td>
-<td>是</td>
-</tr>
-<tr>
-<td>output</td>
-<td style="text-align:center">array</td>
-<td style="text-align:left">输出格式</td>
-<td>是</td>
-</tr>
-<tr>
-<td>groupids</td>
-<td style="text-align:center">str/array</td>
-<td style="text-align:left">主机组id</td>
-<td>是</td>
-</tr>
-<tr>
-<td>auth</td>
-<td style="text-align:center">str</td>
-<td style="text-align:left">认证的key</td>
-<td>是</td>
-</tr>
-<tr>
-<td>id</td>
-<td style="text-align:center">int</td>
-<td style="text-align:left">认证id</td>
-<td>是</td>
-</tr>
-</tbody>
-</table>
-<p>请求事例(参考上面类)：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_host</span><span class="params">(self)</span>:</span></span><br><span class="line">    data=self.json_obj(method=<span class="string">"host.get"</span>,</span><br><span class="line">        params=&#123;</span><br><span class="line">            <span class="string">"output"</span>: [<span class="string">"hostid"</span>, <span class="string">"name"</span>]</span><br><span class="line">        &#125;,</span><br><span class="line">        auth=self.user_login())</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)</span><br></pre></td></tr></table></figure></p>
-<h3 id="itemsid-get方法获取单个主机下所有的监控项ID">itemsid.get方法获取单个主机下所有的监控项ID</h3><table>
-<thead>
-<tr>
-<th>参数名称</th>
-<th style="text-align:center">值类型</th>
-<th style="text-align:left">说明</th>
-<th>是否必须</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>jsonrpc</td>
-<td style="text-align:center">str</td>
-<td style="text-align:left">接口版本</td>
-<td>是</td>
-</tr>
-<tr>
-<td>method</td>
-<td style="text-align:center">str</td>
-<td style="text-align:left">请求方法</td>
-<td>是</td>
-</tr>
-<tr>
-<td>params</td>
-<td style="text-align:center">json</td>
-<td style="text-align:left">请求方法参数</td>
-<td>是</td>
-</tr>
-<tr>
-<td>output</td>
-<td style="text-align:center">array</td>
-<td style="text-align:left">输出格式</td>
-<td>是</td>
-</tr>
-<tr>
-<td>groupids</td>
-<td style="text-align:center">str/array</td>
-<td style="text-align:left">主机组id</td>
-<td>是</td>
-</tr>
-<tr>
-<td>auth</td>
-<td style="text-align:center">str</td>
-<td style="text-align:left">认证的key</td>
-<td>是</td>
-</tr>
-<tr>
-<td>id</td>
-<td style="text-align:center">int</td>
-<td style="text-align:left">认证id</td>
-<td>是</td>
-</tr>
-</tbody>
-</table>
-<p>请求事例：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_mem_total</span><span class="params">(self,hostid)</span>:</span></span><br><span class="line">    data=self.json_obj(method=<span class="string">"item.get"</span>,</span><br><span class="line">        params=&#123;</span><br><span class="line">            <span class="string">"output"</span>: <span class="string">"extend"</span>,</span><br><span class="line">            <span class="string">"hostids"</span>: hostid,</span><br><span class="line">            <span class="string">"search"</span>: &#123;</span><br><span class="line">                <span class="string">"key_"</span>: <span class="string">"vm.memory.size[total]"</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        auth=self.user_login())</span><br><span class="line">    <span class="keyword">return</span> int(json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)[<span class="string">"result"</span>][<span class="number">0</span>][<span class="string">"lastvalue"</span>])/<span class="number">1024</span>/<span class="number">1024</span>/<span class="number">1024</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="以上完整事例">以上完整事例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> sys, argparse</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Zabbix_Api</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.url = <span class="string">'http://192.168.31.249/zabbix/api_jsonrpc.php'</span></span><br><span class="line">        self.header = &#123;<span class="string">"Content-Type"</span>: <span class="string">"application/json"</span>&#125;</span><br><span class="line">        self.id = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">json_obj</span><span class="params">(self,method,auth=True,params=&#123;&#125;)</span>:</span></span><br><span class="line">        obj = &#123;<span class="string">'jsonrpc'</span>: <span class="string">'2.0'</span>,</span><br><span class="line">               <span class="string">'method'</span>: method,</span><br><span class="line">               <span class="string">'params'</span>: params,</span><br><span class="line">               <span class="string">'auth'</span>: auth,</span><br><span class="line">               <span class="string">'id'</span>: self.id&#125;</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> auth:</span><br><span class="line">            <span class="keyword">del</span> obj[<span class="string">"auth"</span>]</span><br><span class="line">        <span class="keyword">return</span> obj</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">user_login</span><span class="params">(self)</span>:</span></span><br><span class="line">        data=self.json_obj(method=<span class="string">"user.login"</span>,auth=<span class="keyword">False</span>, params=&#123;<span class="string">"user"</span>: <span class="string">"yunwei"</span>, <span class="string">"password"</span>: <span class="string">"yunwei"</span>&#125;)</span><br><span class="line">        <span class="keyword">return</span> json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)[<span class="string">"result"</span>]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_host</span><span class="params">(self)</span>:</span></span><br><span class="line">        data=self.json_obj(method=<span class="string">"host.get"</span>,</span><br><span class="line">            params=&#123;</span><br><span class="line">                <span class="string">"output"</span>: [<span class="string">"hostid"</span>, <span class="string">"name"</span>]</span><br><span class="line">            &#125;,</span><br><span class="line">            auth=self.user_login())</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_mem_total</span><span class="params">(self,hostid)</span>:</span></span><br><span class="line">        data=self.json_obj(method=<span class="string">"item.get"</span>,</span><br><span class="line">            params=&#123;</span><br><span class="line">                <span class="string">"output"</span>: <span class="string">"extend"</span>,</span><br><span class="line">                <span class="string">"hostids"</span>: hostid,</span><br><span class="line">                <span class="string">"search"</span>: &#123;</span><br><span class="line">                    <span class="string">"key_"</span>: <span class="string">"vm.memory.size[total]"</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            auth=self.user_login())</span><br><span class="line">        <span class="keyword">return</span> int(json.loads(requests.post(url=self.url, headers=self.header, data=json.dumps(data)).text)[<span class="string">"result"</span>][<span class="number">0</span>][<span class="string">"lastvalue"</span>])/<span class="number">1024</span>/<span class="number">1024</span>/<span class="number">1024</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="comment"># for k in Zabbix_Api().get_host()["result"]:</span></span><br><span class="line">    <span class="comment">#     print(k["hostid"],k["name"],str(round(Zabbix_Api().get_mem(k["hostid"]),2))+"G")</span></span><br><span class="line">    print(Zabbix_Api().get_mem_total(<span class="number">10084</span>))</span><br></pre></td></tr></table></figure>
-<p>以上只是简单举例，具体实践可参考官网文档(要永远相信官方文档是最好的文档)：<a href="https://www.zabbix.com/documentation/3.0/manual/api" target="_blank" rel="noopener">https://www.zabbix.com/documentation/3.0/manual/api</a></p>
-
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2018/06/16/Python-Zabbix-Api/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -1129,7 +959,7 @@
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -1142,6 +972,10 @@
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2019/02/18/Docker如何推送镜像到Harbor？/"><i class="fa fa-file-o"></i>Docker如何推送镜像到Harbor？</a>
+      </li>
     
       <li>
         <a href="/2019/02/18/如何搭建高可用Docker-Harbor仓库/"><i class="fa fa-file-o"></i>如何搭建高可用Docker Harbor仓库</a>
@@ -1157,10 +991,6 @@
     
       <li>
         <a href="/2019/02/17/分布式时序数据库InfluxDB/"><i class="fa fa-file-o"></i>分布式时序数据库InfluxDB</a>
-      </li>
-    
-      <li>
-        <a href="/2018/07/29/企业常用几种部署方式-蓝绿部署、滚动部署、金丝雀部署/"><i class="fa fa-file-o"></i>企业常用几种部署方式(蓝绿部署、滚动部署、金丝雀部署)</a>
       </li>
     
   </ul>

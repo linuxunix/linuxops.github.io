@@ -95,6 +95,47 @@
 	
 	<!-- display as entry -->	
 		<h3 class="title">
+			<div class="date"> 2015-10-25 </div>
+			<div class="article-title"><a href="/2015/10/25/╘╦╬м╓о╡└-╬к║╬─┌┤ц╩╣╙├─╟├┤╕▀г┐/">运维之道-为何内存使用那么高？</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<p>由来：最近zabbix监控发现服务器主机发生内存告警通知，同时内存使用率越来越高甚至超过90%使用率，这个不得不引起运维人员高度注意。</p>
+</blockquote>
+<p>经过核查原来主要是cached作怪，我们可以通过free -m得出以下：<br><br><img src="/img/dec/cached/1.png" style="width: 600px;"><br>total : 物理内存的总大小<br>used ：已经使用内存大小<br>shared：共享的内存大小<br>buffers:缓冲区内存：（磁盘块的读写频繁,linux内存机制做缓冲池）<br>cached:高速缓存</p>
+<ul>
+<li><strong>cached和 buffer的区别： </strong></li>
+</ul>
+<p>Buffer：缓冲区，一个用于存储速度不同步的设备或优先级不同的设备之间传输数据的区域。通过缓冲区，可以使进程之间的相互等待变少，从而使从速度慢的设备读入数据时，速度快的设备的操作进程不发生间断。<br>Cache：高速缓存，是位于CPU与主内存间的一种容量较小但速度很高的存储器。由于CPU的速度远高于主内存，CPU直接从内存中存取数据要等待一定时间周期，Cache中保存着CPU刚用过或循环使用的一部分数据，当CPU再次使用该部分数据时可从Cache中直接调用,这样就减少了CPU的等待时间,提高了系统的效率。Cache又分为一级Cache(L1 Cache)和二级Cache(L2 Cache)，L1 Cache集成在CPU内部，L2 Cache早期一般是焊在主板上,现在也都集成在CPU内部，常见的容量有256KB或512KB L2 Cache。<br>Cache的工作原理图如下：<br><br><img src="/img/dec/cached/2.jpeg" style="width: 600px;"></p>
+<ul>
+<li><strong>以下是清理cache</strong></li>
+</ul>
+<p>cat /proc/sys/vm/drop_caches 默认是0，参照如下图吗，可以根据自己需求清理。<br><br><img src="/img/dec/cached/3.png" style="width: 600px;"></p>
+<p>使用前最好首先执行sync命令<br>sync - 强制将内存中的文件缓冲内容写到磁盘<br><br><img src="/img/dec/cached/4.png" style="width: 600px;"></p>
+<p>更改后监控得出以下：</p>
+<p><br><img src="/img/dec/cached/5-2.png" style="width: 600px;"></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2015/10/25/╘╦╬м╓о╡└-╬к║╬─┌┤ц╩╣╙├─╟├┤╕▀г┐/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
 			<div class="date"> 2015-10-19 </div>
 			<div class="article-title"><a href="/2015/10/19/Zabbix-Agent-┐═╗з╢╦╡─░▓╫░/">Zabbix-Agent 客户端的安装</a></div>						
 		</h3>
@@ -483,97 +524,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2015-09-08 </div>
-			<div class="article-title"><a href="/2015/09/08/Centos-6-5╕№╗╗yum/">Centos 6.5更换yum</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <blockquote>
-<p><strong>什么是yum？所有软件也能用yum安装吗？</strong></p>
-</blockquote>
-<p>1、    首先yum（全称为 Yellow dog Updater, Modified），是一个基于RPM包管理的软件包管理器，它能自动解决包的倚赖性问题，能一次安装软件所需的依赖包。<br>2、    当然不是了，这个得看yum 可安装列表<br>yum list  列出所有可安装的软件包.<br>yum list updates列出所有可更新的软件包<br>话说回来，我们为何要更换源呢？主要还是因为LINUX基本都是外国人写的东西，人家把服务器放在国外，这也是我们下载有时很慢的原因之一了。换源确实能很好解决这问题，这里推荐阿里和163源。</p>
-<ul>
-<li><strong>网易163源：</strong></li>
-</ul>
-<p>1、打开存放源配置的文件夹</p>
-<pre><code class="python">cd /etc/yum.repos.d
-</code></pre>
-<p>2、保险为见，先备份默认源</p>
-<pre><code class="python">cp ./CentOS-Base.repo ./CentOS-Base.repo.bak
-</code></pre>
-<p>3、下载163的源 </p>
-<pre><code class="python">http://mirrors<span class="number">.163</span>.com/.help/centos.html
-wget http://mirrors<span class="number">.163</span>.com/.help/CentOS6-Base-<span class="number">163.</span>repo
-</code></pre>
-<p>4、把下载下来的文件CentOS-Base-163.repo设置为默认源</p>
-<pre><code class="python">mv CentOS6-Base-<span class="number">163.</span>repo CentOS-Base.repo
-</code></pre>
-<p>或者直接跳过第3、4步直接输入以下：</p>
-<pre><code class="python">wget http://mirrors<span class="number">.163</span>.com/.help/CentOS6-Base-<span class="number">163.</span>repo -O CentOS-Base.repo
-</code></pre>
-<p>5、生成缓存并更新</p>
-<pre><code class="python">yum clean all
-yum makecache
-yum update
-</code></pre>
-<p>要是还不可以请查看官方帮助文档：<a href="http://mirrors.163.com/.help/" target="_blank" rel="noopener">http://mirrors.163.com/.help/</a></p>
-<ul>
-<li><strong>阿里云yum源：阿里提供一键安装脚本 </strong><br>当然备份时必须的，请看上面的1。<br>1、    下载脚本<pre><code class="python">wget http://oss.aliyuncs.com/aliyunecs/update_source.tgz
-</code></pre>
-2、    解压<pre><code class="python">tar xf update_source.tgz
-</code></pre>
-3、    运行脚本<pre><code class="python">./update_source.sh   (root权限)
-</code></pre>
-这里提示下，由于本博在阿里云实验下测试成功，后面在自家虚拟机发现以下：</li>
-</ul>
-<pre><code>[root@localhost yum.repos.d]<span class="preprocessor"># ./update1_source.sh</span>
-Step <span class="number">1.</span>No lock file,begin to create lock file and <span class="keyword">continue</span>.
-
-Step <span class="number">2.</span>Begin to check the OS issue.
-
-This OS is centos6.
-
-Step <span class="number">3.</span>Begin to modify the source configration file and update.
-
---<span class="number">2015</span>-<span class="number">09</span>-<span class="number">08</span> <span class="number">23</span>:<span class="number">16</span>:<span class="number">42</span>--  http:<span class="comment">//mirrors.aliyuncs.com/repo/Centos-6.repo</span>
-正在解析主机 mirrors.aliyuncs.com... <span class="number">10.143</span><span class="number">.34</span><span class="number">.200</span>
-正在连接 mirrors.aliyuncs.com|<span class="number">10.143</span><span class="number">.34</span><span class="number">.200</span>|:<span class="number">80.</span>..
-</code></pre><p>得出10.143.34.200是内网IP，无法连接，由于阿里云服务器不仅有公网IP，还带内网IP。</p>
-<p>2.1、打开存放源配置的文件夹</p>
-<pre><code class="python">cd /etc/yum.repos.d
-</code></pre>
-<p>2.2、先备份</p>
-<pre><code class="python">cp ./CentOS-Base.repo ./CentOS-Base.repo.bak
-</code></pre>
-<p>2.3更换阿里云yum源</p>
-<pre><code class="python">wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-<span class="number">6.</span>repo
-</code></pre>
-<p>2.4、生成缓存并更新</p>
-<pre><code class="python">yum clean all
-yum makecache
-yum update
-</code></pre>
-
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2015/09/08/Centos-6-5╕№╗╗yum/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -610,7 +560,7 @@ yum update
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -623,6 +573,10 @@ yum update
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2019/02/18/Docker如何推送镜像到Harbor？/"><i class="fa fa-file-o"></i>Docker如何推送镜像到Harbor？</a>
+      </li>
     
       <li>
         <a href="/2019/02/18/如何搭建高可用Docker-Harbor仓库/"><i class="fa fa-file-o"></i>如何搭建高可用Docker Harbor仓库</a>
@@ -638,10 +592,6 @@ yum update
     
       <li>
         <a href="/2019/02/17/分布式时序数据库InfluxDB/"><i class="fa fa-file-o"></i>分布式时序数据库InfluxDB</a>
-      </li>
-    
-      <li>
-        <a href="/2018/07/29/企业常用几种部署方式-蓝绿部署、滚动部署、金丝雀部署/"><i class="fa fa-file-o"></i>企业常用几种部署方式(蓝绿部署、滚动部署、金丝雀部署)</a>
       </li>
     
   </ul>
