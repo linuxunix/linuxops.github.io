@@ -95,6 +95,156 @@
 	
 	<!-- display as entry -->	
 		<h3 class="title">
+			<div class="date"> 2019-02-18 </div>
+			<div class="article-title"><a href="/2019/02/18/如何搭建高可用Docker-Harbor仓库/">如何搭建高可用Docker Harbor仓库</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <h3 id="一、首先探究Docker仓库分类?">一、首先探究Docker仓库分类?</h3><ul>
+<li>1、公有仓库(docker hub、阿里云仓库、网易云仓库等)</li>
+<li>2、私有仓库(harbor、docker-registry)</li>
+</ul>
+<p>Docker-registry是官方提供的工具，可以用于构建私有的镜像仓库。Harbor是由VMware团队负责开发的开源企业级Docker Registry，</p>
+<h3 id="二、What_is_Harbor?">二、What is Harbor?</h3><blockquote>
+<p>Harbor is an open source cloud native registry that stores, signs, and scans container images for vulnerabilities.</p>
+<p>Harbor solves common challenges by delivering trust, compliance, performance, and interoperability. It fills a gap for organizations and applications that cannot use a public or cloud-based registry, or want a consistent experience across clouds.</p>
+</blockquote>
+<h3 id="三、首先介绍下Horbar组件">三、首先介绍下Horbar组件</h3><p> <img src="/img/201902/harbor01.png" style="width: 550x;"></p>
+<p>如上图所示，Harbor包含6个组件：</p>
+<ul>
+<li><p><strong>Proxy：</strong> Harbor的组件，例如注册表，UI和令牌服务，都在反向代理之后。代理将来自浏览器和Docker客户端的请求转发给各种后端服务。</p>
+</li>
+<li><p><strong>Registry：</strong> 负责存储Docker镜像和处理Docker pull/push命令。由于Harbor需要对图像强制实施访问控制，因此Registry会将客户端定向到token，以获取每个pull/push有效的token。</p>
+</li>
+<li><p><strong>Core services：</strong> horbar的核心功能，主要提供以下服务：</p>
+<ul>
+<li>UI： 一个图形用户界面，用于帮助用户管理Registry;</li>
+<li>Webhook: 是一种在Registry中配置的机制，因此可以将Registry中的图像状态更改填充到Harbor的Webhook端点。Harbor使用webhook更新日志，启动复制和其他一些功能;</li>
+<li>Token：负责根据用户的项目角色为每个docker push / pull命令发出令牌。如果从Docker客户端发送的请求中没有令牌，则注册表会将请求重定向到令牌服务；</li>
+</ul>
+</li>
+<li><p><strong>Database：</strong> 数据库存储项目，用户，角色，复制策略和图像的元数据。</p>
+</li>
+<li><p><strong>Job services：</strong> 用于图像复制，本地图像可以复制（同步）到其他Harbor实例。</p>
+</li>
+<li><p><strong>Log collector：</strong> 负责收集其他模块的日志。</p>
+</li>
+</ul>
+<h3 id="四、Docker登陆过程">四、Docker登陆过程</h3><p> <img src="/img/201902/harbor02.png" style="width: 550x;"></p>
+<ul>
+<li><p>（a）通过端口80监听的代理容器接收该请求。容器中的Nginx将请求转发给后端的Registry容器。</p>
+</li>
+<li><p>（b）注册表容器已配置为基于token的身份验证，如果验证失败将会返回错误代码401，通知Docker客户端从指定的URL获取有效token。在Harbor中，此URL指向Core Services的token服务;</p>
+</li>
+<li><p>（c）当Docker客户端收到错误代码时，它会向token服务URL发送请求，根据HTTP规范的基本身份验证在请求头中带上用户名和密码;</p>
+</li>
+<li><p>（d）在通过端口80将该请求发送到代理容器之后，Nginx再次根据预先配置的规则将请求转发到UI容器。UI容器内的token服务接收请求，解码请求并获取用户名和密码;</p>
+</li>
+<li><p>（e）获取用户名和密码后，token服务检查数据库并通过MySql数据库中的数据对用户进行身份验证。为LDAP / AD身份验证配置token服务时，它将向外部LDAP / AD服务器发起请求进行身份验证。身份验证成功后，token服务将返回指示成功的HTTP代码。HTTP响应主体包含由私钥生成的token。</p>
+</li>
+</ul>
+<h3 id="五、Harbor高可用方案有哪些？">五、Harbor高可用方案有哪些？</h3><blockquote>
+<p>在日常维护中，仓库对于我们来说，可谓十分重要。当生产仓库当宕机后，而不能快速恢复时候，对开发和业务影响甚大，建议在日常运维中采取相对高可用方案，最起码保证数不会丢失。</p>
+<h4 id="Harbor高可用可包括以下方案：">Harbor高可用可包括以下方案：</h4><ul>
+<li>多实例共享后端存储(采取挂载文件系统方式)<br><img src="/img/201902/harbor03.png" style="width: 550x;"></li>
+</ul>
+</blockquote>
+<ul>
+<li>多实例相互数据同步(基于镜像复制模式)</li>
+</ul>
+<h3 id="六、Horbar安装与配置">六、Horbar安装与配置</h3><h4 id="6-1、安装方式">6.1、安装方式</h4><ul>
+<li><strong>在线下载安装：</strong> 安装程序从Docker hub下载Harbor的镜像</li>
+<li><strong>离线脱机安装：</strong> 当主机不能上网时候可使用此安装程序</li>
+</ul>
+<p>建议使用最新稳定版离线脱机安装，相关程序包下载地址为：<a href="https://github.com/goharbor/harbor/releases" target="_blank" rel="noopener">https://github.com/goharbor/harbor/releases</a></p>
+<blockquote>
+<p>基础环境</p>
+<ul>
+<li><strong>系统版本：</strong> CentOS Linux release 7.4.1708 (Core)</li>
+<li><strong>Harbor版本：</strong> harbor-offline-installer-v1.7.1.tgz</li>
+</ul>
+</blockquote>
+<p>注意：安装前需要安装Compose</p>
+<h4 id="6-2、在Linux系统上安装Compose">6.2、在Linux系统上安装Compose</h4><h5 id="6-2-1_运行此命令以下载最新版本的Docker_Compose：">6.2.1 运行此命令以下载最新版本的Docker Compose：</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose</span><br></pre></td></tr></table></figure>
+<h5 id="6-2-2_对二进制文件应用可执行权限：">6.2.2 对二进制文件应用可执行权限：</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod +x /usr/local/bin/docker-compose</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：如果docker-compose安装后命令失败，请检查路径。您还可以创建/usr/bin路径中的符号链接或任何其他目录。<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ln -s <span class="regexp">/usr/</span>local<span class="regexp">/bin/</span>docker-compose <span class="regexp">/usr/</span>bin<span class="regexp">/docker-compose</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h5 id="6-2-3_验证：">6.2.3 验证：</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-node1 harbor]# docker-compose version </span><br><span class="line">docker-compose version 1.23.2, build 1110ad01</span><br><span class="line">docker-py version: 3.6.0</span><br><span class="line">CPython version: 3.6.7</span><br><span class="line">OpenSSL version: OpenSSL 1.1.0f  25 May 2017</span><br></pre></td></tr></table></figure>
+<h4 id="6-3_配置参数">6.3 配置参数</h4><p>horbar配置参数位于文件harbor.cfg中，在harbor.cfg中有两类参数，</p>
+<ul>
+<li><strong>必需参数：</strong> 需要在配置文件中设置这些参数。如果用户更新它们harbor.cfg并运行install.sh脚本以重新安装Harbor，它们将生效。</li>
+<li><strong>可选参数：</strong> 这些参数对于更新是可选的，即用户可以将它们保留为默认值，并在启动Harbour后在Web Portal上更新它们。如果它们已经启用harbor.cfg，它们只会在首次启动Harbour时生效。harbor.cfg将忽略对这些参数的后续更新。</li>
+</ul>
+<p>重要的几个参数（如需要用到其它参数可以参考官方文档）</p>
+<ul>
+<li><strong>hostname：</strong> 目标主机的主机名，不建议使用localhost或127.0.0.1作为主机名 </li>
+<li><strong>ui_url_protocol：</strong> 访问使用协议为http或https,默认为http</li>
+<li><strong>db_password：</strong> 用于db_auth的PostgreSQL数据库的root密码</li>
+<li><strong>max_job_workers：</strong> (默认值为10）作业服务中的最大复制工作数</li>
+<li><strong>ssl_cert：</strong> SSL证书的路径，仅在协议设置为https时应用</li>
+<li><strong>ssl_cert_key：</strong> SSL密钥的路径，仅在协议设置为https时应用</li>
+<li><strong>harbor_admin_password：</strong> 管理员的初始密码。此密码仅在Harbor首次启动时生效。之后，将忽略此设置，并且应在Portal中设置管理员密码。请注意，默认用户名/密码为admin / Harbor12345</li>
+<li><strong>auth_mode：</strong> 使用的身份验证类型。默认情况下，它是db_auth</li>
+</ul>
+<h4 id="6-4_安装harbor">6.4 安装harbor</h4><h5 id="6-4-1_推荐离线安装">6.4.1 推荐离线安装</h5><h6 id="下载程序包：https://github-com/goharbor/harbor/releases">下载程序包：<a href="https://github.com/goharbor/harbor/releases" target="_blank" rel="noopener">https://github.com/goharbor/harbor/releases</a></h6><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://storage.googleapis.com/harbor-releases/release-1.7.0/harbor-offline-installer-v1.7.1.tgz</span><br></pre></td></tr></table></figure>
+<h6 id="建议使用https增加安全性">建议使用https增加安全性</h6><p>由于Harbor未附带任何证书，因此默认情况下使用HTTP来提供注册表请求。但是，强烈建议为任何生产环境启用安全性。Harbor有一个Nginx实例作为所有服务的反向代理，您可以使用prepare脚本配置Nginx以启用https。</p>
+<p>在测试或开发环境中，您可以选择使用自签名证书，而不是来自受信任的第三方CA的证书。以下内容将向您展示如何创建自己的CA，并使用您的CA签署服务器证书和客户端证书。</p>
+<h6 id="获得证书授权">获得证书授权</h6><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">openssl genrsa -out ca.<span class="type">key</span> <span class="number">4096</span></span><br><span class="line">openssl req -x509 -new -nodes -sha512 -days <span class="number">3650</span> \</span><br><span class="line">  -subj <span class="string">"/C=TW/ST=Taipei/L=Taipei/O=example/OU=Personal/CN=yourdomain.com"</span> \</span><br><span class="line">  -<span class="type">key</span> ca.<span class="type">key</span> \</span><br><span class="line">  -out ca.crt</span><br></pre></td></tr></table></figure>
+<h5 id="获得服务器证书">获得服务器证书</h5><p>假设您的注册表的主机名是yourdomain.com，并且其DNS记录指向您正在运行Harbor的主机。在生产环境中，您首先应该从CA获得证书。在测试或开发环境中，您可以使用自己的CA. 证书通常包含.crt文件和.key文件，例如yourdomain.com.crt和yourdomain.com.key。</p>
+<ul>
+<li><p>1）创建自己的私钥：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl genrsa -out yourdomain<span class="selector-class">.com</span><span class="selector-class">.key</span> <span class="number">4096</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>2）生成证书签名请求：</p>
+</li>
+</ul>
+<p>如果您使用像yourdomain.com这样的FQDN 连接注册表主机，那么您必须使用yourdomain.com作为CN（通用名称）。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">openssl req -sha512 -new \</span><br><span class="line">  -subj <span class="string">"/C=TW/ST=Taipei/L=Taipei/O=example/OU=Personal/CN=yourdomain.com"</span> \</span><br><span class="line">  -key yourdomain<span class="selector-class">.com</span><span class="selector-class">.key</span> \</span><br><span class="line">  -out yourdomain<span class="selector-class">.com</span><span class="selector-class">.csr</span></span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>3）生成注册表主机的证书：</li>
+</ul>
+<p>无论您是使用类似yourdomain.com的 FQDN 还是IP来连接注册表主机，请运行此命令以生成符合主题备用名称（SAN）和x509 v3扩展要求的注册表主机证书：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">cat &gt; v3<span class="selector-class">.ext</span> &lt;&lt;-EOF</span><br><span class="line">authorityKeyIdentifier=keyid,issuer</span><br><span class="line">basicConstraints=CA:FALSE</span><br><span class="line">keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment</span><br><span class="line">extendedKeyUsage = serverAuth </span><br><span class="line">subjectAltName = @alt_names</span><br><span class="line"></span><br><span class="line">[alt_names]</span><br><span class="line">DNS.<span class="number">1</span>=yourdomain.com</span><br><span class="line">DNS.<span class="number">2</span>=yourdomain</span><br><span class="line">DNS.<span class="number">3</span>=hostname</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">  openssl x509 -req -sha512 -days <span class="number">3650</span> \</span><br><span class="line">    -extfile v3<span class="selector-class">.ext</span> \</span><br><span class="line">    -CA ca<span class="selector-class">.crt</span> -CAkey ca<span class="selector-class">.key</span> -CAcreateserial \</span><br><span class="line">    -<span class="keyword">in</span> yourdomain<span class="selector-class">.com</span><span class="selector-class">.csr</span> \</span><br><span class="line">    -out yourdomain<span class="selector-class">.com</span><span class="selector-class">.crt</span></span><br></pre></td></tr></table></figure>
+<h5 id="6-4-2_配置harbor">6.4.2 配置harbor</h5><p>复制证书和密钥(建议使用外网域名购买的证书,docker pull/push 默认走https)<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cp yourdomain<span class="selector-class">.com</span><span class="selector-class">.crt</span> /data/cert/</span><br><span class="line">cp yourdomain<span class="selector-class">.com</span><span class="selector-class">.key</span> /data/cert/</span><br></pre></td></tr></table></figure></p>
+<p>修改配置文件<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">hostname</span> = <span class="number">192.168</span>.<span class="number">0.6</span></span><br><span class="line"><span class="attr">ui_url_protocol</span> = https</span><br><span class="line"><span class="attr">ssl_cert</span> = /data/cert/yourdomain.com.crt</span><br><span class="line"><span class="attr">ssl_cert_key</span> = /data/cert/yourdomain.com.key</span><br></pre></td></tr></table></figure></p>
+<p>为Harbor生成配置文件<br><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./<span class="built_in">prepare</span></span><br></pre></td></tr></table></figure></p>
+<p>安装harbor<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./<span class="keyword">install</span>.sh</span><br></pre></td></tr></table></figure></p>
+<p>如果安装过程出现以下错误，请确认Docker Compose是否安装成功！<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">✖ Need to install docker-compose(1.7.1+) by yourself first and run this script again.</span><br></pre></td></tr></table></figure></p>
+<h5 id="6-4-3_如外接pg配置，新版暂时不支持mysql（https://github-com/goharbor/harbor/issues/6534_）">6.4.3 如外接pg配置，新版暂时不支持mysql（<a href="https://github.com/goharbor/harbor/issues/6534" target="_blank" rel="noopener">https://github.com/goharbor/harbor/issues/6534</a> ）</h5><h5 id="harbor-cfg配置如下：">harbor.cfg配置如下：</h5><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">db_host</span> = <span class="number">192.168</span>.<span class="number">32.18</span></span><br><span class="line"><span class="attr">db_password</span> = password</span><br><span class="line"><span class="attr">db_port</span> = <span class="number">5432</span></span><br><span class="line"><span class="attr">db_user</span> = harbor</span><br></pre></td></tr></table></figure>
+<h6 id="安装和配置">安装和配置</h6><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">yum <span class="keyword">install</span> https://download.postgresql.org/pub/repos/yum/<span class="number">10</span>/redhat/rhel<span class="number">-7</span>-x86_64/pgdg-centos10<span class="number">-10</span><span class="number">-1.</span>noarch.rpm</span><br><span class="line"><span class="comment">#安装客户端</span></span><br><span class="line">yum <span class="keyword">install</span> postgresql10</span><br><span class="line"><span class="comment">#安装服务端</span></span><br><span class="line">yum <span class="keyword">install</span> postgresql10-<span class="keyword">server</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#初始化和启动</span></span><br><span class="line">postgresql-setup initdb</span><br><span class="line">systemctl <span class="keyword">enable</span> postgresql.service</span><br><span class="line">systemctl <span class="keyword">start</span> postgresql.service</span><br></pre></td></tr></table></figure>
+<p>具体可参考：<a href="https://www.postgresql.org/download/linux/redhat/" target="_blank" rel="noopener">https://www.postgresql.org/download/linux/redhat/</a></p>
+<h6 id="创建用户和数据库">创建用户和数据库</h6><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">CREATE DATABASE registry;</span><br><span class="line">CREATE USER harbor  WITH PASSWORD 'password';</span><br><span class="line">CREATE DATABASE registry OWNER harbor;</span><br><span class="line">GRANT ALL PRIVILEGES ON DATABASE registry to harbor;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改 postgresql.conf</span></span><br><span class="line">listen_addresses = '*'</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改pg_hba.conf</span></span><br><span class="line">host  all  all 0.0.0.0/0 md5</span><br></pre></td></tr></table></figure>
+<h5 id="踩坑记录">踩坑记录</h5><h6 id="踩坑之一：用户界面无法登陆">踩坑之一：用户界面无法登陆</h6><p>解决：<br>1、docker ps 发现harbor-adminserver 不断重启<br><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bf880eb451cd </span>       goharbor/harbor-adminserver:<span class="built_in">v1</span>.<span class="number">7</span>.<span class="number">1</span>       <span class="string">"/harbor/start.sh"</span>       <span class="number">48</span> seconds ago      Restarting (<span class="number">1</span>) <span class="number">17</span> secons ago                                                                         harbor-adminserver</span><br></pre></td></tr></table></figure></p>
+<p>2、查看日志发现以下<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">Jan</span> <span class="selector-tag">30</span> <span class="selector-tag">08</span><span class="selector-pseudo">:48</span><span class="selector-pseudo">:29</span> <span class="selector-tag">172</span><span class="selector-class">.22</span><span class="selector-class">.0</span><span class="selector-class">.1</span> <span class="selector-tag">adminserver</span><span class="selector-attr">[64872]</span>: <span class="selector-tag">2019-01-30T00</span><span class="selector-pseudo">:48</span><span class="selector-pseudo">:29Z</span> <span class="selector-attr">[INFO]</span> <span class="selector-tag">the</span> <span class="selector-tag">path</span> <span class="selector-tag">of</span> <span class="selector-tag">key</span> <span class="selector-tag">used</span> <span class="selector-tag">by</span> <span class="selector-tag">key</span> <span class="selector-tag">provider</span>: /<span class="selector-tag">etc</span>/<span class="selector-tag">adminserverkey</span></span><br><span class="line"><span class="selector-tag">Jan</span> <span class="selector-tag">30</span> <span class="selector-tag">08</span><span class="selector-pseudo">:48</span><span class="selector-pseudo">:29</span> <span class="selector-tag">172</span><span class="selector-class">.22</span><span class="selector-class">.0</span><span class="selector-class">.1</span> <span class="selector-tag">adminserver</span><span class="selector-attr">[64872]</span>: <span class="selector-tag">2019-01-30T00</span><span class="selector-pseudo">:48</span><span class="selector-pseudo">:29Z</span> <span class="selector-attr">[FATAL]</span> <span class="selector-attr">[main.go:45]</span>: <span class="selector-tag">failed</span> <span class="selector-tag">to</span> <span class="selector-tag">initialize</span> <span class="selector-tag">the</span> <span class="selector-tag">system</span>: <span class="selector-tag">read</span> /<span class="selector-tag">tc</span>/<span class="selector-tag">adminserver</span>/<span class="selector-tag">key</span>: <span class="selector-tag">is</span> <span class="selector-tag">a</span> <span class="selector-tag">directory</span></span><br></pre></td></tr></table></figure></p>
+<p>3、由于修改了secretkey_path in harbor.cfg，并没有更改docker-compose.yml配置导致，修改后docker-compose.yml执行以下命令即可：<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker-compose <span class="meta">down</span></span><br><span class="line">./prepare</span><br><span class="line">docker-compose <span class="meta">up</span> -d</span><br></pre></td></tr></table></figure></p>
+<p>参考：</p>
+<ul>
+<li><a href="https://github.com/goharbor/harbor/wiki/Architecture-Overview-of-Harbor" target="_blank" rel="noopener">https://github.com/goharbor/harbor/wiki/Architecture-Overview-of-Harbor</a></li>
+<li><a href="https://github.com/goharbor/harbor/blob/master/docs/installation_guide.md" target="_blank" rel="noopener">https://github.com/goharbor/harbor/blob/master/docs/installation_guide.md</a></li>
+<li><a href="https://www.postgresql.org/download/linux/redhat/" target="_blank" rel="noopener">https://www.postgresql.org/download/linux/redhat/</a></li>
+<li><a href="https://github.com/goharbor/harbor/issues/6534" target="_blank" rel="noopener">https://github.com/goharbor/harbor/issues/6534</a></li>
+</ul>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2019/02/18/如何搭建高可用Docker-Harbor仓库/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
 			<div class="date"> 2019-02-17 </div>
 			<div class="article-title"><a href="/2019/02/17/Python调用Jenkins-api-文档/">Python调用Jenkins api 文档</a></div>						
 		</h3>
@@ -943,51 +1093,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2018-06-16 </div>
-			<div class="article-title"><a href="/2018/06/16/Python-AES-加解密/">Python AES 加解密</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <blockquote>
-<p>高级加密标准（英语：Advanced Encryption Standard，缩写：AES），在密码学中又称Rijndael加密法，是美国联邦政府采用的一种区块加密标准。这个标准用来替代原先的DES，已经被多方分析且广为全世界所使用。经过五年的甄选流程，高级加密标准由美国国家标准与技术研究院（NIST）于2001年11月26日发布于FIPS PUB 197，并在2002年5月26日成为有效的标准。2006年，高级加密标准已然成为对称密钥加密中最流行的算法之一。</p>
-</blockquote>
-<p>如需进一步了解可以参考：<a href="https://zh.wikipedia.org/wiki/%E9%AB%98%E7%BA%A7%E5%8A%A0%E5%AF%86%E6%A0%87%E5%87%86#%E5%AF%86%E7%A0%81%E8%AF%B4%E6%98%8E" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E9%AB%98%E7%BA%A7%E5%8A%A0%E5%AF%86%E6%A0%87%E5%87%86#%E5%AF%86%E7%A0%81%E8%AF%B4%E6%98%8E</a></p>
-<p>AES5种常见加密模式：</p>
-<pre><code><span class="bullet">1. </span>电码本模式（Electronic Codebook Book (ECB)）
-
-<span class="bullet">2. </span>密码分组链接模式（Cipher Block Chaining (CBC)）
-
-<span class="bullet">3. </span>计算器模式（Counter (CTR)）
-
-<span class="bullet">4. </span>密码反馈模式（Cipher FeedBack (CFB)）
-
-<span class="bullet">5. </span>输出反馈模式（Output FeedBack (OFB)）
-</code></pre><p>pip install pycrypto</p>
-<p>官方链接:<a href="https://pypi.org/project/pycrypto/" target="_blank" rel="noopener">https://pypi.org/project/pycrypto/</a></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">new(key, *args, **kwargs)</span></span><br><span class="line"><span class="string">    Create a new AES cipher</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    :Parameters:</span></span><br><span class="line"><span class="string">      key : byte string</span></span><br><span class="line"><span class="string">        The secret key to use in the symmetric cipher.</span></span><br><span class="line"><span class="string">        It must be 16 (*AES-128*), 24 (*AES-192*), or 32 (*AES-256*) bytes long.</span></span><br><span class="line"><span class="string">    :Keywords:</span></span><br><span class="line"><span class="string">      mode : a *MODE_** constant</span></span><br><span class="line"><span class="string">        The chaining mode to use for encryption or decryption.</span></span><br><span class="line"><span class="string">        Default is `MODE_ECB`.</span></span><br><span class="line"><span class="string">      IV : byte string</span></span><br><span class="line"><span class="string">        The initialization vector to use for encryption or decryption.</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        It is ignored for `MODE_ECB` and `MODE_CTR`.</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">        For `MODE_OPENPGP`, IV must be `block_size` bytes long for encryption</span></span><br><span class="line"><span class="string">        and `block_size` +2 bytes for decryption (in the latter case, it is</span></span><br><span class="line"><span class="string">        actually the *encrypted* IV which was prefixed to the ciphertext).</span></span><br><span class="line"><span class="string">        It is mandatory.</span></span><br><span class="line"><span class="string">       </span></span><br><span class="line"><span class="string">        For all other modes, it must be `block_size` bytes longs. It is optional and</span></span><br><span class="line"><span class="string">        when not present it will be given a default value of all zeroes.</span></span><br><span class="line"><span class="string">      counter : callable</span></span><br><span class="line"><span class="string">        (*Only* `MODE_CTR`). A stateful function that returns the next</span></span><br><span class="line"><span class="string">        *counter block*, which is a byte string of `block_size` bytes.</span></span><br><span class="line"><span class="string">        For better performance, use `Crypto.Util.Counter`.</span></span><br><span class="line"><span class="string">      segment_size : integer</span></span><br><span class="line"><span class="string">        (*Only* `MODE_CFB`).The number of bits the plaintext and ciphertext</span></span><br><span class="line"><span class="string">        are segmented in.</span></span><br><span class="line"><span class="string">        It must be a multiple of 8. If 0 or not specified, it will be assumed to be 8.</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    :Return: an `AESCipher` object</span></span><br><span class="line"><span class="string">'''</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES</span><br><span class="line"><span class="keyword">from</span> binascii <span class="keyword">import</span> b2a_hex, a2b_hex</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Aes_Crypto</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, key)</span>:</span></span><br><span class="line">        <span class="comment">#self.key = key</span></span><br><span class="line">        <span class="comment">##建议使用以下方式</span></span><br><span class="line">        self.key=hashlib.md5(key).hexdigest()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 这里密钥key 长度必须为16（AES-128）、24（AES-192）、或32（AES-256）Bytes 长度</span></span><br><span class="line">        self.iv=<span class="number">16</span>*<span class="string">'0'</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">encrypt</span><span class="params">(self,data)</span>:</span></span><br><span class="line">        <span class="comment"># 不足16位补'\0'</span></span><br><span class="line">        data+=int(<span class="number">16</span>-(len(data) % <span class="number">16</span>)) * <span class="string">'\0'</span></span><br><span class="line">        obj = AES.new(self.key, AES.MODE_CBC, self.iv)</span><br><span class="line">        ciphertext =obj.encrypt(data)</span><br><span class="line">        <span class="comment"># 转化为16进制字符串</span></span><br><span class="line">        <span class="keyword">return</span> b2a_hex(ciphertext)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decrypt</span><span class="params">(self,data)</span>:</span></span><br><span class="line">        obj = AES.new(self.key, AES.MODE_CBC, self.iv)</span><br><span class="line">        <span class="keyword">return</span> obj.decrypt(a2b_hex(data)).rstrip(<span class="string">'\0'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    a=Aes_Crypto(<span class="number">16</span>*<span class="string">'1'</span>)</span><br><span class="line">    b=a.encrypt(<span class="string">'123456782dd000'</span>)</span><br><span class="line">    print(<span class="string">"加密后结果："</span>+b)</span><br><span class="line">    c=a.decrypt(b)</span><br><span class="line">    print(<span class="string">"解密后结果："</span>+c)</span><br></pre></td></tr></table></figure>
-<p>执行后的结果：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> python test2.py </span><br><span class="line">加密后结果：a0ac1a2c639fd4bce1e3804be22bbcbb</span><br><span class="line">解密后结果：<span class="number">1234567890123456</span></span><br></pre></td></tr></table></figure></p>
-
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2018/06/16/Python-AES-加解密/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -1024,7 +1129,7 @@
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -1037,6 +1142,10 @@
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2019/02/18/如何搭建高可用Docker-Harbor仓库/"><i class="fa fa-file-o"></i>如何搭建高可用Docker Harbor仓库</a>
+      </li>
     
       <li>
         <a href="/2019/02/17/Python调用Jenkins-api-文档/"><i class="fa fa-file-o"></i>Python调用Jenkins api 文档</a>
@@ -1052,10 +1161,6 @@
     
       <li>
         <a href="/2018/07/29/企业常用几种部署方式-蓝绿部署、滚动部署、金丝雀部署/"><i class="fa fa-file-o"></i>企业常用几种部署方式(蓝绿部署、滚动部署、金丝雀部署)</a>
-      </li>
-    
-      <li>
-        <a href="/2018/07/29/Pyecharts-生成图表-附Django支持/"><i class="fa fa-file-o"></i>Pyecharts 生成图表(附Django支持)</a>
       </li>
     
   </ul>

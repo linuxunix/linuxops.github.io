@@ -96,6 +96,51 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2018-06-16 </div>
+			<div class="article-title"><a href="/2018/06/16/Python-AES-加解密/">Python AES 加解密</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<p>高级加密标准（英语：Advanced Encryption Standard，缩写：AES），在密码学中又称Rijndael加密法，是美国联邦政府采用的一种区块加密标准。这个标准用来替代原先的DES，已经被多方分析且广为全世界所使用。经过五年的甄选流程，高级加密标准由美国国家标准与技术研究院（NIST）于2001年11月26日发布于FIPS PUB 197，并在2002年5月26日成为有效的标准。2006年，高级加密标准已然成为对称密钥加密中最流行的算法之一。</p>
+</blockquote>
+<p>如需进一步了解可以参考：<a href="https://zh.wikipedia.org/wiki/%E9%AB%98%E7%BA%A7%E5%8A%A0%E5%AF%86%E6%A0%87%E5%87%86#%E5%AF%86%E7%A0%81%E8%AF%B4%E6%98%8E" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E9%AB%98%E7%BA%A7%E5%8A%A0%E5%AF%86%E6%A0%87%E5%87%86#%E5%AF%86%E7%A0%81%E8%AF%B4%E6%98%8E</a></p>
+<p>AES5种常见加密模式：</p>
+<pre><code><span class="bullet">1. </span>电码本模式（Electronic Codebook Book (ECB)）
+
+<span class="bullet">2. </span>密码分组链接模式（Cipher Block Chaining (CBC)）
+
+<span class="bullet">3. </span>计算器模式（Counter (CTR)）
+
+<span class="bullet">4. </span>密码反馈模式（Cipher FeedBack (CFB)）
+
+<span class="bullet">5. </span>输出反馈模式（Output FeedBack (OFB)）
+</code></pre><p>pip install pycrypto</p>
+<p>官方链接:<a href="https://pypi.org/project/pycrypto/" target="_blank" rel="noopener">https://pypi.org/project/pycrypto/</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">new(key, *args, **kwargs)</span></span><br><span class="line"><span class="string">    Create a new AES cipher</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    :Parameters:</span></span><br><span class="line"><span class="string">      key : byte string</span></span><br><span class="line"><span class="string">        The secret key to use in the symmetric cipher.</span></span><br><span class="line"><span class="string">        It must be 16 (*AES-128*), 24 (*AES-192*), or 32 (*AES-256*) bytes long.</span></span><br><span class="line"><span class="string">    :Keywords:</span></span><br><span class="line"><span class="string">      mode : a *MODE_** constant</span></span><br><span class="line"><span class="string">        The chaining mode to use for encryption or decryption.</span></span><br><span class="line"><span class="string">        Default is `MODE_ECB`.</span></span><br><span class="line"><span class="string">      IV : byte string</span></span><br><span class="line"><span class="string">        The initialization vector to use for encryption or decryption.</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        It is ignored for `MODE_ECB` and `MODE_CTR`.</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">        For `MODE_OPENPGP`, IV must be `block_size` bytes long for encryption</span></span><br><span class="line"><span class="string">        and `block_size` +2 bytes for decryption (in the latter case, it is</span></span><br><span class="line"><span class="string">        actually the *encrypted* IV which was prefixed to the ciphertext).</span></span><br><span class="line"><span class="string">        It is mandatory.</span></span><br><span class="line"><span class="string">       </span></span><br><span class="line"><span class="string">        For all other modes, it must be `block_size` bytes longs. It is optional and</span></span><br><span class="line"><span class="string">        when not present it will be given a default value of all zeroes.</span></span><br><span class="line"><span class="string">      counter : callable</span></span><br><span class="line"><span class="string">        (*Only* `MODE_CTR`). A stateful function that returns the next</span></span><br><span class="line"><span class="string">        *counter block*, which is a byte string of `block_size` bytes.</span></span><br><span class="line"><span class="string">        For better performance, use `Crypto.Util.Counter`.</span></span><br><span class="line"><span class="string">      segment_size : integer</span></span><br><span class="line"><span class="string">        (*Only* `MODE_CFB`).The number of bits the plaintext and ciphertext</span></span><br><span class="line"><span class="string">        are segmented in.</span></span><br><span class="line"><span class="string">        It must be a multiple of 8. If 0 or not specified, it will be assumed to be 8.</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    :Return: an `AESCipher` object</span></span><br><span class="line"><span class="string">'''</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES</span><br><span class="line"><span class="keyword">from</span> binascii <span class="keyword">import</span> b2a_hex, a2b_hex</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Aes_Crypto</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, key)</span>:</span></span><br><span class="line">        <span class="comment">#self.key = key</span></span><br><span class="line">        <span class="comment">##建议使用以下方式</span></span><br><span class="line">        self.key=hashlib.md5(key).hexdigest()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 这里密钥key 长度必须为16（AES-128）、24（AES-192）、或32（AES-256）Bytes 长度</span></span><br><span class="line">        self.iv=<span class="number">16</span>*<span class="string">'0'</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">encrypt</span><span class="params">(self,data)</span>:</span></span><br><span class="line">        <span class="comment"># 不足16位补'\0'</span></span><br><span class="line">        data+=int(<span class="number">16</span>-(len(data) % <span class="number">16</span>)) * <span class="string">'\0'</span></span><br><span class="line">        obj = AES.new(self.key, AES.MODE_CBC, self.iv)</span><br><span class="line">        ciphertext =obj.encrypt(data)</span><br><span class="line">        <span class="comment"># 转化为16进制字符串</span></span><br><span class="line">        <span class="keyword">return</span> b2a_hex(ciphertext)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decrypt</span><span class="params">(self,data)</span>:</span></span><br><span class="line">        obj = AES.new(self.key, AES.MODE_CBC, self.iv)</span><br><span class="line">        <span class="keyword">return</span> obj.decrypt(a2b_hex(data)).rstrip(<span class="string">'\0'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    a=Aes_Crypto(<span class="number">16</span>*<span class="string">'1'</span>)</span><br><span class="line">    b=a.encrypt(<span class="string">'123456782dd000'</span>)</span><br><span class="line">    print(<span class="string">"加密后结果："</span>+b)</span><br><span class="line">    c=a.decrypt(b)</span><br><span class="line">    print(<span class="string">"解密后结果："</span>+c)</span><br></pre></td></tr></table></figure>
+<p>执行后的结果：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> python test2.py </span><br><span class="line">加密后结果：a0ac1a2c639fd4bce1e3804be22bbcbb</span><br><span class="line">解密后结果：<span class="number">1234567890123456</span></span><br></pre></td></tr></table></figure></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2018/06/16/Python-AES-加解密/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2018-06-16 </div>
 			<div class="article-title"><a href="/2018/06/16/简单封装Ansible-Api-接口/">简单封装Ansible Api 接口</a></div>						
 		</h3>
 	
@@ -606,90 +651,6 @@ ga?: trace [<span class="keyword">class</span>] [<span class="function"><span cl
 </div>
 
 		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2018-02-11 </div>
-			<div class="article-title"><a href="/2018/02/11/闲聊一下企业上线发布经典案例/">闲聊一下企业上线发布经典案例</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <blockquote>
-<p>作为互联网企业，上线发布肯定是少不了。无疑，凡事也有个渐进过程，今天和大家吹吹水聊一下企业上线发布，还有几天就是过年,时间飞逝，转眼间又一年，本博在此祝各位新年快乐，提前给大家拜个早年。</p>
-</blockquote>
-<h4 id="一、小型创业公司代码上线经典案例">一、小型创业公司代码上线经典案例</h4><blockquote>
-<p>背景：小型企业可能只有几个开发，几台服务器，一般开发兼运维，并不会单独聘请运维工程师。由于服务器较少，通常使用手动拷贝，有部分还会使用FTP上传代码（如下图所示）</p>
-</blockquote>
-<p><img src="/img/201802/1.png" style="width: 550x;"></p>
-<h5 id="简单总结：">简单总结：</h5><ul>
-<li>优点：<br>  1、    上线流程快<br>  2、    可以减少公司的运营成本<br>  ……</li>
-<li>缺点：<br>  1、    流程不规范<br>  2、    手动发布容易出问题，例如替换错文件等等<br>  3、    开发往往很多不懂运维的专业知识，例如可能直接开放外网端口、直接开放ssh端口等，容易被黑客攻击、使用root启动，有些开发为了方便可能在线调试程序等<br>  ……</li>
-</ul>
-<h4 id="二、中小型公司代码上线经典案例">二、中小型公司代码上线经典案例</h4><blockquote>
-<p>背景：中型网站一般具备运维人员，但是运维人员相对不多，通常先会在内网测试，测试通过后才会发布外网，通常中小型使用shell脚本发布居多。</p>
-</blockquote>
-<p><img src="/img/201802/2.png" style="width: 550x;"></p>
-<h4 id="简单总结：-1">简单总结：</h4><ul>
-<li>优点：<br>  1、    存在运维人员，服务器权限管理相对有了规范<br>  2、    使用脚本式批量发布程序，上线或者回滚速度有效加快<br>  ……</li>
-<li>缺点：<br>  1、    每次上线/回滚可能需要登录服务器上操作<br>  2、    当项目较多时候容易出错<br>  ……</li>
-</ul>
-<h4 id="三、中型公司代码上线经典案例">三、中型公司代码上线经典案例</h4><blockquote>
-<p>背景：中型企业通常存在运维团队（人数达一定量），此时，运维人员一般会制定代码tag、程序路径、备份路径、脚本路径、启动用户等相关规范，同时流程相对较为规范。技术选型上可以采取jenkins/walle+ansible/ saltstack+sonar/jacoco等</p>
-</blockquote>
-<p><img src="/img/201802/3.png" style="width: 550x;"></p>
-<h5 id="简单描述下整个流程：">简单描述下整个流程：</h5><ul>
-<li>1、    开发提供代码到gitlab或者svn</li>
-<li>2、    触发钩子调用jenkins(或者手动构建)，Jenkins集成Sonar扫描，部分会接入jacoco生成代码覆盖率。当然这个需要达标才能正式上线</li>
-<li>3、    测试进行测试环境测试</li>
-<li>4、    开发提单上线，测试进行预发布环境测试（预发布环境部分公司存放在内网、部分会存放在正式环境上，通过网络隔离做成预发布环境）</li>
-<li>5、    预发布测试通过后测试拉单到运维审核，同时开发人员需要在gitlab/svn按照规范打tag</li>
-<li>6、    运维基于tag构建jenkins，拉取代码（java需要使用mvn/ant编译），调用ansible/saltstack上线发布，并发邮件通知相关人员</li>
-<li>7、    产品验收并结单</li>
-</ul>
-<h4 id="四、中大型及以上公司代码上线经典案例">四、中大型及以上公司代码上线经典案例</h4><blockquote>
-<p>中大型及以上公司通常存在多个运维团队（业务划分等），也有不少运维开发，所以通常会由自己的运维发布平台，当然上线流程基本并无差异,大体由以下类型组成：</p>
-</blockquote>
-<ul>
-<li>1、 确定语言类型，php还是java还是其它（Java重启tomcat）</li>
-<li>2、 获取代码</li>
-<li>3、 编辑（可选）使用ant maven</li>
-<li>4、 打包命名</li>
-<li>5、 文件分发 (scp salt-cp rsync ansible puppet saltsack)</li>
-<li>6、 将待部署节点，从集群中摘除（是否存在灰度坏境）</li>
-<li>7、 是否存在灰度坏境，先灰度发布</li>
-<li>8、 解压源码包</li>
-<li>9、 创建软链接</li>
-<li>10、 重启web服务（java需要重新启动）</li>
-<li>11、 测试验证</li>
-<li>12、 加入集群</li>
-<li>13、 回滚</li>
-</ul>
-<h5 id="但是中大型及以上公司可能会存在其它小、中型公司不一样的特色，以下简单列举几个：">但是中大型及以上公司可能会存在其它小、中型公司不一样的特色，以下简单列举几个：</h5><ul>
-<li><p><strong>1、HTTP动态负载均衡</strong><br>例如当负载均衡层我们使用nginx时候，后端服务器列表变更时候需要到服务器修改upstream规则，这样容易出错，同时也需要经常reload，消耗系统性能，这里简单说下实现原理：<br><img src="/img/201802/4.png" style="width: 550x;"><br>1.1    当程序启动时候insert或者delete数据库信息(数据库可使用consul/etcd)<br>1.2    Nginx定期获取数据库信息并生成配置信息<br>分享几个参考给大家：<br>微博：upsync+consul:    <a href="https://github.com/weibocom/nginx-upsync-module" target="_blank" rel="noopener">https://github.com/weibocom/nginx-upsync-module</a><br>又拍云开源slardar: balancer_by_lua+consul:   <a href="https://github.com/upyun/slardar" target="_blank" rel="noopener">https://github.com/upyun/slardar</a><br>京东：openresty balancer_by_lua+consul</p>
-</li>
-<li><p><strong>2、配置中心</strong><br>部分公司会存在配置中心，当程序启动时候，首先到配置中心获取配置。这样的好处也杜绝了账号密码经过开发手中，减少配置泄露性。有些配置中心能实现热更新，<br>当修改配置中心配置时候，下发配置更新信息，程序能重新加载配置信息。<br>分享开源配置中心给大家：<br>分布式配置管理平台:<a href="https://github.com/knightliao/disconf" target="_blank" rel="noopener">https://github.com/knightliao/disconf</a></p>
-</li>
-<li><p><strong>3、上线发布多彩</strong><br>蓝绿发布/小版本发布：不停老版本，部署新版本然后进行测试，验证通过后，将流量切到新版本，同时老版本也升级到新版本。<br>灰度/金丝雀发布：新老版本并行跑一段时间，部分用户访问老版本，待功能验证后再全量更新。</p>
-</li>
-</ul>
-
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2018/02/11/闲聊一下企业上线发布经典案例/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -726,7 +687,7 @@ ga?: trace [<span class="keyword">class</span>] [<span class="function"><span cl
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -739,6 +700,10 @@ ga?: trace [<span class="keyword">class</span>] [<span class="function"><span cl
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2019/02/18/如何搭建高可用Docker-Harbor仓库/"><i class="fa fa-file-o"></i>如何搭建高可用Docker Harbor仓库</a>
+      </li>
     
       <li>
         <a href="/2019/02/17/Python调用Jenkins-api-文档/"><i class="fa fa-file-o"></i>Python调用Jenkins api 文档</a>
@@ -754,10 +719,6 @@ ga?: trace [<span class="keyword">class</span>] [<span class="function"><span cl
     
       <li>
         <a href="/2018/07/29/企业常用几种部署方式-蓝绿部署、滚动部署、金丝雀部署/"><i class="fa fa-file-o"></i>企业常用几种部署方式(蓝绿部署、滚动部署、金丝雀部署)</a>
-      </li>
-    
-      <li>
-        <a href="/2018/07/29/Pyecharts-生成图表-附Django支持/"><i class="fa fa-file-o"></i>Pyecharts 生成图表(附Django支持)</a>
       </li>
     
   </ul>

@@ -95,6 +95,45 @@
 	
 	<!-- display as entry -->	
 		<h3 class="title">
+			<div class="date"> 2017-07-22 </div>
+			<div class="article-title"><a href="/2017/07/22/python实现批量更改centos系统密码/">python实现批量更改centos系统密码</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<p>作为一个系统管理员，有时候常常批量修改远程主机配置，当然这里有很多选择，可以选择最近比较热门的自动化工具ansible、saltstack等。</p>
+<p>以下介绍使用python实现,当然留心的小伙伴已经知道前面我写过一篇：<a href="http://linuxops.xyz/2015/11/29/ssh%E2%94%BC%C2%B7%E2%94%B4%E2%94%90%E2%95%A1%E2%95%9F%E2%94%AC%E2%95%9D%E2%96%93%D0%B2%E2%95%93%E2%94%A4%E2%95%A8%E2%95%A8%E2%94%9C%E2%84%96%E2%94%B4%D1%8E%D0%B3%D0%B8python%E2%95%A9%E2%95%A1%E2%95%A7%E2%95%93%D0%B3%D0%B9/">ssh批量登录并执行命令（python实现）</a></p>
+</blockquote>
+<h4 id="以下是通过python批量更改centos系统密码">以下是通过python批量更改centos系统密码</h4><blockquote>
+<p>由于考虑到小伙伴们并不是每一台主机都是使用相同密码，导致以前文章上写的方法并不适用，故写了份修改版供大家参考。</p>
+</blockquote>
+<ul>
+<li>注意执行脚本服务器需要提前安装paramiko模块.</li>
+<li><strong>官网链接：</strong> <a href="http://www.paramiko.org/" target="_blank" rel="noopener">http://www.paramiko.org/</a><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#-*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> paramiko</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">IP_list</span><span class="params">(ip_list)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(ip_list, <span class="string">'r'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        ip_list = f.readlines()</span><br><span class="line">        <span class="keyword">for</span> ip <span class="keyword">in</span> ip_list:</span><br><span class="line">            cmd=<span class="string">"echo '&#123;0&#125;' | passwd --stdin &#123;1&#125;"</span>.format(ip.strip(<span class="string">'\n'</span>).split(<span class="string">' '</span>)[<span class="number">3</span>],ip.strip(<span class="string">'\n'</span>).split(<span class="string">' '</span>)[<span class="number">1</span>])</span><br><span class="line">            a = threading.Thread(target=ssh2, args=(ip.strip(<span class="string">'\n'</span>).split(<span class="string">' '</span>)[<span class="number">0</span>], ip.strip(<span class="string">'\n'</span>).split(<span class="string">' '</span>)[<span class="number">1</span>], ip.strip(<span class="string">'\n'</span>).split(<span class="string">' '</span>)[<span class="number">2</span>], cmd))</span><br><span class="line">            a.start()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ssh2</span><span class="params">(ip,username,passwd,cmd)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        ssh = paramiko.SSHClient()</span><br><span class="line">        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())</span><br><span class="line">        ssh.connect(ip, <span class="number">22</span>, username, passwd, timeout=<span class="number">15</span>)</span><br><span class="line">        stdin, stdout, stderr = ssh.exec_command(cmd)</span><br><span class="line">        stdin.write(<span class="string">"Y"</span>)</span><br><span class="line">        out = stderr.readlines()</span><br><span class="line">        <span class="keyword">if</span> out:</span><br><span class="line">            <span class="keyword">print</span> <span class="string">'========'</span> + ip + <span class="string">"==================&gt;ERROR"</span></span><br><span class="line">            <span class="keyword">for</span> o <span class="keyword">in</span> out:</span><br><span class="line">                <span class="keyword">print</span> o[:<span class="number">-1</span>]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            out = stdout.readlines()</span><br><span class="line">            <span class="keyword">print</span> <span class="string">'========'</span> + ip + <span class="string">"==================&gt;OK"</span></span><br><span class="line">            <span class="keyword">for</span> o <span class="keyword">in</span> out:</span><br><span class="line">                <span class="keyword">print</span> o[:<span class="number">-1</span>]</span><br><span class="line">    <span class="keyword">except</span> Exception, e:</span><br><span class="line">        <span class="keyword">print</span> <span class="string">'%s\tError\n'</span> % (e)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">'__main__'</span>:</span><br><span class="line">    IP_list(<span class="string">'ip.list'</span>)</span><br><span class="line">    threads = [<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">===================================================</span><br><span class="line">ip_list格式</span><br><span class="line">ip username 更改前密码 更改后密码</span><br><span class="line"></span><br><span class="line">===================================================</span><br><span class="line">新增日志版本</span><br><span class="line"></span><br><span class="line"><span class="comment">#-*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> os,sys</span><br><span class="line"><span class="keyword">import</span> paramiko</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">IP_list</span><span class="params">(ip_list)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(ip_list, <span class="string">'r'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        ip_list = f.readlines()</span><br><span class="line">        <span class="keyword">for</span> ip <span class="keyword">in</span> ip_list:</span><br><span class="line">            cmd=<span class="string">"echo '&#123;0&#125;' | passwd --stdin &#123;1&#125;"</span>.format(ip.strip(<span class="string">'\n'</span>).split(<span class="string">' '</span>)[<span class="number">3</span>],ip.strip(<span class="string">'\n'</span>).split(<span class="string">' '</span>)[<span class="number">1</span>])</span><br><span class="line">            a = threading.Thread(target=ssh2, args=(ip.strip(<span class="string">'\n'</span>).split(<span class="string">' '</span>)[<span class="number">0</span>], ip.strip(<span class="string">'\n'</span>).split(<span class="string">' '</span>)[<span class="number">1</span>], ip.strip(<span class="string">'\n'</span>).split(<span class="string">' '</span>)[<span class="number">2</span>], cmd))</span><br><span class="line">            a.start()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Write_log</span><span class="params">(log)</span>:</span></span><br><span class="line">    pwd = os.getcwd()</span><br><span class="line">    <span class="keyword">with</span> open(pwd+<span class="string">'/'</span>+sys.argv[<span class="number">0</span>] + <span class="string">'_log'</span>,<span class="string">'a'</span>) <span class="keyword">as</span> f_log:</span><br><span class="line">        f_log.write(log)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ssh2</span><span class="params">(ip,username,passwd,cmd)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        ssh = paramiko.SSHClient()</span><br><span class="line">        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())</span><br><span class="line">        ssh.connect(ip, <span class="number">22</span>, username, passwd, timeout=<span class="number">15</span>)</span><br><span class="line">        stdin, stdout, stderr = ssh.exec_command(cmd)</span><br><span class="line">        stdin.write(<span class="string">"Y"</span>)</span><br><span class="line">        out = stderr.readlines()</span><br><span class="line">        <span class="keyword">if</span> out:</span><br><span class="line">            <span class="keyword">print</span> <span class="string">'========'</span> + ip + <span class="string">"==================&gt;ERROR"</span></span><br><span class="line">            Write_log( <span class="string">'========'</span> + ip + <span class="string">"==================&gt;ERROR\n"</span>)</span><br><span class="line">            <span class="keyword">for</span> o <span class="keyword">in</span> out:</span><br><span class="line">                <span class="keyword">print</span> o[:<span class="number">-1</span>]</span><br><span class="line">                Write_log(o[:<span class="number">-1</span>]+<span class="string">'\n'</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            out = stdout.readlines()</span><br><span class="line">            <span class="keyword">print</span> <span class="string">'========'</span> + ip + <span class="string">"==================&gt;OK"</span></span><br><span class="line">            Write_log(<span class="string">'========'</span> + ip + <span class="string">"==================&gt;OK\n"</span>)</span><br><span class="line">            <span class="keyword">for</span> o <span class="keyword">in</span> out:</span><br><span class="line">                <span class="keyword">print</span> o[:<span class="number">-1</span>]</span><br><span class="line">                Write_log(o[:<span class="number">-1</span>]+<span class="string">'\n'</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception, e:</span><br><span class="line">        <span class="keyword">print</span> <span class="string">'%s\tError\n'</span> % (e)</span><br><span class="line">        Write_log(<span class="string">'%s\tError\n'</span> % (e))</span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">'__main__'</span>:</span><br><span class="line">    IP_list(<span class="string">'ip.list'</span>)</span><br><span class="line">    threads = [<span class="number">2</span>]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="简单感概：">简单感概：</h4><p>Python是日后运维招聘必须掌握的一项基本技能，建议学习好语言过程，掌握多一门自动化工具，可选ansible或者是saltstack。两者精通其一即可。后面博主会多写关于运维过程中一些常用软件安装或者配置通过salt自动化工具实现的文章，在日常运维工作中尽量减轻重复工作的步骤。</p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/07/22/python实现批量更改centos系统密码/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
 			<div class="date"> 2017-07-16 </div>
 			<div class="article-title"><a href="/2017/07/16/关于博客pythonyw停止运行的说明/">关于博客pythonyw停止运行的说明</a></div>						
 		</h3>
@@ -575,72 +614,6 @@ num_cpus:
 </div>
 
 		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2017-03-01 </div>
-			<div class="article-title"><a href="/2017/03/01/saltstack命令和端口介绍/">saltstack命令和端口介绍</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <p><strong>saltstack命令和端口介绍</strong></p>
-<blockquote>
-<p>运维自动化应该是这几年比较热的名字之一，自动化工具用的比较多的有puppt，ansible，saltstack。当然很多人会选择ansible时候会说salt不支持ssh，需要客户端，其实salt也有salt-ssh模块。在此推荐salt书给需要学习的同学学习。《saltstack运维实战》后继文章大部分会以这书内容+赵班长视频+个人实战组合起来给大家展示。</p>
-</blockquote>
-<p>|</p>
-<blockquote>
-<p>端口：</p>
-</blockquote>
-<p>Salt master启动后默认会监听两个端口：<br>4505（publish_port）—Salt Master pub接口 提供远程执行命令发送功能<br>4506（ret_port）—Salt Master Ret接口 支持认证、文件服务、结果收集等功能</p>
-<blockquote>
-<p>Centos6.x开启防火墙：</p>
-</blockquote>
-<p>-A INPUT -m state –state new -m tcp -p tcp –dport 4505 -j ACCEPT<br>-A INPUT -m state –state new -m tcp -p tcp –dport 4506 -j ACCEPT</p>
-<blockquote>
-<p>命令：</p>
-</blockquote>
-<p>对于很多minion情况下，可以在/etc/salt/master增加：<br>auto_accept：True<br>[root@localhost ~]# salt “*” test.ping  检查minion是否存活<br>192.168.1.135:<br>True<br>[root@localhost ~]# salt –help<br>Usage: salt [options] ‘<target>‘ <function> [arguments]</function></target></p>
-<p>…..省略….<br>    -G, –grain         Instead of using shell globs to evaluate the target<br>                        use a grain value to identify targets, the syntax for<br>                        the target is the grain key followed by a<br>                        globexpression: “os:Arch*”<br>    -N, –nodegroup     Instead of using shell globs to evaluate the target<br>                        use one of the predefined nodegroups to identify a<br>                        list of targets.<br>    –out=OUTPUT, –output=OUTPUT<br>                        Print the output from the ‘salt’ command using the<br>                        specified outputter. The builtins are ‘key’, ‘yaml’,<br>                        ‘overstatestage’, ‘txt’, ‘newline_values_only’,<br>                        ‘no_return’, ‘raw’, ‘virt_query’, ‘compact’, ‘json’,<br>                        ‘highstate’, ‘nested’, ‘quiet’, ‘pprint’.</p>
-<blockquote>
-<p>sys.list_functions查看模块包含哪些函数</p>
-</blockquote>
-<p>[root@localhost ~]# salt “192.168.1.135” sys.list_functions user<br>192.168.1.135:</p>
-<pre><code>-<span class="ruby"> user.add
-</span>-<span class="ruby"> user.chfullname
-</span>-<span class="ruby"> user.chgid
-</span>-<span class="ruby"> user.chgroups
-</span>-<span class="ruby"> user.chhome
-</span>-<span class="ruby"> user.chhomephone
-</span>-<span class="ruby"> user.chloginclass
-</span>-<span class="ruby"> user.chroomnumber
-</span>-<span class="ruby"> user.chshell
-</span>-<span class="ruby"> user.chuid
-</span>-<span class="ruby"> user.chworkphone
-</span>-<span class="ruby"> user.delete
-</span>-<span class="ruby"> user.get_loginclass
-</span>-<span class="ruby"> user.getent
-</span>-<span class="ruby"> user.info
-</span>-<span class="ruby"> user.list_groups
-</span>-<span class="ruby"> user.list_users
-</span>-<span class="ruby"> user.rename</span>
-</code></pre>
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2017/03/01/saltstack命令和端口介绍/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -677,7 +650,7 @@ num_cpus:
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -690,6 +663,10 @@ num_cpus:
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2019/02/18/如何搭建高可用Docker-Harbor仓库/"><i class="fa fa-file-o"></i>如何搭建高可用Docker Harbor仓库</a>
+      </li>
     
       <li>
         <a href="/2019/02/17/Python调用Jenkins-api-文档/"><i class="fa fa-file-o"></i>Python调用Jenkins api 文档</a>
@@ -705,10 +682,6 @@ num_cpus:
     
       <li>
         <a href="/2018/07/29/企业常用几种部署方式-蓝绿部署、滚动部署、金丝雀部署/"><i class="fa fa-file-o"></i>企业常用几种部署方式(蓝绿部署、滚动部署、金丝雀部署)</a>
-      </li>
-    
-      <li>
-        <a href="/2018/07/29/Pyecharts-生成图表-附Django支持/"><i class="fa fa-file-o"></i>Pyecharts 生成图表(附Django支持)</a>
       </li>
     
   </ul>
