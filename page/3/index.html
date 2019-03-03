@@ -95,6 +95,95 @@
 	
 	<!-- display as entry -->	
 		<h3 class="title">
+			<div class="date"> 2018-05-28 </div>
+			<div class="article-title"><a href="/2018/05/28/Python的logging模块（附带Django-实例）/">Python的logging模块（附带Django 实例）</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<p>在日常开发或者运维中，日志是必不可少的。不仅方便我们排查问题，更能进行深一层数据挖掘。在Python的标准库中logging模块提供了日志记录的功能。</p>
+</blockquote>
+<h3 id="logger_配置包括以下四个方面：">logger 配置包括以下四个方面：</h3><ul>
+<li>Loggers   # 日志记录器，是程序中直接调用的接口</li>
+<li>Handlers  # 日志处理器，可配置存储路径等信息</li>
+<li>Filters   # 过滤器，例如定义输出级别等信息</li>
+<li>Formatters  # 格式化日志的输出格式</li>
+</ul>
+<h3 id="logger_日志级别分为以下：">logger 日志级别分为以下：</h3><ul>
+<li>DEBUG: Low level system information for debugging purposes</li>
+<li>INFO: General system information</li>
+<li>WARNING: Information describing a minor problem that has occurred.</li>
+<li>ERROR: Information describing a major problem that has occurred.</li>
+<li>CRITICAL: Information describing a critical problem that has occurred</li>
+</ul>
+<h3 id="简单举个例子：">简单举个例子：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line">FORMAT =<span class="string">'%(asctime)s - %(levelname)s - %(message)s'</span></span><br><span class="line">logging.basicConfig(format=FORMAT,level=logging.DEBUG)</span><br><span class="line"></span><br><span class="line">logging.debug(<span class="string">'debug message'</span>)</span><br><span class="line">logging.info(<span class="string">'info message'</span>)</span><br><span class="line">logging.warn(<span class="string">'warn message'</span>)</span><br><span class="line">logging.error(<span class="string">'error message'</span>)</span><br><span class="line">logging.critical(<span class="string">'critical message'</span>)</span><br></pre></td></tr></table></figure>
+<p>输出结果如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2018</span><span class="number">-05</span><span class="number">-25</span> <span class="number">16</span>:<span class="number">00</span>:<span class="number">13</span>,<span class="number">181</span> - DEBUG - debug message</span><br><span class="line"><span class="number">2018</span><span class="number">-05</span><span class="number">-25</span> <span class="number">16</span>:<span class="number">00</span>:<span class="number">13</span>,<span class="number">181</span> - INFO - info message</span><br><span class="line"><span class="number">2018</span><span class="number">-05</span><span class="number">-25</span> <span class="number">16</span>:<span class="number">00</span>:<span class="number">13</span>,<span class="number">181</span> - WARNING - warn message</span><br><span class="line"><span class="number">2018</span><span class="number">-05</span><span class="number">-25</span> <span class="number">16</span>:<span class="number">00</span>:<span class="number">13</span>,<span class="number">181</span> - ERROR - error message</span><br><span class="line"><span class="number">2018</span><span class="number">-05</span><span class="number">-25</span> <span class="number">16</span>:<span class="number">00</span>:<span class="number">13</span>,<span class="number">181</span> - CRITICAL - critical message</span><br></pre></td></tr></table></figure></p>
+<h3 id="如果我们去掉指定的DEBUG级别会不怎么样尼？">如果我们去掉指定的DEBUG级别会不怎么样尼？</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line">FORMAT =<span class="string">'%(asctime)s - %(levelname)s - %(message)s'</span></span><br><span class="line">logging.basicConfig(format=FORMAT)</span><br><span class="line"></span><br><span class="line">logging.debug(<span class="string">'debug message'</span>)</span><br><span class="line">logging.info(<span class="string">'info message'</span>)</span><br><span class="line">logging.warn(<span class="string">'warn message'</span>)</span><br><span class="line">logging.error(<span class="string">'error message'</span>)</span><br><span class="line">logging.critical(<span class="string">'critical message'</span>)</span><br></pre></td></tr></table></figure>
+<p>输出结果如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2018</span><span class="number">-05</span><span class="number">-25</span> <span class="number">16</span>:<span class="number">00</span>:<span class="number">13</span>,<span class="number">181</span> - WARNING - warn message</span><br><span class="line"><span class="number">2018</span><span class="number">-05</span><span class="number">-25</span> <span class="number">16</span>:<span class="number">00</span>:<span class="number">13</span>,<span class="number">181</span> - ERROR - error message</span><br><span class="line"><span class="number">2018</span><span class="number">-05</span><span class="number">-25</span> <span class="number">16</span>:<span class="number">00</span>:<span class="number">13</span>,<span class="number">181</span> - CRITICAL - critical message</span><br></pre></td></tr></table></figure></p>
+<p>这样我们是否会困惑尼？为何debug和info的日志并没有输出的尼？<br>通常按照博主的思维习惯，默认肯定是上官网查找问题，因为一般官网基本能解决80%的困惑。我们可以通过官网发现<a href="https://docs.python.org/3/library/logging.html以下" target="_blank" rel="noopener">https://docs.python.org/3/library/logging.html以下</a></p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Numeric value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CRITICAL</td>
+<td>50</td>
+</tr>
+<tr>
+<td>ERROR</td>
+<td>40</td>
+</tr>
+<tr>
+<td>WARNING</td>
+<td>30</td>
+</tr>
+<tr>
+<td>INFO</td>
+<td>20</td>
+</tr>
+<tr>
+<td>DEBUG</td>
+<td>10</td>
+</tr>
+<tr>
+<td>NOTSET</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>简单总结：当我们定义日志级别为INFO时候，当Numeric value&gt;=20时候才会输出的对应级别的日志</p>
+<h2 id="Django配置实例">Django配置实例</h2><h3 id="settings-py新增以下">settings.py新增以下</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">LOGGING = &#123;</span><br><span class="line">    <span class="string">'version'</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="string">'disable_existing_loggers'</span>: <span class="keyword">False</span>,</span><br><span class="line">    <span class="string">'formatters'</span>: &#123;</span><br><span class="line">        <span class="string">'verbose'</span>: &#123;</span><br><span class="line">            <span class="string">'format'</span>: <span class="string">'%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">'simple'</span>: &#123;</span><br><span class="line">            <span class="string">'format'</span>: <span class="string">'%(levelname)s %(message)s'</span></span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">'handlers'</span>: &#123;</span><br><span class="line">        <span class="string">'file'</span>: &#123;</span><br><span class="line">            <span class="string">'class'</span>: <span class="string">'logging.FileHandler'</span>,</span><br><span class="line">            <span class="string">'formatter'</span>: <span class="string">'verbose'</span>,</span><br><span class="line">            <span class="string">'filename'</span>: os.path.join(BASE_DIR, <span class="string">'logs'</span>, <span class="string">'ansible.log'</span>),</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">'loggers'</span>: &#123;</span><br><span class="line">        <span class="string">'django'</span>: &#123;</span><br><span class="line">            <span class="string">'handlers'</span>: [<span class="string">'file'</span>],</span><br><span class="line">            <span class="string">'level'</span>: os.getenv(<span class="string">'DJANGO_LOG_LEVEL'</span>, <span class="string">'INFO'</span>),</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="views-py配置如下：">views.py配置如下：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> logging.config</span><br><span class="line">logging.getLogger(<span class="string">'django'</span>) <span class="comment">#引用settings配置中的loggers下的django</span></span><br><span class="line"><span class="comment"># Create your views here.</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(request)</span>:</span></span><br><span class="line">    logging.info(request.method)</span><br><span class="line">    data=&#123;</span><br><span class="line">        <span class="string">'status'</span>:<span class="string">'success'</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> HttpResponse(json.dumps(data), content_type=<span class="string">"application/json"</span>)</span><br></pre></td></tr></table></figure>
+<p>启动django，模拟访问test接口，然后到logs目录下的ansible.log查看日志吧</p>
+<h3 id="附官网文档地址:">附官网文档地址:</h3><ul>
+<li><a href="https://docs.djangoproject.com/en/2.0/topics/logging/" target="_blank" rel="noopener">https://docs.djangoproject.com/en/2.0/topics/logging/</a></li>
+<li><a href="https://docs.python.org/3/library/logging.html" target="_blank" rel="noopener">https://docs.python.org/3/library/logging.html</a></li>
+</ul>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2018/05/28/Python的logging模块（附带Django-实例）/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
 			<div class="date"> 2018-05-12 </div>
 			<div class="article-title"><a href="/2018/05/12/通过namedmanager搭建线上高可用DNS/">通过namedmanager搭建线上高可用DNS</a></div>						
 		</h3>
@@ -622,46 +711,6 @@ ga?: trace [<span class="keyword">class</span>] [<span class="function"><span cl
 </div>
 
 		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2017-08-19 </div>
-			<div class="article-title"><a href="/2017/08/19/python微信发送消息类/">python微信发送消息类</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <h2 id="前言">前言</h2><blockquote>
-<p>记得刚做运维时候，主管就让我搞zabbix，那时候什么都不懂。当时发现网上大神通过python发送告警信息时候，由于那时还不懂python，便觉得异常厉害。最近有空花了不到半小时就能写出调用类，便感觉其实很多事情你只要用心做就不难。</p>
-<blockquote>
-<p>如果有需要通过微信发告警信息可以申请微信企业号，然后结合脚本可以轻松调用发送告警信息。</p>
-</blockquote>
-</blockquote>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WechatApi</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    corpid：每个企业都拥有唯一的corpid，获取此信息可在管理后台“我的企业”－“企业信息”下查看（需要有管理员权限）</span></span><br><span class="line"><span class="string">    secret：secret是企业应用里面用于保障数据安全的“钥匙”，每一个应用都有一个独立的访问密钥，为了保证数据的安全，secret务必不能泄漏。通讯录接口的密钥在“管理工具”-“通讯录同步”里面查看，企业自定义的应用的密钥可以在企业应用的详情里面手动生成</span></span><br><span class="line"><span class="string">    access_token：access_token是企业后台去企业微信的后台获取信息时的重要票据，所有接口在通信时都需要携带此信息用于验证接口的访问权限</span></span><br><span class="line"><span class="string">    官方地址：https://work.weixin.qq.com/api/doc#10087</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.__corpid=<span class="string">"corpid--xxxxxxxx"</span></span><br><span class="line">        self.__secret=<span class="string">"secret--xxxxx"</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">Get_access_token</span><span class="params">(self)</span>:</span></span><br><span class="line">        res = requests.get(url=<span class="string">"https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=&#123;id&#125;&amp;corpsecret=&#123;secrect&#125;"</span>.format(id=self.__corpid,secrect=self.__secret)).json()</span><br><span class="line">        <span class="keyword">return</span> res[<span class="string">"access_token"</span>]</span><br><span class="line">    <span class="comment">###获取部门列表</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">Get_department_list</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">print</span> requests.get(url=<span class="string">"https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=&#123;ACCESS_TOKEN&#125;&amp;id=&#123;ID&#125;"</span>.format(ACCESS_TOKEN=self.Get_access_token(),ID=<span class="number">1</span>)).text</span><br><span class="line"></span><br><span class="line">    <span class="comment">###获取应用列表</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">Get_agent_list</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">print</span> requests.get(</span><br><span class="line">            url=<span class="string">"https://qyapi.weixin.qq.com/cgi-bin/agent/list?access_token=&#123;ACCESS_TOKEN&#125;"</span>.format(ACCESS_TOKEN=self.Get_access_token()), ).text</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">Get_agent</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">print</span> requests.get(url=<span class="string">"https://qyapi.weixin.qq.com/cgi-bin/agent/get?access_token=&#123;ACCESS_TOKEN&#125;&amp;agentid=&#123;AGENTID&#125;"</span>.format(ACCESS_TOKEN=self.Get_access_token(),AGENTID=<span class="number">2000002</span>),).text</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">Send_message</span><span class="params">(self,data=None)</span>:</span></span><br><span class="line"></span><br><span class="line">        headers = &#123;<span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>&#125;</span><br><span class="line">        <span class="keyword">print</span> requests.post(url=<span class="string">"https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=&#123;ACCESS_TOKEN&#125;"</span>.format(ACCESS_TOKEN=self.Get_access_token()),headers=headers,data=json.dumps(data)).text</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    data=&#123;</span><br><span class="line">                    <span class="string">'touser'</span>: <span class="string">"@all"</span>,</span><br><span class="line">                    <span class="string">'toparty'</span>: <span class="string">"2"</span>,</span><br><span class="line">                    <span class="string">'msgtype'</span>: <span class="string">"text"</span>,</span><br><span class="line">                    <span class="string">'agentid'</span>: <span class="string">"2"</span>,</span><br><span class="line">                    <span class="string">'text'</span>: &#123;</span><br><span class="line">                            <span class="string">'content'</span>: <span class="string">"dddddddddddd"</span></span><br><span class="line">                    &#125;,</span><br><span class="line">                    <span class="string">'safe'</span>: <span class="string">"0"</span></span><br><span class="line">            &#125;</span><br><span class="line">    WechatApi().Send_message(data)</span><br></pre></td></tr></table></figure>
-<hr>
-<ul>
-<li><strong>注意</strong><blockquote>
-<p>每个应用对应的secret是不一样的，所以我们在调用时候需要检查”agentid”和”secret”是否一致。</p>
-</blockquote>
-</li>
-</ul>
-
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2017/08/19/python微信发送消息类/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -698,7 +747,7 @@ ga?: trace [<span class="keyword">class</span>] [<span class="function"><span cl
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">2019年03月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">2019年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -711,6 +760,10 @@ ga?: trace [<span class="keyword">class</span>] [<span class="function"><span cl
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2019/03/03/python-cStringIO模块-附生成excel并发送邮件实例/"><i class="fa fa-file-o"></i>python cStringIO模块( 附生成exce...</a>
+      </li>
     
       <li>
         <a href="/2019/03/03/pyevn-pipenv初始化你需要的python环境/"><i class="fa fa-file-o"></i>pyevn+pipenv初始化你需要的python环境</a>
@@ -726,10 +779,6 @@ ga?: trace [<span class="keyword">class</span>] [<span class="function"><span cl
     
       <li>
         <a href="/2019/02/18/如何搭建高可用Docker-Harbor仓库/"><i class="fa fa-file-o"></i>如何搭建高可用Docker Harbor仓库</a>
-      </li>
-    
-      <li>
-        <a href="/2019/02/17/Python调用Jenkins-api-文档/"><i class="fa fa-file-o"></i>Python调用Jenkins api 文档</a>
       </li>
     
   </ul>

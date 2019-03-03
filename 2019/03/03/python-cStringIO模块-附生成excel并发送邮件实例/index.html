@@ -1,0 +1,230 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>python cStringIO模块( 附生成excel并发送邮件实例) | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="python cStringIO模块( 附生成excel并发送邮件实例)">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
+
+  
+    <meta property="og:image" content="undefined">
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> python cStringIO模块( 附生成excel并发送邮件实例)</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <blockquote>
+<p>在计算机中，IO是Input/Output的简写，也就是输入和输出。<br>IO编程中，Stream（流）是一个很重要的概念，可以把流想象成一个水管，数据就是水管里的水，但是只能单向流动。Input Stream就是数据从外面（磁盘、网络）流进内存，Output Stream就是数据从内存流到外面去。对于浏览网页来说，浏览器和服务器之间至少需要建立两根水管，才可以既能发数据，又能收数据。<br>cStringIO类似于StringIO（用法参见Python:StringIO模块），很多时候我们可以内存中读写str,并非一定要写先文件到磁盘。cStringIO其优势在于cStringIO是由C语言写成，运行速度较StringIO快。如果需要大量使用StringIO，就可以考虑使用cStringIO替代。官方文档：<a href="https://docs.python.org/2/library/stringio.html" target="_blank" rel="noopener">https://docs.python.org/2/library/stringio.html</a></p>
+</blockquote>
+<h5 id="使用cStringIO时有几点需要非常注意：">使用cStringIO时有几点需要非常注意：</h5><ul>
+<li><strong>cStringIO.StringIO([s])是工厂函数，不能自行对其进行扩展。</strong></li>
+<li>**不能使用不能被转码为ASCII的Unicode编码格式的字符串。</li>
+<li><strong>带字符串参数创建的内存文件，如：</strong><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cStringIO </span><br><span class="line">s=<span class="string">'abcd'</span></span><br><span class="line">a=cStringIO.StringIO(s)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>则a为只读文件，没有write()函数。<br>若不带参数，则同时有read()函数和write()函数。</p>
+<h6 id="Example_usage:">Example usage:</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cStringIO</span><br><span class="line"></span><br><span class="line">output = cStringIO.StringIO()</span><br><span class="line">output.write(<span class="string">'First line.\n'</span>)</span><br><span class="line"><span class="keyword">print</span> &gt;&gt;output, <span class="string">'Second line.'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Retrieve file contents -- this will be</span></span><br><span class="line"><span class="comment"># 'First line.\nSecond line.\n'</span></span><br><span class="line">contents = output.getvalue()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Close object and discard memory buffer -- </span></span><br><span class="line"><span class="comment"># .getvalue() will now raise an exception.</span></span><br><span class="line">output.close()</span><br></pre></td></tr></table></figure>
+<h6 id="实操例子：">实操例子：</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> xlsxwriter</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">import</span> cStringIO <span class="keyword">as</span> StringIO</span><br><span class="line"><span class="keyword">except</span> ImportError:</span><br><span class="line">    <span class="keyword">import</span> StringIO</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建内存文件</span></span><br><span class="line">xls = StringIO.StringIO()</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="comment"># 创建文件</span></span><br><span class="line">    workbook = xlsxwriter.Workbook(xls)</span><br><span class="line">    <span class="comment"># 创建工作薄</span></span><br><span class="line">    worksheet = workbook.add_worksheet()</span><br><span class="line">    <span class="comment"># 写入标题（第一行）</span></span><br><span class="line">    i = <span class="number">0</span></span><br><span class="line">    title = [<span class="string">"start_timestamp"</span>, <span class="string">"db_instance_id"</span>, <span class="string">"lock_time"</span>, <span class="string">"query_time"</span>, <span class="string">"return_row_count"</span>, <span class="string">"parse_row_count"</span>, <span class="string">"db_name"</span>, <span class="string">"sql"</span>, <span class="string">"user"</span>, <span class="string">"host"</span>]</span><br><span class="line">    worksheet.write_row(<span class="number">0</span>, i, title)</span><br><span class="line">    j = <span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> res:</span><br><span class="line">        worksheet.write(j, <span class="number">0</span>, time.strftime(<span class="string">"%Y-%m-%d %H:%M:%S"</span>, time.localtime(i[<span class="number">0</span>])))</span><br><span class="line">        worksheet.write(j, <span class="number">1</span>, i[<span class="number">1</span>])</span><br><span class="line">        worksheet.write(j, <span class="number">2</span>, i[<span class="number">2</span>])</span><br><span class="line">        worksheet.write(j, <span class="number">3</span>, i[<span class="number">3</span>])</span><br><span class="line">        worksheet.write(j, <span class="number">4</span>, i[<span class="number">4</span>])</span><br><span class="line">        worksheet.write(j, <span class="number">5</span>, i[<span class="number">5</span>])</span><br><span class="line">        worksheet.write(j, <span class="number">6</span>, i[<span class="number">6</span>])</span><br><span class="line">        worksheet.write(j, <span class="number">7</span>, i[<span class="number">7</span>])</span><br><span class="line">        worksheet.write(j, <span class="number">8</span>, i[<span class="number">8</span>])</span><br><span class="line">        worksheet.write(j, <span class="number">9</span>, i[<span class="number">9</span>])</span><br><span class="line">        j+=<span class="number">1</span></span><br><span class="line">    workbook.close()</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    print(str(e))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将内存文件偏移量改为开始，便于邮件中读出所有内容，并发出</span></span><br><span class="line">xls.seek(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">##发送邮件时，从内存读取</span></span><br><span class="line">attach = MIMEText(xls.read(), <span class="string">"base64"</span>, <span class="string">"gb2312"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清除内存文件</span></span><br><span class="line">xls.close()</span><br></pre></td></tr></table></figure>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+		
+          <li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+        
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2019/03/03/pyevn-pipenv初始化你需要的python环境/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2019/03/03/python-cStringIO模块-附生成excel并发送邮件实例/" data-title="python cStringIO模块( 附生成excel并发送邮件实例)" data-url="http://linuxOps.xyz/2019/03/03/python-cStringIO模块-附生成excel并发送邮件实例/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2019-03-03 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2019 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

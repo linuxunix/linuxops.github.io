@@ -95,6 +95,97 @@
 	
 	<!-- display as entry -->	
 		<h3 class="title">
+			<div class="date"> 2016-01-05 </div>
+			<div class="article-title"><a href="/2016/01/05/╗∙╙┌-memcached-╡─-tomcat-╝п╚║╓о-session-╣▓╧э/">基于 memcached 的 tomcat 集群之 session 共享</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<p>Memcached 是一个高性能的分布式内存对象缓存系统，用于动态 Web  应用以减轻数据库负载。它通过在内存中缓存数据和对象来减少读取数据库的次数，从而提高动态、数据库驱动网站的速度。Memcached 是基于一个存储 key / value 的 hashmap。</p>
+</blockquote>
+<p><strong>Memcached安装</strong><br>安装环境</p>
+<p>CentOS 6.5<br>libevent-2.0.22-stable.tar.gz<br>memcached-1.4.24.tar.gz</p>
+<p>安装 libevent</p>
+<p>memcached 依赖 libevent 库，检查 libevent 是否已安装<br>[root@localhost ~]## rpm -qa | grep libevent<br>到 libevent 官网下载所需版本的安装文件<br>[root@localhost ~]# tar zxvf libevent-2.0.22-stable.tar.gz<br>[root@localhost ~]# cd libevent-2.0.22-stable<br>[root@localhost libevent-2.0.22-stable]# ./configure –prefix=/usr/local/libevent<br>[root@localhost ~]# make<br>[root@localhost ~]# make install</p>
+<p>安装 memcached</p>
+<p>到 memcached 官网下载所需版本的安装文件<br>[root@localhost ~]# tar zxvf memcached-1.4.24.tar.gz<br>[root@localhost memcached-1.4.24]# cd memcached-1.4.24<br>[root@localhost memcached-1.4.24]# ./configure –prefix=/usr/local/memcached –with-libevent=/usr/local/libevent/<br>[root@localhost memcached-1.4.24]# make<br>[root@localhost memcached-1.4.24]# make install</p>
+<p>启动 memcached</p>
+<p>[root@localhost memcached-1.4.24]# /usr/local/memcached/bin/memcached -d -m 128 -u root -p 11211 -c 1024 –P /tmp/memcached.pid<br>启动参数    描述<br>-d    启动一个守护进程<br>-m    分配给 memcached 的内存大小，单位 MB<br>-u    启动 memcached 的用户<br>-c    最大运行的并发连接数<br>-p    设置 memcached 监听的端口<br>-P    设置保存 memcached 的 pid 文件</p>
+<p>查看 memcached</p>
+<p>[root@localhost memcached-1.4.24]# ps -ef | grep memcached</p>
+<p>关闭 memcached</p>
+<p>[root@localhost memcached-1.4.24]# ps -ef | grep memcached</p>
+<p>root  92911009:09 ?  00:00:00 /usr/local/memcached/bin/memcached -d -m 128 -u root -p 11211 -c 1024 –P /tmp/memcached.pid</p>
+<p>[root@localhost memcached-1.4.24]# kill -99291</p>
+<p>防火墙开启 11211 端口</p>
+<p>[root@localhost memcached-1.4.24]# vi /etc/sysconfig/iptables<br>加入如下一行配置<br>-A INPUT -m state –state NEW -m tcp -p tcp –dport 11211 -j ACCEPT<br>重启防火墙服务<br>[root@localhost memcached-1.4.24]# service iptables restart</p>
+<p> <strong>基于 memcached 的 tomcat 集群之 session 共享</strong><br>实现在多台服务器之间共享 session 会话中的数据。</p>
+<blockquote>
+<p>JAR 包<br>asm-4.0.jar<br>kryo-1.04.jar<br>minlog-1.2.jar<br>reflectasm-1.04.jar<br>kryo-serializers-0.10.jar<br>spymemcached-2.8.12.jar<br>couchbase-client-1.1.4.jar<br>msm-kryo-serializer-1.6.4.jar<br>memcached-session-manager-1.6.4.jar<br>memcached-session-manager-tc7-1.6.4.jar</p>
+</blockquote>
+<ul>
+<li><strong>配置</strong></li>
+</ul>
+<p>将 JAR 包全部放到 $Tomcat/lib 目录下（$Tomcat 表示 Tomcat 安装的根目录，以下同）。<br>编辑 $Tomcat/conf/context.xml 文件，在 <context> 节点下加入如下配置<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;Manager className=<span class="string">"de.javakaffee.web.msm.MemcachedBackupSessionManager"</span></span><br><span class="line">         memcachedNodes=<span class="string">"n1:192.168.1.102:11211,n2:192.168.1.103:11211"</span></span><br><span class="line">         sticky=<span class="string">"false"</span></span><br><span class="line">         lockingMode=<span class="string">"auto"</span></span><br><span class="line">         sessionBackupAsync= <span class="string">"false"</span></span><br><span class="line">         sessionBackupTimeout=<span class="string">"300"</span></span><br><span class="line">         requestUriIgnorePattern= <span class="string">".*\.(png|gif|jpg|ico|css|js)$"</span></span><br><span class="line">         transcoderFactoryClass=<span class="string">"de.javakaffee.web.msm.serializer.kryo.KryoTranscoderFactory"</span> /&gt;</span><br></pre></td></tr></table></figure></context></p>
+<ul>
+<li><strong>memcachedNodes- </strong><br>必须项 </li>
+</ul>
+<p>配置 memcached 节点。格式：<id>:<host>:<port>，多个节点之间，用空格或英文逗号分隔</port></host></id></p>
+<ul>
+<li><strong>sticky </strong></li>
+</ul>
+<p>可选项<br>是否粘性。默认为 true。粘性会话需要保证每个用户的请求都路由到同一台 Tomcat 服务器中。否则，需要设置成非粘性会话。</p>
+<ul>
+<li><strong>lockingMode</strong></li>
+</ul>
+<p>可选项<br>用于非粘性会话。默认为 none。<br>可选值    描述<br>none    不锁定 session<br>all    每个请求访问 session 的期间，session 一直被锁定，直到请求结束<br>auto    只锁定写请求的 session，只读请求的 session 不会被锁定<br>uriPattern:<regexp>    通过正则表达式的方式来对请求的 URI 进行匹配，匹配上的会被锁定</regexp></p>
+<ul>
+<li><strong>sessionBackupAsync </strong></li>
+</ul>
+<p>可选项<br>设置 session 会话中的数据是否异步同步到 memcached 中，默认为 true。</p>
+<ul>
+<li><strong>requestUriIgnorePattern </strong></li>
+</ul>
+<p>可选项<br>设置忽略会话同步的请求的 URI 地址的正则表达式。这应该包含静态资源的请求。</p>
+<ul>
+<li><strong>failoverNodes </strong></li>
+</ul>
+<p>可选项<br>memcached 故障转移节点配置。用于粘性会话，非粘性会话不可用。如：<br>failoverNodes=”n1”，含义是告诉 msm 将 session 会话中的数据存储到 memcached 的 n2 节点中，如果 n2 节点宕掉等致使其不能正常提供服务，msm 才会将 session 会话中的数据存储到 memcached 的 n1 节点中。<br>sessionAttributeFilter</p>
+<p>可选项<br>配置同步 session 会话数据的属性名称的正则表达式。如果不设置，则将 session 中全部的属性保存到 memcached 中。</p>
+<ul>
+<li><strong>transcoderFactoryClass </strong></li>
+</ul>
+<p>可选项<br>配置序列化和反序列化 session 会话中的数据到 memcached 中的编码转换器的工厂类名。<br>默认是 de.javakaffee.web.msm.JavaSerializationTranscoderFactory</p>
+<ul>
+<li><strong>backupThreadCount</strong></li>
+</ul>
+<p>可选项<br>用于异步存储 session 会话中的数据到 memcached 中的线程数。（当 sessionBackupAsync=”true” 时，该配置项有效）</p>
+<ul>
+<li><strong>sessionBackupTimeout</strong></li>
+</ul>
+<p>可选项<br>备份 session 会话数据所需时间如果大于该值，将导致 session 会话数据同步失败。默认为 100（单位毫秒）</p>
+<p>以上由基友整理，博客地址为：<a href="http://fanlychie.github.io" target="_blank" rel="noopener">http://fanlychie.github.io</a></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2016/01/05/╗∙╙┌-memcached-╡─-tomcat-╝п╚║╓о-session-╣▓╧э/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
 			<div class="date"> 2015-12-23 </div>
 			<div class="article-title"><a href="/2015/12/23/MYSQLl╩¤╛▌┐т╡─SQL╙я╖и/">MYSQLl数据库的SQL语法</a></div>						
 		</h3>
@@ -513,37 +604,6 @@ mysql     <span class="number">20705</span>  <span class="number">20503</span>  
 </div>
 
 		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2015-11-21 </div>
-			<div class="article-title"><a href="/2015/11/21/Nginx╡─╞Ї╢пбв╣╪▒╒║═╞╜╗м╓╪╞Ї/">Nginx的启动、关闭和平滑重启</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <p>在完成对nginx.conf文件的配置后，就可以启动服务了。Nginx自身提供了一些用于日常维护的命令，下面进行详细的介绍。</p>
-<ol>
-<li>Nginx基本信息检查<br>（1）检查Nginx配置文件的正确性<br>Nginx提供的配置文件调试功能非常有用，可以快速定位配置文件存在的问题。执行如下命令可检测配置文件的正确性：<br>/opt/nginx/sbin/nginx –t 或者<br>/opt/nginx/sbin/nginx -t -c /opt/nginx/conf/nginx.conf<br>其中，“-t”参数用于检查配置文件是否正确，但并不执行，“-c”参数用于指定配置文件路径，如果不指定配置文件路径，Nginx默认会在安装时指定的安装目录下查找conf/nginx.conf文件。<br>如果检测结果显示如下信息，说明配置文件正确。<br>the configuration file /opt/nginx/conf/nginx.conf syntax is ok<br>configuration file /opt/nginx/conf/nginx.conf test is successful<br>（2）显示Nginx的版本以及相关编译信息<br>在命令行执行以下命令可以显示安装Nginx的版本信息：<br>/opt/nginx/sbin/nginx -v<br>执行以下命令可显示安装的Nginx版本和相关编译信息：<br>/opt/nginx/sbin/nginx -V<br>上述命令不但显示Nginx的版本信息，同时显示Nginx在编译时指定的相关模块信息。</li>
-<li>Nginx的启动、关闭与重启<br>Nginx对进程的控制能力非常强大，可以通过信号指令控制进程。常用的信号有：<br>QUIT，表示处理完当前请求后，关闭进程。<br>HUP，表示重新加载配置，也就是关闭原有的进程，并开启新的工作进程。此操作不会中断用户的访问请求，因此可以通过此信号平滑地重启Nginx。<br>USR1，用于Nginx的日志切换，也就是重新打开一个日志文件，例如每天要生成一个新的日志文件时，可以使用这个信号来控制。<br>USR2，用于平滑升级可执行程序。<br>WINCH ，从容关闭工作进程。<br>（1）Nginx的启动<br>Nginx的启动非常简单，只需输入如下命令：<br>/opt/nginx/sbin/nginx<br>即可完成Nginx的启动。Nginx启动后，可以通过如下命令查看Nginx的启动进程：<br>[root@localhost logs]# ps -ef|grep nginx<br>root     16572     1  0 11:14 ?    00:00:00 nginx: master process /opt/nginx/sbin/nginx<br>nobody  16591 16572  0 11:15 ?  00:00:00 nginx: worker process<br>nobody  16592 16572  0 11:15 ?  00:00:00 nginx: worker process<br>nobody  16593 16572  0 11:15 ?  00:00:00 nginx: worker process<br>nobody  16594 16572  0 11:15 ?  00:00:00 nginx: worker process<br>（2）Nginx的关闭<br>如果要关闭Nginx进程，可以使用如下命令：<br>kill -XXX pid<br>其中，XXX就是信号名，pid是Nginx的进程号，可以通过如下两个命令获取：<br>ps -ef | grep “nginx: master process” | grep -v “grep” | awk -F ‘ ‘ ‘{print $2}’<br>cat /opt/nginx/logs/nginx.pid<br>（3）Nginx的平滑重启<br>要不间断服务地重新启动Nginx，可以使用如下命令：<br>kill -HUP ‘cat /opt/nginx/logs/nginx.pid‘ </li>
-</ol>
-
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2015/11/21/Nginx╡─╞Ї╢пбв╣╪▒╒║═╞╜╗м╓╪╞Ї/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -580,7 +640,7 @@ mysql     <span class="number">20705</span>  <span class="number">20503</span>  
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">2019年03月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">2019年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -593,6 +653,10 @@ mysql     <span class="number">20705</span>  <span class="number">20503</span>  
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2019/03/03/python-cStringIO模块-附生成excel并发送邮件实例/"><i class="fa fa-file-o"></i>python cStringIO模块( 附生成exce...</a>
+      </li>
     
       <li>
         <a href="/2019/03/03/pyevn-pipenv初始化你需要的python环境/"><i class="fa fa-file-o"></i>pyevn+pipenv初始化你需要的python环境</a>
@@ -608,10 +672,6 @@ mysql     <span class="number">20705</span>  <span class="number">20503</span>  
     
       <li>
         <a href="/2019/02/18/如何搭建高可用Docker-Harbor仓库/"><i class="fa fa-file-o"></i>如何搭建高可用Docker Harbor仓库</a>
-      </li>
-    
-      <li>
-        <a href="/2019/02/17/Python调用Jenkins-api-文档/"><i class="fa fa-file-o"></i>Python调用Jenkins api 文档</a>
       </li>
     
   </ul>
