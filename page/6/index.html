@@ -96,6 +96,34 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2017-02-14 </div>
+			<div class="article-title"><a href="/2017/02/14/阿里云CDN缓存刷新（PYTHON实现）/">阿里云CDN缓存刷新（PYTHON实现）</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p><strong>阿里云CDN缓存刷新（PYTHON实现）</strong><br><strong>项目背景：</strong><br>由来：由于作者公司把Ucloud云服务器迁移到阿里云上，并使用了阿里的OSS文件系统，出于成本考虑并使用上阿里的CDN服务。但是迁移后，开发隔三两日就跑过来叫帮忙刷新缓存。当时思想，每次这样搞并发长久之策，便尝试编写缓存系统。<br><strong>编写过程</strong><br>1、查阅官方API文档<br><a href="https://help.aliyun.com/document_detail/27200.html?spm=5176.doc27201.6.624.B0NT84" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/27200.html?spm=5176.doc27201.6.624.B0NT84</a><br>2、选择前端框架<br>觉得最快实现还是选择Bootstrap<br>3、选择后端框架<br>选择基于PYTHON的DJANGO框架<br><strong>部分截图</strong><br><img src="/img/201702/aliyun1.png" style="width: 550x;"><br><img src="/img/201702/aliyun2.png" style="width: 550x;"></p>
+<p><strong>Github地址</strong><br><a href="https://github.com/linuxunix/AliCDN/" target="_blank" rel="external">https://github.com/linuxunix/AliCDN/</a></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/02/14/阿里云CDN缓存刷新（PYTHON实现）/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-02-14 </div>
 			<div class="article-title"><a href="/2017/02/14/DJANGO模型及查询/">DJANGO模型及查询</a></div>						
 		</h3>
 	
@@ -526,63 +554,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2015-12-23 </div>
-			<div class="article-title"><a href="/2015/12/23/MYSQLl╩¤╛▌┐т╡─SQL╙я╖и/">MYSQLl数据库的SQL语法</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <p><strong>SQL语言分为以下4个部分：</strong><br>（1）数据定义语言（DDL）：DROP、CREATE、ALYER等集中负责数据结构定义与数据库对象定义的语言。<br>（2）数据操作语言（DML）：INSERT、UPDATE、DELETE等语句。<br>（3）数据查询语言（DQL）：SELECT语句。<br>（4）数据控制语言（DCL）：GRANT、REVOKE、COMMIT等是用来设置或者更改数据库用户或角色权限的语句。</p>
-<p><strong>初始root密码:</strong><br>[root@localhost ~]# /usr/bin/mysqladmin -u root password ‘new_passwd’<br><strong>mysql更改密码的三种方法：</strong></p>
-<p>1、[root@localhost ~]# mysqladmin -uroot -p原密码 password ‘新密码’<br>2、mysql&gt;update mysql.user set password=’linuxunix’ where user=’root’ and host=’localhost’; (明文加密)<br>mysql&gt;update mysql.user set password=password(‘新密码’) where user=’root’ and host=’localhost’;<br>mysql&gt;flush privileges;<br>3、mysql&gt;set password = password(‘linuxunix’)；<br>     mysql&gt; flush privileges;<br><strong>库操作</strong><br>查看mysql字符集：</p>
-<p>mysql&gt; show create database zabbix\G;<br><strong><strong><strong><strong><strong><strong><em>*</em></strong></strong></strong></strong></strong></strong> 1. row <strong><strong><strong><strong><strong><strong><em>*</em></strong></strong></strong></strong></strong></strong><br>       Database: zabbix<br>Create Database: CREATE DATABASE <code>zabbix</code> /<em>!40100 DEFAULT CHARACTER SET utf8 </em>/<br>1 row in set (0.00 sec)</p>
-<p><strong>创建数据库并指定编码:</strong><br>GBK: create database test2 DEFAULT CHARACTER SET gbk COLLATE gbk_chinese_ci;</p>
-<p>UTF8: CREATE DATABASE <code>test2</code> DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;<br><strong>查看数据库当前用户、时间、版本等：</strong><br>mysql&gt; select user()<br>    -&gt; ;<br>+—————-+<br>| user()         |<br>+—————-+<br>| root@localhost |<br>+—————-+<br>1 row in set (0.00 sec)<br>mysql&gt; select now();<br>+———————+<br>| now()               |<br>+———————+<br>| 2015-12-11 11:16:44 |<br>+———————+<br>1 row in set (0.02 sec)</p>
-<p>mysql&gt; select version();<br>+———–+<br>| version() |<br>+———–+<br>| 5.1.73    |<br>+———–+<br>1 row in set (0.00 sec)<br><strong>查找某些数据库：</strong><br>mysql&gt; show databases like ‘%te%’;<br>+—————–+<br>| Database (%te%) |<br>+—————–+<br>| test            |<br>| test2           |<br>+—————–+<br>2 rows in set (0.00 sec)</p>
-<p><strong>删除数据库：</strong><br>mysql&gt; drop database test2;<br>Query OK, 0 rows affected (0.04 sec)</p>
-<p>mysql&gt; show databases;<br>+——————–+<br>| Database           |<br>+——————–+<br>| information_schema |<br>| mysql              |<br>| test               |<br>| zabbix             |<br>+——————–+<br>4 rows in set (0.00 sec)</p>
-<p><strong>查看数据库包含的表信息：</strong><br>mysql&gt; use zabbix<br>Reading table information for completion of table and column names<br>You can turn off this feature to get a quicker startup with -A</p>
-<p>Database changed<br>mysql&gt;<br>mysql&gt; show tables;<br>+———————–+<br>| Tables_in_zabbix      |<br>+———————–+<br>| acknowledges          |<br>| actions               |<br>| alerts                |<br>| application_template  |<br>| valuemaps             |<br>+———————–+<br>104 rows in set (0.00 sec)</p>
-<p><strong>删除Mysql系统的多余账号:</strong><br>语法：dorp user ‘用户名’@’主机域’;<br>mysql&gt; drop user ‘zabbix’@’localhost’;<br>Query OK, 0 rows affected (0.00 sec)<br>注意：如果drop删除不了(一般是特殊字符或者大写)，可以用下面方式删除:<br>mysql&gt; delete from mysql.user where user=’用户’ and host=’主机域’;<br>mysql&gt; flush privileges;</p>
-<p><strong>创建Mysql用户及赋予用户权限</strong><br>通过help查看grant命令帮助<br>mysql&gt; help grant<br>Name: ‘GRANT’<br>……..部分省略<br>CREATE USER ‘jeffrey’@’localhost’ IDENTIFIED BY ‘mypass’;<br>GRANT ALL ON db1.<em> TO ‘jeffrey’@’localhost’;<br>GRANT SELECT ON db2.invoice TO ‘jeffrey’@’localhost’;<br>GRANT USAGE ON </em>.* TO ‘jeffrey’@’localhost’ WITH MAX_QUERIES_PER_HOUR 90;<br>……..部分省略</p>
-<p>通过grant命令简单语法如下：<br>1、    grant 命令简单语法如下：<br> grant all privileges on dbname.<em>  to  username@localhost identified by ‘passwd’;<br>说明：上述命令是授权localhost主机上通过用户username管理dbname数据库的所有权限，密码为passwd。<br>2、    操作实例：创建linuxunix用户，对test库具备所有权限，允许从localhost主机登陆管理数据库，密码为linuxunix。<br>grant all privileges on test.</em> to ‘linuxunix’@’localhost’ identified by ‘linuxunix’;</p>
-<p>查看当前数据库用户情况，然后执行对应命令授权如下：<br>mysql&gt; grant all privileges on test.* to ‘linux’@’localhost’ identified by ‘linux’;<br>Query OK, 0 rows affected (0.00 sec)<br>查看授权后Mysql用户列表情况：<br>mysql&gt; select user,host from mysql.user;<br>+———–+———————–+<br>| user      | host                  |<br>+———–+———————–+<br>| root      | 127.0.0.1             |<br>|           | localhost             |<br>| linux     | localhost             |<br>| linuxunix | localhost             |<br>|           | localhost.localdomain |<br>+———–+———————–+<br>5 rows in set (0.00 sec)</p>
-<p>Mysql 用户可以授权的权限有哪些：<br>SELECT, UPDATE, DELETE, CREATE, DROP, REFERENCES, INDEX, ALTER, CREATE TEMPORARY TABLES, LOCK TABLES, EXECUTE, CREATE VIEW, SHOW VIEW, CREATE ROUTINE, ALTER ROUTINE, EVENT, TRIGGER,INSERT</p>
-<p><strong>表操作</strong><br>指定字符集建表：<br>mysql&gt; create database test2;<br>Query OK, 1 row affected (0.00 sec)<br>mysql&gt; show create database test2;<br>+———-+——————————————————————+<br>| Database | Create Database                                                  |<br>+———-+——————————————————————+<br>| test2    | CREATE DATABASE <code>test2</code> /<em>!40100 DEFAULT CHARACTER SET latin1 </em>/ |<br>+———-+——————————————————————+<br>默认新增库是latin1字符。<br>新增表语法：<br>Create table &lt;表名&gt;(<br>&lt;字段名1&gt; &lt;类型1&gt;，<br>&lt;字段名2&gt; &lt;类型2&gt;，<br>…<br>&lt;字段名n&gt; &lt;类型n&gt;<br>);</p>
-<p><strong>创建主键索引的方法：</strong><br>1、    在建表时可以增加主键索引的语句如下：<br>Create table student(<br>Id int(4) not null AUTO_INCREMENT,<br>Name char(20) not null,<br>Age tinyint(2) NOT Null default   ‘0’,<br>Dept varchar(16) default Null,<br>primary key(id),<br>KEY index_name(name)<br>);<br>提示： primary key(id), #主键<br>KEY index_name(name)#name字段普通索引</p>
-<p>提示：PRI为主键的标识，MUL为普通索引的标识。</p>
-<p>创建主键索引：<br>mysql&gt; alter table student change id id int primary key auto_increment;<br>mysql&gt; desc student;<br>+——-+————-+——+—–+———+—————-+<br>| Field | Type        | Null | Key | Default | Extra          |<br>+——-+————-+——+—–+———+—————-+<br>| id    | int(11)     | NO   | PRI | NULL    | auto_increment |<br>| Name  | char(20)    | NO   |     | NULL    |                |<br>| Age   | tinyint(2)  | NO   |     | 0       |                |<br>| Dept  | varchar(16) | YES  |     | NULL    |                |<br>+——-+————-+——+—–+———+—————-+<br>4 rows in set (0.00 sec)<br>在name列上添加索引，索引名为index_name;<br>mysql&gt; alter table student add index index_name(Name);<br>Query OK, 0 rows affected (0.13 sec)<br>Records: 0  Duplicates: 0  Warnings: 0<br>mysql&gt; desc student;<br>+——-+————-+——+—–+———+—————-+<br>| Field | Type        | Null | Key | Default | Extra          |<br>+——-+————-+——+—–+———+—————-+<br>| id    | int(11)     | NO   | PRI | NULL    | auto_increment |<br>| Name  | char(20)    | NO   | MUL | NULL    |                |<br>| Age   | tinyint(2)  | NO   |     | 0       |                |<br>| Dept  | varchar(16) | YES  |     | NULL    |                |<br>+——-+————-+——+—–+———+—————-+<br>4 rows in set (0.00 sec)<br>创建索引相关命令集合：<br>创建主键索引：<br>mysql&gt; alter table student change id id int primary key auto_increment;<br>创建唯一索引：<br>mysql&gt; create ind_name_dept on student(name,dept);<br>删除主键索引：<br>mysql&gt; alter table student drop primary key;<br>创建普通索引：<br>mysql&gt; alter table student add index index_dept(dept(8));<br>根据列的前N个字符创建索引：<br>mysql&gt; create index index_dept on student(dept(8));<br>根据多个列创建联合索引<br>mysql&gt; create index index_name_dept on student(name,dept);<br>根据多个列前N个字符创建联合索引<br>mysql&gt; create index index_name_dept on student(name(8),dept(10));<br>删除普通索引：<br>mysql&gt;alter table student drop index index_dept;<br>mysql&gt;drop index index_dept on student;<br>提示：<br>1、    要在表的列上创建索引。<br>2、    索引会加快查询速度，但是会影响更新的速度，因为要维护索引。<br>3、    索引不是越多越好，要是在频繁查询的where后的条件列上创建索引<br>4、    小表或唯一值极少的列上不建立索引，要在大表以及不同内容多的列上创建索引。<br><strong>查询数据</strong><br>(1)、命令语法：select &lt;字段1，字段2….&gt;  from &lt;表名&gt;  where &lt;表达式&gt;<br>(2)、例子：<br>mysql&gt; select <em> from test;<br>+—-+——–+<br>| id | name   |<br>+—-+——–+<br>|  1 | centos |<br>|  2 | redhat |<br>|  3 | ubuntu |<br>|  4 | SUSE   |<br>|  5 | AIX    |<br>+—-+——–+<br>5 rows in set (0.00 sec)<br>mysql&gt; select id,name from test where id=1;<br>+—-+——–+<br>| id | name   |<br>+—-+——–+<br>|  1 | centos |<br>+—-+——–+<br>1 row in set (0.00 sec)<br>mysql&gt; select id,name from test where id=1 and name=’centos’;  #and代表两边要同时成立要是or则取并集。<br>+—-+——–+<br>| id | name   |<br>+—-+——–+<br>|  1 | centos |<br>+—-+——–+<br>1 row in set (0.00 sec)<br>mysql&gt; select id,name from test where id&gt;2 and id&lt;5;<br>+—-+——–+<br>| id | name   |<br>+—-+——–+<br>|  3 | ubuntu |<br>|  4 | SUSE   |<br>+—-+——–+<br>2 rows in set (0.00 sec)<br><em>*排序：</em></em><br>语法：order by &lt;字段&gt;  +   asc升序/desc倒序：<br>例子：</p>
-<p>mysql&gt; select id,name from test  order by id asc;<br>+—-+——–+<br>| id | name   |<br>+—-+——–+<br>|  1 | centos |<br>|  2 | redhat |<br>|  3 | ubuntu |<br>|  4 | SUSE   |<br>|  5 | AIX    |<br>+—-+——–+<br>5 rows in set (0.00 sec)</p>
-<p>mysql&gt; select id,name from test  order by id desc;<br>+—-+——–+<br>| id | name   |<br>+—-+——–+<br>|  5 | AIX    |<br>|  4 | SUSE   |<br>|  3 | ubuntu |<br>|  2 | redhat |<br>|  1 | centos |<br>+—-+——–+<br>5 rows in set (0.00 sec)<br><strong>往表中插入数据：</strong><br>(1)    语法命令：Insert into &lt;表名&gt; [ (&lt;字段名1&gt;[…&lt;字段名n&gt;])] values (值1)[,(值n)]<br>(2)    新增一个简单的测试test<br>mysql&gt; create table test( id int(4) NOT NULL AUTO_INCREMENT,name char(20) not null,PRIMARY KEY (id) );<br>mysql&gt; show tables;<br>+—————-+<br>| Tables_in_test |<br>+—————-+<br>| student        |<br>| test           |<br>+—————-+<br>2 rows in set (0.00 sec)<br>往表中插入数据的不同的语法例子：<br>1、 指定所有列名，并且每列都插入值<br>mysql&gt; Insert into test(id,name) values(1,’centos’);<br>Query OK, 1 row affected (0.03 sec)<br>2、    由于id列为自增的，所以可以只在name列插入值<br>mysql&gt; select * from test;<br>+—-+——–+<br>| id | name   |<br>+—-+——–+<br>|  1 | centos |<br>+—-+——–+<br>1 row in set (0.00 sec)</p>
-<p>mysql&gt; insert into test(name) values(‘redhat’);<br>Query OK, 1 row affected (0.00 sec)</p>
-<p>mysql&gt; select * from test;<br>+—-+——–+<br>| id | name   |<br>+—-+——–+<br>|  1 | centos |<br>|  2 | redhat |<br>+—-+——–+<br>2 rows in set (0.00 sec)<br>3、    如果不指定列，则要按规矩为每列都插入适当的值。<br>mysql&gt; insert into test values(3,’ubuntu’);<br>4、    批量插入数据<br>mysql&gt; insert into test values(4,’SUSE’),(5,’AIX’);</p>
-<p><strong>修改表中数据</strong><br>命令语法：update 表名 set 字段=新值 where 条件(一定要注意)<br>1、    修改指定行字段内容<br>mysql&gt; select * from test;<br>+—-+——–+<br>| id | name   |<br>+—-+——–+<br>|  1 | centos |<br>|  2 | redhat |<br>|  3 | ubuntu |<br>|  4 | SUSE   |<br>|  5 | AIX    |<br>+—-+——–+<br>5 rows in set (0.00 sec)</p>
-<p>mysql&gt; update test set name=’windonws’ where id=3;<br>Query OK, 1 row affected (0.00 sec)<br>Rows matched: 1  Changed: 1  Warnings: 0<br>mysql&gt; select * from test;<br>+—-+———-+<br>| id | name     |<br>+—-+———-+<br>|  1 | centos   |<br>|  2 | redhat   |<br>|  3 | windonws |<br>|  4 | SUSE     |<br>|  5 | AIX      |<br>+—-+———-+<br>5 rows in set (0.00 sec)</p>
-<p>2、    全部更改：<br>mysql&gt; update test set name=’win10’; #此方法慎用<br>Query OK, 5 rows affected (0.00 sec)<br>Rows matched: 5  Changed: 5  Warnings: 0<br>mysql&gt; select <em> from test;<br>+—-+——-+<br>| id | name  |<br>+—-+——-+<br>|  1 | win10 |<br>|  2 | win10 |<br>|  3 | win10 |<br>|  4 | win10 |<br>|  5 | win10 |<br>+—-+——-+<br>5 rows in set (0.00 sec)<br><strong>删除表中数据：</strong><br>mysql&gt; select </em> from test;<br>+—-+——–+<br>| id | name   |<br>+—-+——–+<br>|  1 | centos |<br>|  2 | redhat |<br>|  3 | ubuntu |<br>|  4 | SUSE   |<br>|  5 | AIX    |<br>+—-+——–+<br>5 rows in set (0.04 sec)<br>mysql&gt; delete from test where id=5;  #不加条件就是全部删除，此方法慎用<br>Query OK, 1 row affected (0.00 sec)<br>mysql&gt; select <em> from test;<br>+—-+——–+<br>| id | name   |<br>+—-+——–+<br>|  1 | centos |<br>|  2 | redhat |<br>|  3 | ubuntu |<br>|  4 | SUSE   |<br>+—-+——–+<br>4 rows in set (0.00 sec)<br><em>*清空表内容</em></em><br>mysql&gt; truncate table test;   </p>
-<p><strong>增删改表字段</strong><br>命令语法：alter table 表名 add 字段 类型 其他;</p>
-<p><strong>更改表名</strong><br>1、语法：rename table 原表名 to 新表名;<br>mysql&gt; rename table test to test2;<br>Query OK, 0 rows affected (0.00 sec)<br>mysql&gt; show tables;<br>+—————-+<br>| Tables_in_test |<br>+—————-+<br>| student        |<br>| test2          |<br>+—————-+<br>2 rows in set (0.00 sec)<br>2、alter table 原表名 rename to 新表名;<br>mysql&gt; alter table test2 rename to test;<br>Query OK, 0 rows affected (0.00 sec)<br>mysql&gt; show tables;<br>+—————-+<br>| Tables_in_test |<br>+—————-+<br>| student        |<br>| test           |<br>+—————-+<br>2 rows in set (0.00 sec)<br><strong>删除表</strong><br>mysql&gt; drop table表名;<br>Query OK, 0 rows affected (0.00 sec)</p>
-<p><strong>备份</strong><br>备份test数据库到/mysqldate目录下<br>[root@localhost ~]# mysqldump -uroot -pcentos -B test &gt; /mysqldate/test_bak.sql</p>
-<p><strong>还原数据库</strong><br>[root@localhost mysqldate]# mysql -uroot -pcentos test &lt; /mysqldate/test_bak.sql</p>
-
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2015/12/23/MYSQLl╩¤╛▌┐т╡─SQL╙я╖и/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -619,7 +590,7 @@
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">2019年03月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -632,6 +603,10 @@
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2019/03/03/pyevn-pipenv初始化你需要的python环境/"><i class="fa fa-file-o"></i>pyevn+pipenv初始化你需要的python环境</a>
+      </li>
     
       <li>
         <a href="/2019/02/18/Ansible模块中核心类（附执行剧本实例代码）/"><i class="fa fa-file-o"></i>Ansible模块中核心类（附执行剧本实例代码）</a>
@@ -647,10 +622,6 @@
     
       <li>
         <a href="/2019/02/17/Python调用Jenkins-api-文档/"><i class="fa fa-file-o"></i>Python调用Jenkins api 文档</a>
-      </li>
-    
-      <li>
-        <a href="/2019/02/17/centos7-docker-使用ss科学上网/"><i class="fa fa-file-o"></i>centos7 docker 使用ss科学上网</a>
       </li>
     
   </ul>

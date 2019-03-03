@@ -3,7 +3,7 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>谷歌想说爱你不容易 | BY DevOps | 今晚打老虎</title>
+  <title>pyevn+pipenv初始化你需要的python环境 | BY DevOps | 今晚打老虎</title>
   <meta name="author" content="林文杰">
   
   <meta name="description" content="DevOps 技术运维小学生">
@@ -11,7 +11,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="谷歌想说爱你不容易">
+  <meta property="og:title" content="pyevn+pipenv初始化你需要的python环境">
   <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
@@ -77,7 +77,7 @@
 
 	
 		<div class="page-header">		
-			<h1> 谷歌想说爱你不容易</h1>
+			<h1> pyevn+pipenv初始化你需要的python环境</h1>
 		</div>		
 	
 
@@ -93,7 +93,25 @@
 
 	<!-- content -->
 	<div class="mypage">		
-	    <p>自从谷歌退出大陆后,不少朋友都会觉得可惜，但是连香港服务器也访问不到的时候，就不是可惜问题了，简直就是。。博主之前还能用IP和部分域名通过反代理直接搜索，前几天发现还是被封了，当然不少朋友还是通过hosts和VPN访问的，可是VPN免费的不好用，好用的却不免费。在此博主奉献个网址给大家<a href="https://www.cngoog.tk/" target="_blank" rel="noopener">https://www.cngoog.tk/</a></p>
+	    <h3 id="一、引言">一、引言</h3><blockquote>
+<p>现在很多运维小伙伴都基于go或者python语言来编写些小工具或者平台。同时不少小伙伴都存在多个版本的python环境，特别是以前基于python2.7开发，现在基于python3开发。今天我们来简单介绍两个工具来初始化你需要的python环境</p>
+</blockquote>
+<h3 id="二、PYENV">二、PYENV</h3><h4 id="PYENV可以干嘛？">PYENV可以干嘛？</h4><ul>
+<li>让您基于每个用户更改全局Python版本。</li>
+<li>为每个项目的Python版本提供支持。</li>
+<li>允许您使用环境变量覆盖Python版本。</li>
+<li>一次从多个版本的Python中搜索命令。</li>
+</ul>
+<h4 id="PYENV安装">PYENV安装</h4><h5 id="1、安装依赖">1、安装依赖</h5><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum <span class="keyword">install </span>gcc make patch gdbm-devel openssl-devel sqlite-devel zlib-devel <span class="keyword">bzip2-devel </span>readline-devel</span><br></pre></td></tr></table></figure>
+<h5 id="2、安装">2、安装</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash</span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="string">"/root/.pyenv/bin:<span class="variable">$PATH</span>"</span></span><br><span class="line"><span class="built_in">eval</span> <span class="string">"<span class="variable">$(pyenv init -)</span>"</span></span><br><span class="line"><span class="built_in">eval</span> <span class="string">"<span class="variable">$(pyenv virtualenv-init -)</span>"</span></span><br></pre></td></tr></table></figure>
+<h4 id="pyevn用法可参考">pyevn用法可参考</h4><p> <img src="/img/201903/pyenv01.png" style="width: 550x;"></p>
+<p>具体可参考：<a href="https://github.com/pyenv/pyenv" target="_blank" rel="noopener">https://github.com/pyenv/pyenv</a></p>
+<h3 id="三、pipenv是啥？">三、pipenv是啥？</h3><p>pipenv这个管理工具，是 Kennethreitz 大神的作品，requests模块作者，主要解决使用同一模块多个版本的问题</p>
+<h5 id="PIPENV安装">PIPENV安装</h5><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip <span class="keyword">install</span> pipenv</span><br></pre></td></tr></table></figure>
+<h5 id="pipenv_用法可参考">pipenv 用法可参考</h5><p> <img src="/img/201903/pipenv01.png" style="width: 550x;"><br>更详细用法可参考：<a href="https://github.com/pypa/pipenv" target="_blank" rel="noopener">https://github.com/pypa/pipenv</a></p>
+<h4 id="如何结合pycharm使用">如何结合pycharm使用</h4><p> <img src="/img/201903/pycharm01.png" style="width: 550x;"><br>  <img src="/img/201903/pycharm02.png" style="width: 550x;"></p>
+<p> <img src="/img/201903/pycharm03.png" style="width: 550x;"></p>
+<p>附加：<br>django.core.exceptions.ImproperlyConfigured: Error loading MySQLdb module: No module named MySQLdb<br>解决方案：<br>sudo yum install mysql-devel<br>sudo yum install python-devel<br>sudo pipenv install mysql-python</p>
 	  
 	</div>
 
@@ -102,14 +120,14 @@
 	<div class="pagination">
 <ul class="pagination">
 	 
-				
-    	<li class="prev"><a href="/2015/09/03/╟│╠╕4G╝╝╩ї/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
-  		
+		
+          <li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+        
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2015/08/31/shell│╠╨Є▒р╨┤╓о╥╗║╬╬кshellг┐/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2019/02/18/Ansible模块中核心类（附执行剧本实例代码）/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -124,7 +142,7 @@
   <h2 class="title">Comments</h2>
 
   
-  	 <div class="ds-thread" data-thread-key="2015/09/03/╣╚╕ш╧ы╦╡░о─у▓╗╚▌╥╫/" data-title="谷歌想说爱你不容易" data-url="http://linuxOps.xyz/2015/09/03/╣╚╕ш╧ы╦╡░о─у▓╗╚▌╥╫/"></div>  
+  	 <div class="ds-thread" data-thread-key="2019/03/03/pyevn-pipenv初始化你需要的python环境/" data-title="pyevn+pipenv初始化你需要的python环境" data-url="http://linuxOps.xyz/2019/03/03/pyevn-pipenv初始化你需要的python环境/"></div>  
   
 </section>
 
@@ -138,7 +156,7 @@
 	
 	<div class="meta-widget">
 	<i class="fa fa-clock-o"></i>
-	2015-09-03 
+	2019-03-03 
 	</div>
 	
 
