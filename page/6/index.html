@@ -96,6 +96,58 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2017-02-27 </div>
+			<div class="article-title"><a href="/2017/02/27/jenkins构建自动发布项目/">jenkins构建自动发布项目</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p><strong>构建自动发布项目</strong></p>
+<blockquote>
+<p>需求：日常运维中，发布代码几乎占用运维时间的三分一，提高运维效率之一就是提交发布代码效率。当开发push代码到服务器时候，自动触发jenkins执行构建任务并推送到测试web服务器进而加快开发和运维效率。本文写出测试坏境，完美运行，成产坏境发布不方便放出来，小伙伴可以参考思路和脚本自行更改即可。在此非常感谢老男孩，这几年大部分技术来源老男孩架构师和运维培训等相关视频，当然python入门也是不可避免。</p>
+</blockquote>
+<p><img src="/img/201702/jenkins-1.png" style="width: 550x;"></p>
+<blockquote>
+<p>证书免密码登录：<br>系统：CentOS Linux release 7.3.1611<br>发布服务器（也是jenkins安装机）：192.168.1.248<br>Web服务器：192.168.1.234</p>
+</blockquote>
+<p><strong>发布服务器：192.168.1.248</strong><br>发布用户为www或者nginx，这里统一为www<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">useradd www</span><br><span class="line">su www</span><br><span class="line">ssh-keygen -t rsa</span><br><span class="line">[www@localhost tmp]$ cat /home/www/.ssh/id_rsa.pub </span><br><span class="line">ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDh/b/QBVGwxzsETwkY/DzxI/iFu8bn9Yr/+gUHOlrCsVjo3kLc7iVg8s/VE5VTNNWcjhzcTDT3wCOr+P/hMjmvWSpFagW4ZMHh+EY8YyUNh3/dXSVIPMD0X4GWWW+U957SwI4LCL+E3O7mQV7H7orTZMfJWR9FeJk6Ls7h/DaTOKWe7BbrGMbHI/Q2iQCBpyY8VuJnEQe7tuV71UnK7VQGCjZY4n+Ncy4/<span class="number">8J</span>a3bAVQt9QYlZfqlUXI+B3OP1HkkY3AQXhQdrA6qq4tJL4hHLZ9kCsq4EQxmw6N9jyzV3IyP1KGGxLRQT38MzwEfJIEvvYmdF83n7fx7M0Wcsp0ruz9 www@localhost.localdomain</span><br></pre></td></tr></table></figure></p>
+<p><strong>Web服务器：192.168.1.234</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">useradd www</span><br><span class="line">su www</span><br><span class="line">ssh-keygen -t rsa</span><br><span class="line">把上面服务器公匙复制到/home/www/.ssh/authorized_keys（需要新增）</span><br><span class="line">[www@localhost Webroot]$ vim /home/www/.ssh/authorized_keys</span><br><span class="line">ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDh/b/QBVGwxzsETwkY/DzxI/iFu8bn9Yr/+gUHOlrCsVjo3kLc7iVg8s/VE5VTNNWcjhzcTDT3wCOr+P/hMjmvWSpFagW4ZMHh+EY8YyUNh3/dXSVIPMD0X4GWWW+U957SwI4LCL+E3O7mQV7H7orTZMfJWR9FeJk6Ls7h/DaTOKWe7BbrGMbHI/Q2iQCBpyY8VuJnEQe7tuV71UnK7VQGCjZY4n+Ncy4/<span class="number">8J</span>a3bAVQt9QYlZfqlUXI+B3OP1HkkY3AQXhQdrA6qq4tJL4hHLZ9kCsq4EQxmw6N9jyzV3IyP1KGGxLRQT38MzwEfJIEvvYmdF83n7fx7M0Wcsp0ruz9 www@localhost.localdomain</span><br><span class="line">~</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意下文件授权</p>
+</blockquote>
+<p><strong>安装Gitlab Plugin和Gitlab Hook Plugin插件</strong><br>系统管理—管理插件—可选插件，选择安装Gitlab Plugin和Gitlab Hook Plugin（git和Build Authorization Token Root Plugin和Build Pipeline Plugin视图插件也需要安装上）</p>
+<p> <img src="/img/201702/jenkins-2.png" style="width: 550x;"></p>
+<p><strong>Gitlab配置发布用的key</strong><br>Gitlab安装请查看最后参考资料链接：<br>在发布机生成公钥<br> <img src="/img/201702/jenkins-3.png" style="width: 550x;"><br>  <img src="/img/201702/jenkins-4.png" style="width: 550x;"><br>复制公钥到以下：<br> <img src="/img/201702/jenkins-5.png" style="width: 550x;"></p>
+<p>在192.168.1.248机子上测试是否能拉取代码<br> <img src="/img/201702/jenkins-6.png" style="width: 550x;"></p>
+<p><strong>Jenkins新增认证方式</strong><br> <img src="/img/201702/jenkins-7.png" style="width: 550x;"><br>选择  Add Credentials<br> <img src="/img/201702/jenkins-8.png" style="width: 550x;"></p>
+<p><strong>配置发布项目</strong><br>选择新增，输入auto-deploy，选择构建一个自由风格的软件项目<br> <img src="/img/201702/jenkins-9.png" style="width: 550x;"><br>备注：ubuntu查看gitlab版本：dpkg -l|grep gitlab</p>
+<p>保存后，点击立即构建，选择控制台输出可以看出/root/.jenkins/workspace/<br> <img src="/img/201702/jenkins-10.png" style="width: 550x;"><br>随机生成10个数字用于token验证：<br>[root@localhost ~]# openssl rand -hex 10<br>f25b0694e4f519a04ee8<br><strong>配置jenkins触发器</strong><br> <img src="/img/201702/jenkins-11.png" style="width: 550x;"><br><strong>配置Gitlab Weboos</strong></p>
+<p> <img src="/img/201702/jenkins-12.png" style="width: 550x;"><br>  <img src="/img/201702/jenkins-13.png" style="width: 550x;"><br><strong>配置完成后点击test测试下是否自动触发jenkins构建</strong><br>  <img src="/img/201702/jenkins-14.png" style="width: 550x;"><br><strong>脚本配置参考前博客</strong><br><a href="http://pythonyw.cn:90/article/?id=38" target="_blank" rel="noopener">http://pythonyw.cn:90/article/?id=38</a><br>或者<a href="http://linuxops.xyz/2017/02/20/shell%E6%89%B9%E9%87%8F%E5%8F%91%E5%B8%83%E7%AB%99%E7%82%B9/">http://linuxops.xyz/2017/02/20/shell%E6%89%B9%E9%87%8F%E5%8F%91%E5%B8%83%E7%AB%99%E7%82%B9/</a><br><strong>配置jenkins构建执行命令</strong></p>
+<p>  <img src="/img/201702/jenkins-15.png" style="width: 550x;"></p>
+<p><strong>测试如下：</strong><br>1、更改index.html内容</p>
+<p>  <img src="/img/201702/jenkins-16.png" style="width: 550x;"></p>
+<p>2、查看控制台输出<br>  <img src="/img/201702/jenkins-17.png" style="width: 550x;"><br>3、访问测试站点</p>
+<p>  <img src="/img/201702/jenkins-18.png" style="width: 550x;"></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/02/27/jenkins构建自动发布项目/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2017-02-27 </div>
 			<div class="article-title"><a href="/2017/02/27/JENKINS安装/">JENKINS安装</a></div>						
 		</h3>
 	
@@ -468,50 +520,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2016-01-23 </div>
-			<div class="article-title"><a href="/2016/01/23/mongodb╦ў╥¤╙┼╗п░╕└¤/">mongodb索引优化案例</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <p>通过mongodb查看日志发现一堆等待信息,同时发现日志文件太大，日志格式如下：</p>
-<p>2016-01-19T00:00:04.739+0800 [conn1788] warning: ClientCursor::staticYield can’t unlock b/c of recursive lock ns:  top: { opid: 18394915, active: true, secs_running: 1, op: “query”, ns: “”, query: { findAndModify: “AutoDesign”, query: { RequestState: 1, RequestType: 0 }, sort: { RequestTime: 1 }, update: { $set: { RequestState: 2, HandleTime: new Date(1453132701269), ArrangeMachineIp: “10.X.X.X” } } }, client: “10.X.X.X”, desc: “conn1788”, threadId: “0x7f49bb859700”, connectionId: 1788, locks: { ^: “w”, ^JIAXXX: “W” }, waitingForLock: false, numYields: 0, lockStats: { timeLockedMicros: {}, timeAcquiringMicros: { r: 0, w: 5 } } }</p>
-<p><br><img src="/img/201601/mongodb.png" style="width: 650x;"></p>
-<p>explain 操作提供了查询信息，使用索引及查询统计等。有利于我们对索引的优化。<br>indexOnly: 字段为 false，表示没有使用了索引。<br>cursor：如果没有使用索引，游标的类型是BasicCursor。这个键还会给出你所使用的索引的名称，你通过这个名称可以查看当前数据库下的system.indexes集合（系统自动创建，由于存储索引信息，这个稍微会提到）来得到索引的详细信息。<br>nscanned/nscannedObjects：表明当前这次查询一共扫描了集合中多少个文档<br>millis：当前查询所需时间，毫秒数。<br>indexBounds：当前查询具体使用的索引。</p>
-<p>MongoDB 3.0之后，explain的返回与使用方法与之前版本有点不同，explain有三种模式，分别如下：<br>queryPlanner<br>executionStats<br>allPlansExecution<br>例如：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.c1.find(&#123;name:<span class="string">"linuxunix"</span>&#125;).explain(<span class="string">"executionStats"</span>)</span><br><span class="line">&#123;</span><br><span class="line">         <span class="string">"queryPlanner"</span> : &#123;</span><br><span class="line">                   <span class="string">"plannerVersion"</span> : <span class="number">1</span>,</span><br><span class="line">                   <span class="string">"namespace"</span> : <span class="string">"test.c1"</span>,</span><br><span class="line">                   <span class="string">"indexFilterSet"</span> : false,</span><br><span class="line">                   <span class="string">"parsedQuery"</span> : &#123;</span><br><span class="line">                            <span class="string">"name"</span> : &#123;</span><br><span class="line">                                     <span class="string">"$eq"</span> : <span class="string">"linuxunix"</span></span><br><span class="line">                            &#125;</span><br><span class="line">                   &#125;,</span><br><span class="line">                   <span class="string">"winningPlan"</span> : &#123;</span><br><span class="line">                            <span class="string">"stage"</span> : <span class="string">"COLLSCAN"</span>,</span><br><span class="line">                            <span class="string">"filter"</span> : &#123;</span><br><span class="line">                                     <span class="string">"name"</span> : &#123;</span><br><span class="line">                                               <span class="string">"$eq"</span> : <span class="string">"linuxunix"</span></span><br><span class="line">                                     &#125;</span><br><span class="line">                            &#125;,</span><br><span class="line">                            <span class="string">"direction"</span> : <span class="string">"forward"</span></span><br><span class="line">                   &#125;,</span><br><span class="line">                   <span class="string">"rejectedPlans"</span> : [ ]</span><br><span class="line">         &#125;,</span><br><span class="line">         <span class="string">"executionStats"</span> : &#123;</span><br><span class="line">                   <span class="string">"executionSuccess"</span> : true,</span><br><span class="line">                   <span class="string">"nReturned"</span> : <span class="number">1</span>,</span><br><span class="line">                   <span class="string">"executionTimeMillis"</span> : <span class="number">0</span>,</span><br><span class="line">                   <span class="string">"totalKeysExamined"</span> : <span class="number">0</span>,</span><br><span class="line">                   <span class="string">"totalDocsExamined"</span> : <span class="number">10</span>,</span><br><span class="line">                   <span class="string">"executionStages"</span> : &#123;</span><br><span class="line">                            <span class="string">"stage"</span> : <span class="string">"COLLSCAN"</span>,</span><br><span class="line">                            <span class="string">"filter"</span> : &#123;</span><br><span class="line">                                     <span class="string">"name"</span> : &#123;</span><br><span class="line">                                               <span class="string">"$eq"</span> : <span class="string">"linuxunix"</span></span><br><span class="line">                                     &#125;</span><br><span class="line">                            &#125;,</span><br><span class="line">                            <span class="string">"nReturned"</span> : <span class="number">1</span>,</span><br><span class="line">                            <span class="string">"executionTimeMillisEstimate"</span> : <span class="number">0</span>,</span><br><span class="line">                            <span class="string">"works"</span> : <span class="number">12</span>,</span><br><span class="line">                            <span class="string">"advanced"</span> : <span class="number">1</span>,</span><br><span class="line">                            <span class="string">"needTime"</span> : <span class="number">10</span>,</span><br><span class="line">                            <span class="string">"needYield"</span> : <span class="number">0</span>,</span><br><span class="line">                            <span class="string">"saveState"</span> : <span class="number">0</span>,</span><br><span class="line">                            <span class="string">"restoreState"</span> : <span class="number">0</span>,</span><br><span class="line">                            <span class="string">"isEOF"</span> : <span class="number">1</span>,</span><br><span class="line">                            <span class="string">"invalidates"</span> : <span class="number">0</span>,</span><br><span class="line">                            <span class="string">"direction"</span> : <span class="string">"forward"</span>,</span><br><span class="line">                            <span class="string">"docsExamined"</span> : <span class="number">10</span></span><br><span class="line">                   &#125;</span><br><span class="line">         &#125;,</span><br><span class="line">         <span class="string">"serverInfo"</span> : &#123;</span><br><span class="line">                   <span class="string">"host"</span> : <span class="string">"server2"</span>,</span><br><span class="line">                   <span class="string">"port"</span> : <span class="number">27017</span>,</span><br><span class="line">                   <span class="string">"version"</span> : <span class="string">"3.2.0"</span>,</span><br><span class="line">                   <span class="string">"gitVersion"</span> : <span class="string">"45d947729a0315accb6d4f15a6b06be6d9c19fe7"</span></span><br><span class="line">         &#125;,</span><br><span class="line">         <span class="string">"ok"</span> : <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line">&gt; db.test.getIndexKeys()  &lt;==获取所有索引的字段</span><br><span class="line">&gt; db.test.getIndexes()  &lt;==获取所有索引的相关信息</span><br></pre></td></tr></table></figure></p>
-<p>从日志和以上相关命令找出主要是由于没有新增索引引起的。<br>MongoDB索引：</p>
-<p>索引通常能够极大的提高查询的效率，如果没有索引，MongoDB在读取数据时必须扫描集合中的每个文件并选取那些符合查询条件的记录。<br>这种扫描全集合的查询效率是非常低的，特别在处理大量的数据时，查询可以要花费几十秒甚至几分钟，这对网站的性能是非常致命的。<br>索引是特殊的数据结构，索引存储在一个易于遍历读取的数据集合中，索引是对数据库表中一列或多列的值进行排序的一种结构。<br>ensureIndex() 方法</p>
-<p>MongoDB使用 ensureIndex() 方法来创建索引。<br>语法</p>
-<p>ensureIndex()方法基本语法格式如下所示：</p>
-<blockquote>
-<p>db.COLLECTION_NAME.ensureIndex({KEY:1})<br>语法中 Key 值为你要创建的索引字段，1为指定按升序创建索引，如果你想按降序来创建索引指定为-1即可。</p>
-</blockquote>
-<p>此处引出优化器profile话题<br>优化器profile(类似MySQL的慢查询日志)  默认是关闭的，且默认是100毫秒.我们可以通过设置profile找出查询慢的例子，通过索引等相关优化减少查询时间，<br>设置profile很简单，以下是一些基本语法：<br>db.getProfilingLevel();    –0 如果是0,说明没有开启慢查询日志<br>db.setProfilingLevel(1);   –1 表示开启记录慢查询（默认为100ms）<br>db.setProfilingLevel(2);   –2 表示记录所有命令</p>
-<blockquote>
-<p>db.setProfilingLevel(1,1000)<br>{ “was” : 0, “slowms” : 100, “ok” : 1 }<br>show tables<br>test<br>system.profile  &lt;==默认慢查询日志保存在此位置</p>
-</blockquote>
-<p>总结mongodb优化方案：</p>
-<p> 1：创建索引<br> 2：限定返回结果条数<br> 3：查询使用到的字段，不查询所有字段<br> 4：采用profiling慢查询日志       </p>
-
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2016/01/23/mongodb╦ў╥¤╙┼╗п░╕└¤/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -548,7 +556,7 @@
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">2019年03月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">2019年03月</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -561,6 +569,10 @@
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2019/03/24/使用非root用户操作Docker/"><i class="fa fa-file-o"></i>使用非root用户操作Docker</a>
+      </li>
     
       <li>
         <a href="/2019/03/24/如何进入Docker容器和Pod？/"><i class="fa fa-file-o"></i>如何进入Docker容器和Pod？</a>
@@ -576,10 +588,6 @@
     
       <li>
         <a href="/2019/03/03/pyevn-pipenv初始化你需要的python环境/"><i class="fa fa-file-o"></i>pyevn+pipenv初始化你需要的python环境</a>
-      </li>
-    
-      <li>
-        <a href="/2019/02/18/Ansible模块中核心类（附执行剧本实例代码）/"><i class="fa fa-file-o"></i>Ansible模块中核心类（附执行剧本实例代码）</a>
       </li>
     
   </ul>

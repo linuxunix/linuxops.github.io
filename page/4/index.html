@@ -95,6 +95,45 @@
 	
 	<!-- display as entry -->	
 		<h3 class="title">
+			<div class="date"> 2017-11-18 </div>
+			<div class="article-title"><a href="/2017/11/18/openresty针对不同IP或者不同目录做权限认证/">openresty针对不同IP或者不同目录做权限认证</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<p>作为运维，我们可能使用最多的web服务器有可能是NGINX了。在工作中，我们或者有需求针对不同内外网、同一站点不同目录需要做权限认证。以下简单列举下：</p>
+</blockquote>
+<ul>
+<li><strong>1、内网访问不需要账号认证，而外网却需要</strong></li>
+<li><strong>2、访问test1不需要账号认证，访问test2目录下却需要</strong></li>
+</ul>
+<p>当我们遇到以上需要时候，采用NGINX或者有点吃力。这时可以推荐春哥的openresty。</p>
+<h3 id="如果使用auth_basic方式">如果使用auth_basic方式</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">       location / &#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> ($remote_addr = <span class="string">"8.8.8.8"</span>)&#123;</span><br><span class="line">                auth_basic <span class="string">"User Authentication"</span>;</span><br><span class="line">                auth_basic_user_file /usr/local/nginx/conf/solf_pass.db;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ($remote_addr !~ <span class="string">"8.8.8.8|192.168.\*.\*"</span>)</span><br><span class="line">                &#123;<span class="keyword">return</span> <span class="number">403</span>;&#125;</span><br><span class="line">    proxy_pass http://<span class="number">192.168</span><span class="number">.162</span><span class="number">.113</span>/test2;</span><br><span class="line">...省略部分跳转代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当执行nginx -t报错<br>[root@log1 upstream]# nginx -t<br>nginx: [emerg] “auth_basic” directive is not allowed here in /usr/local/nginx/conf/upstream/soft.xxxx.com.conf:13<br>nginx: configuration file /usr/local/nginx/conf/nginx.conf test failed</p>
+<h3 id="使用openresty结合lua">使用openresty结合lua</h3><p>当我们遇到以上需要时候，采用NGINX或者有点吃力。这时可以推荐春哥的openresty。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">       location / &#123;</span><br><span class="line">        <span class="keyword">if</span> ($remote_addr = <span class="string">"8.8.8.8"</span>)&#123;</span><br><span class="line">   access_by_lua <span class="string">'</span></span><br><span class="line"><span class="string">        if ngx.var.remote_user == "test" and ngx.var.remote_passwd == "test" then</span></span><br><span class="line"><span class="string">            return</span></span><br><span class="line"><span class="string">        end</span></span><br><span class="line"><span class="string">        ngx.header.www_authenticate = [[Basic realm="Restricted"]]</span></span><br><span class="line"><span class="string">        ngx.exit(401)</span></span><br><span class="line"><span class="string">    '</span>;&#125;</span><br><span class="line">        <span class="keyword">if</span> ($remote_addr !~ <span class="string">"8.8.8.8|192.168.\*.\*"</span>)</span><br><span class="line">        &#123;<span class="keyword">return</span> <span class="number">403</span>;&#125;</span><br><span class="line">        proxy_pass http://<span class="number">192.168</span><span class="number">.162</span><span class="number">.113</span>/test2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过实践证明，使用lua是可以完美解决我们的需求，当然lua并非只能做这些简单需求。我们可以把openresty+lua直接变成web服务器也可，直接对数据库操作。详情可以参考<a href="https://github.com/openresty/lua-nginx-module#name" target="_blank" rel="noopener">https://github.com/openresty/lua-nginx-module#name</a></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/11/18/openresty针对不同IP或者不同目录做权限认证/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
 			<div class="date"> 2017-09-09 </div>
 			<div class="article-title"><a href="/2017/09/09/Pinpoint安装及配置/">Pinpoint安装及配置</a></div>						
 		</h3>
@@ -468,88 +507,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2017-03-03 </div>
-			<div class="article-title"><a href="/2017/03/03/通过Jinja2模板以及Grain和Pillar扩展主机状态/">通过Jinja2模板以及Grain和Pillar扩展主机状态</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <blockquote>
-<p>通过Jinja2模板以及Grain和Pillar扩展主机状态</p>
-</blockquote>
-<p><strong>Jinja2模板语言的基础</strong><br>Jinja2是一个强大的python模板引擎，可以使用代码动态生成内容和创建文件内容。可以理解为何django的模板用法一样。<br>官网地址：<a href="http://jinja.pocoo.org/" target="_blank" rel="noopener">http://jinja.pocoo.org/</a><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Jinja2变量：</span><br><span class="line">[root@localhost states]<span class="comment"># cat init/var.sls </span></span><br><span class="line">&#123;% set var = <span class="string">'hello'</span> %&#125;</span><br><span class="line">test_var:</span><br><span class="line">  cmd.run:</span><br><span class="line">    - name: echo <span class="string">"var is &#123;&#123; var &#125;&#125;"</span></span><br></pre></td></tr></table></figure></p>
-<p> <img src="/img/201703/salt-9.png" style="width: 550x;"></p>
-<p>由于和d’jango模板差不多，此处不作过多解析。</p>
-<blockquote>
-<p>Grains</p>
-</blockquote>
-<p><strong>Grains的概念</strong><br>grains是minion第一次启动的时候采集的静态数据，可以用在salt的模块和其他组件中。其实grains在每次的minion启动（重启）的时候都会采集，即向master汇报一次的。这个很重要，可以让某些同学企图使用grains值来做监控死心了。</p>
-<blockquote>
-<p>Grain相关命令</p>
-</blockquote>
-<p><strong>列出所有minion上的Grains项:</strong><br>[root@localhost states]# salt ‘*’ grains.ls<br>192.168.17.132:</p>
-<pre><code>-<span class="ruby"> <span class="constant">SSDs</span>
-</span>-<span class="ruby"> biosreleasedate
-</span>-<span class="ruby"> biosversion
-</span>-<span class="ruby"> cpu_flags
-</span>-<span class="ruby"> cpu_model
-</span>-<span class="ruby"> cpuarch</span>
-</code></pre><ul>
-<li>domain<br>…省略</li>
-</ul>
-<p><strong>查询minion上某一具体Grain的值：</strong><br>salt ‘*’ grains.item 选项</p>
-<p> <img src="/img/201703/salt-10.png" style="width: 550x;"></p>
-<p><strong>列出对应minion上所有Grain的详细信息：</strong><br>[root@localhost states]# salt ‘*’ grains.items<br>….省略部分数据</p>
-<h2 id="192-168-17-132:">192.168.17.132:</h2><pre><code>    <span class="number">192.168</span><span class="number">.17</span><span class="number">.132</span>
-
-manufacturer:
-    VMware, Inc.
-master:
-    <span class="number">192.168</span><span class="number">.17</span><span class="number">.135</span>
-mdadm:
-mem_total:
-    <span class="number">980</span>
-nodename:
-    localhost.localdomain
-num_cpus:
-    <span class="number">1</span>
-</code></pre><blockquote>
-<p>设置Grains数据  </p>
-</blockquote>
-<p><strong>命令行方式</strong></p>
-<p>单个值设置：<br>  <img src="/img/201703/salt-11.png" style="width: 550x;"><br>查询：<br>   <img src="/img/201703/salt-12.png" style="width: 550x;"><br>多个值设置：<br>    <img src="/img/201703/salt-13.png" style="width: 550x;"><br>列表结构设置：<br>    <img src="/img/201703/salt-14.png" style="width: 550x;"><br>查询：<br><img src="/img/201703/salt-15.png" style="width: 550x;"><br><strong>Grains_module的方式设置</strong><br>mkdir -p /etc/salt/states/_grains新增模块目录<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost salt]<span class="comment"># cat states/_grains/my_grain_mod.py </span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">now</span><span class="params">()</span>:</span></span><br><span class="line"> grains = ()</span><br><span class="line"> grains[<span class="string">'now'</span>] = time.time()</span><br><span class="line"> <span class="keyword">return</span> grains</span><br></pre></td></tr></table></figure></p>
-<p><strong>saltutil.sync_all同步模块到minion：</strong><br><img src="/img/201703/salt-16.png" style="width: 550x;"><br>重载一次模块：<br><img src="/img/201703/salt-17.png" style="width: 550x;"><br>自定义grains的item：编辑etc/salt/minion注意是有空格<br>grains:<br>  roles: nginx<br>  env: prod</p>
-<p>[root@localhost psycopg2]# salt -G ‘env:prod’ test.ping<br>192.168.17.130:<br>    True<br>在minion端新增以下，重启动客户端<br>[root@localhost ~]# cat /etc/salt/grains<br>web: nginx</p>
-<p>master可以<br><img src="/img/201703/salt-18.png" style="width: 550x;"><br>以下是采用刷新方式，不重启minion客户端<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@salt-minion ~]<span class="comment"># cat /etc/salt/grains </span></span><br><span class="line">web: nginx</span><br><span class="line">web: tomcat</span><br><span class="line"></span><br><span class="line">[root@ salt-master~]<span class="comment"># salt -G 'web:tomcat' test.ping</span></span><br><span class="line">No minions matched the target. No command was sent, no jid was assigned.</span><br><span class="line">ERROR: No <span class="keyword">return</span> received</span><br><span class="line">[root@ salt-master~]<span class="comment"># salt '*' saltutil.sync_grains</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.230</span>:</span><br><span class="line">test_lnmp<span class="number">.1</span><span class="number">.248</span>:</span><br><span class="line">CacheServer:</span><br><span class="line">[root@ salt-master~]<span class="comment"># salt -G 'web:tomcat' test.ping</span></span><br><span class="line">test_lnmp<span class="number">.1</span><span class="number">.248</span>:</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>Pillar</p>
-</blockquote>
-<p><strong>Pillar是什么？</strong></p>
-<p>Pillar是Salt非常重要的一个组件，它用于给特定的minion定义任何你需要的数据，这些数据可以被Salt的其他组件使用。Salt在 0.9.8版本中引入了Pillar。Pillar在解析完成后，是一个嵌套的dict结构；最上层的key是minion ID，其value是该minion所拥有的Pillar数据；每一个value也都是key/value。</p>
-<p><hr><br>这里可以看出Pillar的一个特点，Pillar数据是与特定minion关联的，也就是说每一个minion都只能看到自己的数据，所以 Pillar可以用来传递敏感数据（在Salt的设计中，Pillar使用独立的加密session，也是为了保证敏感数据的安全性）。<br><strong>Pillar可以用在哪些地方？</strong><br>•    敏感数据<br>例如ssh key，加密证书等，由于Pillar使用独立的加密session，可以确保这些敏感数据不被其他minion看到。<br>•    变量<br>可以在Pillar中处理平台差异性，比如针对不同的操作系统设置软件包的名字，然后在State中引用。<br>•    其他任何数据<br>可以在Pillar中添加任何需要用到的数据。比如定义用户和UID的对应关系，mnion的角色等。<br>•    用在Targetting中<br>Pillar可以用来选择minion，使用-I选项。</p>
-<p><strong>Pillar相关命令</strong><br>列出对应minion上所有的pillar的详细信息:<br>[root@localhost salt]# salt ‘<em>‘ pillar.items<br><em>*Pillar实战：</em></em><br><img src="/img/201703/salt-19.png" style="width: 550x;"><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost pillar]<span class="comment"># tree</span></span><br><span class="line">.</span><br><span class="line">├── init</span><br><span class="line">│ └── rsyclog.sls</span><br><span class="line">└── top.sls</span><br><span class="line">[root@localhost pillar]<span class="comment"># cat top.sls </span></span><br><span class="line">base:</span><br><span class="line">  <span class="string">'test_lnmp.1.248'</span>:</span><br><span class="line">- init.rsyslog</span><br><span class="line"></span><br><span class="line">[root@localhost pillar]<span class="comment"># cat init/rsyclog.sls </span></span><br><span class="line">&#123;% <span class="keyword">if</span> grains[<span class="string">'osfinger'</span>] == <span class="string">'CentOS-6'</span> %&#125;</span><br><span class="line">syslog: rsyslog</span><br><span class="line">&#123;% <span class="keyword">elif</span> grains[<span class="string">'osfinger'</span>] == <span class="string">'CentOS-5'</span> %&#125;</span><br><span class="line">syslog: syslog</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure></p>
-<p><img src="/img/201703/salt-20.png" style="width: 550x;"></p>
-<p><strong>Grains和Pillar区别</strong><br><img src="/img/201703/salt-21.png" style="width: 550x;"></p>
-
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2017/03/03/通过Jinja2模板以及Grain和Pillar扩展主机状态/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -586,7 +543,7 @@ num_cpus:
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">2019年03月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">2019年03月</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -599,6 +556,10 @@ num_cpus:
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2019/03/24/使用非root用户操作Docker/"><i class="fa fa-file-o"></i>使用非root用户操作Docker</a>
+      </li>
     
       <li>
         <a href="/2019/03/24/如何进入Docker容器和Pod？/"><i class="fa fa-file-o"></i>如何进入Docker容器和Pod？</a>
@@ -614,10 +575,6 @@ num_cpus:
     
       <li>
         <a href="/2019/03/03/pyevn-pipenv初始化你需要的python环境/"><i class="fa fa-file-o"></i>pyevn+pipenv初始化你需要的python环境</a>
-      </li>
-    
-      <li>
-        <a href="/2019/02/18/Ansible模块中核心类（附执行剧本实例代码）/"><i class="fa fa-file-o"></i>Ansible模块中核心类（附执行剧本实例代码）</a>
       </li>
     
   </ul>

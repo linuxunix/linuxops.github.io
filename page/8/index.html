@@ -95,6 +95,42 @@
 	
 	<!-- display as entry -->	
 		<h3 class="title">
+			<div class="date"> 2015-12-06 </div>
+			<div class="article-title"><a href="/2015/12/06/╩╣╙├zabbix API╜╙┐┌┤ю╜иgrafana/">使用zabbix API接口搭建grafana</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <p>或许很多小伙伴都说zabbix难看，实际上真的难看吗？我们可以帮它穿上一件皇帝的新衣变得不难看，先直接让大家看看成果吧：<br><br><img src="/img/12-grafana-1.png" style="width: 650x;"><br>要是觉得看得不清晰，可以直接看grafana官方演示站点 <a href="http://play.grafana.org/" target="_blank" rel="noopener">http://play.grafana.org/</a></p>
+<ul>
+<li><strong>配置过程：</strong></li>
+</ul>
+<p>一、下载安装grafana<br>下载链接：<a href="http://docs.grafana.org/installation/rpm/" target="_blank" rel="noopener">http://docs.grafana.org/installation/rpm/</a><br>要是觉得麻烦可以直接下载：wget <a href="https://grafanarel.s3.amazonaws.com/builds/grafana-2.5.0-1.x86_64.rpm" target="_blank" rel="noopener">https://grafanarel.s3.amazonaws.com/builds/grafana-2.5.0-1.x86_64.rpm</a><br>安装：rpm -Uvh grafana-2.5.0-1.x86_64.rpm<br>二、安装grafana-zabbix插件</p>
+<p>shell #git clone  <a href="https://github.com/alexanderzobnin/grafana-zabbix/" target="_blank" rel="noopener">https://github.com/alexanderzobnin/grafana-zabbix/</a></p>
+<p>shell #sudo cp -r grafana-zabbix/zabbix/  /usr/share/grafana/public/app/plugins/datasource/<br>shell #ls  /usr/share/grafana/public/app/plugins/datasource/<br>shell #vim   /usr/share/grafana/public/app/plugins/datasource/zabbix/plugin.json<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="string">"pluginType"</span> :  <span class="string">"datasource"</span> ,</span><br><span class="line"><span class="string">"name"</span> :  <span class="string">"Zabbix"</span> ,</span><br><span class="line"><span class="string">"type"</span> :  <span class="string">"zabbix"</span> ,</span><br><span class="line"><span class="string">"serviceName"</span> :  <span class="string">"ZabbixAPIDatasource"</span> ,</span><br><span class="line"><span class="string">"module"</span> :  <span class="string">"plugins/datasource/zabbix/datasource"</span> ,</span><br><span class="line"><span class="string">"partials"</span> : &#123;</span><br><span class="line"><span class="string">"config"</span> :  <span class="string">"app/plugins/datasource/zabbix/partials/config.html"</span> ,</span><br><span class="line"><span class="string">"query"</span> :  <span class="string">"app/plugins/datasource/zabbix/partials/query.editor.html"</span> ,</span><br><span class="line"><span class="string">"annotations"</span> :  <span class="string">"app/plugins/datasource/zabbix/partials/annotations.editor.html"</span></span><br><span class="line">&#125;,</span><br><span class="line"><span class="string">"username"</span> :  <span class="string">"guest"</span> ,   <span class="comment">#配置用户名，注意此用户在zabbix中存在，且对zabbix数据有只读权限（不需要写权限）</span></span><br><span class="line"><span class="string">"password"</span> :  <span class="string">"guest"</span> ,   <span class="comment">#配置密码</span></span><br><span class="line">  <span class="string">"metrics"</span> :  true ,</span><br><span class="line"><span class="string">"annotations"</span> :  true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>安装完成后启动应用：service grafana-server restart</p>
+<p>登陆浏览器配置：IP:3000<br><br><img src="/img/12-grafana-2.png" style="width: 650x;"><br><br><img src="/img/12-grafana-3.png" style="width: 650x;"><br><br><img src="/img/12-grafana-4.png" style="width: 650x;"></p>
+<p>配置后效果如下：<br><br><img src="/img/12-grafana-5.png" style="width: 650x;"><br>由于一开始是参照<a href="http://www.tuicool.com/articles/b2miiuJ此文做的插件配置，现在也分享给大家" target="_blank" rel="noopener">http://www.tuicool.com/articles/b2miiuJ此文做的插件配置，现在也分享给大家</a></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2015/12/06/╩╣╙├zabbix API╜╙┐┌┤ю╜иgrafana/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
 			<div class="date"> 2015-11-29 </div>
 			<div class="article-title"><a href="/2015/11/29/ssh┼·┴┐╡╟┬╝▓в╓┤╨╨├№┴югиpython╩╡╧╓гй/">ssh批量登录并执行命令（python实现）</a></div>						
 		</h3>
@@ -476,33 +512,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2015-11-14 </div>
-			<div class="article-title"><a href="/2015/11/14/╟х└э╥╗╓▄╟░╚╒╓╛/">清理一周前日志</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <p>作为管理员通常我们都需要清理日志释放部分硬盘资源，通常我们可以使用du -sh * 可以查看文件的占用空间。以下是使用find 命令清楚一周前日志。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">find 文件所在路径</span><br><span class="line">-mtime +<span class="number">7</span> -name <span class="string">"*.log"</span>  -<span class="keyword">exec</span> rm -rf &#123;&#125; \;  清理<span class="number">7</span>天前日志</span><br><span class="line"></span><br><span class="line">find / -size +<span class="number">100</span>M -<span class="keyword">exec</span> ls -lh &#123;&#125; \; 查找大于<span class="number">100</span>m的文件并显示输出</span><br></pre></td></tr></table></figure>
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2015/11/14/╟х└э╥╗╓▄╟░╚╒╓╛/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -539,7 +548,7 @@
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">2019年03月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">2019年03月</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -552,6 +561,10 @@
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2019/03/24/使用非root用户操作Docker/"><i class="fa fa-file-o"></i>使用非root用户操作Docker</a>
+      </li>
     
       <li>
         <a href="/2019/03/24/如何进入Docker容器和Pod？/"><i class="fa fa-file-o"></i>如何进入Docker容器和Pod？</a>
@@ -567,10 +580,6 @@
     
       <li>
         <a href="/2019/03/03/pyevn-pipenv初始化你需要的python环境/"><i class="fa fa-file-o"></i>pyevn+pipenv初始化你需要的python环境</a>
-      </li>
-    
-      <li>
-        <a href="/2019/02/18/Ansible模块中核心类（附执行剧本实例代码）/"><i class="fa fa-file-o"></i>Ansible模块中核心类（附执行剧本实例代码）</a>
       </li>
     
   </ul>
