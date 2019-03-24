@@ -3,7 +3,7 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>win10右键不能新增文件夹和文本该如何处理？ | BY DevOps | 今晚打老虎</title>
+  <title>如何解决The connection to the server localhost8080 was refused？ | BY DevOps | 今晚打老虎</title>
   <meta name="author" content="林文杰">
   
   <meta name="description" content="DevOps 技术运维小学生">
@@ -11,7 +11,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="win10右键不能新增文件夹和文本该如何处理？">
+  <meta property="og:title" content="如何解决The connection to the server localhost8080 was refused？">
   <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
@@ -77,7 +77,7 @@
 
 	
 		<div class="page-header">		
-			<h1> win10右键不能新增文件夹和文本该如何处理？</h1>
+			<h1> 如何解决The connection to the server localhost8080 was refused？</h1>
 		</div>		
 	
 
@@ -93,15 +93,16 @@
 
 	<!-- content -->
 	<div class="mypage">		
-	    <blockquote>
-<p>对于微软在7月29号发布win10正式版到今，相信还是有不少部分朋友已经更新win10，本人从8月初使用至今，win10给我的感觉差强人意吧。当然本博客也不只是局限于Linux和UNIX系统上的问题，将会记录本人在使用电脑时候的一些小问题或者热点资讯等。</p>
-</blockquote>
-<ul>
-<li><strong>以下是解决win10右键不能新增文件夹和文本问题方法</strong></li>
+	    <h3 id="查看集群信息报错">查看集群信息报错</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@gzzsg-test-k8smaster03 ~]<span class="comment"># kubectl cluster-info</span></span><br><span class="line"></span><br><span class="line">To further debug and diagnose cluster problems, <span class="keyword">use</span> <span class="string">'kubectl cluster-info dump'</span>.</span><br><span class="line">The <span class="keyword">connection</span> <span class="keyword">to</span> the <span class="keyword">server</span> localhost:<span class="number">8080</span> was refused - did you specify the <span class="keyword">right</span> host <span class="keyword">or</span> port?</span><br></pre></td></tr></table></figure>
+<h3 id="原因分析：">原因分析：</h3><ul>
+<li>1、apiserver启动时候端没有开启8080</li>
+<li>2、配置文件设置为–insecure-port=0</li>
 </ul>
-<p>1、以管理员身份允许CMD命令提示符<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在桌面同时按下windows键+X键，选择命令提示符（管理员）即可</span><br></pre></td></tr></table></figure></p>
-<p>2、在cmd控制台运行以下命令<br>cmd /k reg add “HKEY_CLASSES_ROOT\Directory\Background\shellex\ContextMenuHandlers\New” /ve /t REG_SZ /d {D969A300-E7FF-11d0-A93B-00A0C90F2719} /f <strong>(如下面所示)</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Microsoft Windows [版本 <span class="number">10.0</span><span class="number">.10240</span>]</span><br><span class="line">(c) <span class="number">2015</span> Microsoft Corporation. All rights reserved.</span><br><span class="line"></span><br><span class="line">C:\WINDOWS\system32&gt;cmd /k reg add <span class="string">"HKEY_CLASSES_ROOT\Directory\Background\shellex\ContextMenuHandlers\New"</span> /ve /t REG_SZ /d &#123;D969A300-E7FF<span class="number">-11</span>d0-A93B<span class="number">-00</span>A0C90F2719&#125; /f</span><br><span class="line">操作成功完成。</span><br><span class="line"></span><br><span class="line">C:\WINDOWS\system32&gt;</span><br></pre></td></tr></table></figure></p>
-<p>以上其实是通过修改注册表来解决右键不能新增文件夹问题，朋友们也是可以直接到注册表上修改，要是CMD提示符运行命令后还是不能解决，请再次检查是否使用了管理员身份。</p>
+<h3 id="解决方案：">解决方案：</h3><ul>
+<li>1、开启8080端口 –insecure-port=8080</li>
+<li>2、指定~/.kube/config<br>复制kubernetes 部署 dashboard 插件中创建使用 token 的 KubeConfig 文件内容到~/.kube/config即可<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@gzzsg-test-k8smaster01 cfg]# kubectl  cluster-info</span><br><span class="line">Kubernetes master <span class="keyword">is</span> running at http<span class="variable">s:</span>//k8s-api-test.xxx.<span class="keyword">com</span>:<span class="number">8443</span></span><br><span class="line">kubernetes-dashboard <span class="keyword">is</span> running at http<span class="variable">s:</span>//k8s-api-test.xxx.<span class="keyword">com</span>:<span class="number">8443</span>/api/v1/namespaces/kube-<span class="built_in">system</span>/services/http<span class="variable">s:kubernetes</span>-dashboard:/proxy</span><br><span class="line"></span><br><span class="line">To further <span class="keyword">debug</span> <span class="built_in">and</span> diagnose cluster problems, use <span class="string">'kubectl cluster-info dump'</span>.</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 	  
 	</div>
 
@@ -110,14 +111,14 @@
 	<div class="pagination">
 <ul class="pagination">
 	 
-				
-    	<li class="prev"><a href="/2015/08/30/CentOS6-5-┼ф╓├vsftpd/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
-  		
+		
+          <li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+        
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-          <li class="next disabled"><a>Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+		   <li class="next"><a href="/2019/03/03/python-cStringIO模块-附生成excel并发送邮件实例/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -132,7 +133,7 @@
   <h2 class="title">Comments</h2>
 
   
-  	 <div class="ds-thread" data-thread-key="2015/08/29/win10╙╥╝№▓╗─▄╨┬╘Ў╬─╝■╝╨║═╬─▒╛╕├╚ч║╬┤ж└эг┐/" data-title="win10右键不能新增文件夹和文本该如何处理？" data-url="http://linuxOps.xyz/2015/08/29/win10╙╥╝№▓╗─▄╨┬╘Ў╬─╝■╝╨║═╬─▒╛╕├╚ч║╬┤ж└эг┐/"></div>  
+  	 <div class="ds-thread" data-thread-key="2019/03/24/如何解决The-connection-to-the-server-localhost8080-was-refused》？/" data-title="如何解决The connection to the server localhost8080 was refused？" data-url="http://linuxOps.xyz/2019/03/24/如何解决The-connection-to-the-server-localhost8080-was-refused》？/"></div>  
   
 </section>
 
@@ -146,7 +147,7 @@
 	
 	<div class="meta-widget">
 	<i class="fa fa-clock-o"></i>
-	2015-08-29 
+	2019-03-24 
 	</div>
 	
 

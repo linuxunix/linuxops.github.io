@@ -95,6 +95,34 @@
 	
 	<!-- display as entry -->	
 		<h3 class="title">
+			<div class="date"> 2017-08-27 </div>
+			<div class="article-title"><a href="/2017/08/27/salt自定义变量传参执行/">salt自定义变量传参执行</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <h1 id="salt自定义变量传参执行sls">salt自定义变量传参执行sls</h1><h2 id="以下使用安装redis为例子，动态传密码：">以下使用安装redis为例子，动态传密码：</h2><h3 id="一、redis_install-sls">一、redis_install.sls</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">redis-conf:</span><br><span class="line">  cmd.run:</span><br><span class="line">    - name: mkdir -p /data/redis6379/&#123;data,logs&#125; &amp;&amp; chown redis.redis -R /data/redis6379/ &amp;&amp; echo <span class="string">"su - redis -c '/usr/local/redis/bin/redis-server /usr/local/redis/conf/redis6379.conf &amp;'"</span> &gt;&gt; /etc/rc.local</span><br><span class="line">    - require:</span><br><span class="line">      - cmd: redis-install </span><br><span class="line">  &#123;% set redis_pass = salt[<span class="string">'pillar.get'</span>](<span class="string">'redis_pass'</span>,<span class="string">'xxxxx'</span>) %&#125;</span><br><span class="line">  file.recurse:</span><br><span class="line">    - name: /usr/local/redis/conf</span><br><span class="line">    - source: salt://Redis/file/conf</span><br><span class="line">    - user: redis</span><br><span class="line">    - group: redis</span><br><span class="line">    - dir_mode: <span class="number">731</span></span><br><span class="line">    - template: jinja </span><br><span class="line">    - defaults: </span><br><span class="line">        redis_pass: &#123;&#123; redis_pass &#125;&#125;   ==&gt;注意使用4个空格</span><br><span class="line">    - require:</span><br><span class="line">      - cmd: redis-install</span><br></pre></td></tr></table></figure>
+<h3 id="二、file/conf/redis6379-conf">二、file/conf/redis6379.conf</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">requirepass &#123;&#123; redis_pass &#125;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="三、执行命令">三、执行命令</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">salt-ssh <span class="string">'192.168.162.113'</span> state.sls Redis.redis_install  pillar=<span class="string">'&#123;"redis_pass":"redis"&#125;'</span></span><br></pre></td></tr></table></figure>
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/08/27/salt自定义变量传参执行/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
 			<div class="date"> 2017-08-19 </div>
 			<div class="article-title"><a href="/2017/08/19/python微信发送消息类/">python微信发送消息类</a></div>						
 		</h3>
@@ -516,53 +544,6 @@ num_cpus:
 </div>
 
 		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2017-03-03 </div>
-			<div class="article-title"><a href="/2017/03/03/SaltStack数据系统之Grains[上]/">SaltStack数据系统之Grains【上】</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <blockquote>
-<p>什么是Grains？</p>
-</blockquote>
-<p>Grains是SaltStack的一个组件，存放着minion启动时收集的底层系统的静态信息。Grains中包含诸如运行的操作系统、内核版本、CPU个数、内存、主机名、IP地址、物理设备型号、甚至机器的SN号等非常多的信息。</p>
-<p><hr><br>Grains是存储在minion端的，当minion启动时，会进行Grains的采集工作，然后保存下来。在以后的生命周期（再次重启minion，会重新收集）是不会发生变化的，所以是静态数据。你可能已经想到这些数据可以用来做资产管理的信息收集。</p>
-<blockquote>
-<p>Grains应用场景</p>
-</blockquote>
-<p>•    Grains可以在state系统中使用，用于配置管理模块。<br>•    Grains可以target中使用，在用来匹配Minion，比如匹配操作系统，使用-G选项。<br>•    Grains可以用于信息查询，Grains保存着收集到的客户端的详细信息。</p>
-<blockquote>
-<p>Grains使用案例</p>
-</blockquote>
-<p><strong>1.Grains 信息查询</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> 列出Minion上所有可用的grains的名称。</span><br><span class="line"><span class="comment"># salt '*' grains.ls</span></span><br><span class="line"> 列出Minion上所有grains的的名称及内容。</span><br><span class="line"><span class="comment"># salt '*' grains.items</span></span><br><span class="line"> 查询salt版本</span><br><span class="line"><span class="comment"># salt '*' grains.get saltversion   </span></span><br><span class="line"> 查询eth0 所有IP 地址</span><br><span class="line"><span class="comment"># salt '*' grains.get ip_interfaces:eth0</span></span><br></pre></td></tr></table></figure></p>
-<p> <strong>2.使用Grains匹配Minion</strong><br>匹配所有系统是CentOS的客户端，并执行命令：</p>
-<p><strong>3.在Top文件中使用Grains匹配</strong></p>
-<p>这样我们可以使用grains进行非常灵活的来选择对应的服务器。<br><strong>4.在States文件中配合jinja模板使用Grains内容做判断。</strong></p>
-<p>   例如如果你的环境中有CentOS还有Debian系统，那么在快速入门中我们编写的apache.sls需要修改为下面的内容：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line">因为CentOS和Debian的apache的包名称是不同的，我们可以通过grains的os获取到操作系统名称，然后进行判断。注意这个｛% … %｝&#123;% <span class="keyword">elif</span> … %&#125;&#123;% endif %&#125;是jinja模版。</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>自定义Grains</p>
-</blockquote>
-<p>内置的Grains不一定能满足所有需求，所以SaltStack支持在Minion的配置文件中静态定义Grains，或者在/etc/salt/grains中，推荐后者。比如我们将一台服务器打一个标签。说明它是一台Nginx，运行在OpenStack平台中。这样我们在以后做远程管理的时候，比如重启下所有的Nginx服务，就可以通过这个自定义的Grains来进行了。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># vim /etc/salt/grains</span></span><br><span class="line">roles: nginx</span><br><span class="line">dept: dev</span><br><span class="line">cloud: openstack</span><br><span class="line"></span><br><span class="line">还记得前面说的Grains的特点吗，必须重启Minion才会重新收集Grains。</span><br><span class="line"><span class="comment"># /etc/init.d/salt-minion restart</span></span><br><span class="line"></span><br><span class="line">重启minion服务后，使用grains.item就可以列出roles等自定义的grains。</span><br><span class="line"><span class="comment"># salt '*' grains.item roles</span></span><br><span class="line">linux-node2.example.com:</span><br><span class="line"> roles: nginx</span><br></pre></td></tr></table></figure></p>
-
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2017/03/03/SaltStack数据系统之Grains[上]/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -599,7 +580,7 @@ num_cpus:
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">2019年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">2019年03月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -612,6 +593,10 @@ num_cpus:
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2019/03/24/如何解决The-connection-to-the-server-localhost8080-was-refused》？/"><i class="fa fa-file-o"></i>如何解决The connection to the s...</a>
+      </li>
     
       <li>
         <a href="/2019/03/03/python-cStringIO模块-附生成excel并发送邮件实例/"><i class="fa fa-file-o"></i>python cStringIO模块( 附生成exce...</a>
@@ -627,10 +612,6 @@ num_cpus:
     
       <li>
         <a href="/2019/02/18/Docker如何推送镜像到Harbor？/"><i class="fa fa-file-o"></i>Docker如何推送镜像到Harbor？</a>
-      </li>
-    
-      <li>
-        <a href="/2019/02/18/如何搭建高可用Docker-Harbor仓库/"><i class="fa fa-file-o"></i>如何搭建高可用Docker Harbor仓库</a>
       </li>
     
   </ul>

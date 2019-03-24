@@ -95,6 +95,53 @@
 	
 	<!-- display as entry -->	
 		<h3 class="title">
+			<div class="date"> 2017-03-03 </div>
+			<div class="article-title"><a href="/2017/03/03/SaltStack数据系统之Grains[上]/">SaltStack数据系统之Grains【上】</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<p>什么是Grains？</p>
+</blockquote>
+<p>Grains是SaltStack的一个组件，存放着minion启动时收集的底层系统的静态信息。Grains中包含诸如运行的操作系统、内核版本、CPU个数、内存、主机名、IP地址、物理设备型号、甚至机器的SN号等非常多的信息。</p>
+<p><hr><br>Grains是存储在minion端的，当minion启动时，会进行Grains的采集工作，然后保存下来。在以后的生命周期（再次重启minion，会重新收集）是不会发生变化的，所以是静态数据。你可能已经想到这些数据可以用来做资产管理的信息收集。</p>
+<blockquote>
+<p>Grains应用场景</p>
+</blockquote>
+<p>•    Grains可以在state系统中使用，用于配置管理模块。<br>•    Grains可以target中使用，在用来匹配Minion，比如匹配操作系统，使用-G选项。<br>•    Grains可以用于信息查询，Grains保存着收集到的客户端的详细信息。</p>
+<blockquote>
+<p>Grains使用案例</p>
+</blockquote>
+<p><strong>1.Grains 信息查询</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> 列出Minion上所有可用的grains的名称。</span><br><span class="line"><span class="comment"># salt '*' grains.ls</span></span><br><span class="line"> 列出Minion上所有grains的的名称及内容。</span><br><span class="line"><span class="comment"># salt '*' grains.items</span></span><br><span class="line"> 查询salt版本</span><br><span class="line"><span class="comment"># salt '*' grains.get saltversion   </span></span><br><span class="line"> 查询eth0 所有IP 地址</span><br><span class="line"><span class="comment"># salt '*' grains.get ip_interfaces:eth0</span></span><br></pre></td></tr></table></figure></p>
+<p> <strong>2.使用Grains匹配Minion</strong><br>匹配所有系统是CentOS的客户端，并执行命令：</p>
+<p><strong>3.在Top文件中使用Grains匹配</strong></p>
+<p>这样我们可以使用grains进行非常灵活的来选择对应的服务器。<br><strong>4.在States文件中配合jinja模板使用Grains内容做判断。</strong></p>
+<p>   例如如果你的环境中有CentOS还有Debian系统，那么在快速入门中我们编写的apache.sls需要修改为下面的内容：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line">因为CentOS和Debian的apache的包名称是不同的，我们可以通过grains的os获取到操作系统名称，然后进行判断。注意这个｛% … %｝&#123;% <span class="keyword">elif</span> … %&#125;&#123;% endif %&#125;是jinja模版。</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>自定义Grains</p>
+</blockquote>
+<p>内置的Grains不一定能满足所有需求，所以SaltStack支持在Minion的配置文件中静态定义Grains，或者在/etc/salt/grains中，推荐后者。比如我们将一台服务器打一个标签。说明它是一台Nginx，运行在OpenStack平台中。这样我们在以后做远程管理的时候，比如重启下所有的Nginx服务，就可以通过这个自定义的Grains来进行了。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># vim /etc/salt/grains</span></span><br><span class="line">roles: nginx</span><br><span class="line">dept: dev</span><br><span class="line">cloud: openstack</span><br><span class="line"></span><br><span class="line">还记得前面说的Grains的特点吗，必须重启Minion才会重新收集Grains。</span><br><span class="line"><span class="comment"># /etc/init.d/salt-minion restart</span></span><br><span class="line"></span><br><span class="line">重启minion服务后，使用grains.item就可以列出roles等自定义的grains。</span><br><span class="line"><span class="comment"># salt '*' grains.item roles</span></span><br><span class="line">linux-node2.example.com:</span><br><span class="line"> roles: nginx</span><br></pre></td></tr></table></figure></p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/03/03/SaltStack数据系统之Grains[上]/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
 			<div class="date"> 2017-03-02 </div>
 			<div class="article-title"><a href="/2017/03/02/salt-ssh/">salt-ssh</a></div>						
 		</h3>
@@ -613,47 +660,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2017-02-20 </div>
-			<div class="article-title"><a href="/2017/02/20/shell批量发布站点/">shell批量发布站点</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <p>shell批量发布站点</p>
-<blockquote>
-<p>网站发布是运维人员不可避免的日常日常工作，使用较多的开源的发布系统有walle，或者jenkins+插件方式。</p>
-<p>这里介绍下如何shell如何批量发布，首先确定下流程。</p>
-</blockquote>
-<p>1、    确定语言类型，php还是java还是其它。因为java发布，虽然重启动tomcat<br>2、    获取代码<br>3、    编辑（可选）使用ant maven<br>4、    打包命名<br>5、    文件分发 (scp salt-cp rsync ansible)<br>6、    将待部署节点，从集群中摘除（是否存在灰度坏境）<br>7、    是否存在灰度坏境，先灰度发布<br>8、    解压源码包<br>9、    创建软链接<br>10、    重启web服务（java需要重新启动）<br>11、    测试验证<br>12、    加入集群<br>13、    回滚</p>
-<p><strong>PHP发布具体代码</strong></p>
-<blockquote>
-<p>基础坏境：<br>发布机子和web服务器机子新增一个nginx用户，配置key登陆，注意目录权限。</p>
-</blockquote>
-<p>##Node List<br>NODE_LIST=’192.168.1.234’<br>ROLLBACK_LIST=’192.168.1.234’</p>
-<p>##Shell Env<br>SHELL_DIR=”/data/shell/“<br>SHELL_NAME=”web_deploy.sh”<br>SHELL_LOG=”${SHELL_DIR}/${SHELL_NAME}.log”</p>
-<h2 id="代码坏境">代码坏境</h2><p>PRO_NAME=”auto-deploy” #项目名字<br>CODE_DIR=”/data/code/deploy/${PRO_NAME}”<br>TMP_DIR=”/ data /deploy_tmp”<br>TAR_DIR=”/ data /deploy<em>tar”<br>CDATE=<code>date &quot;+%Y-%m-%d&quot;</code><br>CTIME=`date “+%H</em>%M_%S”`</p>
-<p>##部署目录坏境<br>WEB_SOURCE_DIR=”/data/Webroot_source”<br>WEB_DIR=”/data/Webroot”</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br></pre></td><td class="code"><pre><span class="line">shell_lock()&#123;</span><br><span class="line">	<span class="keyword">if</span> [ -f /var/run/deploy-start/deploy-start.lock ];then </span><br><span class="line">	  echo <span class="string">"Deploy is running"</span> &amp;&amp; exit;</span><br><span class="line">	fi</span><br><span class="line">	touch /var/run/deploy-start/deploy-start.lock</span><br><span class="line">	echo -e <span class="string">"\033[32m 1、shell_locak \033[0m"</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">shell_unlock()&#123;</span><br><span class="line">	rm -f  /var/run/deploy-start/deploy-start.lock</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">usage()&#123;</span><br><span class="line">		echo $<span class="string">"Usage: $0 &#123; deploy | rollback [list | version] &#125;"</span></span><br><span class="line">&#125;</span><br><span class="line">writelog()&#123;</span><br><span class="line">   LOGINFO=$<span class="number">1</span></span><br><span class="line">   echo <span class="string">"$&#123;CDATE&#125; $&#123;CTIME&#125;:$&#123;LOGINFO&#125; "</span> &gt;&gt; $&#123;SHELL_LOG&#125;</span><br><span class="line">&#125;</span><br><span class="line">code_get()&#123;</span><br><span class="line">        echo -e <span class="string">"\033[32m 2、code_get start \033[0m"</span></span><br><span class="line">	writelog <span class="string">"code_get"</span>;</span><br><span class="line">        cd $CODE_DIR &amp;&amp; git pull </span><br><span class="line">        cp -r $&#123;CODE_DIR&#125; $&#123;TMP_DIR&#125;/</span><br><span class="line">	API_VERL=`git show|grep commit |cut -d <span class="string">' '</span> -f2`</span><br><span class="line">	API_VER=$(echo $&#123;API_VERL:<span class="number">0</span>:<span class="number">6</span>&#125;)</span><br><span class="line">	echo -e <span class="string">"\033[32m 2、code_get version=$&#123;API_VERL&#125; finish \033[0m"</span></span><br><span class="line">&#125;      </span><br><span class="line"></span><br><span class="line">code_config()&#123;</span><br><span class="line">	/bin/cp -r $&#123;CONFIG_DIR&#125;/* $&#123;TMP_DIR&#125;/$&#123;PRO_NAME&#125; &gt; /dev/null <span class="number">2</span>&gt;&amp;<span class="number">1</span></span><br><span class="line">	PKG_NAME=<span class="string">"$&#123;PRO_NAME&#125;"</span>_<span class="string">"$API_VER"</span>-<span class="string">"$&#123;CDATE&#125;"</span>-<span class="string">"$&#123;CTIME&#125;"</span></span><br><span class="line">	cd $&#123;TMP_DIR&#125; &amp;&amp; mv $&#123;PRO_NAME&#125; $&#123;PKG_NAME&#125;</span><br><span class="line">        echo -e <span class="string">"\033[32m 3、code_config  finish \033[0m"</span></span><br><span class="line">&#125;</span><br><span class="line">code_tar()&#123;</span><br><span class="line">	writelog <span class="string">"code_tar"</span></span><br><span class="line">	cd $&#123;TMP_DIR&#125; &amp;&amp; tar czf $&#123;PKG_NAME&#125;.tar.gz $&#123;PKG_NAME&#125;</span><br><span class="line">	writelog <span class="string">"$PKG_NAME.tar.gz"</span></span><br><span class="line">        echo -e <span class="string">"\033[32m 4、code_tar $&#123;PKG_NAME&#125;.tar.gz  finish \033[0m"</span></span><br><span class="line">&#125;</span><br><span class="line">code_scp()&#123;</span><br><span class="line">	writelog <span class="string">"code_scp"</span></span><br><span class="line">	<span class="keyword">for</span> node <span class="keyword">in</span> $&#123;NODE_LIST&#125;;do</span><br><span class="line">		scp $&#123;TMP_DIR&#125;/$&#123;PKG_NAME&#125;.tar.gz $node:$&#123;WEB_SOURCE_DIR&#125;</span><br><span class="line">		echo -e <span class="string">"\033[32m 5、code_scp $node:$&#123;WEB_SOURCE_DIR&#125;  finish \033[0m"</span></span><br><span class="line">	done	</span><br><span class="line">&#125;</span><br><span class="line">cluster_node_remove()&#123;</span><br><span class="line">	writelog <span class="string">"cluster_node_remove"</span>;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">code_test()&#123;</span><br><span class="line">        URL=$<span class="number">1</span></span><br><span class="line">        curl -s --head http://$<span class="number">1</span>:<span class="number">82</span>/index.html|grep <span class="string">"200 OK"</span> &gt;&gt; /dev/null</span><br><span class="line">        if [ $? -ne 0 ];then</span><br><span class="line">             shell_unlock;</span><br><span class="line">             writelog <span class="string">"$1 test error"</span> &amp;&amp; echo -e <span class="string">"\033[31m 7、code_test $1 test False \033[0m"</span> &amp;&amp; exit;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	   echo -e <span class="string">"\033[32m 7、code_test $node test sucess  \033[0m"</span>	</span><br><span class="line">        fi</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">code_deploy()&#123;</span><br><span class="line">	<span class="keyword">for</span> node <span class="keyword">in</span> $&#123;NODE_LIST&#125;;do</span><br><span class="line">		ssh $node <span class="string">"cd $&#123;WEB_SOURCE_DIR&#125; &amp;&amp; tar zxf $&#123;PKG_NAME&#125;.tar.gz &amp;&amp;rm -f $&#123;WEB_DIR&#125;/$&#123;PRO_NAME&#125; &amp;&amp; ln -s $&#123;WEB_SOURCE_DIR&#125;/$&#123;PKG_NAME&#125; $&#123;WEB_DIR&#125;/$&#123;PRO_NAME&#125;"</span></span><br><span class="line">		echo -e <span class="string">"\033[32m 6、code_deploy $node deploy  finish \033[0m"</span></span><br><span class="line">		echo <span class="string">"--------------------------------------------------------"</span></span><br><span class="line">		code_test $node;</span><br><span class="line">        done</span><br><span class="line">&#125;</span><br><span class="line">rollback_fun()&#123;</span><br><span class="line">	<span class="keyword">if</span> [ -z $<span class="number">1</span> ];then</span><br><span class="line">		echo <span class="string">"Please input list|version"</span></span><br><span class="line">	fi</span><br><span class="line">	<span class="keyword">for</span> node <span class="keyword">in</span> $ROLLBACK_LIST;do</span><br><span class="line">            ssh $node <span class="string">"if [ -d $&#123;WEB_SOURCE_DIR&#125;/$1 ];then rm -f $&#123;WEB_DIR&#125;/$&#123;PRO_NAME&#125; &amp;&amp; ln -s $&#123;WEB_SOURCE_DIR&#125;/$1  $&#123;WEB_DIR&#125;/$&#123;PRO_NAME&#125; &amp;&amp; echo "</span>$node $<span class="number">1</span> rollback success!<span class="string">";else echo "</span>$<span class="number">1</span> rollback false<span class="string">";fi"</span></span><br><span class="line">	writelog <span class="string">"$node $1 rollback  finish"</span></span><br><span class="line">        done</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">rollback_list()&#123;</span><br><span class="line">	ls -l  $&#123;TMP_DIR&#125;/*.tar.gz</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">rollback()&#123;</span><br><span class="line">	<span class="comment">#echo $1</span></span><br><span class="line">	case $<span class="number">1</span> <span class="keyword">in</span> </span><br><span class="line">	    list)</span><br><span class="line">		rollback_list;</span><br><span class="line">		;;</span><br><span class="line">	    *)</span><br><span class="line">		rollback_fun $<span class="number">1</span>; 					</span><br><span class="line">		;;</span><br><span class="line">	esac</span><br><span class="line">&#125;</span><br><span class="line">main()&#123;</span><br><span class="line">	ROLLBACK_VER=$<span class="number">2</span></span><br><span class="line">	case $<span class="number">1</span> <span class="keyword">in</span> </span><br><span class="line">		deploy)</span><br><span class="line">			shell_lock;</span><br><span class="line">			code_get;</span><br><span class="line">			<span class="comment">#code_build;</span></span><br><span class="line">			code_config;</span><br><span class="line">			code_tar;</span><br><span class="line">			code_scp;</span><br><span class="line">			<span class="comment">#cluster_node_remove;</span></span><br><span class="line">			code_deploy;</span><br><span class="line">			<span class="comment">#cluster_node_in;</span></span><br><span class="line">			shell_unlock;</span><br><span class="line">			;;</span><br><span class="line">					</span><br><span class="line">		rollback)</span><br><span class="line">			shell_lock;</span><br><span class="line">			rollback $&#123;ROLLBACK_VER&#125;;</span><br><span class="line">			shell_unlock;</span><br><span class="line">			;;</span><br><span class="line">		*)</span><br><span class="line">			usage;</span><br><span class="line">	esac		</span><br><span class="line">&#125;</span><br><span class="line">main $<span class="number">1</span> $<span class="number">2</span></span><br></pre></td></tr></table></figure>
-
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2017/02/20/shell批量发布站点/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -690,7 +696,7 @@
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">2019年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">2019年03月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -703,6 +709,10 @@
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2019/03/24/如何解决The-connection-to-the-server-localhost8080-was-refused》？/"><i class="fa fa-file-o"></i>如何解决The connection to the s...</a>
+      </li>
     
       <li>
         <a href="/2019/03/03/python-cStringIO模块-附生成excel并发送邮件实例/"><i class="fa fa-file-o"></i>python cStringIO模块( 附生成exce...</a>
@@ -718,10 +728,6 @@
     
       <li>
         <a href="/2019/02/18/Docker如何推送镜像到Harbor？/"><i class="fa fa-file-o"></i>Docker如何推送镜像到Harbor？</a>
-      </li>
-    
-      <li>
-        <a href="/2019/02/18/如何搭建高可用Docker-Harbor仓库/"><i class="fa fa-file-o"></i>如何搭建高可用Docker Harbor仓库</a>
       </li>
     
   </ul>

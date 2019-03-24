@@ -96,6 +96,60 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2018-05-28 </div>
+			<div class="article-title"><a href="/2018/05/28/日志监控应该如何做？附ELK-wather-通知告警/">日志监控应该如何做？附ELK wather 通知告警</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<p>日志文件是用于记录系统操作事件的记录文件或文件集合，可分为事件日志和消息日志。具有处理历史数据、诊断问题的追踪以及理解系统的活动等重要作用。 既然日志那么重要，在实际运维中我们应该如何处理？</p>
+</blockquote>
+<h3 id="什么是日志监控？">什么是日志监控？</h3><blockquote>
+<blockquote>
+<p>日志监控是指运维人员在程序输出某些关键字或者某种级别日志时候，发送告警通知相关人员，日志监控可以及时发现故障发生。一般存在以下几种情况：</p>
+</blockquote>
+</blockquote>
+<ul>
+<li>某种级别的日志（通常是ERROR级别的日志）出现或者单位时间内达到某次数</li>
+<li>某些关键字的异常日志（例OutOfMemory、connect timed out），出现或者单位时间内达到某次数</li>
+<li>某些特殊关键字的正常日志(success)</li>
+<li>某段时间内没有日志输出等</li>
+</ul>
+<h3 id="做好日志监控的前提">做好日志监控的前提</h3><ul>
+<li><strong>1、    输出目录规范化</strong>:目录统一化、备份目录统一化</li>
+<li><strong>2、    输出格式规范化</strong>:技术中心统一使用某种日志输出格式，方便文件分割和查找</li>
+<li><strong>3、    输出等级规范化</strong>:ERROR、WARM、INFO、DEBUG等等级，通常线上日志禁止输出DEBUG级别日志、否则日志看起来多而且不方便监控</li>
+<li><strong>4、    切割日志格式规范化</strong>:建议按照时间天数格式切割、大文件还可以小时切割</li>
+</ul>
+<h3 id="日志监控思路可分集中式、分布式">日志监控思路可分集中式、分布式</h3><h4 id="分布式原理如下：">分布式原理如下：</h4><p> <img src="/img/201805/log1.png" style="width: 550x;"></p>
+<p>分布式监控通常存放在web服务器上，可以通过程序本身去触发、或者编写监控脚本实现</p>
+<h4 id="集中式">集中式</h4><p>  <img src="/img/201805/log2.png" style="width: 550x;"></p>
+<p>集中式有ELK，web端部署logstash推送日志到ES，通过kibana分析、展现、监控</p>
+<h3 id="ELK_wetcher_告警">ELK wetcher 告警</h3><p>演示ELK版本为5.4.3,需要安装x-pack插件<br>1、进入左侧导航栏里面的Management–Watcher如下图所示<br> <img src="/img/201805/log3.png" style="width: 550x;"></p>
+<p>2、进入后，能看到有三个框，分别是“ID”、“Name”和“Watch JSON”。<br>ID：填写最能代表这个告警的名称，简单，容易搜索，且有代表性<br>Name：可以详细描写该告警的名称，便于理解<br>Watch JSON：接入告警的最重要的地方，查询语法和告警规则<br> <img src="/img/201805/log4.png" style="width: 550x;"></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"trigger"</span>: &#123;</span><br><span class="line">    //查询时间间隔</span><br><span class="line">    "schedule": &#123;</span><br><span class="line">      "interval": "10m"</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  "input": &#123;</span><br><span class="line">    "search": &#123;</span><br><span class="line">      "request": &#123;</span><br><span class="line">        "search_type": "query_then_fetch",</span><br><span class="line">        //查询索引</span><br><span class="line">        "indices": [</span><br><span class="line">          <span class="string">"example.com-*"</span></span><br><span class="line">        ],</span><br><span class="line">        "types": [],</span><br><span class="line">        "body": &#123;</span><br><span class="line">          //条数</span><br><span class="line">          "size": 10,</span><br><span class="line">          "query": &#123;</span><br><span class="line">            "bool": &#123;</span><br><span class="line">              "must": [</span><br><span class="line">                &#123;</span><br><span class="line">                  //查询内容</span><br><span class="line">                  "match": &#123;</span><br><span class="line">                    "message": "error"</span><br><span class="line">                  &#125;</span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                  //查询时间范围</span><br><span class="line">                  "range": &#123;</span><br><span class="line">                    "@timestamp": &#123;</span><br><span class="line">                      "gt": "now-1h"</span><br><span class="line">                    &#125;</span><br><span class="line">                  &#125;</span><br><span class="line">                &#125;</span><br><span class="line">              ]</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  "condition": &#123;</span><br><span class="line">"compare": &#123;</span><br><span class="line">//查询返回大于或者等于2条即触发action</span><br><span class="line">      "ctx.payload.hits.total": &#123;</span><br><span class="line">        "gte": 2</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  "actions": &#123;</span><br><span class="line">    "attack_alert": &#123;</span><br><span class="line">      "throttle_period_in_millis": 600000, //每两次告警间的最小时间间隔</span><br><span class="line">      "webhook": &#123;</span><br><span class="line">        "scheme": "https",</span><br><span class="line">        "host": "oapi.dingtalk.com",</span><br><span class="line">        "port": 443,</span><br><span class="line">        "method": "post",</span><br><span class="line">        "path": "/robot/send",</span><br><span class="line">        "params": &#123;</span><br><span class="line">          "access_token": "xxx"</span><br><span class="line">        &#125;,</span><br><span class="line">        "headers": &#123;</span><br><span class="line">          "Content-type": "application/json"</span><br><span class="line">        &#125;,</span><br><span class="line">        "body": "&#123; \"msgtype\": \"markdown\", \"at\": &#123;\"isAtAll\": \"True\"&#125;,\"markdown\": &#123;\"title\": \"NGINX日志报错通知\",\"text\": \" **NGINX日志报错通知:** \\n \\n&#123;&#123;#ctx.payload.hits.hits&#125;&#125;&#123;&#123;_source.message&#125;&#125;\\n&#123;&#123;/ctx.payload.hits.hits&#125;&#125;\"&#125; &#125;"</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上使用钉钉告警，邮件告警也是相同原理编写即可。</p>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2018/05/28/日志监控应该如何做？附ELK-wather-通知告警/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2018-05-28 </div>
 			<div class="article-title"><a href="/2018/05/28/Python的logging模块（附带Django-实例）/">Python的logging模块（附带Django 实例）</a></div>						
 		</h3>
 	
@@ -683,34 +737,6 @@ ga?: trace [<span class="keyword">class</span>] [<span class="function"><span cl
 </div>
 
 		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2017-08-27 </div>
-			<div class="article-title"><a href="/2017/08/27/salt自定义变量传参执行/">salt自定义变量传参执行</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <h1 id="salt自定义变量传参执行sls">salt自定义变量传参执行sls</h1><h2 id="以下使用安装redis为例子，动态传密码：">以下使用安装redis为例子，动态传密码：</h2><h3 id="一、redis_install-sls">一、redis_install.sls</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">redis-conf:</span><br><span class="line">  cmd.run:</span><br><span class="line">    - name: mkdir -p /data/redis6379/&#123;data,logs&#125; &amp;&amp; chown redis.redis -R /data/redis6379/ &amp;&amp; echo <span class="string">"su - redis -c '/usr/local/redis/bin/redis-server /usr/local/redis/conf/redis6379.conf &amp;'"</span> &gt;&gt; /etc/rc.local</span><br><span class="line">    - require:</span><br><span class="line">      - cmd: redis-install </span><br><span class="line">  &#123;% set redis_pass = salt[<span class="string">'pillar.get'</span>](<span class="string">'redis_pass'</span>,<span class="string">'xxxxx'</span>) %&#125;</span><br><span class="line">  file.recurse:</span><br><span class="line">    - name: /usr/local/redis/conf</span><br><span class="line">    - source: salt://Redis/file/conf</span><br><span class="line">    - user: redis</span><br><span class="line">    - group: redis</span><br><span class="line">    - dir_mode: <span class="number">731</span></span><br><span class="line">    - template: jinja </span><br><span class="line">    - defaults: </span><br><span class="line">        redis_pass: &#123;&#123; redis_pass &#125;&#125;   ==&gt;注意使用4个空格</span><br><span class="line">    - require:</span><br><span class="line">      - cmd: redis-install</span><br></pre></td></tr></table></figure>
-<h3 id="二、file/conf/redis6379-conf">二、file/conf/redis6379.conf</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">requirepass &#123;&#123; redis_pass &#125;&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="三、执行命令">三、执行命令</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">salt-ssh <span class="string">'192.168.162.113'</span> state.sls Redis.redis_install  pillar=<span class="string">'&#123;"redis_pass":"redis"&#125;'</span></span><br></pre></td></tr></table></figure>
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2017/08/27/salt自定义变量传参执行/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -747,7 +773,7 @@ ga?: trace [<span class="keyword">class</span>] [<span class="function"><span cl
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">2019年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">2019年03月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -760,6 +786,10 @@ ga?: trace [<span class="keyword">class</span>] [<span class="function"><span cl
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2019/03/24/如何解决The-connection-to-the-server-localhost8080-was-refused》？/"><i class="fa fa-file-o"></i>如何解决The connection to the s...</a>
+      </li>
     
       <li>
         <a href="/2019/03/03/python-cStringIO模块-附生成excel并发送邮件实例/"><i class="fa fa-file-o"></i>python cStringIO模块( 附生成exce...</a>
@@ -775,10 +805,6 @@ ga?: trace [<span class="keyword">class</span>] [<span class="function"><span cl
     
       <li>
         <a href="/2019/02/18/Docker如何推送镜像到Harbor？/"><i class="fa fa-file-o"></i>Docker如何推送镜像到Harbor？</a>
-      </li>
-    
-      <li>
-        <a href="/2019/02/18/如何搭建高可用Docker-Harbor仓库/"><i class="fa fa-file-o"></i>如何搭建高可用Docker Harbor仓库</a>
       </li>
     
   </ul>
