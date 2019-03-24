@@ -96,6 +96,115 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2018-07-29 </div>
+			<div class="article-title"><a href="/2018/07/29/企业常用几种部署方式-蓝绿部署、滚动部署、金丝雀部署/">企业常用几种部署方式(蓝绿部署、滚动部署、金丝雀部署)</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<p>部署是将服务的某个版本投入生产环境的过程。部署的总体目标是：对系统用户产生最小影响的情况下，把服务的升级版本投放到生产环境中。</p>
+</blockquote>
+<h3 id="服务变更的主要原因：">服务变更的主要原因：</h3><ul>
+<li>1、修复错误</li>
+<li>2、提高服务的质量</li>
+<li>3、增加新的功能</li>
+</ul>
+<h3 id="服务变更需要注意哪些(或者说如何产生最小影响)？">服务变更需要注意哪些(或者说如何产生最小影响)？</h3><p>SRE 经验告诉我们，大概 70% 的生产事故由某种部署的变更而触发。变更管理的最佳实践可使用自动化来完成以下几点：</p>
+<ul>
+<li>1、部署尽可能在用户少的时候。</li>
+<li>2、每次部署前备份原始数据。</li>
+<li>3、采用渐进式发布机制。</li>
+<li>4、迅速而准确地检测到问题的发生。</li>
+<li>5、当出现问题时，安全迅速地回退改动。</li>
+</ul>
+<h3 id="常用部署方式存在以下几种:">常用部署方式存在以下几种:</h3><ul>
+<li>蓝绿部署</li>
+<li>滚动部署</li>
+<li>灰度部署/金丝雀部署</li>
+</ul>
+<h4 id="蓝绿部署">蓝绿部署</h4><h5 id="定义：">定义：</h5><p>蓝绿部署(部分称大翻转或红/黑部署)，首先准备N台提供版本A服务的机器，同时准备N台提供版本B的机器。一旦版本B的N台机器配置好并准备好服务请求，通过切换路由到版本B,例子如下所示：</p>
+<p>1、绿色表示当前的生产应用程序V1<br> <img src="/img/201807/greendeployment.png" style="width: 550x;"></p>
+<p>2、现在，当您准备对app2进行更改并将其升级到v2时，您将在”蓝色环境”中执行此操作。在该环境中，您可以部署新版本的应用程序，运行冒烟测试以及任何其他测试（包括操作系统，缓存，CPU等）。当结果看起来不错时，您可以将负载均衡器/反向代理/路由器更改为指向蓝色环境：</p>
+<p> <img src="/img/201807/bluedeployment.png" style="width: 550x;"></p>
+<h5 id="方法：">方法：</h5><ul>
+<li>可以通过切换域名服务器（DNS）</li>
+<li>更改负载均衡器路由切换</li>
+</ul>
+<h5 id="优点：">优点：</h5><ul>
+<li>更新过程无需停机，风险较少</li>
+<li>回滚方便，只需要更改路由或者切换DNS服务器，效率较高</li>
+</ul>
+<h5 id="缺点：">缺点：</h5><ul>
+<li>需要部署两套机器，费用开销大</li>
+<li>在非隔离的机器（Docker、VM）上操作时，可能会导致蓝绿环境被摧毁风险</li>
+<li>负载均衡器/反向代理/路由/DNS处理不当，将导致流量没有切换过来情况出现</li>
+</ul>
+<h4 id="滚动发布：">滚动发布：</h4><h5 id="定义：-1">定义：</h5><p>现生产N台机器都为版本A的机器，部署取出一个或者多个服务器停止服务，执行更新版本B，更新后重新将其投入使用，继续不断更新其他机器，直到集群中所有的实例都更新成版本B。</p>
+<h5 id="流程：">流程：</h5><ul>
+<li>1、负载均衡或者路由移除一台或者多台实例(正常监控也需要移除)</li>
+<li>2、移除后的实例开始更新</li>
+<li>3、上线测试后无异常开始接入负载均衡器或者路由</li>
+<li>4、新增实例监控</li>
+<li>5、继续上线后一批实例，直到集群中所有的实例都更新</li>
+</ul>
+<h5 id="优点：-1">优点：</h5><ul>
+<li>更新过程体验影响少，风险较少</li>
+<li>费用对比蓝绿花费开销较少，无需额外新增机器</li>
+</ul>
+<h5 id="缺点：-1">缺点：</h5><ul>
+<li>上线/回滚完成时间相对较慢</li>
+<li>需要监控和负载均衡器的移除和接入能力</li>
+</ul>
+<h4 id="灰度发布">灰度发布</h4><h5 id="定义">定义</h5><p>灰度发布（又名金丝雀发布）是指在黑与白之间，能够平滑过渡的一种发布方式。在其上可以进行A/B testing，即让一部分用户继续用产品特性A，一部分用户开始用产品特性B，如果用户对B没有什么反对意见，那么逐步扩大范围，把所有用户都迁移到B上面来。灰度发布可以保证整体系统的稳定，在初始灰度的时候就可以发现、调整问题，以保证其影响度。（类似地下采煤使用的金丝雀方法，当金丝雀遇到有毒气体时候，产生痛苦信号）A/B testing和金丝雀的差别在于A/B 测试对于特定业务的关键绩效指标来说，确定那个版本执行得更好。</p>
+<h5 id="方法">方法</h5><ul>
+<li>首先部署少量服务器密切</li>
+<li>观察是否因为版本产生预期结果</li>
+<li>当结果满意时候再全量部署</li>
+</ul>
+<p> <img src="/img/201807/beta.png" style="width: 550x;"></p>
+<p> <img src="/img/201807/AB-test.png" style="width: 550x;"></p>
+<p> 优缺点可以参考上面</p>
+<h4 id="关于CAP定理">关于CAP定理</h4><ul>
+<li>一致性（Consistence） （等同于所有节点访问同一份最新的数据副本）</li>
+<li>可用性（Availability）（每次请求都能获取到非错的响应——但是不保证获取的数据为最新数据）</li>
+<li>分区容错性（Partition tolerance）（以实际效果而言，分区相当于对通信的时限要求。系统如果不能在时限内达成数据一致性，就意味着发生了分区的情况，必须就当前操作在C和A之间做出选择[3]。）</li>
+</ul>
+<p>我们这里只讨论一致性问题，其他你们可以自行思考下：</p>
+<ul>
+<li>建议无状态(session等信息存放在缓存数据库)</li>
+<li>如果新版本的操作涉及到数据库更改，建议保持只新增不删减字段操作</li>
+</ul>
+<p>要是存在多版本同时存在，注意考虑以下：</p>
+<ul>
+<li>1、功能开关</li>
+<li>2、前后版本兼容</li>
+</ul>
+<p>参考资料包括以下：</p>
+<ul>
+<li><a href="http://blog.christianposta.com/deploy/blue-green-deployments-a-b-testing-and-canary-releases/" target="_blank" rel="noopener">http://blog.christianposta.com/deploy/blue-green-deployments-a-b-testing-and-canary-releases/</a></li>
+<li><a href="https://docs.cloudfoundry.org/devguide/deploy-apps/blue-green.html" target="_blank" rel="noopener">https://docs.cloudfoundry.org/devguide/deploy-apps/blue-green.html</a></li>
+</ul>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2018/07/29/企业常用几种部署方式-蓝绿部署、滚动部署、金丝雀部署/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2018-07-29 </div>
 			<div class="article-title"><a href="/2018/07/29/Pyecharts-生成图表-附Django支持/">Pyecharts 生成图表(附Django支持)</a></div>						
 		</h3>
 	
@@ -855,44 +964,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2018-05-28 </div>
-			<div class="article-title"><a href="/2018/05/28/python-引用计数和对象销毁/">python 引用计数和对象销毁</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <blockquote>
-<p>在Python中，对象会包括一个引用计数器。当对象被赋值给一个变量时，计算器会递增。反之，当变量被删除时候，计算器便递减。当计数器的指为0时，表示我们不再使用对象并可以销毁对象。正常来说，删除对象时候会调用<strong>del</strong>()方法。</p>
-</blockquote>
-<p>很多小伙伴可能觉得调用del x 会直接销毁对象，其实并非如此，我们可以通过官方文档查阅可以知道<a href="https://docs.python.org/2.0/ref/customization.html" target="_blank" rel="noopener">https://docs.python.org/2.0/ref/customization.html</a></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">__del__ (self)</span><br><span class="line">Called when the instance is about to be destroyed. This is also called a destructor. If a base class has a __del__() method, the derived class's __del__() method must explicitly call it to ensure proper deletion of the base class part of the instance. Note that it is possible (though not recommended!) for the __del__() method to postpone destruction of the instance by creating a new reference to it. It may then be called at a later time when this new reference is deleted. It is not guaranteed that __del__() methods are called for objects that still exist when the interpreter exits.</span><br><span class="line">Programme<span class="string">r's note: "del x" doesn'</span>t directly call x.__del__() -- the former decrements the reference count <span class="keyword">for</span> x by one, <span class="keyword">and</span> the latter <span class="keyword">is</span> only called when its reference count reaches zero. Some common situations that may prevent the reference count of an object to go to zero include: circular references between objects (e.g., a doubly-linked list <span class="keyword">or</span> a tree data structure <span class="keyword">with</span> parent <span class="keyword">and</span> child pointers); a reference to the object on the stack frame of a function that caught an exception (the traceback stored <span class="keyword">in</span> sys.exc_traceback keeps the stack frame alive); <span class="keyword">or</span> a reference to the object on the stack frame that raised an unhandled exception <span class="keyword">in</span> interactive mode (the traceback stored <span class="keyword">in</span> sys.last_traceback keeps the stack frame alive). The first situation can only be remedied by explicitly breaking the cycles; the latter two situations can be resolved by storing <span class="keyword">None</span> <span class="keyword">in</span> sys.exc_traceback <span class="keyword">or</span> sys.last_traceback.</span><br><span class="line"></span><br><span class="line">Warning: due to the precarious circumstances under which __del__() methods are invoked, exceptions that occur during their execution are ignored, <span class="keyword">and</span> a warning <span class="keyword">is</span> printed to sys.stderr instead. Also, when __del__() <span class="keyword">is</span> invoked <span class="keyword">is</span> response to a module being deleted (e.g., when execution of the program <span class="keyword">is</span> done), other globals referenced by the __del__() method may already have been deleted. For this reason, __del__() methods should do the absolute minimum needed to maintain external invariants. Python <span class="number">1.5</span> guarantees that globals whose name begins <span class="keyword">with</span> a single underscore are deleted <span class="keyword">from</span> their module before other globals are deleted; <span class="keyword">if</span> no other references to such globals exist, this may help <span class="keyword">in</span> assuring that imported modules are still available at the time when the __del__() method <span class="keyword">is</span> called.</span><br></pre></td></tr></table></figure>
-<p>通过官方文档可以知：del x 不能直接调用x.<strong> del </strong>（）前者将x的引用计数递减1，后者仅在其引用计数达到零时调用。</p>
-<h5 id="以下简单举例说明：">以下简单举例说明：</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="class"><span class="keyword">class</span> <span class="title">Test</span>:</span></span><br><span class="line">   ...:         <span class="function"><span class="keyword">def</span> <span class="title">__del__</span><span class="params">(self)</span>:</span></span><br><span class="line">   ...:                 print(<span class="string">"Delete &#123;id&#125;"</span>.format(id=id(self)))</span><br><span class="line">   ...:         </span><br><span class="line">In [<span class="number">2</span>]: T=Test()</span><br><span class="line">In [<span class="number">3</span>]: <span class="keyword">del</span> T</span><br><span class="line">Delete <span class="number">140514893069920</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>无法直接销毁的情况：</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="class"><span class="keyword">class</span> <span class="title">Test</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">__del__</span><span class="params">(self)</span>:</span></span><br><span class="line">                print(<span class="string">"Delete &#123;id&#125;"</span>.format(id=id(self)))</span><br><span class="line">   ...:         </span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: l1=[Test()]</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: l2=l1[:]</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: id(l1),id(l2)</span><br><span class="line">Out[<span class="number">4</span>]: (<span class="number">139682913194208</span>, <span class="number">139682928632032</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: <span class="keyword">del</span> l1</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: <span class="keyword">del</span> l2</span><br><span class="line">Delete <span class="number">139682913195000</span></span><br></pre></td></tr></table></figure>
-<p>总结：通过发现浅复制调用并不能直接删除对象，同时验证了调用del不一定就能直接触发<strong>del</strong>()销毁对象。</p>
-
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2018/05/28/python-引用计数和对象销毁/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -929,7 +1000,7 @@
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">2019年03月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">2019年03月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -942,6 +1013,10 @@
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2019/03/24/如何进入Docker容器和Pod？/"><i class="fa fa-file-o"></i>如何进入Docker容器和Pod？</a>
+      </li>
     
       <li>
         <a href="/2019/03/24/如何解决The-connection-to-the-server-localhost8080-was-refused》？/"><i class="fa fa-file-o"></i>如何解决The connection to the s...</a>
@@ -957,10 +1032,6 @@
     
       <li>
         <a href="/2019/02/18/Ansible模块中核心类（附执行剧本实例代码）/"><i class="fa fa-file-o"></i>Ansible模块中核心类（附执行剧本实例代码）</a>
-      </li>
-    
-      <li>
-        <a href="/2019/02/18/Docker如何推送镜像到Harbor？/"><i class="fa fa-file-o"></i>Docker如何推送镜像到Harbor？</a>
       </li>
     
   </ul>

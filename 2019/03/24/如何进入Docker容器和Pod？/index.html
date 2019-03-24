@@ -3,7 +3,7 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>谷歌想说爱你不容易 | BY DevOps | 今晚打老虎</title>
+  <title>如何进入Docker容器和Pod？ | BY DevOps | 今晚打老虎</title>
   <meta name="author" content="林文杰">
   
   <meta name="description" content="DevOps 技术运维小学生">
@@ -11,7 +11,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="谷歌想说爱你不容易">
+  <meta property="og:title" content="如何进入Docker容器和Pod？">
   <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
 
   
@@ -77,7 +77,7 @@
 
 	
 		<div class="page-header">		
-			<h1> 谷歌想说爱你不容易</h1>
+			<h1> 如何进入Docker容器和Pod？</h1>
 		</div>		
 	
 
@@ -93,7 +93,9 @@
 
 	<!-- content -->
 	<div class="mypage">		
-	    <p>自从谷歌退出大陆后,不少朋友都会觉得可惜，但是连香港服务器也访问不到的时候，就不是可惜问题了，简直就是。。博主之前还能用IP和部分域名通过反代理直接搜索，前几天发现还是被封了，当然不少朋友还是通过hosts和VPN访问的，可是VPN免费的不好用，好用的却不免费。在此博主奉献个网址给大家<a href="https://www.cngoog.tk/" target="_blank" rel="noopener">https://www.cngoog.tk/</a></p>
+	    <h5 id="两种方案：">两种方案：</h5><h6 id="进入docker容器_：">进入docker容器 ：</h6><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -ti  <span class="params">&lt;your-container-name&gt;</span>   <span class="meta-keyword">/bin/</span>sh</span><br></pre></td></tr></table></figure>
+<h6 id="进入pod：">进入pod：</h6><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl exec -ti <span class="params">&lt;your-pod-name&gt;</span>  -n <span class="params">&lt;your-namespace&gt;</span>  -- <span class="meta-keyword">/bin/</span>sh</span><br></pre></td></tr></table></figure>
+<p>附：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看日志</span></span><br><span class="line">kubectl logs -f deploy/<span class="built_in">test</span>-6549dd8c94-w8kb9 -n huidu</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入容器</span></span><br><span class="line">kubectl <span class="built_in">exec</span> -it -n huidu <span class="built_in">test</span>-6549dd8c94-w8kb9 -- /bin/bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启pod</span></span><br><span class="line">kubectl delete po -n huidu <span class="built_in">test</span>-6549dd8c94-w8kb9</span><br></pre></td></tr></table></figure></p>
 	  
 	</div>
 
@@ -102,14 +104,14 @@
 	<div class="pagination">
 <ul class="pagination">
 	 
-				
-    	<li class="prev"><a href="/2015/09/03/╟│╠╕4G╝╝╩ї/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
-  		
+		
+          <li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+        
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2015/08/31/shell│╠╨Є▒р╨┤╓о╥╗║╬╬кshellг┐/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2019/03/24/如何解决The-connection-to-the-server-localhost8080-was-refused》？/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -124,7 +126,7 @@
   <h2 class="title">Comments</h2>
 
   
-  	 <div class="ds-thread" data-thread-key="2015/09/03/╣╚╕ш╧ы╦╡░о─у▓╗╚▌╥╫/" data-title="谷歌想说爱你不容易" data-url="http://linuxOps.xyz/2015/09/03/╣╚╕ш╧ы╦╡░о─у▓╗╚▌╥╫/"></div>  
+  	 <div class="ds-thread" data-thread-key="2019/03/24/如何进入Docker容器和Pod？/" data-title="如何进入Docker容器和Pod？" data-url="http://linuxOps.xyz/2019/03/24/如何进入Docker容器和Pod？/"></div>  
   
 </section>
 
@@ -138,7 +140,7 @@
 	
 	<div class="meta-widget">
 	<i class="fa fa-clock-o"></i>
-	2015-09-03 
+	2019-03-24 
 	</div>
 	
 
