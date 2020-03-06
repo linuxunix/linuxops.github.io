@@ -1,0 +1,370 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>如果现在给你 500 台服务器，你会如何管理？ | BY DevOps | 今晚打老虎</title>
+  <meta name="author" content="林文杰">
+  
+  <meta name="description" content="DevOps 技术运维小学生">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="如果现在给你 500 台服务器，你会如何管理？">
+  <meta property="og:site_name" content="BY DevOps | 今晚打老虎">
+
+  
+    <meta property="og:image" content="undefined">
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BY DevOps | 今晚打老虎</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> 如果现在给你 500 台服务器，你会如何管理？</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <h3 id="一、如果现在给你_500_台服务器，你会如何管理？">一、如果现在给你 500 台服务器，你会如何管理？</h3><blockquote>
+<p>个人认为无论机器规模多大，运维保障体系建设是不可缺少的一部分，当然也是最为重要的一部分，一个完整的运维系统必须包括以下几点：</p>
+<ul>
+<li>标准化</li>
+<li>工具化</li>
+<li>规范化</li>
+<li>流程化</li>
+<li>持续改进</li>
+</ul>
+</blockquote>
+<h4 id="1-1、_标准化">1.1、 标准化</h4><p>简单举例子为何要做标准化？例子：不同运维人员习惯安装软件的路径可能是不一致，A运维把软件安装在/www目录下，B运维喜欢或习惯把软件安装在/data目录上，没有标准化做支撑，要是不实现业务应用、服务流程等标准化制定和落地，将会导致日后日常管理和增加日后自动化落地难度，日积月累，这无疑导致日后成为一种隐患。</p>
+<h4 id="1-2、_工具化">1.2、 工具化</h4><p>为何要做工具化？</p>
+<ul>
+<li>1、大量重复性手工工作</li>
+<li>2、存在变更问题（出错、改漏等，特别是应急情况下）</li>
+<li>3、人员变更导致入门（培训、入门）门槛高</li>
+<li>4、……</li>
+</ul>
+<p>做好工具化的收益？</p>
+<ul>
+<li>1、用脚本、自动化工具代替繁琐的重复性工作，提高工作效率</li>
+<li>2、降低出现问题概率</li>
+<li>3、某些操作发起人不局限于运维，减少运维工作，不经过运维处理，间接推动研发效率</li>
+<li>4、…….</li>
+</ul>
+<h4 id="1-3、规范化">1.3、规范化</h4><p>不同运维人员写的脚本在所用的编程语言、编码、注释等方面存在巨大差异，当然最常见包括系统版本，主机名，IP不统一规范，间接或者直接增加日后程序部署、监控自动化难度，甚至影响故障排查时间。</p>
+<h4 id="1-4、流程化">1.4、流程化</h4><p>这里简单举个例子，例如某开发变更某个版本，只在开发环境验证没有问题，但是没有经过测试人员在测试和预发布环境验证后直接上生产导致出现严重故障问题，此时要是没有严格的上线流程，将会直接给公司带来严重损失。</p>
+<p>做好流程化我们可以根据ITIL中有十个重要的IT管理关键模块，包括配置管理、服务台、问题管理、变更管理、软件控制和发布、服务管理、容量管理、可用度管理、意外事件管理、费用管理制定相关流程化方案。</p>
+<h4 id="1-5、持续改进">1.5、持续改进</h4><p>顾名思义，这个就不多说了。</p>
+<h3 id="二、500台机器如何管理？">二、500台机器如何管理？</h3><p>根据运维体系中标准化、规范化、流程化可推断出，运维项目管理流程包括</p>
+<ul>
+<li>立项阶段</li>
+<li>计划阶段</li>
+<li>运维实施阶段</li>
+<li>验收总结阶段</li>
+</ul>
+<p>当然这里我们假设这里已立项成功，这里重点说明计划和运维实施阶段操作。</p>
+<h4 id="2-1_计划阶段">2.1 计划阶段</h4><p>无论做啥也好，首先要做的是事前规划，整体架构规划，包括以下几点：</p>
+<ul>
+<li>主机类型（实体机、虚拟机（kvm、docker）、系统配置等）</li>
+<li>网络（开发、测试、灰度、生产等环境划分、中间件、db等网络划分）</li>
+<li>系统类型（centos、ubuntu等）</li>
+<li>整体架构图</li>
+<li>达到的收益</li>
+</ul>
+<h4 id="2-2_、运维实施阶段">2.2 、运维实施阶段</h4><blockquote>
+<p>实施阶段包括安装、安全、监控、维护等</p>
+</blockquote>
+<h5 id="2-2-1_安装">2.2.1 安装</h5><p>常规安装可以通过主流的自动化工具进行操作，例如Puppet、SaltStack、Ansible。</p>
+<ul>
+<li>Puppet：基于Ruby语言编写。是最典型的C/S结构，需要安装服务端和客户端。</li>
+<li>SaltStack：SaltStack和Puppet一样，也是C/S模式，需要安装服务端和客户端，基于Python编写，当然也可以使用ssh管理，但更多基于客户端方式。</li>
+<li>Ansible：和SaltStack也是基于python开发，同时基于ssh管理，正常来说远程主机皆开通ssh，可通过key或ssh管理即可，客户端主机无需安装任何软件即可管理。</li>
+</ul>
+<h6 id="2-2-1-1_安装软件之前首选系统初始化（机器上架后必须做的事情，包括root权限、文件最大打开数、云服务器等swap分区创建，非必须开启服务等系列操作）">2.2.1.1 安装软件之前首选系统初始化（机器上架后必须做的事情，包括root权限、文件最大打开数、云服务器等swap分区创建，非必须开启服务等系列操作）</h6><ul>
+<li><p>IDC机房机器安装系统后可通过ansible初始化</p>
+</li>
+<li><p>云主机或者容器化机器初始化<br> 通过脚本或者工具化实现系统初始化后，打包成标准基础镜像，日后新增机器可直接引用</p>
+</li>
+</ul>
+<h6 id="2-2-1-2_软件安装、升级、下架">2.2.1.2 软件安装、升级、下架</h6><p>tomcat  redis  mysql等安装、升级、下载只需要按照配置指定参数执行即可,例如tomcat安装<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">ansible-playbook</span> <span class="bullet">-i</span> <span class="string">Inventory/test</span>  <span class="bullet">-u</span> <span class="string">xxxx</span> <span class="bullet">-b</span> <span class="string">tomcat.yml</span> <span class="string">\</span></span><br><span class="line"><span class="bullet">-</span><span class="string">e</span> <span class="string">exclude_jdk=1</span> <span class="bullet">-e</span> <span class="string">JAVA_OPTS="-Ddisconf.env=test</span> <span class="string">\</span></span><br><span class="line"><span class="bullet">-</span><span class="string">server</span> <span class="bullet">-Xms3072m</span> <span class="bullet">-Xmx3072m</span> <span class="bullet">-Xmn512m</span> <span class="attr">-XX:+UseConcMarkSweepGC</span> <span class="bullet">-Dcom.sun.management.jmxremote</span>  <span class="string">\</span></span><br><span class="line"><span class="bullet">-</span><span class="string">Dcom.sun.management.jmxremote.port=19988</span> <span class="bullet">-Dcom.sun.management.jmxremote.ssl=false</span> <span class="bullet">-Dcom.sun.management.jmxremote.authenticate=false</span> <span class="string">\</span></span><br><span class="line"><span class="attr">-verbose:</span><span class="string">gc</span> <span class="attr">-XX:+PrintGCDetails</span> <span class="attr">-XX:+PrintGCTimeStamps</span> <span class="attr">-XX:+PrintHeapAtGC</span> <span class="attr">-Xloggc:/www/web/drserviceGc.log</span> <span class="string">\</span></span><br><span class="line"><span class="attr">-verbose:</span><span class="string">gc</span> <span class="attr">-XX:+PrintGCDetails</span> <span class="attr">-XX:+PrintGCTimeStamps</span> <span class="attr">-XX:+PrintHeapAtGC</span> <span class="attr">-Xloggc:/www/web/droolServerGc.log"</span> <span class="bullet">-e</span> <span class="string">project=xxxx</span> <span class="bullet">-e</span> <span class="string">http_port=8080</span></span><br></pre></td></tr></table></figure></p>
+<p>软件包需要提前上传到内网仓库（也是为了保障网络稳定以及减少版本一致性问题）</p>
+<h5 id="2-2-2_安全">2.2.2 安全</h5><p>安全是互联网不可或缺的部分，一旦出现安全事故，影响可谓甚大。当然做好安全也不容易，不过我们可以从以下几方面入手：</p>
+<ul>
+<li>访问控制</li>
+<li>基线审计与入侵检测</li>
+<li>漏洞扫描</li>
+<li>CI/CD安全</li>
+<li>数据安全</li>
+</ul>
+<h6 id="2-2-2-1_访问控制">2.2.2.1 访问控制</h6><ul>
+<li>访问控制可通过网络隔离，主要基于以下：<ul>
+<li>a、网络层（各个环境隔离等）</li>
+<li>b、系统层（开启防火墙，关闭不必要端口、禁止root登陆等）</li>
+<li>c、应用层（数据库、缓存等只部署内网，禁止外网访问，权限访问最少化等）</li>
+</ul>
+</li>
+<li>统一入口管理</li>
+<li>跳板机与VPN<ul>
+<li>a、 使用跳板机可实现运维入口统一化，达到集中访问控制和审计，当然可以选择购买商用或者开源（jumpserver）</li>
+<li>b、生产机器只允许某些可信用段访问，运维人员在家远程必须通过vpn访问后才能操作</li>
+</ul>
+</li>
+</ul>
+<h6 id="2-2-2-2_基线审计与入侵检测">2.2.2.2 基线审计与入侵检测</h6><ul>
+<li>基线审计：可以避免某些入侵，同时也为达到国家等保要求</li>
+<li>入侵检测：云主机可通过云盾等相关检测，当然物理也可以通过安装相关安全产品，例如青藤云等<h6 id="2-2-2-3_漏洞扫描">2.2.2.3 漏洞扫描</h6>开源或者邀请第三方安全公司扫描</li>
+</ul>
+<h6 id="2-2-2-4_CI/CD安全">2.2.2.4 CI/CD安全</h6><p>包括敏感信息泄露（脱敏处理、数据加密）、代码或镜像的安全审计(配置中心等)</p>
+<h6 id="2-2-2-5_数据安全，数据安全可谓重要，不久前才出现微盟系统被员工删库">2.2.2.5 数据安全，数据安全可谓重要，不久前才出现微盟系统被员工删库</h6><ul>
+<li>a、访问控制，数据库等只掌握在dba手上，开发和测试无生产数据库权限</li>
+<li>b、网络控制：数据库只开放需要使用的应用访问，其他机器无访问权限</li>
+<li>c、备份：包括数据库数据备份、系统日志备份、应用备份（可参考/Script/Log_upload_oss）</li>
+<li>d、代码泄露（github等，扫描脚本存放在/Script目录）</li>
+<li>e、数据脱敏</li>
+<li>f、数据库操作要经过审核平台，例如<a href="https://github.com/cookieY/Yearning" target="_blank" rel="noopener">https://github.com/cookieY/Yearning</a></li>
+</ul>
+<h5 id="2-2-3_监控">2.2.3 监控</h5><p>监控是整个运维实施阶段，同时也是产品生命周期中最为重要的一环，事前及时预警利于发现故障，事后提供详数据方便排查定位问题。一个完整监控整体流程包括以下几个步骤：</p>
+<ul>
+<li>数据采集</li>
+<li>数据存储</li>
+<li>数据分析</li>
+<li>数据展示</li>
+<li>报警</li>
+<li>处理</li>
+</ul>
+<p>监控指标包括以下几大点：</p>
+<ul>
+<li>硬件（cpn、温度、磁盘等）</li>
+<li>软件（cpu、内存、磁盘、线程、进程端口、网络等）</li>
+<li>系统（cpu、内存、磁盘、IO、网络等）</li>
+<li>应用（端口、进程等）</li>
+<li>网络（流出、流入、DNS、）</li>
+<li>日志（某种级别的日志、某些关键字的异常日志（例OutOfMemory、connect timed out），出现或者单位时间内达到某次数、甚至单位时间内没有日志输出，具体可参考之前写的文章<a href="http://linuxops.xyz/2018/05/28/%E6%97%A5%E5%BF%97%E7%9B%91%E6%8E%A7%E5%BA%94%E8%AF%A5%E5%A6%82%E4%BD%95%E5%81%9A%EF%BC%9F%E9%99%84ELK-wather-%E9%80%9A%E7%9F%A5%E5%91%8A%E8%AD%A6/）">http://linuxops.xyz/2018/05/28/%E6%97%A5%E5%BF%97%E7%9B%91%E6%8E%A7%E5%BA%94%E8%AF%A5%E5%A6%82%E4%BD%95%E5%81%9A%EF%BC%9F%E9%99%84ELK-wather-%E9%80%9A%E7%9F%A5%E5%91%8A%E8%AD%A6/）</a></li>
+<li>性能（DNS响应时间、HTTP建立连接时间、响应时间、后端响应时间、错误码等）</li>
+<li>业务（按需监控，例如下单监控等）</li>
+</ul>
+<p>当然日常开源监控还是不少，主流监控软件包括以下：</p>
+<ul>
+<li>zabbix</li>
+<li>cacti</li>
+<li>nagios</li>
+<li>prometheus</li>
+<li>第三方监控（监控宝等）</li>
+<li>全链路跟踪监控apm(听云、skywalking、pinpoint等)</li>
+<li>……</li>
+</ul>
+<p>常规告警路径可包括以下：</p>
+<ul>
+<li>钉钉</li>
+<li>邮件</li>
+<li>微信</li>
+<li>短信</li>
+<li>电话</li>
+</ul>
+<h5 id="2-2-4_维护">2.2.4 维护</h5><p>维护主要划分两大类，1、日常维护 2、故障处理</p>
+<h6 id="2-2-4_-1_日常维护">2.2.4 .1 日常维护</h6><p>日常维护包括资产化管理、日志管理、软件变更、甚至资源扩缩容等：</p>
+<ul>
+<li>资产化管理，可通过cmdb平台管理，例如jumpserver跳板机自带相关功能，当然自研是不错的选择。</li>
+<li>日志管理：日常访问可通过主流的FLK,开发、测试人员查看日志通过平台查询，避免登陆服务器访问，同时也是避免部分安全问题。</li>
+<li>软件变更：日常迭代、紧急迭代可通过jenkins+ansible方式，开源发布平台瓦力、自研发布平台等，主流日常上线发布的几种方式可参考文章<a href="http://linuxops.xyz/2018/02/11/%E9%97%B2%E8%81%8A%E4%B8%80%E4%B8%8B%E4%BC%81%E4%B8%9A%E4%B8%8A%E7%BA%BF%E5%8F%91%E5%B8%83%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B/">http://linuxops.xyz/2018/02/11/%E9%97%B2%E8%81%8A%E4%B8%80%E4%B8%8B%E4%BC%81%E4%B8%9A%E4%B8%8A%E7%BA%BF%E5%8F%91%E5%B8%83%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B/</a></li>
+<li>资源扩缩容：顾名思义<h6 id="2-2-4_-2_故障处理">2.2.4 .2 故障处理</h6>日常故障处理可根据SLA（Service Level Agreement）服务水平协议流程处理，当然不同公司，不同业务都存在一套不同方案。当然离不开以下几大类：</li>
+<li>服务分类</li>
+<li>响应时效</li>
+<li>SLA故障分类</li>
+<li>故障级别划分与定义</li>
+<li>应急团队建设</li>
+<li>故障升级机制</li>
+<li>故障处理流程</li>
+<li>个别还存在奖罚机制</li>
+</ul>
+<p>最后又回到运维体系中的持续改进，互联网技术更新迭代速度可谓甚快，运维人员只有不断学习，跟上时代发展，才能不被淘汰。</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+		
+          <li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+        
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2020/02/13/小公司如何优雅地推进应用上Kubernetes容器云/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+
+  
+  	 <div class="ds-thread" data-thread-key="2020/03/06/如果现在给你-500-台服务器，你会如何管理？/" data-title="如果现在给你 500 台服务器，你会如何管理？" data-url="http://linuxOps.xyz/2020/03/06/如果现在给你-500-台服务器，你会如何管理？/"></div>  
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2020-03-06 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2020 林文杰
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+  <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'ZP2ZSuHgipSZfRyU8uTR','2.0.0');
+  </script>
+
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = { short_name: 'linuxunix' };
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.src = 'http://static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

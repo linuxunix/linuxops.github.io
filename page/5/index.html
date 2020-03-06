@@ -95,6 +95,45 @@
 	
 	<!-- display as entry -->	
 		<h3 class="title">
+			<div class="date"> 2017-07-16 </div>
+			<div class="article-title"><a href="/2017/07/16/关于博客pythonyw停止运行的说明/">关于博客pythonyw停止运行的说明</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+  
+	<div class="col-md-12">
+	  
+	
+	  <blockquote>
+<blockquote>
+<p>时间飞逝，转眼间从事运维工作也好几年了。由于已到年中，顺便也总结这几年的工作情况。</p>
+</blockquote>
+</blockquote>
+<ul>
+<li><strong>简单总结：</strong> 从当初的懵懵懂懂，到现在的基本入门。当然按照阿里技术专家陈喻说的运维三阶段来说，现在水平处于1-2阶段之间，主要还是基于shell+python+salt+linux等上工作。当然按照第三阶段来说 ，运维水平越高，自动化程序越高，工作越闲，最终实现上班就是天天玩手机（开下小玩笑，说明自动化程度达到比较高的水平。）<br><img src="/img/201707/01.jpg" style="width: 550x;"></li>
+<li><strong>个人定位：</strong> 从事运维开发工程师，通过网页web实现运维日常琐事</li>
+<li><strong>后继行动：</strong> 进一步学习python+django+salt（ansible）+docker+openstack等<br><a href="http://python.cn/" target="_blank" rel="noopener">http://python.cn/</a> 站点由于服务器取消后，现在正式下架。但是<a href="http://linuxops.xyz/">http://linuxops.xyz/</a> 将会继续运营，最近会计划续费此域名。当然有兴趣的小伙伴可以在<a href="https://github.com/linuxunix/pythonyw_blog" target="_blank" rel="noopener">https://github.com/linuxunix/pythonyw_blog</a> 查看相关源码，<a href="http://python.cn/" target="_blank" rel="noopener">http://python.cn/</a> 使用python+django+bootstrap搭建完成，部分前端代码是本人编写，由于前端学艺不精，导致手机版本适配存在不友好显示。<blockquote>
+<p>后继会把所有博客文章转到linuxops.xyz此站点,后继尽量偏向基于python类的文章，希望各位多多支持和鼓励，谢谢。</p>
+</blockquote>
+</li>
+</ul>
+
+	
+	</div>
+	
+  
+</div>
+	<a type="button" href="/2017/07/16/关于博客pythonyw停止运行的说明/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
 			<div class="date"> 2017-03-03 </div>
 			<div class="article-title"><a href="/2017/03/03/django上传图片和文件并保存在数据库/">django上传图片和文件并保存在数据库</a></div>						
 		</h3>
@@ -602,60 +641,6 @@ num_cpus:
 </div>
 
 		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2017-03-01 </div>
-			<div class="article-title"><a href="/2017/03/01/Saltstack介绍及安装/">Saltstack介绍及安装</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-  
-	<div class="col-md-12">
-	  
-	
-	  <p><strong>Saltstack介绍及安装</strong></p>
-<blockquote>
-<p>Salt 是：</p>
-</blockquote>
-<p>•    一个配置管理系统，能够维护预定义状态的远程节点(比如，确保指定的报被安装，指定的服务在运行)<br>•    一个分布式远程执行系统，用来在远程节点（可以是单个节点，也可以是任意规则挑选出来的节点）上执行命令和查询数据<br>开发其的目的是为远程执行提供最好的解决方案，并使远程执行变得更好，更快，更简单。<br>并行执行</p>
-<blockquote>
-<p>Salt的核心功能</p>
-</blockquote>
-<p>•    使命令发送到远程系统是并行的而不是串行的<br>•    使用安全加密的协议<br>•    使用最小最快的网络载荷<br>•    提供简单的编程接口<br>Salt同样引入了更加细致化的领域控制系统来远程执行，使得系统成为目标不止可以通过主机名，还可以通过系统属性。<br>Python客户端接口<br>为了允许简单的扩展，Salt执行程序可以写为纯Python模块。数据从Salt执行过程中收集到可以发送回master服务端，或者发送到任何 任意程序。Salt可以从一个简单的Python API调用，或者从命令行被调用，所以Salt可以用来执行一次性命令，也可以作为一个更大的应用程序的一个组成部分。<br><strong>saltstack安装</strong><br>安装准备<br>rpm -Uvh <a href="http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm" target="_blank" rel="noopener">http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</a><br>Salt的master和minion包是分开的。机器只需要安装相应的包即可运行。通常情况下，会有一个master和多个minions。<br>在salt-master上，运行:<br>yum install salt-master<br>在salt-minion上，运行:<br>yum install salt-minion</p>
-<blockquote>
-<p>实战安装</p>
-</blockquote>
-<p>Master:192.168.108.129<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@server1 ~]<span class="comment"># rpm -Uvh http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</span></span><br><span class="line">Retrieving http://ftp.linux.ncsu.edu/pub/epel/<span class="number">6</span>/x86_64/epel-release<span class="number">-6</span><span class="number">-8.</span>noarch.rpm</span><br><span class="line">warning: /var/tmp/rpm-tmp.iZuZME: Header V3 RSA/SHA256 Signature, key ID <span class="number">0608</span>b895: NOKEY</span><br><span class="line">Preparing… <span class="comment">########################################### [100%]</span></span><br><span class="line">package epel-release<span class="number">-6</span><span class="number">-8.</span>noarch <span class="keyword">is</span> already installed</span><br><span class="line">[root@server1 ~]<span class="comment"># yum install -y salt-master</span></span><br><span class="line">已加载插件：fastestmirror, refresh-packagekit, security</span><br><span class="line">设置安装进程</span><br><span class="line">Loading mirror speeds <span class="keyword">from</span> cached hostfile</span><br><span class="line">epel/metalink | <span class="number">5.4</span> kB <span class="number">00</span>:<span class="number">00</span> </span><br><span class="line">•	base: mirrors.aliyun.com</span><br><span class="line">….省略</span><br><span class="line">Minion：<span class="number">192.168</span><span class="number">.108</span><span class="number">.141</span></span><br><span class="line">[root@server2 ~]<span class="comment"># rpm -Uvh http://ftp.linux.ncsu.edu/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</span></span><br><span class="line">[root@server2 ~]<span class="comment"># yum install -y salt-minion</span></span><br></pre></td></tr></table></figure></p>
-<p><strong>Master</strong><br>配置master开机自动启动:<br>[root@server2 ~]# chkconfig salt-master on<br>启动Master:<br>[root@server1 ~]# service salt-master start<br>Starting salt-master daemon: [确定]<br>[root@server1 ~]# lsof -i:4505<br>COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME<br>salt-mast 2833 root 12u IPv4 22272 0t0 TCP <em>:4505 (LISTEN)<br><em>*Minion</em></em><br>配置Minion开机自动启动:<br>[root@server2 ~]# chkconfig salt-minion on<br>启动Minion:<br>[root@server2 ~]# chkconfig salt-minion on<br>Starting salt-minion daemon: [确定]<br>[root@server2 ~]# vim /etc/salt/minion —配置文件<br>[root@server2 ~]# grep -v ‘^#’ /etc/salt/minion<br>master: 192.168.108.129</p>
-<p><strong>Master</strong><br>[root@server1 ~]# salt-key<br>Accepted Keys:<br>Denied Keys:<br>Unaccepted Keys:<br>server2   #默认是主机2的系统名，可以修改/etc/salt/minion的id字段<br>Rejected Keys:<br>把server2加入监控列表<br>[root@server1 ~]# salt-key -a server2<br>The following keys are going to be accepted:<br>Unaccepted Keys:<br>server2<br>Proceed? [n/Y] y<br>Key for minion server2 accepted.<br>[root@server1 ~]# salt-key<br>Accepted Keys:<br>server2<br>Denied Keys:<br>Unaccepted Keys:<br>Rejected Keys:</p>
-<blockquote>
-<p>测试</p>
-</blockquote>
-<p>[root@server1 ~]# salt ‘*’ test.ping&lt;==代表所有主机<br>server2:<br>True</p>
-<blockquote>
-<p>* 是指向所有minions的目标。<br>test.ping 告诉minon运行 test.ping 函数。    </p>
-</blockquote>
-<p>[root@server1 ~]# salt ‘*’ cmd.run ‘df -h’&lt;==远程执行命令<br>server2:<br>Filesystem Size Used Avail Use% Mounted on<br>/dev/mapper/VolGroup-lv_root 18G 8.2G 8.4G 50% /<br>tmpfs 491M 92K 491M 1% /dev/shm<br>/dev/sda1 485M 35M 426M 8% /boot<br>/dev/sr0 4.2G 4.2G 0 100% /media/CentOS_6.5_Final</p>
-<blockquote>
-<p>错误排查：</p>
-</blockquote>
-<p>通过查看minion：tail -f /var/log/salt/minion<br>2016-08-28 23:29:25,272 [salt.config      ][ERROR   ] Error parsing configuration file: /etc/salt/minion - conf should be a document, not <type 'str'>.<br>修改minion配置文件<br>master: 192.168.1.248<br>id: 192.168.1.230<br>master：后面跟空格，然后是mster的ip。id：后面有个空格，千万别忘了，否则启动会报错。</type></p>
-<p>最新centos7系列安装可以参考官网：<br><a href="https://docs.saltstack.com/en/latest/topics/installation/rhel.html" target="_blank" rel="noopener">https://docs.saltstack.com/en/latest/topics/installation/rhel.html</a></p>
-
-	
-	</div>
-	
-  
-</div>
-	<a type="button" href="/2017/03/01/Saltstack介绍及安装/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -692,7 +677,7 @@ num_cpus:
 			
   <div class="widget tag">
     <h3 class="title">归档</h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">2020年02月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">2019年03月</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">2020年03月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">2020年02月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">2019年03月</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">2019年02月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">2018年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">2018年06月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">2018年05月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">2018年03月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">2018年02月</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">2018年01月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">2017年11月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">2017年09月</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">2017年08月</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">2017年07月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">2017年03月</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">2017年02月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">2016年01月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">2015年12月</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">2015年11月</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">2015年10月</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">2015年09月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">2015年08月</a><span class="archive-list-count">5</span></li></ul>
   </div>
 
 		
@@ -705,6 +690,10 @@ num_cpus:
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2020/03/06/如果现在给你-500-台服务器，你会如何管理？/"><i class="fa fa-file-o"></i>如果现在给你 500 台服务器，你会如何管理？</a>
+      </li>
     
       <li>
         <a href="/2020/02/13/小公司如何优雅地推进应用上Kubernetes容器云/"><i class="fa fa-file-o"></i>小公司如何优雅地推进应用上Kubernetes容器云</a>
@@ -720,10 +709,6 @@ num_cpus:
     
       <li>
         <a href="/2019/03/24/如何解决The-connection-to-the-server-localhost8080-was-refused》？/"><i class="fa fa-file-o"></i>如何解决The connection to the s...</a>
-      </li>
-    
-      <li>
-        <a href="/2019/03/03/python-cStringIO模块-附生成excel并发送邮件实例/"><i class="fa fa-file-o"></i>python cStringIO模块( 附生成exce...</a>
       </li>
     
   </ul>
